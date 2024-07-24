@@ -19,7 +19,7 @@ Copy-Item -Path "config/auth.php.bak" -Destination "config/auth.php" -Force
 # Restore Auth controllers (if applicable)
 Copy-Item -Recurse -Path "app/Http/Controllers/Auth.bak\*" -Destination "app/Http/Controllers/Auth" -Force -ErrorAction SilentlyContinue
 
-Clean up - remove backup files if needed
+# Clean up - remove backup files if needed
 Remove-Item "routes/web.php.bak"
 Remove-Item -Recurse "resources/views/layouts.bak"
 Remove-Item -Recurse "resources/views/auth.bak"
