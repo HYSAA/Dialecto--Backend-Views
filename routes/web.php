@@ -37,12 +37,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
     Route::resource('courses', CourseController::class);
     Route::resource('courses.lessons', LessonController::class);
+    
     // Route::resource('lessons.contents', ContentController::class);
-    // Route::resource('courses.lessons.update', LessonController::class);
+    
+    // Route::resource('courses.lessons.contents.index',ContentController::class);
     Route::resource('courses.lessons.contents', ContentController::class);
+    
   
     
 });
+
 
  
 //API GATEWAY

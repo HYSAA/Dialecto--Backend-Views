@@ -9,7 +9,9 @@
             </div>
             <div class="pull-right">
                 <a class="btn btn-primary" href="{{ route('courses.lessons.index', $course->id) }}">Back to Lessons</a>
-                <a class="btn btn-success" href="{{ route('lessons.contents.create', [$course->id, $lesson->id]) }}">Add Content</a>
+                <a class="btn btn-success" href="{{ route('courses.lessons.contents.create', [$course->id, $lesson->id]) }}">Add Content</a>
+       
+
             </div>
         </div>
     </div>
@@ -23,8 +25,8 @@
             <div class="form-group mt-4">
                 <strong>Contents:</strong>
                 <ul>
-                    @forelse($lesson->contents as $content)
-                        <li>{{ $content->content }}</li>
+                    @forelse($contents as $content) <!-- Use $contents variable -->
+                        <li>{{ $content->text }}</li> <!-- Ensure field names match -->
                     @empty
                         <li>No contents available.</li>
                     @endforelse

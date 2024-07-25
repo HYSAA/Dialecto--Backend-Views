@@ -30,11 +30,16 @@ class LessonController extends Controller
         return redirect()->route('courses.lessons.index', $course->id)->with('success', 'Lesson created successfully.');
     }
 
+    // public function show(Course $course, Lesson $lesson)
+    // {
+    //     return view('lessons.show', compact('course', 'lesson'));
+    // }
     public function show(Course $course, Lesson $lesson)
     {
-        return view('lessons.show', compact('course', 'lesson'));
+        $contents = $lesson->contents; // Fetch contents associated with the lesson
+        return view('lessons.show', compact('course', 'lesson', 'contents'));
     }
-
+    
     public function edit(Course $course, Lesson $lesson)
     {
         return view('lessons.edit', compact('course', 'lesson'));

@@ -8,7 +8,7 @@
                 <h2>Add New Content to {{ $lesson->title }}</h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('courses.lessons.show', [$course->id, $lesson->id]) }}"> Back</a>
+                <a class="btn btn-primary" href="{{ route('courses.lessons.show', [$course->id, $lesson->id]) }}">Back</a>
             </div>
         </div>
     </div>
@@ -31,7 +31,7 @@
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Content:</strong>
-                    <input type="text" name="content" class="form-control" placeholder="Content">
+                    <input type="text" name="text" class="form-control" placeholder="Content">
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
