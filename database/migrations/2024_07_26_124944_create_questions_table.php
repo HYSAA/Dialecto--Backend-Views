@@ -11,20 +11,20 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('contents', function (Blueprint $table) {
+        Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
-            $table->text('text')->nullable();
-            $table->string('image')->nullable();
+            $table->foreignId('content_id')->constrained()->onDelete('cascade');
+            $table->string('question');
+            $table->text('answer');
             $table->timestamps();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('contents');
+        Schema::dropIfExists('questions');
     }
 };

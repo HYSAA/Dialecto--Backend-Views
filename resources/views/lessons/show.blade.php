@@ -15,24 +15,34 @@
             </div>
         </div>
     </div>
-
     <div class="row mt-4">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Title:</strong>
-                {{ $lesson->title }}
-            </div>
-            <div class="form-group mt-4">
-                <strong>Contents:</strong>
-                <ul>
-                    @forelse($contents as $content) <!-- Use $contents variable -->
-                        <li>{{ $content->text }}</li> <!-- Ensure field names match -->
-                    @empty
-                        <li>No contents available.</li>
-                    @endforelse
-                </ul>
-            </div>
-        </div>
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Content Text</th>
+                    <th width="280px">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($lesson->contents as $content)
+                    <tr>
+                        <td>{{ $content->text }}</td>
+                        <td>
+                            <a class="btn btn-info" href="{{ route('courses.lessons.contents.show', [$course->id, $lesson->id, $content->id]) }}">Show</a>
+                            <a class="btn btn-primary" href="{{ route('courses.lessons.contents.edit', [$course->id, $lesson->id, $content->id]) }}">Edit</a>
+                            <form action="{{ route('courses.lessons.contents.destroy', [$course->id, $lesson->id, $content->id]) }}" method="POST" style="display:inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
+</div>
+
 </div>
 @endsection

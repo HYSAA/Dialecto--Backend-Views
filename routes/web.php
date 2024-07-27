@@ -42,6 +42,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     
     // Route::resource('courses.lessons.contents.index',ContentController::class);
     Route::resource('courses.lessons.contents', ContentController::class);
+   
     
   
     
