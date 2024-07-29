@@ -18,6 +18,10 @@
             <div class="form-group">
                 <strong>Text:</strong>
                 {{ $content->text }}
+                @if ($content->image)
+                                    <img src="{{ asset('storage/' . $content->image) }}" width="150px">
+                                @endif
+
             </div>
         </div>
     </div>

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('text')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
+            // $table->string('video')->nullable();
         });
     }
 

@@ -27,7 +27,8 @@ class ContentController extends Controller
     {
         $request->validate([
             'text' => 'nullable',
-            'image' => 'nullable|image|max:2048'
+            'image' => 'nullable|image|max:2048',
+            'video' => 'nullable|video|max:10240'
         ]);
 
         $content = new Content();
@@ -58,7 +59,9 @@ class ContentController extends Controller
     {
         $request->validate([
             'text' => 'nullable',
-            'image' => 'nullable|image|max:2048'
+            'image' => 'nullable|image|max:2048',
+            // 'video' => 'nullable|imagep|max:10200'
+            
         ]);
 
         $content->text = $request->text;
