@@ -9,10 +9,13 @@ class Question extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['content_id', 'question', 'answer'];
+    protected $fillable = ['content_id' , 'question_text'];
 
     public function content()
     {
         return $this->belongsTo(Content::class);
+    }
+    public function answers(){
+        return $this->hasMany(Answer::class);
     }
 }

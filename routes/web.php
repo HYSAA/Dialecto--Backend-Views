@@ -6,6 +6,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\ContentController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\AnswerController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,11 +39,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
     Route::resource('courses', CourseController::class);
     Route::resource('courses.lessons', LessonController::class);
-    
-    // Route::resource('lessons.contents', ContentController::class);
-    
-    // Route::resource('courses.lessons.contents.index',ContentController::class);
     Route::resource('courses.lessons.contents', ContentController::class);
+    Route::resource('courses.lessons.contents.questions', QuestionController::class);
+    Route::resource('courses.lessons.contents.questions.answers', AnswerController::class);
    
     
   
