@@ -2,48 +2,59 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\Lesson;
+use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
 
-class LessonController extends Controller
+class LessonController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index($courseId)
     {
-        //
+        $course = Course::findOrFail($courseId);
+        return response()->json($course->lessons);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request, $courseId)
     {
-        //
+        $course = Course::findOrFail($courseId);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        $lesson = new Lesson($request->all());
+        $course->lessons()->save($lesson);
+
+        return response()->json(['message' => 'Lesson created successfully', 'lesson' => $lesson], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($courseId, $id)
     {
-        //
+        $lesson = Lesson::where('course_id', $courseId)->findOrFail($id);
+        return response()->json($lesson);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $courseId, $id)
     {
-        //
+        $lesson = Lesson::where('course_id', $courseId)->findOrFail($id);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        $lesson->update($request->all());
+
+        return response()->json(['message' => 'Lesson updated successfully', 'lesson' => $lesson]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($courseId, $id)
     {
-        //
+        $lesson = Lesson::where('course_id', $courseId)->findOrFail($id);
+        $lesson->delete();
+
+        return response()->json(['message' => 'Lesson deleted successfully']);
     }
 }
