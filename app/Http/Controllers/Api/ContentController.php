@@ -21,12 +21,10 @@ class ContentController extends BaseController
     public function store(Request $request, $courseId, $lessonId)
     {
         $request->validate([
-            'text' => 'nullable|string',
+            'text' => 'nullable',
             'image' => 'nullable|image|max:2048',
-            'video' => 'nullable|mimes:mp4,avi,mov|max:10240'
+            'video' => 'nullable|file|max:10240'
         ]);
-
-        $lesson = Lesson::findOrFail($lessonId);
 
         $content = new Content();
         $content->text = $request->text;
@@ -38,10 +36,7 @@ class ContentController extends BaseController
 
         $content->save();
 
-        return response()->json([
-            'message' => 'Content created successfully.',
-            'content' => $content
-        ], 201);
+        return response()->json($content, 201);
     }
 
     public function show(Course $course, Lesson $lesson, Content $content)
@@ -52,9 +47,9 @@ class ContentController extends BaseController
     public function update(Request $request, Course $course, Lesson $lesson, Content $content)
     {
         $request->validate([
-            'text' => 'nullable|string',
+            'text' => 'nullable',
             'image' => 'nullable|image|max:2048',
-            'video' => 'nullable|mimes:mp4,avi,mov|max:10240'
+            'video' => 'nullable|file|max:10240'
         ]);
 
         $content->text = $request->text;
@@ -68,10 +63,7 @@ class ContentController extends BaseController
 
         $content->save();
 
-        return response()->json([
-            'message' => 'Content updated successfully.',
-            'content' => $content
-        ]);
+        return response()->json($content);
     }
 
     public function destroy(Course $course, Lesson $lesson, Content $content)
@@ -82,8 +74,6 @@ class ContentController extends BaseController
 
         $content->delete();
 
-        return response()->json([
-            'message' => 'Content deleted successfully.'
-        ]);
+        return response()->json(null, 204);
     }
 }

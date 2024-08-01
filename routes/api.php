@@ -20,5 +20,9 @@ use App\Http\Controllers\Api\HomeController as ApiHomeController;
         Route::resource('courses.lessons.contents', ApiContentController::class);
         Route::resource('courses.lessons.contents.questions', ApiQuestionController::class);
         Route::resource('courses.lessons.contents.questions.answers', ApiAnswerController::class);
+        // Route::get('/questions', function () {
+        //     return view('questions');
+        // });
+        
     });
 // });

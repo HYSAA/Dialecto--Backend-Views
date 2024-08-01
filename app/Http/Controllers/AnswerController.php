@@ -30,6 +30,7 @@ class AnswerController extends Controller
         return view('answers.edit', compact('answer'));
     }
 
+    
     public function update(Request $request, Answer $answer)
     {
         $request->validate([

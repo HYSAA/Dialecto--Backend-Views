@@ -9,13 +9,26 @@ class Question extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['content_id' , 'question_text'];
+    protected $fillable = [
+        'question_text', 
+        'content_id'
+    ];
 
+    // Define the relationship with the Answer model
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
+
+    // Define the relationship with the Content model
     public function content()
     {
         return $this->belongsTo(Content::class);
     }
-    public function answers(){
-        return $this->hasMany(Answer::class);
+
+    // Get the correct answer for the question
+    public function correctAnswer()
+    {
+        return $this->hasOne(Answer::class)->where('is_correct', true);
     }
 }

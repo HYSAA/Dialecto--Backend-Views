@@ -2,48 +2,72 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\Question;
+use App\Models\Answer;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
 
-class AnswerController extends Controller
+class AnswerController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index($courseId, $lessonId, $contentId, $questionId)
     {
-        //
+        $question = Question::findOrFail($questionId);
+        $answers = $question->answers;
+
+        return response()->json($answers);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request, $courseId, $lessonId, $contentId, $questionId)
     {
-        //
+        $request->validate([
+            'answer_text' => 'required',
+            'is_correct' => 'boolean',
+        ]);
+
+        $question = Question::findOrFail($questionId);
+
+        $answer = new Answer();
+        $answer->answer_text = $request->answer_text;
+        $answer->is_correct = $request->is_correct;
+        $answer->question_id = $question->id;
+        $answer->save();
+
+        return response()->json([
+            'message' => 'Answer created successfully.',
+            'answer' => $answer
+        ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($courseId, $lessonId, $contentId, $questionId, $answerId)
     {
-        //
+        $answer = Answer::findOrFail($answerId);
+
+        return response()->json($answer);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $courseId, $lessonId, $contentId, $questionId, $answerId)
     {
-        //
+        $request->validate([
+            'answer_text' => 'required',
+            'is_correct' => 'boolean',
+        ]);
+
+        $answer = Answer::findOrFail($answerId);
+        $answer->update($request->only('answer_text', 'is_correct'));
+
+        return response()->json([
+            'message' => 'Answer updated successfully.',
+            'answer' => $answer
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($courseId, $lessonId, $contentId, $questionId, $answerId)
     {
-        //
+        $answer = Answer::findOrFail($answerId);
+        $answer->delete();
+
+        return response()->json([
+            'message' => 'Answer deleted successfully.'
+        ]);
     }
 }

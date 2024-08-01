@@ -42,7 +42,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('courses.lessons.contents', ContentController::class);
     Route::resource('courses.lessons.contents.questions', QuestionController::class);
     Route::resource('courses.lessons.contents.questions.answers', AnswerController::class);
-   
+    // Route::get('/questions', function () {
+    //     return view('questions');
+    // });
     
   
     
