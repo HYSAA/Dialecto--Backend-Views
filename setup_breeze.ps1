@@ -1,4 +1,5 @@
 
+#composer require laravel/breeze --dev
 Copy-Item -Path "routes/web.php" -Destination "routes/web.php.bak"
 Copy-Item -Recurse -Path "resources/views/layouts" -Destination "resources/views/layouts.bak"
 Copy-Item -Recurse -Path "resources/views/auth" -Destination "resources/views/auth.bak"
@@ -6,7 +7,6 @@ Copy-Item -Path "config/auth.php" -Destination "config/auth.php.bak"
 
 
 Copy-Item -Recurse -Path "app/Http/Controllers/Auth" -Destination "app/Http/Controllers/Auth.bak" -ErrorAction SilentlyContinue
-
 
 # php artisan breeze:install blade
 

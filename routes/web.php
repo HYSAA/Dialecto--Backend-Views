@@ -35,6 +35,9 @@ require __DIR__.'/auth.php';
 //     Route::resource('courses.lessons', LessonController::class);
 //     Route::resource('lessons.contents', ContentController::class);
 // });
+
+
+//ADMIN ROUTES
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
     Route::resource('courses', CourseController::class);
@@ -42,18 +45,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('courses.lessons.contents', ContentController::class);
     Route::resource('courses.lessons.contents.questions', QuestionController::class);
     Route::resource('courses.lessons.contents.questions.answers', AnswerController::class);
-    // Route::get('/questions', function () {
-    //     return view('questions');
-    // });
+    Route::get('/questions', function () {
+        return view('questions');
+    });
     
-  
+    //USER ROUTES
+   
     
 });
 
+// Route::middleware(['auth', 'user'])->group(function () {
+//     Route::get('courses', 'CourseController@index')->name('courses.index');
+// });
 
  
-//API GATEWAY
-// Route::prefix('api')->group(function () {
-//     Route::resource('admin/courses', CourseController::class);
-//     Route::resource('admin/lessons', LessonController::class);
-// });
