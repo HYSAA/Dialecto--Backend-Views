@@ -5,6 +5,7 @@
                @if(Auth::check() && Auth::user()->usertype != 'admin')
             <div class="pull-right">
                 <!-- If you want a button to redirect users to a different page or filter courses -->
+               <a class="btn btn-primary" href="{{ route('courses.index') }}">View Available Courses</a>
                 <a class="btn btn-primary" href="{{ route('courses.index') }}">View Available Courses</a>
             </div>
             @endif
