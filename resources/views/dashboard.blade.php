@@ -2,12 +2,6 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
-               @if(Auth::check() && Auth::user()->usertype != 'admin')
-            <div class="pull-right">
-                <!-- If you want a button to redirect users to a different page or filter courses -->
-                <a class="btn btn-primary" href="{{ route('courses.index') }}">View Available Courses</a>
-            </div>
-            @endif
         </h2>
     </x-slot>
 
