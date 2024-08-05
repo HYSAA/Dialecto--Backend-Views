@@ -1,0 +1,578 @@
+/* For documentation: Search the css for a view but addind css:viewName */
+
+.addborder {
+    border: solid red;
+}
+
+
+
+/* bootstrap custom  */
+
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* custom classes  */
+
+/* buttons  */
+
+
+
+.btn-login {
+    background-color: #CB9219;
+    border-color: #CB9219;
+    color: white;
+    border-radius: 10px;
+    height: 50px;
+    font-weight: 500;
+}
+
+
+.btn-view-courses {
+    background-color: #CB9219;
+    /* Custom background color */
+    border-color: #CB9219;
+    /* Custom border color */
+    color: white;
+    /* Text color */
+    border-radius: 10px;
+    /* Rounded corners */
+    height: 50px;
+    /* Fixed height */
+    font-weight: 500;
+    /* Font weight */
+    display: inline-flex;
+    /* Flexbox for centering text */
+    align-items: center;
+    /* Center text vertically */
+    justify-content: center;
+    /* Center text horizontally */
+    padding: 0 20px;
+    /* Horizontal padding */
+    text-align: center;
+    /* Center text alignment */
+    text-decoration: none;
+    /* Remove underline */
+
+    height: 30px;
+}
+
+
+.btn-view-courses:hover {
+    background-color: #a67c1c;
+    /* Slightly darker on hover */
+    border-color: #a67c1c;
+    /* Border color on hover */
+}
+
+
+
+
+
+
+.btn-register {
+    background-color: #CB9219;
+    border-color: #CB9219;
+    color: white;
+
+}
+
+
+.btn-logout {
+    background-color: #CB9219;
+    border-color: #CB9219;
+    color: white;
+    border-radius: 5px;
+    height: 50px;
+    font-weight: 500;
+}
+
+
+.btn-logout:hover {
+    color: #fff;
+    /* Text color on hover */
+    background-color: #A67C1F;
+    /* Background color on hover */
+    border-color: #A67C1F;
+    /* Border color on hover */
+}
+
+.btn-login:hover {
+    color: #fff;
+    /* Text color on hover */
+    background-color: #A67C1F;
+    /* Background color on hover */
+    border-color: #A67C1F;
+    /* Border color on hover */
+}
+
+
+.btn-register:hover {
+    color: #fff;
+    /* Text color on hover */
+    background-color: #A67C1F;
+    /* Background color on hover */
+    border-color: #A67C1F;
+    /* Border color on hover */
+}
+
+/* css:header  */
+
+header {
+    z-index: 1000;
+}
+
+/* css:body */
+
+body {
+    background-color: #FFCA58;
+}
+
+/* css:langing-page */
+
+.landing-page {
+    display: flex;
+    height: 100vh;
+
+    /* border: solid; */
+    /* padding: 0px; */
+}
+
+.landing-page .left-side {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding-left: 15%;
+}
+
+.landing-page .right-side {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    padding-right: 15%;
+}
+
+.login-form {
+    border-radius: 5px;
+    padding: 50px 50px 70px 50px;
+    background-color: white;
+    width: 100%;
+    max-width: 500px;
+    align-items: center;
+    /* Add shadow on right and bottom */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+.forget-password {
+    margin-top: 7%;
+    margin-bottom: 7%;
+    /* Add space between button and label */
+    color: #CB9219;
+    font-weight: 500;
+
+    display: block;
+    /* Ensure it behaves like a block element if needed */
+
+    text-decoration: none;
+
+}
+
+.forget-password:hover {
+    text-decoration: underline;
+    /* Underline on hover */
+    color: #A67C1F;
+}
+
+.form-control {
+    height: 50px;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .landing-page .left-side {
+        padding-left: 0;
+        /* Remove padding on smaller screens */
+    }
+
+    .landing-page .right-side {
+
+        padding-right: 0;
+    }
+}
+
+/* css:register page  */
+
+.modal-overlay {
+    display: none;
+    /* Hide the overlay by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+
+
+
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+
+    /* add  */
+
+    max-height: 90vh;
+    overflow-y: auto;
+
+}
+
+
+
+
+
+
+.blurred {
+    filter: blur(5px);
+    /* Apply blur effect to the background */
+}
+
+
+
+
+
+
+
+
+/* css:components  */
+
+/* css:header  */
+
+.navbar-brand img {
+    max-height: 70px;
+    margin-left: 20%;
+
+}
+
+/* css:sidebar  */
+
+/* #sidebar {
+
+    height: calc(100vh - 150px);
+    position: fixed;
+    top: 120px;
+    left: 0;
+    width: 400px;
+    background-color: #1A2325;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+}
+
+
+.btn-nav {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: linear-gradient(to right, #6A6C6C, #253036);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.btn-nav:hover {
+    background: linear-gradient(to right, #5a5b5b, #1e2b2b);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+} */
+
+/* css:sidebar update  */
+
+#sidebar {
+    height: calc(100vh - 150px);
+    position: fixed;
+    top: 120px;
+    left: 0;
+    width: 300px;
+    background-color: #1A2325;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    transition: width 0.3s;
+    border: solid;
+
+    overflow-y: auto;
+
+
+}
+
+#sidebar.collapsed {
+    width: 60px;
+
+}
+
+.btn-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: linear-gradient(to right, #6A6C6C, #253036);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.btn-nav .btn-text {
+    margin-left: 10px;
+}
+
+.btn-nav:hover {
+    background: linear-gradient(to right, #5a5b5b, #1e2b2b);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    #sidebar {
+        width: 100px;
+    }
+
+    .btn-nav {
+        justify-content: center;
+        text-align: center;
+        padding-left: 0 px;
+    }
+
+    .btn-nav .btn-text {
+        display: none;
+    }
+
+    .btn-nav .btn-icon {
+        font-size: 20px;
+        /* Adjust icon size if needed */
+    }
+}
+
+/* css:main content container */
+
+.main-contaner {
+
+    padding-top: 20px;
+}
+
+
+/* css:learner.course */
+
+/* .main-container {
+    padding-top: 19px;
+
+}
+
+.custom-container {
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    
+} */
+
+
+/* css:learner.homepage updated */
+
+
+.main-container {
+    position: fixed;
+    left: 310px;
+    top: 120px;
+    width: calc(100% - 320px);
+    z-index: 1000;
+    background-color: white;
+    padding: 10px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    height: calc(100vh - 150px);
+
+    /* New line: Make the container a flex container */
+    display: flex;
+
+    /* New line: Stack child elements vertically */
+    flex-direction: column;
+}
+
+.card-container {
+    /* flex: 1; */
+
+    display: flex;
+
+    height: 100%;
+
+    /* New line: Stack child elements vertically */
+
+    overflow-x: auto;
+    /* Enables horizontal scrolling */
+    white-space: nowrap;
+    /* Prevents wrapping of flex items */
+
+
+
+}
+
+.card {
+    border: 1px solid #ddd;
+    /* Light border around the card */
+    border-radius: 8px;
+    /* Rounded corners */
+    overflow: hidden;
+    /* Hide content that overflows */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+    font-family: Arial, sans-serif;
+    /* Font style */
+    margin-right: 10px;
+    /* Spacing between cards */
+    flex: 1 0 auto;
+    /* Flex item grows but doesn't shrink */
+    min-width: 380px;
+    /* Minimum width for the card */
+    max-width: 380px;
+    /* Maximum width for the card */
+    height: 100%;
+    /* Full height of the container */
+
+    background-color: #ebe4cc;
+
+    /* margin-bottom: 10lx; */
+
+
+    word-wrap: break-word;
+    /* Breaks long words onto the next line */
+    overflow-wrap: break-word;
+    /* Prevents overflow from long words */
+    white-space: normal;
+
+}
+
+.card-img {
+    width: auto;
+    height: 300px;
+    /* Fixed width */
+
+    /* Fixed height */
+    object-fit: cover;
+    /* Ensures the image covers the area without distortion */
+    display: block;
+}
+
+.card-content {
+    padding: 16px;
+    /* Padding inside the card */
+}
+
+.card-title {
+    margin: 0 0 8px;
+    /* Margin for spacing */
+    font-size: 18px;
+    /* Font size for title */
+    color: #333;
+    /* Text color */
+}
+
+.card-description {
+    margin: 0;
+    font-size: 14px;
+    /* Font size for description */
+    color: #666;
+    /* Text color */
+}
+
+
+.top {
+
+    background-color: white;
+
+
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* button */
+
+.redirect-link {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.redirect-link:hover {
+    background-color: #0056b3;
+}
+
+
+
+
+
+
+/* Add responsiveness if needed */
+@media (max-width: 768px) {
+    .main-container {
+        left: 110px;
+        /* Adjust the left position for smaller screens */
+        width: calc(100% - 120px);
+
+        background-color: none;
+
+
+
+
+        /* Adjust width for smaller screens */
+    }
+
+    .card {
+
+        margin-bottom: 10px;
+
+
+
+        min-height: auto;
+        max-height: 700px;
+    }
+}

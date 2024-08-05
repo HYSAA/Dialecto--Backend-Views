@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Include CSS files here -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <!-- Include your Vite or custom CSS/JS here -->
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
+
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/dialecto.css') }}">
+
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
-        <!-- Include navigation from Breeze or custom navigation -->
-        @include('layouts.navigation')
 
-        <!-- Page Heading -->
-        @isset($header)
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
+<body class="font-sans antialiased">
+    <div class="min-h-screen ">
+        <!-- Include navigation from Breeze or custom navigation -->
+
+        @include('layouts.navigation')
+        @include('layouts.sidebar')
+
+        @isset($dashboard)
+
+        {{ $dashboard }}
+
         @endisset
 
         <!-- Page Content -->
@@ -29,4 +37,5 @@
         </main>
     </div>
 </body>
+
 </html>
