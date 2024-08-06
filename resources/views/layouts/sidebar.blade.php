@@ -17,30 +17,32 @@
                     <i class="fas fa-book btn-icon"></i>
                     <span class="btn-text">Courses</span>
                 </a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </li>
+
+
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ url('/lessons') }}">
                     <i class="fas fa-chalkboard-teacher btn-icon"></i>
                     <span class="btn-text">Lessons</span>
                 </a>
             </li>
+
+
+
+
+            @if(Auth::user()->usertype == 'admin')
+
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ url('/lessons') }}">
+                    <i class="fas fa-chalkboard-teacher btn-icon"></i>
+                    <span class="btn-text">View Users</span>
+                </a>
+            </li>
+
+            @endif
+
+
+
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ url('/progress') }}">
                     <i class="fas fa-tachometer-alt btn-icon"></i>
