@@ -10,7 +10,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AnswerController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 
 //para ang admin ray maka access 
@@ -48,14 +48,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/questions', function () {
         return view('questions');
     });
-    
+
     //USER ROUTES
-   
-    
+
+
 });
 
 // Route::middleware(['auth', 'user'])->group(function () {
 //     Route::get('courses', 'CourseController@index')->name('courses.index');
 // });
-
- 
