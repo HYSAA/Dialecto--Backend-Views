@@ -16,12 +16,17 @@
                 <a class="btn btn-nav" href="{{ route('courses.index') }}">
                     <i class="fas fa-book btn-icon"></i>
                     <span class="btn-text">Courses</span>
+                
                 </a>
+                <!-- <a class="btn btn-nav" href="{{ route('lessons.index') }}">
+                <i class="fas fa-book btn-icon"></i>
+                <span class="btn-text">Lessons</span>
+                  </a>  -->
             </li>
 
 
             <li class="nav-item">
-                <a class="btn btn-nav" href="{{ url('/lessons') }}">
+            <a class="btn btn-nav" href="{{ route('lessons.index') }}">
                     <i class="fas fa-chalkboard-teacher btn-icon"></i>
                     <span class="btn-text">Lessons</span>
                 </a>

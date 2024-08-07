@@ -8,12 +8,24 @@ use Illuminate\Http\Request;
 
 class LessonController extends Controller
 {
-    public function index(Course $course)
+    // public function index(Course $course)
+    // {
+    //     $lessons = $course->lessons;
+    //     return view('lessons.index', compact('course', 'lessons'));
+    // }
+    public function index($courseId = null)
     {
-        $lessons = $course->lessons;
-        return view('lessons.index', compact('course', 'lessons'));
-    }
+        if ($courseId) {
+            // Fetch lessons for the specific course   //BAG O NI 
+            $course = Course::findOrFail($courseId);
+            $lessons = $course->lessons;
+        } else {
+            // Fetch all lessons, possibly with course information  /BAG O NI
+            $lessons = Lesson::with('course')->get();
+        }
 
+        return view('lessons.index', compact('lessons'));
+    }
     public function create(Course $course)
     {
         return view('lessons.create', compact('course'));

@@ -13,9 +13,12 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+//PARA NI LAHOS SA COURSES ANG USER IG OPEN 
+Route::get('/dashboard', [CourseController::class, 'index'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -23,7 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
 
 
 //para ang admin ray maka access 
@@ -39,21 +42,34 @@ require __DIR__ . '/auth.php';
 
 //ADMIN ROUTES
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
+    //MAO NING CODE PARA MO LAHOS DIRECTLY SA COURSES IG DASHBOARD SA ADMIN
+    Route::get('/dashboard', [CourseController::class, 'index'])->name('dashboard');//bag o ni 
+
+    // Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
     Route::resource('courses', CourseController::class);
     Route::resource('courses.lessons', LessonController::class);
+    Route::get('lessons', [LessonController::class, 'index'])->name('lessons.index'); //bag o ni
     Route::resource('courses.lessons.contents', ContentController::class);
     Route::resource('courses.lessons.contents.questions', QuestionController::class);
     Route::resource('courses.lessons.contents.questions.answers', AnswerController::class);
     Route::get('/questions', function () {
         return view('questions');
+        
     });
 
+    // Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
+    //     Route::resource('courses', CourseController::class);
+    //     Route::get('courses/{course}', [CourseController::class, 'show'])->name('courses.show');
+
+    // });
+   
     //USER ROUTES
-
-
+   
+    
 });
 
 // Route::middleware(['auth', 'user'])->group(function () {
 //     Route::get('courses', 'CourseController@index')->name('courses.index');
 // });
+
+ 
