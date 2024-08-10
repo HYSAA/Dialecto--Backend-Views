@@ -2,14 +2,9 @@
 
 @section('content')
 
-
-
-
-
-
 <div class="main-container">
 
-    <div class="container-fluid mb-1 addborder ">
+    <div class="container-fluid mb-1  ">
         <h1>Courses</h1>
 
         <!-- change the set up -->
@@ -48,12 +43,8 @@
 
                         <a href="{{ route('courses.show', $course->id) }}" class="btn btn-view-courses btn-block">View Course</a>
 
-
-
                         <!-- 
                         <a class="btn btn-info" href="{{ route('courses.show', $course->id) }}">View Course</a> -->
-
-
 
                     </div>
 
@@ -61,7 +52,7 @@
                 </div>
             </div>
             <div class="card-content">
-                <h5>Regions:</h5>
+                <!-- <h5>Regions:</h5>
                 <p class="card-description">
                     Central Visayas, eastern Negros Island, Cebu, Bohol, Siquijor, parts of Leyte and Southern Leyte, Mindanao, and a few parts of Masbate.
                 </p>
@@ -72,7 +63,14 @@
                 <h5>Fun Facts:</h5>
                 <p class="card-description">
                     Cebuano is sometimes simply called "Bisaya," though Bisaya can also refer to other Visayan languages.
-                </p>
+                </p> -->
+
+                <h5>Description</h5>
+
+                <p class="card-description">{{ $course->description }}</p>
+
+
+
             </div>
         </div>
         @endforeach

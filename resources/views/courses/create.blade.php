@@ -1,20 +1,17 @@
-<!-- 
 @extends('layouts.app')
 
 @section('content')
-    <h1>Add New Course</h1>
-    <form action="{{ route('courses.store') }}" method="POST">
-        @csrf
-        <label for="name">Course Name:</label>
-        <input type="text" id="name" name="name" required>
-        <button type="submit">Save</button>
-    </form>
-@endsection -->
 
-@extends('layouts.app')
 
-@section('content')
-<div class="container">
+<div class="main-container">
+
+    <div class="container-fluid mb-1  ">
+
+        <h1>Courses</h1>
+
+
+    </div>
+
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
@@ -27,14 +24,14 @@
     </div>
 
     @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    <div class="alert alert-danger">
+        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif
 
     <form action="{{ route('courses.store') }}" method="POST">
@@ -59,5 +56,6 @@
         </div>
 
     </form>
+
 </div>
 @endsection
