@@ -11,10 +11,10 @@ use App\Http\Controllers\AnswerController;
 
 use App\Http\Controllers\AdminController;
 
-// Route::get('/', function () {
-//     return view('auth.login');
-// });
-Route::get('/',[AdminController::class,'manageUsers']);
+Route::get('/', function () {
+    return view('auth.login');
+});
+// Route::get('/',[AdminController::class,'manageUsers']);
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
