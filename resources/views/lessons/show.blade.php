@@ -33,12 +33,15 @@
                     @foreach ($lesson->contents as $content)
                     <tr>
                         <td>{{ $content->text }}</td>
-                        <td>English Equivalent</td>
+                        <td>{{$content->english}}</td>
+                        
                         <td>
-                            <video width="100%" height="260" controls>
-                                <source src="{{ asset('videos/sample-video.mp4') }}" type="video/mp4">
+                        @if ($content->video)
+                            <video width="100%" height="100" controls>
+                            <source src="{{ $content->video }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
+                            @endif
                         </td>
                         <td>
                             <a class="btn btn-info"

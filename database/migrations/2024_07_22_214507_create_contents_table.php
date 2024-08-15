@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->text('text')->nullable();
-            $table->string('image')->nullable();
+            $table->text('english')->nullable();
+            $table->text('image')->nullable();
+            $table->text('video')->nullable();
             $table->timestamps();
-            // $table->string('video')->nullable();
         });
     }
 

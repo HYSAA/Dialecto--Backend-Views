@@ -38,8 +38,18 @@
                     <strong>Image:</strong>
                     <input type="file" name="image" class="form-control">
                     @if ($content->image)
-                        <img src="{{ asset('storage/' . $content->image) }}" width="300px" class="mt-2">
+                    <img src="{{ $content->image }}" width="300px" class="mt-2">
                     @endif
+                    <strong>Video:</strong>
+                    <input type="file" name="video" class="form-control">
+                    @if ($content->video)
+                                    <video width="150px" controls>
+                                        <source src="{{ $content->video }}" type="video/mp4">
+                                    </video>
+                                @endif
+
+                    
+
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">

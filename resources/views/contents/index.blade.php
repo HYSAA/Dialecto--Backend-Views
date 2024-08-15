@@ -26,12 +26,20 @@
                 <tbody>
                     @foreach ($contents as $content)
                         <tr>
-                            <td>
+                        <td>
                                 @if ($content->text)
                                     <p>{{ $content->text }}</p>
                                 @endif
+                                @if ($content->text)
+                                <p>{{ $content->english }}</p>
+                                @endif
                                 @if ($content->image)
-                                    <img src="{{ asset('storage/' . $content->image) }}" width="150px">
+                                    <img src="{{ $content->image }}" width="150px" alt="Content Image">
+                                @endif
+                                @if ($content->video)
+                                    <video width="150px" controls>
+                                        <source src="{{ $content->video }}" type="video/mp4">
+                                    </video>
                                 @endif
                             </td>
                             <td>
