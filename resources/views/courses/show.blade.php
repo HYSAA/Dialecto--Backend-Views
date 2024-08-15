@@ -8,7 +8,7 @@
 <div class="main-container">
 
     <div class="container-fluid mb-2  ">
-        <h1>Lessossns - {{ $course->name }}</h1>
+        <h1>Lessons - {{ $course->name }}</h1>
 
         <!-- change the set up -->
 
