@@ -29,7 +29,7 @@ class LessonController extends Controller
     public function create(Course $course)
     {
         return view('lessons.create', compact('course'));
-    } 
+    }
 
     public function store(Request $request, Course $course)
     {
@@ -39,7 +39,7 @@ class LessonController extends Controller
 
         $course->lessons()->create($request->all());
 
-        return redirect()->route('courses.lessons.index', $course->id)->with('success', 'Lesson created successfully.');
+        return redirect()->route('courses.show', $course->id)->with('success', 'Lesson created successfully.');
     }
 
     // public function show(Course $course, Lesson $lesson)
@@ -51,7 +51,7 @@ class LessonController extends Controller
         $contents = $lesson->contents; // Fetch contents associated with the lesson
         return view('lessons.show', compact('course', 'lesson', 'contents'));
     }
-    
+
     public function edit(Course $course, Lesson $lesson)
     {
         return view('lessons.edit', compact('course', 'lesson'));
@@ -65,13 +65,13 @@ class LessonController extends Controller
 
         $lesson->update($request->all());
 
-        return redirect()->route('courses.lessons.index', $course->id)->with('success', 'Lesson updated successfully.');
+        return redirect()->route('courses.show', $course->id)->with('success', 'Lesson updated successfully.');
     }
 
     public function destroy(Course $course, Lesson $lesson)
     {
         $lesson->delete();
 
-        return redirect()->route('courses.lessons.index', $course->id)->with('success', 'Lesson deleted successfully.');
+        return redirect()->route('courses.show', $course->id)->with('success', 'Lesson deleted successfully.');
     }
 }

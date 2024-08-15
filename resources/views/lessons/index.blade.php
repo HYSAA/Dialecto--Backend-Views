@@ -6,23 +6,23 @@
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
                 @if(isset($course))
-                    <h2>Lessons for {{ $course->name }}</h2>
+                <h2>Lessons for {{ $course->name }}</h2>
                 @else
-                    <h2>All Lessons</h2>
+                <h2>All Lessons</h2>
                 @endif
             </div>
             @if(isset($course))
-                <div class="pull-right">
-                    <a class="btn btn-success" href="{{ route('courses.lessons.create', $course->id) }}">Create New Lesson</a>
-                </div>
+            <div class="pull-right">
+                <a class="btn btn-success" href="{{ route('courses.lessons.create', $course->id) }}">Create New Lesson</a>
+            </div>
             @endif
         </div>
     </div>
 
     @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
-        </div>
+    <div class="alert alert-success">
+        <p>{{ $message }}</p>
+    </div>
     @endif
 
     <table class="table table-bordered">
@@ -33,7 +33,7 @@
             <th width="280px">Action</th>
         </tr>
         @php
-            $i = 0;
+        $i = 0;
         @endphp
         @foreach ($lessons as $lesson)
         <tr>
@@ -42,7 +42,7 @@
             <td>{{ $lesson->course->name }}</td>
             <td>
                 <form action="{{ route('courses.lessons.destroy', [$lesson->course->id, $lesson->id]) }}" method="POST">
-                    <a class="btn btn-info" href="{{ route('courses.lessons.show', [$lesson->course->id, $lesson->id]) }}">Show</a>
+                    <a class="btn btn-info" href="{{ route('courses.lessons.show', [$lesson->course->id, $lesson->id]) }}">Shosssw</a>
                     <a class="btn btn-primary" href="{{ route('courses.lessons.edit', [$lesson->course->id, $lesson->id]) }}">Edit</a>
 
                     @csrf

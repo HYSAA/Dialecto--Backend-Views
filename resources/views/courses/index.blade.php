@@ -4,14 +4,14 @@
 
 <div class="main-container">
 
-    <div class="container-fluid mb-1  ">
+    <div class="container-fluid mb-2  ">
         <h1>Courses</h1>
 
         <!-- change the set up -->
 
         @if(Auth::user()->usertype == 'admin')
         <div class="pull-right">
-            <a class="btn btn-success" href="{{ route('courses.create') }}"> Create New Course</a>
+            <a class="btn btn-view-courses" href="{{ route('courses.create') }}"> Create Nsssew Course</a>
         </div>
         @endif
 
@@ -24,29 +24,36 @@
 
 
     <!-- Card container -->
-    <div class="container-fluid card-container row">
+    <div class="container-fluid card-container">
 
         @foreach ($courses as $course)
         <!-- Card item -->
-        <div class="card">
+        <div class="card ">
             <div class="top">
+
+
                 <img src="{{ asset('images/cebuano.png') }}" alt="Card Image" class="card-img">
+
+
                 <div class="row align-items-center mt-3 mb-3">
                     <div class="col-6 d-flex align-items-center">
                         <h3 class="card-title mb-0">{{ $course->name }}</h3>
                     </div>
 
 
+                    <div class="col-6">
+                        <div class="d-flex justify-content-between">
 
-                    <div class="col-6 d-flex justify-content-center align-items-center">
-                        <!-- <a href="{{ url('/course/courseName') }}" class="btn btn-view-courses btn-block">View Course</a> -->
+                            @if(Auth::user()->usertype == 'admin')
+                            <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-view-courses ">Edit</a>
 
-                        <a href="{{ route('courses.show', $course->id) }}" class="btn btn-view-courses btn-block">View Course</a>
+                            <a href="{{ route('courses.show', $course->id) }}" class="btn btn-2 ">View</a>
 
-                        <!-- 
-                        <a class="btn btn-info" href="{{ route('courses.show', $course->id) }}">View Course</a> -->
-
+                            @endif
+                        </div>
                     </div>
+
+
 
 
                 </div>
@@ -68,8 +75,6 @@
                 <h5>Description</h5>
 
                 <p class="card-description">{{ $course->description }}</p>
-
-
 
             </div>
         </div>
@@ -97,6 +102,6 @@
     </div> -->
 
 
+</div>
 
-
-    @endsection
+@endsection

@@ -56,7 +56,7 @@
 
 //         return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
 //     }
-    
+
 
 //     public function destroy(Course $course)
 //     {
@@ -118,7 +118,7 @@ class CourseController extends Controller
 
         return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
     }
-    
+
 
     public function destroy(Course $course)
     {

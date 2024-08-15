@@ -9,23 +9,23 @@
             </div>
             <div class="pull-right">
                 <a class="btn btn-primary" href="{{ route('courses.lessons.index', $course->id) }}">Back to Lessons</a>
-                <a class="btn btn-success" href="{{ route('courses.lessons.contents.create', [$course->id, $lesson->id]) }}">Add Content</a>
-       
+                <a class="btn btn-success" href="{{ route('courses.lessons.contents.create', [$course->id, $lesson->id]) }}">Addss Content</a>
+
 
             </div>
         </div>
     </div>
     <div class="row mt-4">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Content Text</th>
-                    <th width="280px">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($lesson->contents as $content)
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Content Text</th>
+                        <th width="280px">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($lesson->contents as $content)
                     <tr>
                         <td>{{ $content->text }}</td>
                         <td>
@@ -38,11 +38,11 @@
                             </form>
                         </td>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
 </div>
 @endsection
