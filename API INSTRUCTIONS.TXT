@@ -1,0 +1,16 @@
+
+#API FOR ACCESSING THE COURSES 
+http://127.0.0.1:8000/api/admin/courses
+
+#API FOR ACCESSING THE LESSONS 
+http://127.0.0.1:8000/api/admin/courses/{courseId}/lessons
+
+#API FOR ACCESSING THE CONTENTS 
+http://127.0.0.1:8000/api/admin/courses/{courseId}/lessons/{lessonId}/contents
+
+#API FOR ACCESSING THE QUESTIONS
+http://127.0.0.1:8000/api/admin/courses/${courseId}/lessons/${lessonId}/contents/{contentId}/questions
+
+#API FOR ACCESSING THE ANSWERS
+http://127.0.0.1:8000/api/admin/courses/${courseId}/lessons/${lessonId}/contents/{contentId}/questions/{questionId}/answers
+
