@@ -17,6 +17,8 @@
                 <!-- Session Status Message -->
                 <x-auth-session-status class="mb-4" :status="session('status')" />
 
+
+
                 <!-- Login Form -->
                 <form method="POST" class="login-form" action="{{ route('login') }}">
                     @csrf

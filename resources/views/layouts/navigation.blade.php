@@ -121,7 +121,7 @@
 
             <form method="POST" action="{{ route('logout') }}" id="logoutForm">
                 @csrf
-                <button type="submit" class="btn btn-logout" id="registerButton">
+                <button type="submit" class="btn btn-main" id="registerButton">
                     Logout
                 </button>
             </form>

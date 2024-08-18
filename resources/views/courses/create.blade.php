@@ -5,23 +5,14 @@
 
 <div class="main-container">
 
-    <div class="container-fluid mb-1  ">
-
-        <h1>Courses</h1>
-
-
-    </div>
 
     <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2>Create New Course</h2>
-            </div>
-            <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('courses.index') }}"> Back</a>
-            </div>
+        <div class="col-lg-6">
+            <h1>Create Course</h1>
         </div>
+
     </div>
+
 
     @if ($errors->any())
     <div class="alert alert-danger">
@@ -34,23 +25,40 @@
     </div>
     @endif
 
+
     <form action="{{ route('courses.store') }}" method="POST">
         @csrf
 
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
+                <div class="form-group" style="width: 500px;">
                     <strong>Name:</strong>
                     <input type="text" name="name" class="form-control" placeholder="Name">
                 </div>
             </div>
+
+
+
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Description:</strong>
                     <textarea class="form-control" style="height:150px" name="description" placeholder="Description"></textarea>
                 </div>
             </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    <strong>Upload Image:</strong>
+                    <input type="file" class="form-control-file" name="image" accept="image/*" required>
+                </div>
+            </div>
+
+
+
+
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                <a class="btn btn-back" href="{{ route('courses.index') }}">Back</a>
+
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>

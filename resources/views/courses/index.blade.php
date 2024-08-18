@@ -3,18 +3,12 @@
 @section('content')
 
 <div class="main-container">
+    @if(Auth::user()->usertype == 'user')
 
-    <div class="container-fluid mb-2  ">
-        <h1>Courses</h1>
-
-        <!-- change the set up -->
-
-        @if(Auth::user()->usertype == 'admin')
-        <div class="pull-right">
-            <a class="btn btn-view-courses" href="{{ route('courses.create') }}"> Create Nsssew Course</a>
+    <div class="row">
+        <div class="col-lg-12 ">
+            <h1>Courses</h1>
         </div>
-        @endif
-
     </div>
 
 
@@ -22,9 +16,11 @@
     $i = 0;
     @endphp
 
-
     <!-- Card container -->
+    <!-- <div class="container-fluid card-container"> -->
     <div class="container-fluid card-container">
+
+
 
         @foreach ($courses as $course)
         <!-- Card item -->
@@ -41,22 +37,18 @@
                     </div>
 
 
-                    <div class="col-6">
-                        <div class="d-flex justify-content-between">
+                    <div class="col-6 d-flex justify-content-end ">
+                        <!-- <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-main ">Edit</a> -->
+                        <a href="{{ route('courses.show', $course->id) }}" class="btn btn-2 pull-right ">View</a>
 
-                            @if(Auth::user()->usertype == 'admin')
-                            <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-view-courses ">Edit</a>
-
-                            <a href="{{ route('courses.show', $course->id) }}" class="btn btn-2 ">View</a>
-
-                            @endif
-                        </div>
                     </div>
 
-
-
-
                 </div>
+
+
+
+
+
             </div>
             <div class="card-content">
                 <!-- <h5>Regions:</h5>
@@ -100,6 +92,81 @@
             @endif
         </div>
     </div> -->
+    @endif
+
+
+
+    @if(Auth::user()->usertype == 'admin')
+
+    <div class="row mb-4">
+        <div class="col-lg-12 margin-tb">
+            <div class="pull-left">
+
+                <h1>Courses</h1>
+
+            </div>
+
+            <div class="pull-right ">
+                <a class="btn btn-main" href="{{ route('courses.create') }}"> Create Course</a>
+            </div>
+
+        </div>
+    </div>
+
+
+    @if ($message = Session::get('success'))
+    <div class="alert alert-success">
+        <p>{{ $message }}</p>
+    </div>
+    @endif
+
+
+    <div class="row" style="overflow-y: auto;">
+
+        <div class="col-lg-12 margin-tb">
+
+
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>No</th>
+                    <th>Course Name</th>
+
+                    <th width="280px">Action</th>
+                </tr>
+                @php
+                $i = 0;
+                @endphp
+                @foreach ($courses as $course)
+                <tr>
+                    <td>{{ ++$i }}</td>
+                    <td>{{ $course->name }}</td>
+
+                    <td>
+                        <form action="{{ route('courses.destroy', $course->id) }}" method="POST">
+                            <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-main-1 ">Edit</a>
+                            <a href="{{ route('courses.show', $course->id) }}" class="btn btn-main-2 ">View</a>
+
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit" class="btn btn-main-3">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </table>
+
+        </div>
+    </div>
+
+
+
+    @endif
+
+
+
+
 
 
 </div>

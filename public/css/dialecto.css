@@ -1,9 +1,8 @@
 /* For documentation: Search the css for a view but addind css:viewName */
 
 .addborder {
-    border: solid red;
+    border: solid red !important;
 }
-
 
 
 /* bootstrap custom  */
@@ -34,16 +33,16 @@
 }
 
 
-.btn-view-courses {
+.btn-main {
     background-color: #CB9219;
     /* Custom background color */
     border-color: #CB9219;
     /* Custom border color */
     color: white;
     /* Text color */
-    border-radius: 7px;
+    border-radius: 4px;
     /* Rounded corners */
-    height: 35px;
+    height: 37.5px;
     /* Fixed height */
     font-weight: 500;
     /* Font weight */
@@ -60,6 +59,237 @@
     text-decoration: none;
     /* Remove underline */
 }
+
+
+.btn-main:hover {
+    color: #fff;
+    background-color: #a67c1c;
+    border-color: #a67c1c;
+}
+
+.btn-main:focus,
+.btn-main.focus {
+    box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, 0.5);
+}
+
+.btn-main:disabled,
+.btn-main.disabled {
+    color: #fff;
+    background-color: #a67c1c;
+    border-color: #a67c1c;
+}
+
+.btn-main:not(:disabled):not(.disabled):active,
+.btn-main:not(:disabled):not(.disabled).active,
+.show>.btn-main.dropdown-toggle {
+    color: #fff;
+    background-color: #a67c1c;
+    border-color: #a67c1c;
+}
+
+.btn-main:not(:disabled):not(.disabled):active:focus,
+.btn-main:not(:disabled):not(.disabled).active:focus,
+.show>.btn-main.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, 0.5);
+}
+
+
+
+.btn-main-1 {
+    background-color: #e8e8e8;
+    /* Custom background color */
+    border-color: #e8e8e8;
+    /* Custom border color */
+    color: black;
+    /* Text color */
+    border-radius: 4px;
+    /* Rounded corners */
+    height: 37.5px;
+    /* Fixed height */
+    font-weight: 500;
+    /* Font weight */
+    display: inline-flex;
+    /* Flexbox for centering text */
+    align-items: center;
+    /* Center text vertically */
+    justify-content: center;
+    /* Center text horizontally */
+    padding: 0 20px;
+    /* Horizontal padding */
+    text-align: center;
+    /* Center text alignment */
+    text-decoration: none;
+    /* Remove underline */
+}
+
+
+.btn-main-1:hover {
+    color: black;
+    background-color: #c9c9c9;
+    border-color: #c9c9c9;
+}
+
+.btn-main-1:focus,
+.btn-main-1.focus {
+    box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, 0.5);
+}
+
+.btn-main-1:disabled,
+.btn-main-1.disabled {
+    color: #fff;
+    background-color: #c9c9c9;
+    border-color: #c9c9c9;
+}
+
+.btn-main-1:not(:disabled):not(.disabled):active,
+.btn-main-1:not(:disabled):not(.disabled).active,
+.show>.btn-main-1.dropdown-toggle {
+    color: #fff;
+    background-color: #c9c9c9;
+    border-color: #c9c9c9;
+}
+
+.btn-main-1:not(:disabled):not(.disabled):active:focus,
+.btn-main-1:not(:disabled):not(.disabled).active:focus,
+.show>.btn-main-1.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, 0.5);
+}
+
+
+
+.btn-main-2 {
+    background-color: #e8e8e8;
+    /* Custom background color */
+    border-color: #e8e8e8;
+    /* Custom border color */
+    color: black;
+    /* Text color */
+    border-radius: 4px;
+    /* Rounded corners */
+    height: 37.5px;
+    /* Fixed height */
+    font-weight: 500;
+    /* Font weight */
+    display: inline-flex;
+    /* Flexbox for centering text */
+    align-items: center;
+    /* Center text vertically */
+    justify-content: center;
+    /* Center text horizontally */
+    padding: 0 20px;
+    /* Horizontal padding */
+    text-align: center;
+    /* Center text alignment */
+    text-decoration: none;
+    /* Remove underline */
+}
+
+.btn-main-2:hover {
+    color: black;
+    background-color: #6aa4fc;
+    border-color: #3988ff;
+}
+
+
+
+
+.btn-main-3 {
+    background-color: #e8e8e8;
+    /* Custom background color */
+    border-color: #e8e8e8;
+    /* Custom border color */
+    color: black;
+    /* Text color */
+    border-radius: 4px;
+    /* Rounded corners */
+    height: 37.5px;
+    /* Fixed height */
+    font-weight: 500;
+    /* Font weight */
+    display: inline-flex;
+    /* Flexbox for centering text */
+    align-items: center;
+    /* Center text vertically */
+    justify-content: center;
+    /* Center text horizontally */
+    padding: 0 20px;
+    /* Horizontal padding */
+    text-align: center;
+    /* Center text alignment */
+    text-decoration: none;
+    /* Remove underline */
+}
+
+
+
+.btn-main-3:hover {
+    color: black;
+    background-color: #da5461;
+    border-color: #dc3545;
+}
+
+
+
+.btn-back {
+    background-color: #e8e8e8;
+    /* Custom background color */
+    border-color: #e8e8e8;
+    /* Custom border color */
+    color: black;
+    /* Text color */
+    border-radius: 4px;
+    /* Rounded corners */
+    height: 37.5px;
+    /* Fixed height */
+    font-weight: 500;
+    /* Font weight */
+    display: inline-flex;
+    /* Flexbox for centering text */
+    align-items: center;
+    /* Center text vertically */
+    justify-content: center;
+    /* Center text horizontally */
+    padding: 0 20px;
+    /* Horizontal padding */
+    text-align: center;
+    /* Center text alignment */
+    text-decoration: none;
+    /* Remove underline */
+}
+
+
+.btn-back:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0069d9;
+}
+
+.btn-back:focus,
+.btn-back.focus {
+    box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, 0.5);
+}
+
+.btn-back:disabled,
+.btn-back.disabled {
+    color: #fff;
+    background-color: #a67c1c;
+    border-color: #a67c1c;
+}
+
+.btn-back:not(:disabled):not(.disabled):active,
+.btn-back:not(:disabled):not(.disabled).active,
+.show>.btn-back.dropdown-toggle {
+    color: #fff;
+    background-color: #a67c1c;
+    border-color: #a67c1c;
+}
+
+.btn-back:not(:disabled):not(.disabled):active:focus,
+.btn-back:not(:disabled):not(.disabled).active:focus,
+.show>.btn-back.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, 0.5);
+}
+
 
 .btn-2 {
     background-color: #FFCA58;
@@ -93,7 +323,6 @@
 .btn-3 {
 
 
-
     background-color: #d82d2d;
     /* Custom background color */
     border-color: #d82d2d;
@@ -122,12 +351,10 @@
 
 }
 
-.btn-view-courses:hover {
-    background-color: #a67c1c;
-    /* Slightly darker on hover */
-    border-color: #a67c1c;
-    /* Border color on hover */
-}
+
+
+
+
 
 
 
@@ -141,34 +368,6 @@
 
 }
 
-
-.btn-logout {
-    background-color: #CB9219;
-    border-color: #CB9219;
-    color: white;
-    border-radius: 5px;
-    height: 50px;
-    font-weight: 500;
-}
-
-
-.btn-logout:hover {
-    color: #fff;
-    /* Text color on hover */
-    background-color: #A67C1F;
-    /* Background color on hover */
-    border-color: #A67C1F;
-    /* Border color on hover */
-}
-
-.btn-login:hover {
-    color: #fff;
-    /* Text color on hover */
-    background-color: #A67C1F;
-    /* Background color on hover */
-    border-color: #A67C1F;
-    /* Border color on hover */
-}
 
 
 .btn-register:hover {
@@ -193,6 +392,7 @@ body {
     /* font-family: sans-serif; */
 
     font-family: Arial, sans-serif;
+
 }
 
 /* css:langing-page */
