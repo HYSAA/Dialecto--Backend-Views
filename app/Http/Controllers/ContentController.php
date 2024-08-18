@@ -190,10 +190,19 @@ class ContentController extends Controller
         return redirect()->route('courses.lessons.contents.index', [$course->id, $lesson->id])
                          ->with('success', 'Content deleted successfully.');
     }
-    public function show(Course $course, Lesson $lesson, Content $content)
-    {
-        return view('contents.show', compact('course', 'lesson', 'content'));
-    }
+
+    public function show($courseId, $lessonId, $contentId)
+{
+    $course = Course::find($courseId);
+    $lesson = Lesson::find($lessonId);
+    $content = Content::find($contentId);
+
+    // diri mag retrieve sa new ug before na content
+    $nextContent = Content::where('lesson_id', $lessonId)->where('id', '>', $contentId)->orderBy('id')->first();
+    $previousContent = Content::where('lesson_id', $lessonId)->where('id', '<', $contentId)->orderBy('id', 'desc')->first();
+
+    return view('contents.show', compact('course', 'lesson', 'content', 'nextContent', 'previousContent'));
+}
     public function edit($courseId, $lessonId, $contentId)
 {
     // Fetch the content, lesson, and course from the database

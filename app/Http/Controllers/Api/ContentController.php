@@ -113,10 +113,10 @@ class ContentController extends BaseController
                 ['name' => $firebasePath]
             );
 
-            // Get the public URL of the uploaded image
+            // imo kuhaon ang url sa image 
             $imageUrl = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
 
-            // Update the image URL in the database
+            // mag update sa image url
             $content->image = $imageUrl;
         }
 
@@ -178,6 +178,9 @@ class ContentController extends BaseController
         return Response::json(['message' => 'Content deleted successfully.'], 200);
     }
 
+
+    ///might reuse this parameters in the future 
+    //stay put
     public function show($courseId, $lessonId, $contentId)
     {
         $content = Content::findOrFail($contentId);
