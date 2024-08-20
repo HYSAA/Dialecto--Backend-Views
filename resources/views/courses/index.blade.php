@@ -102,7 +102,7 @@
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
 
-                <h1>Courses</h1>
+                <h2>Courses</h2>
 
             </div>
 
@@ -115,9 +115,15 @@
 
 
     @if ($message = Session::get('success'))
-    <div class="alert alert-success">
-        <p>{{ $message }}</p>
+
+    <div class="row">
+        <div class="col-lg-12 margin-tb">
+            <div class="alert alert-success">
+                <p>{{ $message }}</p>
+            </div>
+        </div>
     </div>
+
     @endif
 
 
@@ -129,28 +135,38 @@
 
             <table class="table table-bordered">
                 <tr>
-                    <th>No</th>
+                    <th>ID Number</th>
                     <th>Course Name</th>
+                    <th>Course Image</th>
 
                     <th width="280px">Action</th>
                 </tr>
-                @php
-                $i = 0;
-                @endphp
+
                 @foreach ($courses as $course)
                 <tr>
-                    <td>{{ ++$i }}</td>
+                    <td>{{ $course->id }}</td>
                     <td>{{ $course->name }}</td>
 
                     <td>
+                        @if($course->image)
+                        <img src="{{ asset('storage/' . $course->image) }}" alt="Course Image" class="image-thumbnail">
+                        @else
+                        No image available
+                        @endif
+                    </td>
+
+
+
+
+                    <td>
                         <form action="{{ route('courses.destroy', $course->id) }}" method="POST">
-                            <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-main-1 ">Edit</a>
-                            <a href="{{ route('courses.show', $course->id) }}" class="btn btn-main-2 ">View</a>
+                            <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-success ">Edit</a>
+                            <a href="{{ route('courses.show', $course->id) }}" class="btn btn-primary">View</a>
 
                             @csrf
                             @method('DELETE')
 
-                            <button type="submit" class="btn btn-main-3">Delete</button>
+                            <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                     </td>
                 </tr>
