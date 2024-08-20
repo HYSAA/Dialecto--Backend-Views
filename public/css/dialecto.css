@@ -918,3 +918,27 @@ body {
     display: flex;
     /* Ensures the button inside the form also takes full width */
 }
+
+
+/* css:admin.course.index  */
+
+
+
+.image-thumbnail {
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .image-thumbnail {
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 576px) {
+    .image-thumbnail {
+        max-width: 200px;
+    }
+}

@@ -135,18 +135,28 @@
 
             <table class="table table-bordered">
                 <tr>
-                    <th>No</th>
+                    <th>ID Number</th>
                     <th>Course Name</th>
+                    <th>Course Image</th>
 
                     <th width="280px">Action</th>
                 </tr>
-                @php
-                $i = 0;
-                @endphp
+
                 @foreach ($courses as $course)
                 <tr>
-                    <td>{{ ++$i }}</td>
+                    <td>{{ $course->id }}</td>
                     <td>{{ $course->name }}</td>
+
+                    <td>
+                        @if($course->image)
+                        <img src="{{ asset('storage/' . $course->image) }}" alt="Course Image" class="image-thumbnail">
+                        @else
+                        No image available
+                        @endif
+                    </td>
+
+
+
 
                     <td>
                         <form action="{{ route('courses.destroy', $course->id) }}" method="POST">

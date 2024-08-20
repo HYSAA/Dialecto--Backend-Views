@@ -26,18 +26,16 @@
     @endif
 
 
-    <form action="{{ route('courses.store') }}" method="POST">
+    <form action="{{ route('courses.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Name:</strong>
-                    <input type="text" name="name" class="form-control" placeholder="Name">
+                    <input type="text" name="name" class="form-control" placeholder="Name" required>
                 </div>
             </div>
-
-
 
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
@@ -48,21 +46,18 @@
 
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
-                    <strong>Upload Image:</strong>
-                    <input type="file" class="form-control-file" name="image" accept="image/*" required>
+                    <label for="image">Course Image:</label>
+                    <input type="file" class="form-control" name="image" id="image" required>
                 </div>
             </div>
 
-
-
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                 <a class="btn btn-back" href="{{ route('courses.index') }}">Back</a>
-
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
-
     </form>
+
 
 </div>
 @endsection

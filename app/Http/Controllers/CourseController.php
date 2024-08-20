@@ -85,17 +85,45 @@ class CourseController extends Controller
         return view('courses.create');
     }
 
+
+
+
+
     public function store(Request $request)
     {
+        // Validate the incoming request
         $request->validate([
             'name' => 'required',
             'description' => 'nullable',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
         ]);
 
-        Course::create($request->all());
+        $imagePath = null; // Initialize the imagePath variable
 
+        // Check if the image file is present and store it
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+        }
+
+        // Create the course with the image path
+        Course::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'image' => $imagePath, // Store the image path in the database
+        ]);
+
+        // Redirect with a success message
         return redirect()->route('courses.index')->with('success', 'Course created successfully.');
     }
+
+
+
+
+
+
+
+
 
     public function show(Course $course)
     {
