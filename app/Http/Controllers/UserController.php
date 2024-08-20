@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-
-namespace App\Http\Controllers;
-
 use App\Models\User;
+
+
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -16,9 +16,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all(); // Retrieve all users
-        return view('users.index', compact('users')); // Pass users to the view
+        $currentUserId = Auth::id(); // Get the currently authenticated user's ID
+        $users = User::where('id', '!=', $currentUserId)->get(); // Retrieve all users except the current one
+        return view('users.index', compact('users')); // Pass filtered users to the view
     }
+
+
+
 
 
 
@@ -36,6 +40,29 @@ class UserController extends Controller
     {
 
         return view('users.edit', compact('user'));
+    }
+
+
+    public function update(Request $request, User $user)
+    {
+
+        // dd($request->all());
+
+        $request->validate([
+            'name' => 'required',
+            'usertype' => 'nullable',
+
+        ]);
+
+
+
+        $user->update([
+            'name' => $request->name,
+            'usertype' => $request->usertype,
+
+        ]);
+
+        return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
 

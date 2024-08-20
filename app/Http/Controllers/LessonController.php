@@ -31,16 +31,48 @@ class LessonController extends Controller
         return view('lessons.create', compact('course'));
     }
 
+
+
+
+
     public function store(Request $request, Course $course)
     {
         $request->validate([
             'title' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
 
-        $course->lessons()->create($request->all());
+        $imagePath = null; // Initialize the imagePath variable
+
+        // Check if the image file is present and store it
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+        }
+
+
+        Lesson::create([
+            'course_id' => $course->id,
+            'title' => $request->title,
+            'image' => $imagePath,
+        ]);
+
+
+        // $course->lessons()->create($request->all());
 
         return redirect()->route('courses.show', $course->id)->with('success', 'Lesson created successfully.');
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     // public function show(Course $course, Lesson $lesson)
     // {

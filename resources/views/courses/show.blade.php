@@ -52,8 +52,8 @@
                     <td>{{ $lesson->title }}</td>
 
                     <td>
-                        @if($course->image)
-                        <!-- <img src="{{ asset('storage/' . $course->image) }}" alt="Course Image" class="image-thumbnail"> -->
+                        @if($lesson->image)
+                        <img src="{{ asset('storage/' . $lesson->image) }}" alt="lesson Image" class="image-thumbnail">
                         @else
                         No image available
                         @endif

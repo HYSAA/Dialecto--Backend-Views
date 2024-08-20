@@ -8,7 +8,7 @@
 
     <div class="row">
         <div class="col-lg-6">
-            <h1>Create Course</h1>
+            <h2>Create Course</h2>
         </div>
 
     </div>
@@ -46,14 +46,15 @@
 
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
-                    <label for="image">Course Image:</label>
+                    <label for="image"><strong>Course Image:</strong> </label>
                     <input type="file" class="form-control" name="image" id="image" required>
                 </div>
             </div>
 
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                <a class="btn btn-back" href="{{ route('courses.index') }}">Back</a>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a class="btn btn-danger" href="{{ route('courses.index') }}">Back</a>
+
             </div>
         </div>
     </form>

@@ -87,15 +87,13 @@ class CourseController extends Controller
 
 
 
-
-
     public function store(Request $request)
     {
         // Validate the incoming request
         $request->validate([
             'name' => 'required',
             'description' => 'nullable',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
 
         ]);
 
@@ -120,11 +118,6 @@ class CourseController extends Controller
 
 
 
-
-
-
-
-
     public function show(Course $course)
     {
         return view('courses.show', compact('course'));
@@ -135,17 +128,46 @@ class CourseController extends Controller
         return view('courses.edit', compact('course'));
     }
 
+
+
+
+
+
+
     public function update(Request $request, Course $course)
     {
         $request->validate([
             'name' => 'required',
             'description' => 'nullable',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
 
-        $course->update($request->all());
+        // Retain the existing image path unless a new image is uploaded
+        $imagePath = $course->image;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+        }
+
+        // Update the course with the new or existing image path
+        $course->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'image' => $imagePath,
+        ]);
 
         return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
     }
+
+
+
+
+
+
+
+
+
+
 
 
     public function destroy(Course $course)

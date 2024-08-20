@@ -8,9 +8,17 @@
 
 
 
-    <div class="container-fluid mb-1  ">
-        <h1>Lessons - {{ $user->name }}</h1>
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>Edit User Information</h2>
+        </div>
     </div>
+
+
+
+
 
     <div class="container-fluid ">
 
@@ -30,6 +38,8 @@
                 </ul>
             </div>
             @endif
+
+
 
             <form action="{{ route('users.update', $user->id) }}" method="POST">
                 @csrf
@@ -63,23 +73,16 @@
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
                             <strong>Usertype:</strong>
-                            <select name="Usertype" class="form-control">
+                            <select name="usertype" class="form-control">
                                 <option value="admin" {{ $user->usertype === 'admin' ? 'selected' : '' }}>Admin</option>
                                 <option value="user" {{ $user->usertype === 'user' ? 'selected' : '' }}>User</option>
                                 <option value="contributor" {{ $user->usertype === 'contributor' ? 'selected' : '' }}>Contributor</option>
                             </select>
                         </div>
                     </div>
-
-
-
-
-
-
-
                     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                        <button type="submit" class="btn btn-view-courses">Submit</button>
-                        <a class="btn btn-view-courses" href="{{ route('courses.index') }}"> Back</a>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <a class="btn btn-danger" href="{{ route('users.index') }}"> Back</a>
 
 
                     </div>

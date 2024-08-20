@@ -114,6 +114,8 @@
     </div>
 
 
+
+
     @if ($message = Session::get('success'))
 
     <div class="row">
@@ -137,6 +139,7 @@
                 <tr>
                     <th>ID Number</th>
                     <th>Course Name</th>
+                    <th>Course Description</th>
                     <th>Course Image</th>
 
                     <th width="280px">Action</th>
@@ -146,6 +149,7 @@
                 <tr>
                     <td>{{ $course->id }}</td>
                     <td>{{ $course->name }}</td>
+                    <td>{{ $course->description }}</td>
 
                     <td>
                         @if($course->image)
