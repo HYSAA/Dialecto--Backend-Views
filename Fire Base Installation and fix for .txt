@@ -1,0 +1,26 @@
+Fire Base Installation and fix for error.
+Install Laravel Firebase in cmd 
+composer require kreait/laravel-firebase
+
+download firebase credentials and put inside config folder in your laravel-project 
+https://drive.google.com/drive/folders/1qOFPuA3T6NhZbZ_BrZdZcOMbkbMvxs-8
+
+in env file 
+FIREBASE_CREDENTIALS=config/firebase_credentials.json
+
+FIREBASE_STORAGE_BUCKET=gs://try-lecto.appspot.com
+
+if errors 
+
+check cacert.perm <- search for dl online
+also check for your openssl and <-DL online 
+put it inside the php file folder 
+C:\Programming\PHP\PHP8.2\extras\ssl <- Here 
+
+and in  php.ini check extensions 
+for CURL OPENSSL and SODIUM uncomment them 
+
+and below near last line of code in ini.
+it would be [curl] and [openssl]
+curl.cainfo = "C:\Programming\PHP\PHP8.2\extras\ssl\cacert.pem"
+openssl.capath="C:\Programming\PHP\PHP8.2\extras\ssl"
