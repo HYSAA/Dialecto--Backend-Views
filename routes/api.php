@@ -13,16 +13,27 @@ use App\Http\Controllers\Api\HomeController as ApiHomeController;
 
 // Define the API routes
 // Route::middleware('auth:api')->group(function () {
+//// API ROUTES FOR THE ADMIN
     Route::prefix('admin')->group(function () {
         // Route::get('dashboard', [ApiHomeController::class, 'index']);
         Route::resource('courses',ApiCourseController::class);
         Route::resource('courses.lessons', ApiLessonController::class);     
         Route::resource('courses.lessons.contents', ApiContentController::class);
         Route::resource('courses.lessons.contents.questions', ApiQuestionController::class);
-        Route::resource('courses.lessons.contents.questions.answers', ApiAnswerController::class);
-        // Route::get('/questions', function () {
-        //     return view('questions');
-        // });
-        
+        Route::resource('courses.lessons.contents.questions.answers', ApiAnswerController::class);  
     });
-// });
+
+    //API ROUTES FOR THE USER TO GET REQUEST
+
+    Route::prefix('user')->group(function () {
+        // Route::get('dashboard', [ApiHomeController::class, 'index']);
+        Route::resource('courses',ApiCourseController::class);
+        Route::resource('courses.lessons', ApiLessonController::class);     
+        Route::resource('courses.lessons.contents', ApiContentController::class);
+        Route::resource('courses.lessons.contents.questions', ApiQuestionController::class);
+        Route::resource('courses.lessons.contents.questions.answers', ApiAnswerController::class);  
+    });
+
+
+
+
