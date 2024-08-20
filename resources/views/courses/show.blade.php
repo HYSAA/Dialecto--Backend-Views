@@ -40,20 +40,20 @@
             <table class="table table-bordered">
                 <tr>
                     <th>Lesson ID</th>
-                    <th>Course Name</th>
-                    <th>Course Image</th>
+                    <th>Title</th>
+                    <th>Lesson Image</th>
 
                     <th width="280px">Action</th>
                 </tr>
 
-                @foreach ($courses as $course)
+                @foreach ($course->lessons as $lesson)
                 <tr>
-                    <td>{{ $course->id }}</td>
-                    <td>{{ $course->name }}</td>
+                    <td>{{ $lesson->id }}</td>
+                    <td>{{ $lesson->title }}</td>
 
                     <td>
                         @if($course->image)
-                        <img src="{{ asset('storage/' . $course->image) }}" alt="Course Image" class="image-thumbnail">
+                        <!-- <img src="{{ asset('storage/' . $course->image) }}" alt="Course Image" class="image-thumbnail"> -->
                         @else
                         No image available
                         @endif
@@ -63,14 +63,20 @@
 
 
                     <td>
-                        <form action="{{ route('courses.destroy', $course->id) }}" method="POST">
-                            <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-success ">Edit</a>
-                            <a href="{{ route('courses.show', $course->id) }}" class="btn btn-primary">View</a>
+                        <form action="{{ route('courses.lessons.destroy', [$course->id, $lesson->id]) }}" method="POST">
+
+
+                            <a class="btn btn-success" href="{{ route('courses.lessons.edit', [$course->id, $lesson->id]) }}">Edit</a>
+                            <a class="btn btn-primary" href="{{ route('courses.lessons.show', [$course->id, $lesson->id]) }}">View</a>
+
 
                             @csrf
                             @method('DELETE')
 
                             <button type="submit" class="btn btn-danger">Delete</button>
+
+
+
                         </form>
                     </td>
                 </tr>
@@ -81,35 +87,5 @@
     </div>
 
 
-    @if(Auth::user()->usertype == 'user')
 
-
-    <div class="container-fluid card-container">
-        @foreach ($course->lessons as $lesson)
-
-        <div class="cardsmall">
-
-            <div class="img-cont">
-                <img src="{{ asset('images/cebuano.png') }}" alt="Card Image">
-            </div>
-
-            <div class="heading">
-                <h4>{{ $lesson->title }}</h4>
-            </div>
-
-
-            <div class="button-container">
-                <a class="btn btn-view-courses" href="{{ route('courses.lessons.show', [$course->id, $lesson->id]) }}">Show</a>
-                <a class="btn btn-2" href="{{ route('courses.lessons.edit', [$course->id, $lesson->id]) }}">Edit</a>
-                <form action="{{ route('courses.lessons.destroy', [$course->id, $lesson->id]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-3">Delete</button>
-                </form>
-            </div>
-
-        </div>
-        @endforeach
-    </div>
-    @endif
 </div>
