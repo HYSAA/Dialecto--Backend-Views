@@ -8,7 +8,8 @@ https://drive.google.com/drive/folders/1qOFPuA3T6NhZbZ_BrZdZcOMbkbMvxs-8
 in env file 
 FIREBASE_CREDENTIALS=config/firebase_credentials.json
 
-FIREBASE_STORAGE_BUCKET=gs://try-lecto.appspot.com
+FIREBASE_STORAGE_BUCKET=gs://dialecto-c14c1.appspot.com
+
 
 if errors 
 
