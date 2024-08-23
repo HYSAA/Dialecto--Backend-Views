@@ -712,7 +712,8 @@ body {
     flex: 1 0 auto;
     min-width: 370px;
     max-width: 370px;
-    height: 100%;
+    height: 600px;
+    /* height: 100%; */
     /* margin-right: 10px; */
 
     /* Box Model */
@@ -734,12 +735,13 @@ body {
 
 
 .card-img {
-    width: auto;
+    width: 100%;
     height: 300px;
     /* Fixed height */
     object-fit: cover;
     /* Ensures the image covers the area without distortion */
     display: block;
+
 }
 
 .card-content {

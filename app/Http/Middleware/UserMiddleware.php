@@ -16,7 +16,7 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check() && auth::user()->usertype== 'user' ){
+        if (Auth::check() && auth::user()->usertype == 'user') {
             return $next($request);
         }
         return redirect('/');  ///return sa homepage 

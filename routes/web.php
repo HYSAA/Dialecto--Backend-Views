@@ -1,14 +1,21 @@
 <?php
 
+// admin
+
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CourseController; //first
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\UserController;
+
+// user 
+
+use App\Http\Controllers\User\CourseController as UserCourseController;
+
 
 
 
@@ -26,7 +33,7 @@ Route::get('/', function () {
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
 //PARA NI LAHOS SA COURSES ANG USER IG OPEN 
-Route::get('/dashboard', [CourseController::class, 'index'])->name('dashboard');
+// Route::get('/dashboard', [CourseController::class, 'index'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -69,13 +76,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('users', UserController::class);
 
 
-
-
-
-
-
-
-
     // Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     //     Route::resource('courses', CourseController::class);
     //     Route::get('courses/{course}', [CourseController::class, 'show'])->name('courses.show');
@@ -87,6 +87,25 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 });
 
-// Route::middleware(['auth', 'user'])->group(function () {
-//     Route::get('courses', 'CourseController@index')->name('courses.index');
-// });
+Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
+
+    // Dashboard route
+    Route::get('/dashboard', [UserCourseController::class, 'index'])->name('user.dashboard');
+
+
+    // Course-related resources
+    // Route::resource('courses', CourseController::class);
+    // Route::resource('courses.lessons', LessonController::class);
+    // Route::resource('courses.lessons.contents', ContentController::class);
+    // Route::resource('courses.lessons.contents.questions', QuestionController::class);
+    // Route::resource('courses.lessons.contents.questions.answers', AnswerController::class);
+
+    // Additional lesson and question routes
+    // Route::get('lessons', [LessonController::class, 'index'])->name('lessons.index');
+    // Route::get('/questions', function () {
+    //     return view('questions');
+    // });
+
+    // User resource
+    // Route::resource('users', UserController::class);
+});
