@@ -1,18 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h2>{{ isset($question) ? 'Edit Question' : 'Add Question' }}</h2>
-    <form action="{{ isset($question) ? route('contents.questions.update', [$content->id, $question->id]) : route('contents.questions.store', $content->id) }}" method="POST">
+<div class="main-container">
+        
+    <h1>Add New Question</h1>
+    <form action="{{ route('courses.lessons.questions.store', [$course->id, $lesson->id]) }}" method="POST">
         @csrf
-        @if(isset($question))
-            @method('PUT')
-        @endif
         <div class="form-group">
-            <label for="question_text">Question Text</label>
-            <input type="text" class="form-control" id="question_text" name="question_text" value="{{ old('question_text', $question->question_text ?? '') }}">
+            <label for="question_text">Question</label>
+            <input type="text" name="question_text" id="question_text" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-primary">{{ isset($question) ? 'Update' : 'Create' }}</button>
+        <button type="submit" class="btn btn-primary mt-3">Save Question</button>
     </form>
-</div>
+    </div>
 @endsection
