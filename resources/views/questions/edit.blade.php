@@ -1,22 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h2>{{ isset($answer) ? 'Edit Answer' : 'Add Answer' }}</h2>
-    <form action="{{ isset($answer) ? route('questions.answers.update', [$answer->question_id, $answer->id]) : route('questions.answers.store', $question->id) }}" method="POST">
+<div class="main-container">
+    <h1>Edit Question</h1>
+    <form action="{{ route('courses.lessons.questions.update', [$course->id, $lesson->id, $question->id]) }}" method="POST">
         @csrf
-        @if(isset($answer))
-            @method('PUT')
-        @endif
+        @method('PUT')
         <div class="form-group">
-            <label for="answer_text">Answer Text</label>
-            <input type="text" class="form-control" id="answer_text" name="answer_text" value="{{ old('answer_text', $answer->answer_text ?? '') }}">
+            <label for="question_text">Question</label>
+            <input type="text" name="question_text" id="question_text" class="form-control" value="{{ $question->question_text }}" required>
         </div>
-        <div class="form-group">
-            <label for="is_correct">Is Correct?</label>
-            <input type="checkbox" id="is_correct" name="is_correct" {{ old('is_correct', $answer->is_correct ?? false) ? 'checked' : '' }}>
-        </div>
-        <button type="submit" class="btn btn-primary">{{ isset($answer) ? 'Update' : 'Create' }}</button>
+        <button type="submit" class="btn btn-primary mt-3">Update Question</button>
     </form>
 </div>
 @endsection

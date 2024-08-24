@@ -58,8 +58,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('courses.lessons', LessonController::class);
     Route::get('lessons', [LessonController::class, 'index'])->name('lessons.index'); //bag o ni
     Route::resource('courses.lessons.contents', ContentController::class);
-    Route::resource('courses.lessons.contents.questions', QuestionController::class);
-    Route::resource('courses.lessons.contents.questions.answers', AnswerController::class);
+     // CRUD routes for questions associated with contents
+     Route::resource('courses.lessons.questions', QuestionController::class);
+
+     // CRUD routes for answers associated with questions
+     Route::resource('courses.lessons.questions.answers', AnswerController::class);
     Route::get('/questions', function () {
         return view('questions');
     });

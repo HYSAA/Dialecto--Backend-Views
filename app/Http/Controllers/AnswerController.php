@@ -3,52 +3,67 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Models\Course;
+use App\Models\Lesson;
 use App\Models\Answer;
 use Illuminate\Http\Request;
 
 class AnswerController extends Controller
 {
-    public function store(Request $request, Question $question)
+    public function store(Request $request, $courseId, $lessonId, $questionId)
     {
-        $request->validate([
-            'answer_text' => 'required',
-            'is_correct' => 'boolean',
+        // Convert checkbox value to integer
+        $isCorrect = $request->has('is_correct') ? 1 : 0;
+    
+        Answer::create([
+            'question_id' => $questionId,
+            'answer_text' => $request->input('answer_text'),
+            'is_correct' => $isCorrect,
         ]);
-
-        $answer = new Answer();
-        $answer->answer_text = $request->answer_text;
-        $answer->is_correct = $request->is_correct;
-        $answer->question_id = $question->id;
-        $answer->save();
-
-        return redirect()->route('questions.show', $question->id)
+    
+        return redirect()->route('courses.lessons.questions.show', [$courseId, $lessonId, $questionId])
                          ->with('success', 'Answer created successfully.');
     }
-
-    public function edit(Answer $answer)
-    {
-        return view('answers.edit', compact('answer'));
-    }
-
     
-    public function update(Request $request, Answer $answer)
+    public function update(Request $request, $courseId, $lessonId, $questionId, $id)
     {
-        $request->validate([
-            'answer_text' => 'required',
-            'is_correct' => 'boolean',
+        $answer = Answer::findOrFail($id);
+    
+        // Convert checkbox value to integer
+        $isCorrect = $request->has('is_correct') ? 1 : 0;
+    
+        $answer->update([
+            'answer_text' => $request->input('answer_text'),
+            'is_correct' => $isCorrect,
         ]);
-
-        $answer->update($request->only('answer_text', 'is_correct'));
-
-        return redirect()->route('questions.show', $answer->question_id)
+    
+        return redirect()->route('courses.lessons.questions.show', [$courseId, $lessonId, $questionId])
                          ->with('success', 'Answer updated successfully.');
     }
-
-    public function destroy(Answer $answer)
+    
+    public function destroy($courseId, $lessonId, $questionId, $id)
     {
+        $answer = Answer::findOrFail($id);
         $answer->delete();
-
-        return redirect()->route('questions.show', $answer->question_id)
-                         ->with('success', 'Answer deleted successfully.');
+    
+        return redirect()->route('courses.lessons.questions.show', [$courseId, $lessonId, $questionId]);
     }
+    public function create($courseId, $lessonId, $questionId)
+{
+    $course = Course::findOrFail($courseId);
+    $lesson = Lesson::findOrFail($lessonId);
+    $question = Question::findOrFail($questionId);
+
+    return view('answers.create', compact('course', 'lesson', 'question'));
+}
+public function edit($courseId, $lessonId, $questionId, $answerId)
+{
+    $course = Course::findOrFail($courseId);
+    $lesson = Lesson::findOrFail($lessonId);
+    $question = Question::findOrFail($questionId);
+    $answer = Answer::findOrFail($answerId);
+
+    return view('answers.edit', compact('course', 'lesson', 'question', 'answer'));
+}
+    
 }

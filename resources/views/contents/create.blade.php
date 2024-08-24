@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="main-container">
 <div class="container">
     <div class="row">
         <div class="col-lg-12 margin-tb">
@@ -9,7 +10,8 @@
             </div>
             <div class="pull-right">
                 <a class="btn btn-primary" href="{{ route('courses.lessons.show', [$course->id, $lesson->id]) }}">Back</a>
-                <a class="btn btn-success" href="{{ route('courses.lessons.contents.questions.create', [$course->id, $lesson->id, $content->id ?? 0]) }}">Manage Questions</a>
+                <!-- <a class="btn btn-success" href="{{ route('courses.lessons.contents.questions.create', [$course->id, $lesson->id, $content->id ?? 0]) }}">Manage Questions</a> -->
+             
             </div>
         </div>
     </div>
@@ -53,5 +55,6 @@
         </div>
 
     </form>
+</div>
 </div>
 @endsection

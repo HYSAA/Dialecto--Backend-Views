@@ -1,27 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h2>Questions for {{ $content->text }}</h2>
-    <a href="{{ route('contents.questions.create', $content->id) }}" class="btn btn-primary">Add Question</a>
-    <table class="table">
+<div class="main-container">
+    <h1>Questions for Lesson {{ $lesson->title }}</h1>
+    <a href="{{ route('courses.lessons.questions.create', [$course->id, $lesson->id]) }}" class="btn btn-primary">Add New Question</a>
+    <table class="table mt-3">
         <thead>
             <tr>
-                <th>Question Text</th>
+                <th>ID</th>
+                <th>Question</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($questions as $question)
                 <tr>
+                    <td>{{ $question->id }}</td>
                     <td>{{ $question->question_text }}</td>
                     <td>
-                        <a href="{{ route('contents.questions.edit', [$content->id, $question->id]) }}" class="btn btn-warning">Edit</a>
-                        <form action="{{ route('contents.questions.destroy', [$content->id, $question->id]) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('courses.lessons.questions.edit', [$course->id, $lesson->id, $question->id]) }}" class="btn btn-warning">Edit</a>
+                        <form action="{{ route('courses.lessons.questions.destroy', [$course->id, $lesson->id, $question->id]) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
+                        <a href="{{ route('courses.lessons.questions.show', [$course->id, $lesson->id, $question->id]) }}" class="btn btn-info">View Answers</a>
                     </td>
                 </tr>
             @endforeach
