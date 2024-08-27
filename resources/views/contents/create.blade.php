@@ -1,28 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="main-container">
+
     <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2>Add New Content</h2>
+        <div class="col-lg-12 ">
+
+            <div class="float-left">
+
+                <h2>{{ $course->name }}{{ $course->name }} Add New Content</h2>
             </div>
-            <div class="pull-right">
+
+            <div class="float-right">
                 <a class="btn btn-primary" href="{{ route('courses.lessons.show', [$course->id, $lesson->id]) }}">Back</a>
                 <a class="btn btn-success" href="{{ route('courses.lessons.contents.questions.create', [$course->id, $lesson->id, $content->id ?? 0]) }}">Manage Questions</a>
             </div>
+
         </div>
     </div>
 
+
+
     @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    <div class="alert alert-danger">
+        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif
 
     <form action="{{ route('courses.lessons.contents.store', [$course->id, $lesson->id]) }}" method="POST" enctype="multipart/form-data">

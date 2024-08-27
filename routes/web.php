@@ -15,6 +15,8 @@ use App\Http\Controllers\UserController;
 // user 
 
 use App\Http\Controllers\User\CourseController as UserCourseController;
+use App\Http\Controllers\User\LessonController as UserLessonController;
+use App\Http\Controllers\User\ContentController as UserContentController;
 
 
 
@@ -61,9 +63,20 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [CourseController::class, 'index'])->name('dashboard'); //bag o ni 
 
     // Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
-    Route::resource('courses', CourseController::class);
+
+
+    Route::resource('courses', CourseController::class)->names([
+        'index' => 'admin.courses.index',
+        'create' => 'admin.courses.create',
+        'store' => 'admin.courses.store',
+        'show' => 'admin.courses.show',
+        'edit' => 'admin.courses.edit',
+        'update' => 'admin.courses.update',
+        'destroy' => 'admin.courses.destroy'
+    ]);
+
     Route::resource('courses.lessons', LessonController::class);
-    Route::get('lessons', [LessonController::class, 'index'])->name('lessons.index'); //bag o ni
+    Route::get('lessons', [LessonController::class, 'index'])->name('lessons.index');
     Route::resource('courses.lessons.contents', ContentController::class);
     Route::resource('courses.lessons.contents.questions', QuestionController::class);
     Route::resource('courses.lessons.contents.questions.answers', AnswerController::class);
@@ -87,15 +100,60 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 });
 
+
+
+
+
+
+
+
+
 Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
     // Dashboard route
     Route::get('/dashboard', [UserCourseController::class, 'index'])->name('user.dashboard');
 
+    Route::resource('courses', UserCourseController::class)->names([
+        'index' => 'user.courses.index',
+        'create' => 'user.courses.create',
+        'store' => 'user.courses.store',
+        'show' => 'user.courses.show',
+        'edit' => 'user.courses.edit',
+        'update' => 'user.courses.update',
+        'destroy' => 'user.courses.destroy'
+    ]);
 
-    // Course-related resources
-    // Route::resource('courses', CourseController::class);
-    // Route::resource('courses.lessons', LessonController::class);
+    Route::resource('courses.lessons', UserLessonController::class)->names([
+        'index' => 'user.lessons.index',
+        'create' => 'user.lessons.create',
+        'store' => 'user.lessons.store',
+        'show' => 'user.lessons.show',
+        'edit' => 'user.lessons.edit',
+        'update' => 'user.lessons.update',
+        'destroy' => 'user.lessons.destroy'
+    ]);
+
+    Route::resource('courses.lessons.contents', UserContentController::class)->names([
+        'index' => 'user.contents.index',
+        'create' => 'user.contents.create',
+        'store' => 'user.contents.store',
+        'show' => 'user.contents.show',
+        'edit' => 'user.contents.edit',
+        'update' => 'user.contents.update',
+        'destroy' => 'user.contents.destroy',
+    ]);
+
+
+
+
+
+
+
+
+
+
+
+
     // Route::resource('courses.lessons.contents', ContentController::class);
     // Route::resource('courses.lessons.contents.questions', QuestionController::class);
     // Route::resource('courses.lessons.contents.questions.answers', AnswerController::class);

@@ -11,7 +11,7 @@
                 <h2>Courses</h2>
             </div>
             <div class="pull-right ">
-                <a class="btn btn-main" href="{{ route('courses.create') }}"> Create Course</a>
+                <a class="btn btn-main" href="{{ route('admin.courses.create') }}"> Create Course</a>
             </div>
         </div>
     </div>
@@ -60,9 +60,9 @@
                         @endif
                     </td>
                     <td>
-                        <form action="{{ route('courses.destroy', $course->id) }}" method="POST">
-                            <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-success ">Edit</a>
-                            <a href="{{ route('courses.show', $course->id) }}" class="btn btn-primary">View</a>
+                        <form action="{{ route('admin.courses.destroy', $course->id) }}" method="POST">
+                            <a href="{{ route('admin.courses.edit', $course->id) }}" class="btn btn-success ">Edit</a>
+                            <a href="{{ route('admin.courses.show', $course->id) }}" class="btn btn-primary">View</a>
 
                             @csrf
                             @method('DELETE')

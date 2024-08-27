@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Course;
 use App\Models\Lesson;
@@ -215,6 +217,8 @@ class ContentController extends Controller
         // Return the view with the data to edit
         return view('contents.edit', compact('content', 'lesson', 'course'));
     }
+
+
 
 
     public function index(Course $course, Lesson $lesson)

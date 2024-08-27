@@ -25,33 +25,33 @@
                 </thead>
                 <tbody>
                     @foreach ($contents as $content)
-                        <tr>
+                    <tr>
                         <td>
-                                @if ($content->text)
-                                    <p>{{ $content->text }}</p>
-                                @endif
-                                @if ($content->text)
-                                <p>{{ $content->english }}</p>
-                                @endif
-                                @if ($content->image)
-                                    <img src="{{ $content->image }}" width="150px" alt="Content Image">
-                                @endif
-                                @if ($content->video)
-                                    <video width="150px" controls>
-                                        <source src="{{ $content->video }}" type="video/mp4">
-                                    </video>
-                                @endif
-                            </td>
-                            <td>
-                                <a class="btn btn-info" href="{{ route('courses.lessons.contents.show', [$course->id, $lesson->id, $content->id]) }}">Show</a>
-                                <a class="btn btn-primary" href="{{ route('courses.lessons.contents.edit', [$course->id, $lesson->id, $content->id]) }}">Edit</a>
-                                <form action="{{ route('courses.lessons.contents.destroy', [$course->id, $lesson->id, $content->id]) }}" method="POST" style="display:inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
+                            @if ($content->text)
+                            <p>{{ $content->text }}</p>
+                            @endif
+                            @if ($content->text)
+                            <p>{{ $content->english }}</p>
+                            @endif
+                            @if ($content->image)
+                            <img src="{{ $content->image }}" width="150px" alt="Content Image">
+                            @endif
+                            @if ($content->video)
+                            <video width="150px" controls>
+                                <source src="{{ $content->video }}" type="video/mp4">
+                            </video>
+                            @endif
+                        </td>
+                        <td>
+                            <a class="btn btn-info" href="{{ route('courses.lessons.contents.show', [$course->id, $lesson->id, $content->id]) }}">Show</a>
+                            <a class="btn btn-primary" href="{{ route('courses.lessons.contents.edit', [$course->id, $lesson->id, $content->id]) }}">Edit</a>
+                            <form action="{{ route('courses.lessons.contents.destroy', [$course->id, $lesson->id, $content->id]) }}" method="POST" style="display:inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>

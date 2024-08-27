@@ -8,7 +8,7 @@
 
             @if(Auth::user()->usertype == 'admin')
             <li class="nav-item">
-                <a class="btn btn-nav" href="{{ route('courses.index') }}">
+                <a class="btn btn-nav" href="{{ route('admin.courses.index') }}">
                     <i class="fas fa-book btn-icon"></i>
                     <span class="btn-text">Courses</span>
                 </a>
@@ -41,11 +41,17 @@
                 </a>
             </li>
 
-
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ url('/progress') }}">
                     <i class="fas fa-tachometer-alt btn-icon"></i>
                     <span class="btn-text">Progress</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ url('/progress') }}">
+                    <i class="fas fa-tachometer-alt btn-icon"></i>
+                    <span class="btn-text">Ranking</span>
                 </a>
             </li>
 

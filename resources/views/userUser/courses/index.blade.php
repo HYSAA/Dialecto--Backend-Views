@@ -19,6 +19,7 @@
     <div class="row" style="overflow-y: auto;">
         <div class="col-lg-12 margin-tb">
 
+
             <div class="row">
 
                 @foreach ($courses as $course)
@@ -35,11 +36,6 @@
                         </td>
 
 
-
-
-
-
-
                         <div class="row align-items-center mt-3 mb-3 " style="height: 50px;">
                             <div class="col-6 d-flex align-items-center ">
                                 <h3 class="card-title mb-0">{{ $course->name }}</h3>
@@ -48,7 +44,7 @@
 
                             <div class="col-6 d-flex justify-content-end ">
 
-                                <a href="{{ route('courses.show', $course->id) }}" class="btn btn-main pull-right ">View</a>
+                                <a href="{{ route('user.courses.show', $course->id) }}" class="btn btn-main pull-right ">View</a>
 
                             </div>
                         </div>

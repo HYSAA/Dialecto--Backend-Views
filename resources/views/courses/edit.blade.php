@@ -28,7 +28,7 @@
 
 
 
-    <form action="{{ route('courses.update', $course->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.courses.update', $course->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -57,7 +57,7 @@
 
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                 <button type="submit" class="btn btn-primary">Save</button>
-                <a class="btn btn-danger" href="{{ route('courses.index') }}">Discard</a>
+                <a class="btn btn-danger" href="{{ route('admin.courses.index') }}">Discard</a>
             </div>
         </div>
     </form>

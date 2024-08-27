@@ -66,14 +66,6 @@ class LessonController extends Controller
 
 
 
-
-
-
-
-
-
-
-
     // public function show(Course $course, Lesson $lesson)
     // {
     //     return view('lessons.show', compact('course', 'lesson'));
@@ -83,6 +75,10 @@ class LessonController extends Controller
         $contents = $lesson->contents; // Fetch contents associated with the lesson
         return view('lessons.show', compact('course', 'lesson', 'contents'));
     }
+
+
+
+
 
     public function edit(Course $course, Lesson $lesson)
     {

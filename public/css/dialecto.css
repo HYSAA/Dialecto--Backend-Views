@@ -645,10 +645,6 @@ body {
 
 /* css:main content container */
 
-.main-contaner {
-
-    padding-top: 20px;
-}
 
 
 /* css:learner.course */
@@ -715,21 +711,38 @@ body {
     height: 600px;
     /* height: 100%; */
     /* margin-right: 10px; */
+    /* Box Model */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* Background */
+    background-color: #ebe4cc;
+    /* Overflow and Word Wrapping */
+    overflow: hidden;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
 
+.cardsmall {
+    /* Layout */
+    flex: 1 0 auto;
+    min-width: 370px;
+    max-width: 370px;
+    height: 300px;
+    /* height: 100%; */
+    /* margin-right: 10px; */
     /* Box Model */
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
+
     /* Background */
     background-color: #ebe4cc;
-
     /* Overflow and Word Wrapping */
     overflow: hidden;
     overflow-wrap: break-word;
     white-space: normal;
-
-
 }
 
 
@@ -743,6 +756,22 @@ body {
     display: block;
 
 }
+
+.card-img-small {
+    width: 100%;
+    height: 230px;
+    /* Fixed height */
+    object-fit: cover;
+    /* Ensures the image covers the area without distortion */
+    display: block;
+
+}
+
+
+
+
+
+
 
 .card-content {
     padding: 16px;
@@ -833,15 +862,14 @@ body {
 
 /* css:course/show  */
 
-.cardsmall {
+/* .cardsmall {
 
-    /* Layout */
+    
     display: flex;
     flex-direction: column;
-    /* justify-content: center;
-    align-items: center; */
+    
     overflow: hidden;
-    /* Box Model */
+    
     width: 290px;
     height: 200px;
     border: 1px solid #ddd;
@@ -850,7 +878,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-}
+} */
 
 .img-cont {
     width: 100%;
@@ -943,4 +971,34 @@ body {
     .image-thumbnail {
         max-width: 200px;
     }
+}
+
+
+/* modal for lesson  */
+
+.l-modal-overlay {
+    display: none;
+    /* Hide the modal by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+}
+
+.l-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
 }

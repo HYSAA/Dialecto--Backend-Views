@@ -109,18 +109,32 @@
 
         // Add event listener to the "Register" button
         document.getElementById('registerButton').addEventListener('click', function() {
+            console.log('Register button clicked'); // Debug message
+
             // Add blur effect to the landing page
-            document.querySelector('.landing-page').classList.add('blurred');
+            var landingPage = document.querySelector('.landing-page');
+            landingPage.classList.add('blurred');
+            console.log('Blur effect added to landing page'); // Debug message
+
             // Display the register modal
-            document.getElementById('registerModal').style.display = 'block';
+            var registerModal = document.getElementById('registerModal');
+            registerModal.style.display = 'block';
+            console.log('Register modal displayed'); // Debug message
         });
 
         // Add event listener to the "Close" button in the modal
         document.getElementById('closeModal').addEventListener('click', function() {
+            console.log('Close button clicked'); // Debug message
+
             // Remove blur effect from the landing page
-            document.querySelector('.landing-page').classList.remove('blurred');
+            var landingPage = document.querySelector('.landing-page');
+            landingPage.classList.remove('blurred');
+            console.log('Blur effect removed from landing page'); // Debug message
+
             // Hide the register modal
-            document.getElementById('registerModal').style.display = 'none';
+            var registerModal = document.getElementById('registerModal');
+            registerModal.style.display = 'none';
+            console.log('Register modal hidden'); // Debug message
         });
     </script>
 
