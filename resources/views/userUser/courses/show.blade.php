@@ -76,7 +76,7 @@
         <h3 id="modalLessonTitle">Lesson Title</h3>
         <h5 id="modalLessonCount" style="font-weight: 50; color: #90949C;">Total Contents: 0</h5>
 
-        <a class="btn btn-info" id="modalShowButton" href="#">Show</a>
+        <a class="btn btn-main" id="modalShowButton" href="#">Show</a>
 
         <div id="modalLessonContents">
             <!-- The lesson contents will be injected here -->
@@ -99,7 +99,7 @@
                 document.getElementById('modalLessonTitle').textContent = lessonTitle;
 
                 // Count the number of contents
-                document.getElementById('modalLessonCount').textContent = `Total Contents: ${lessonContents.length}`;
+                document.getElementById('modalLessonCount').textContent = `${lessonContents.length} Words`;
 
                 // Generate the contents and inject them into the modal
                 let contentsHtml = '';
