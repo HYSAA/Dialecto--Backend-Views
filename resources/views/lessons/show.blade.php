@@ -14,7 +14,12 @@
                 <a class="btn btn-success"
                     href="{{ route('courses.lessons.contents.create', [$course->id, $lesson->id]) }}">Add Content</a>
 
+                    <a href="{{ route('courses.lessons.questions.create', [$course->id, $lesson->id]) }}" class="btn btn-primary">Add New Question</a>
 
+                    <a class="btn btn-primary"href="{{route('courses.lessons.questions.index',[$course->id,$lesson->id]) }}">View Questions</a>
+
+
+     
             </div>
         </div>
     </div>

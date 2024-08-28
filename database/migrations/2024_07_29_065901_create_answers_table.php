@@ -10,12 +10,12 @@ return new class extends Migration
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('question_id')->constrained()->onDelete('cascade');
-            $table->text('answer_text');
-            $table->boolean('is_correct')->default(false);
+            $table->string('answer_text');
+            $table->boolean('is_correct')->default(false); // Mark the correct answer
             $table->timestamps();
         });
     }
-
+    
     public function down()
     {
         Schema::dropIfExists('answers');
