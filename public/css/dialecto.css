@@ -60,6 +60,24 @@
     /* Remove underline */
 }
 
+#closeLessonModal {
+    color: #CB9219;
+
+}
+
+#closeLessonModal:hover {
+    color: #a67c1c;
+
+}
+
+
+
+
+
+
+
+
+
 
 .btn-main:hover {
     color: #fff;
@@ -799,6 +817,8 @@ body {
 
 .top {
 
+    padding-bottom: 15px;
+
     background-color: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -1009,4 +1029,38 @@ body {
     max-width: 500px;
     max-height: 90vh;
     overflow-y: auto;
+}
+
+#modalLessonContents {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.content-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 5px;
+    /* Adjust spacing between rows */
+}
+
+.content-text,
+.content-english {
+
+    text-align: left;
+    /* Align text to the left */
+
+    flex: 1;
+}
+
+
+
+
+.content-separator {
+    margin: 0 10px;
+    /* Adjust spacing around the dash */
+    white-space: nowrap;
+    /* Prevents the dash from wrapping */
+    text-align: center;
+    /* Centers the dash */
 }

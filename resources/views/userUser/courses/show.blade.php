@@ -72,16 +72,31 @@
 
 <!-- Lesson Modal -->
 <div class="l-modal-overlay" id="lessonModal" style="display:none;">
-    <div class="l-modal-content text-center" style="padding-top: 100px;">
-        <h3 id="modalLessonTitle">Lesson Title</h3>
-        <h5 id="modalLessonCount" style="font-weight: 50; color: #90949C;">Total Contents: 0</h5>
 
-        <a class="btn btn-main" id="modalShowButton" href="#">Show</a>
+    <div class="l-modal-content text-center ">
+
+        <div class="container-fluid position-relative addborder" style="height: 80px;">
+            <i class="bi bi-x-circle position-absolute btn" id="closeLessonModal" style="top: 0; right: 0; padding: 10px; font-size: 32px;"></i>
+        </div>
+
+
+
+
+
+        <h3 id="modalLessonTitle">Lesson Title</h3>
+        <h5 id="modalLessonCount" style="font-weight: 50; color: #90949C; margin-bottom: 3  0px;">Total Contents: 0</h5>
+
+        <a class="btn btn-main" id="modalShowButton" style="margin-bottom: 20px;" href="#">Show</a>
+
 
         <div id="modalLessonContents">
-            <!-- The lesson contents will be injected here -->
+
         </div>
-        <button type="button" class="btn btn-secondary" id="closeLessonModal">Close</button>
+
+
+
+
+
     </div>
 </div>
 
@@ -103,17 +118,38 @@
 
                 // Generate the contents and inject them into the modal
                 let contentsHtml = '';
+
                 lessonContents.forEach(content => {
-                    contentsHtml += `<p>${content.text} - ${content.english}</p>`;
+                    contentsHtml += `
+                <div class="content-row">
+                    <div class="content-text">${content.text}</div>
+                    <div class="content-separator">-</div>
+                    <div class="content-english">${content.english}</div>
+                </div>
+                <hr>`;
                 });
                 document.getElementById('modalLessonContents').innerHTML = contentsHtml;
+
+
+
+
+                // lessonContents.forEach(content => {
+                //     contentsHtml += `<p>${content.text} - ${content.english}</p>
+                //      <hr>`;
+                // });
+                // document.getElementById('modalLessonContents').innerHTML = contentsHtml;
+
+
+
+
+
 
                 // Dynamically set the href for the Show button
                 const firstContentId = lessonContents.length > 0 ? lessonContents[0].id : null;
                 const showButton = document.getElementById('modalShowButton');
                 if (firstContentId) {
                     showButton.href = `/user/courses/${courseId}/lessons/${lessonId}/contents/${firstContentId}`;
-                    showButton.style.display = 'inline-block';
+                    // showButton.style.display = 'inline-block';
                 } else {
                     showButton.style.display = 'none'; // Hide the button if no content exists
                 }
