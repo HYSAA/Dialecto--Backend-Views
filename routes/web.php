@@ -100,7 +100,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         'destroy' => 'admin.contents.destroy',
     ]);
 
+        'create' => 'admin.questions.create',
+        'store' => 'admin.questions.store',
+        'show' => 'admin.questions.show',
+        'edit' => 'admin.questions.edit',
+        'update' => 'admin.questions.update',
+        'destroy' => 'admin.questions.destroy',
+    ]);
 
+  
 
 
 
