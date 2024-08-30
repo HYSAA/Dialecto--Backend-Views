@@ -9,7 +9,7 @@
                 <h2>{{ $course->name }} - {{ $lesson->title }} - Contents</h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('courses.lessons.show', [$course->id, $lesson->id]) }}">Back To Lesson</a>
+                <a class="btn btn-primary" href="{{ route('admin.lessons.show', [$course->id, $lesson->id]) }}">Back To Lesson</a>
             </div>
         </div>
     </div>
