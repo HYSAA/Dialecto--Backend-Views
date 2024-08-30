@@ -88,7 +88,7 @@ class ContentController extends Controller
 
         $content->save();
 
-        return redirect()->route('courses.lessons.show', [$courseId, $lessonId])
+        return redirect()->route('admin.lessons.show', [$courseId, $lessonId])
             ->with('success', 'Content created successfully.');
     }
 
@@ -159,7 +159,7 @@ class ContentController extends Controller
 
         $content->save();
 
-        return redirect()->route('courses.lessons.contents.index', [$course->id, $lesson->id])
+        return redirect()->route('admin.contents.index', [$course->id, $lesson->id])
             ->with('success', 'Content updated successfully.');
     }
 
@@ -187,8 +187,7 @@ class ContentController extends Controller
 
         $content->delete();
 
-        return redirect()->route('courses.lessons.contents.index', [$course->id, $lesson->id])
-            ->with('success', 'Content deleted successfully.');
+        return redirect()->route('admin.lessons.show', [$course->id, $lesson->id])->with('success', 'Content deleted successfully.');
     }
 
     public function show($courseId, $lessonId, $contentId)
@@ -203,6 +202,10 @@ class ContentController extends Controller
 
         return view('contents.show', compact('course', 'lesson', 'content', 'nextContent', 'previousContent'));
     }
+
+
+
+
 
 
     public function edit($courseId, $lessonId, $contentId)

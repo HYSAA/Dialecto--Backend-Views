@@ -29,7 +29,7 @@
     </div>
     @endif
 
-    <form action="{{ route('courses.lessons.store', $course->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.lessons.store', $course->id) }}" method="POST" enctype="multipart/form-data">
 
 
         @csrf
@@ -57,7 +57,7 @@
 
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                 <button type="submit" class="btn btn-primary">Save</button>
-                <a href="{{ route('courses.show', $course->id) }}" class="btn btn-danger">Discard</a>
+                <a href="{{ route('admin.courses.show', $course->id) }}" class="btn btn-danger">Discard</a>
             </div>
         </div>
 

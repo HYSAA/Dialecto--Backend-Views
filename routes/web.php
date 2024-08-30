@@ -61,6 +61,7 @@ require __DIR__ . '/auth.php';
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     //MAO NING CODE PARA MO LAHOS DIRECTLY SA COURSES IG DASHBOARD SA ADMIN
     Route::get('/dashboard', [CourseController::class, 'index'])->name('dashboard'); //bag o ni 
+    Route::get('lessons', [LessonController::class, 'index'])->name('lessons.index');
 
     // Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
 
@@ -75,37 +76,44 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         'destroy' => 'admin.courses.destroy'
     ]);
 
-    Route::resource('courses.lessons', LessonController::class);
-    Route::get('lessons', [LessonController::class, 'index'])->name('lessons.index');
-    Route::resource('courses.lessons.contents', ContentController::class);
-     // CRUD routes for questions associated with contents
-     Route::resource('courses.lessons.questions', QuestionController::class);
+    // Route::resource('courses.lessons', LessonController::class);
 
-     // CRUD routes for answers associated with questions
-     Route::resource('courses.lessons.questions.answers', AnswerController::class);
+    Route::resource('courses.lessons', LessonController::class)->names([
+        'index' => 'admin.lessons.index',
+        'create' => 'admin.lessons.create',
+        'store' => 'admin.lessons.store',
+        'show' => 'admin.lessons.show',
+        'edit' => 'admin.lessons.edit',
+        'update' => 'admin.lessons.update',
+        'destroy' => 'admin.lessons.destroy'
+    ]);
+
+    // Route::resource('courses.lessons.contents', ContentController::class);
+
+    Route::resource('courses.lessons.contents', ContentController::class)->names([
+        'index' => 'admin.contents.index',
+        'create' => 'admin.contents.create',
+        'store' => 'admin.contents.store',
+        'show' => 'admin.contents.show',
+        'edit' => 'admin.contents.edit',
+        'update' => 'admin.contents.update',
+        'destroy' => 'admin.contents.destroy',
+    ]);
+
+
+
+
+
+
+    Route::resource('courses.lessons.questions', QuestionController::class);
+    Route::resource('courses.lessons.questions.answers', AnswerController::class);
     Route::get('/questions', function () {
         return view('questions');
     });
 
-    // route for viewing user 
 
     Route::resource('users', UserController::class);
-
-
-    // Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
-    //     Route::resource('courses', CourseController::class);
-    //     Route::get('courses/{course}', [CourseController::class, 'show'])->name('courses.show');
-
-    // });
-
-    //USER ROUTES
-
-
 });
-
-
-
-
 
 
 

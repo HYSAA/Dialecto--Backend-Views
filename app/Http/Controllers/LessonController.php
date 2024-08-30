@@ -59,11 +59,8 @@ class LessonController extends Controller
 
         // $course->lessons()->create($request->all());
 
-        return redirect()->route('courses.show', $course->id)->with('success', 'Lesson created successfully.');
+        return redirect()->route('admin.courses.show', $course->id)->with('success', 'Lesson created successfully.');
     }
-
-
-
 
 
     // public function show(Course $course, Lesson $lesson)
@@ -93,13 +90,13 @@ class LessonController extends Controller
 
         $lesson->update($request->all());
 
-        return redirect()->route('courses.show', $course->id)->with('success', 'Lesson updated successfully.');
+        return redirect()->route('admin.courses.show', $course->id)->with('success', 'Lesson updated successfully.');
     }
 
     public function destroy(Course $course, Lesson $lesson)
     {
         $lesson->delete();
 
-        return redirect()->route('courses.show', $course->id)->with('success', 'Lesson deleted successfully.');
+        return redirect()->route('admin.courses.show', $course->id)->with('success', 'Lesson deleted successfully.');
     }
 }

@@ -2,27 +2,23 @@
 
 @section('content')
 <div class="main-container">
-<div class="container">
     <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2>Edit Content</h2>
-            </div>
-            <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('courses.lessons.show', [$course->id, $lesson->id]) }}"> Back</a>
-            </div>
+
+        <div class="col-lg-6">
+            <h2>Edit Content</h2>
         </div>
+
     </div>
 
     @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    <div class="alert alert-danger">
+        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif
 
     <form action="{{ route('courses.lessons.contents.update', [$course->id, $lesson->id, $content->id]) }}" method="POST" enctype="multipart/form-data">
@@ -44,21 +40,23 @@
                     <strong>Video:</strong>
                     <input type="file" name="video" class="form-control">
                     @if ($content->video)
-                                    <video width="150px" controls>
-                                        <source src="{{ $content->video }}" type="video/mp4">
-                                    </video>
-                                @endif
+                    <video width="150px" controls>
+                        <source src="{{ $content->video }}" type="video/mp4">
+                    </video>
+                    @endif
 
-                    
+
 
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a class="btn btn-danger" href="{{ route('admin.courses.index') }}">Back</a>
+
             </div>
         </div>
 
     </form>
 </div>
-</div>
+
 @endsection

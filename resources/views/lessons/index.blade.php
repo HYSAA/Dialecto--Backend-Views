@@ -13,7 +13,7 @@
             </div>
             @if(isset($course))
             <div class="pull-right">
-                <a class="btn btn-success" href="{{ route('courses.lessons.create', $course->id) }}">Create New Lesson</a>
+                <a class="btn btn-success" href="{{ route('admin.lessons.create', $course->id) }}">Create New Lesson</a>
             </div>
             @endif
         </div>
@@ -41,9 +41,9 @@
             <td>{{ $lesson->title }}</td>
             <td>{{ $lesson->course->name }}</td>
             <td>
-                <form action="{{ route('courses.lessons.destroy', [$lesson->course->id, $lesson->id]) }}" method="POST">
-                    <a class="btn btn-info" href="{{ route('courses.lessons.show', [$lesson->course->id, $lesson->id]) }}">Shosssw</a>
-                    <a class="btn btn-primary" href="{{ route('courses.lessons.edit', [$lesson->course->id, $lesson->id]) }}">Edit</a>
+                <form action="{{ route('admin.lessons.destroy', [$lesson->course->id, $lesson->id]) }}" method="POST">
+                    <a class="btn btn-info" href="{{ route('admin.lessons.show', [$lesson->course->id, $lesson->id]) }}">Shosssw</a>
+                    <a class="btn btn-primary" href="{{ route('admin.lessons.edit', [$lesson->course->id, $lesson->id]) }}">Edit</a>
 
                     @csrf
                     @method('DELETE')

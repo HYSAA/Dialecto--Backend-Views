@@ -8,18 +8,13 @@
                 <h2>{{ $course->name }} - Lesson: {{ $lesson->title }}</h2>
             </div>
             <div class="pull-right">
-                <!-- <a class="btn btn-primary" href="{{ route('courses.lessons.index', $course->id) }}">Back to Lessons</a>  -->
-                <a class="btn btn-primary" href="{{ route('courses.show', $course->id) }}">Back to Course</a>
 
-                <a class="btn btn-success"
-                    href="{{ route('courses.lessons.contents.create', [$course->id, $lesson->id]) }}">Add Content</a>
-
-                    <a href="{{ route('courses.lessons.questions.create', [$course->id, $lesson->id]) }}" class="btn btn-primary">Add New Question</a>
-
-                    <a class="btn btn-primary"href="{{route('courses.lessons.questions.index',[$course->id,$lesson->id]) }}">View Questions</a>
+                <a class="btn btn-main" href="{{ route('admin.contents.create', [$course->id, $lesson->id]) }}">Add Content</a>
 
 
-     
+
+
+
             </div>
         </div>
     </div>
@@ -42,19 +37,21 @@
 
                         <td>
                             @if ($content->video)
-                            <video width="100%" height="100" controls>
+                            <video controls class="image-thumbnail">
                                 <source src="{{ $content->video }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
+                            @else
+                            No video available
                             @endif
                         </td>
+
                         <td>
-                            <a class="btn btn-info"
-                                href="{{ route('courses.lessons.contents.show', [$course->id, $lesson->id, $content->id]) }}">Show</a>
-                            <a class="btn btn-primary"
-                                href="{{ route('courses.lessons.contents.edit', [$course->id, $lesson->id, $content->id]) }}">Edit</a>
+                            <a class="btn btn-success" href="{{ route('admin.contents.edit', [$course->id, $lesson->id, $content->id]) }}">Edit</a>
+                            <a class="btn btn-primary" href="{{ route('admin.contents.show', [$course->id, $lesson->id, $content->id]) }}">Show</a>
+
                             <form
-                                action="{{ route('courses.lessons.contents.destroy', [$course->id, $lesson->id, $content->id]) }}"
+                                action="{{ route('admin.contents.destroy', [$course->id, $lesson->id, $content->id]) }}"
                                 method="POST" style="display:inline">
                                 @csrf
                                 @method('DELETE')

@@ -11,12 +11,12 @@
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
 
-                <h2>Lessons - {{ $course->name }}{{ $course->course_id }}</h2>
+                <h2>Lessons - {{ $course->name }}</h2>
 
             </div>
 
             <div class="pull-right ">
-                <a class="btn btn-main" href="{{ route('courses.lessons.create', $course->id) }}">Create Lesson</a>
+                <a class="btn btn-main" href="{{ route('admin.lessons.create', $course->id) }}">Create Lesson</a>
             </div>
 
         </div>
@@ -63,11 +63,13 @@
 
 
                     <td>
-                        <form action="{{ route('courses.lessons.destroy', [$course->id, $lesson->id]) }}" method="POST">
+                        <form action="{{ route('admin.lessons.destroy', [$course->id, $lesson->id]) }}" method="POST">
 
 
-                            <a class="btn btn-success" href="{{ route('courses.lessons.edit', [$course->id, $lesson->id]) }}">Edit</a>
-                            <a class="btn btn-primary" href="{{ route('courses.lessons.show', [$course->id, $lesson->id]) }}">View</a>
+                            <a class="btn btn-success" href="{{ route('admin.lessons.edit', [$course->id, $lesson->id]) }}">Edit</a>
+
+                            <a class="btn btn-primary" href="{{ route('admin.lessons.show', [$course->id, $lesson->id]) }}">View</a>
+
 
 
                             @csrf

@@ -26,7 +26,7 @@
     @endif
 
 
-    <form action="{{ route('courses.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.courses.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="row">
@@ -53,7 +53,7 @@
 
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                 <button type="submit" class="btn btn-primary">Save</button>
-                <a class="btn btn-danger" href="{{ route('courses.index') }}">Back</a>
+                <a class="btn btn-danger" href="{{ route('admin.courses.index') }}">Back</a>
 
             </div>
         </div>
