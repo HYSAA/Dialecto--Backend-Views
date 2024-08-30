@@ -2,7 +2,8 @@
 
 @section('content')
 <div class="main-container">
-    <div class="row">
+
+    <div class="row mb-4">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
                 <h2>{{ $course->name }} - Lesson: {{ $lesson->title }}</h2>
@@ -11,14 +12,11 @@
 
                 <a class="btn btn-main" href="{{ route('admin.contents.create', [$course->id, $lesson->id]) }}">Add Content</a>
 
-
-
-
-
             </div>
         </div>
     </div>
-    <div class="row mt-4">
+
+    <div class="row" style="overflow-y: auto;">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <table class="table table-bordered">
                 <thead>
@@ -37,7 +35,7 @@
 
                         <td>
                             @if ($content->video)
-                            <video controls class="image-thumbnail">
+                            <video controls class="vid-thumbnail">
                                 <source src="{{ $content->video }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>

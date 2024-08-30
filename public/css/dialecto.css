@@ -961,6 +961,14 @@ body {
     object-fit: cover;
 }
 
+
+.vid-thumbnail {
+    width: 100%;
+
+    height: auto;
+    object-fit: cover;
+}
+
 @media (max-width: 768px) {
     .image-thumbnail {
         max-width: 300px;
