@@ -21,7 +21,7 @@
     </div>
     @endif
 
-    <form action="{{ route('courses.lessons.contents.update', [$course->id, $lesson->id, $content->id]) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.contents.update', [$course->id, $lesson->id, $content->id]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
