@@ -4,6 +4,7 @@
 <div class="main-container">
     <h1>Questions for Lesson {{ $lesson->title }}</h1>
     <a href="{{ route('courses.lessons.questions.create', [$course->id, $lesson->id]) }}" class="btn btn-primary">Add New Question</a>
+    <a  class="btn btn-primary" href="{{ route('admin.lessons.show', [$course->id, $lesson->id]) }}">Back</a>
     <table class="table mt-3">
         <thead>
             <tr>

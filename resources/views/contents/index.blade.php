@@ -46,7 +46,7 @@
                             <td>
                                 <a class="btn btn-info" href="{{ route('courses.lessons.contents.show', [$course->id, $lesson->id, $content->id]) }}">Show</a>
                                 <a class="btn btn-primary" href="{{ route('courses.lessons.contents.edit', [$course->id, $lesson->id, $content->id]) }}">Edit</a>
-                                <form action="{{ route('courses.lessons.contents.destroy', [$course->id, $lesson->id, $content->id]) }}" method="POST" style="display:inline">
+                                <form action="{{ route('admin.contents.destroy', [$course->id, $lesson->id, $content->id]) }}" method="POST" style="display:inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Delete</button>

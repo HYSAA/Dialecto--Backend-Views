@@ -86,9 +86,20 @@ class LessonController extends Controller
     {
         $request->validate([
             'title' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
+        $imagePath = $lesson->image;
 
-        $lesson->update($request->all());
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+        }
+
+        // Update the course with the new or existing image path
+        $lesson->update([
+            'title' => $request->title,
+            
+            'image' => $imagePath,
+        ]);
 
         return redirect()->route('admin.courses.show', $course->id)->with('success', 'Lesson updated successfully.');
     }
