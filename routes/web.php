@@ -17,7 +17,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\User\CourseController as UserCourseController;
 use App\Http\Controllers\User\LessonController as UserLessonController;
 use App\Http\Controllers\User\ContentController as UserContentController;
-
+use App\Http\Controllers\User\QuizController;
 
 
 
@@ -110,11 +110,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         'destroy' => 'admin.questions.destroy',
     ]);
 
-  
-
-
-
-
     Route::resource('courses.lessons.questions', QuestionController::class);
     Route::resource('courses.lessons.questions.answers', AnswerController::class);
     Route::get('/questions', function () {
@@ -163,6 +158,16 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
         'update' => 'user.contents.update',
         'destroy' => 'user.contents.destroy',
     ]);
+
+    Route::get('/quiz', [UserController::class, 'show'])->name('user.quiz');
+
+    Route::get('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'showQuiz'])->name('user.quiz.show');
+
+
+    Route::post('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
+    Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
+
+
 
 
 
