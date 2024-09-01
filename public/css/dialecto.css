@@ -1064,3 +1064,30 @@ body {
     text-align: center;
     /* Centers the dash */
 }
+
+
+/* this is for content   */
+
+
+.box-container {
+    padding-right: 100px;
+    padding-left: 10%;
+    display: flex;
+    justify-content: space-between;
+    /* Distribute space evenly between boxes */
+    align-items: center;
+    /* Align items vertically center */
+}
+
+.box {
+    flex: 1;
+    /* Make all boxes take equal space */
+    margin: 0 1px;
+    /* Apply margin for gaps between boxes */
+    text-align: center;
+    /* Center text inside boxes */
+    padding: 10px;
+    /* Optional: add padding for visual spacing */
+    border: 1px solid gray;
+    /* Optional: add border for visual effect */
+}

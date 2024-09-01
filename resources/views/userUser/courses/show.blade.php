@@ -75,11 +75,9 @@
 
     <div class="l-modal-content text-center ">
 
-        <div class="container-fluid position-relative addborder" style="height: 80px;">
+        <div class="container-fluid position-relative" style="height: 80px;">
             <i class="bi bi-x-circle position-absolute btn" id="closeLessonModal" style="top: 0; right: 0; padding: 10px; font-size: 32px;"></i>
         </div>
-
-
 
 
 
@@ -138,10 +136,6 @@
                 //      <hr>`;
                 // });
                 // document.getElementById('modalLessonContents').innerHTML = contentsHtml;
-
-
-
-
 
 
                 // Dynamically set the href for the Show button
