@@ -27,11 +27,11 @@
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
-                    <strong>Text:</strong>
+                    <strong>{{ $course->name }} Text</strong>
                     <textarea class="form-control" style="height:150px" name="text" placeholder="Text"></textarea>
                 </div>
                 <div class="form-group">
-                    <strong>English Equivalent:</strong>
+                    <strong>English Text:</strong>
                     <textarea class="form-control" style="height:150px" name="english" placeholder="English Equivalent"></textarea>
                 </div>
                 <div class="form-group">

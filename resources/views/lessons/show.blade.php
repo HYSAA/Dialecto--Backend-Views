@@ -9,11 +9,11 @@
                 <h2>{{ $course->name }} - Lesson: {{ $lesson->title }}</h2>
             </div>
             <div class="pull-right">
-                
+
 
                 <a class="btn btn-main" href="{{ route('admin.contents.create', [$course->id, $lesson->id]) }}">Add Contents</a>
                 <a href="{{ route('courses.lessons.questions.create', [$course->id, $lesson->id]) }}" class="btn btn-primary">Add New Question</a>
-                <a href="{{route('courses.lessons.questions.index',[$course->id,$lesson->id])}}"class="btn btn-primary">View Questions</a>
+                <a href="{{route('courses.lessons.questions.index',[$course->id,$lesson->id])}}" class="btn btn-primary">View Questions</a>
 
 
             </div>
@@ -25,7 +25,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Content Text</th>
+                        <th>{{ $course->name }} Text</th>
                         <th>English Text</th>
                         <th width="380px">Video</th>
                         <th width="280px">Action</th>
@@ -50,7 +50,7 @@
 
                         <td>
                             <a class="btn btn-success" href="{{ route('admin.contents.edit', [$course->id, $lesson->id, $content->id]) }}">Edit</a>
-                            <a class="btn btn-primary" href="{{ route('admin.contents.show', [$course->id, $lesson->id, $content->id]) }}">Show</a>
+                            <!-- <a class="btn btn-primary" href="{{ route('admin.contents.show', [$course->id, $lesson->id, $content->id]) }}">Show</a> -->
 
                             <form
                                 action="{{ route('admin.contents.destroy', [$course->id, $lesson->id, $content->id]) }}"
