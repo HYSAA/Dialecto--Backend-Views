@@ -34,10 +34,10 @@
     <!-- mugawas ra ang proceed button if naay next content-->
     <div class="row justify-content-center">
     @if($previousContent)
-                    <a class="btn btn-primary" type="button" href="{{ route('courses.lessons.contents.show', [$course->id, $lesson->id, $previousContent->id]) }}">Back</a>
+                    <a class="btn btn-primary" type="button" href="{{ route('user.contents.show', [$course->id, $lesson->id, $previousContent->id]) }}">Back</a>
                 @endif
         @if($nextContent)
-            <a class="btn btn-primary" type="button" href="{{ route('courses.lessons.contents.show', [$course->id, $lesson->id, $nextContent->id]) }}">Proceed</a>
+            <a class="btn btn-primary" type="button" href="{{ route('user.contents.show', [$course->id, $lesson->id, $nextContent->id]) }}">Proceed</a>
         @endif
     </div>
 </div>
