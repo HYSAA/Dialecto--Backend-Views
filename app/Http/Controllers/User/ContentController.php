@@ -203,7 +203,7 @@ class ContentController extends Controller
         $nextContent = Content::where('lesson_id', $lessonId)->where('id', '>', $contentId)->orderBy('id')->first();
         $previousContent = Content::where('lesson_id', $lessonId)->where('id', '<', $contentId)->orderBy('id', 'desc')->first();
 
-        return view('contents.show', compact('course', 'lesson', 'content', 'nextContent', 'previousContent'));
+        return view('userUser.contents.show', compact('course', 'lesson', 'content', 'nextContent', 'previousContent'));
     }
 
 

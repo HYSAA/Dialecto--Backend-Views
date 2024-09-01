@@ -60,6 +60,42 @@
     /* Remove underline */
 }
 
+.btn-back-main {
+    background-color: white;
+    /* Custom background color */
+    border-color: #CB9219;
+
+    border: solid 1.7px;
+
+
+    color: #CB9219;
+    /* Text color */
+    border-radius: 4px;
+    /* Rounded corners */
+    height: 37.5px;
+    /* Fixed height */
+    font-weight: 550;
+    /* Font weight */
+    display: inline-flex;
+    /* Flexbox for centering text */
+    align-items: center;
+    /* Center text vertically */
+    justify-content: center;
+    /* Center text horizontally */
+    padding: 0 20px;
+    /* Horizontal padding */
+    text-align: center;
+    /* Center text alignment */
+    text-decoration: none;
+    /* Remove underline */
+}
+
+
+
+
+
+
+
 #closeLessonModal {
     color: #CB9219;
 
@@ -89,6 +125,26 @@
 .btn-main.focus {
     box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, 0.5);
 }
+
+
+
+.btn-back-main:hover {
+    color: #a67c1c;
+    background-color: white;
+    border-color: #a67c1c;
+}
+
+.btn-back-main:focus,
+.btn-back-main.focus {
+    box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, 0.5);
+}
+
+
+
+
+
+
+
 
 .btn-main:disabled,
 .btn-main.disabled {
@@ -984,10 +1040,10 @@ body {
 
 .vid-thumbnail {
     width: 100%;
-
     height: auto;
     object-fit: cover;
 }
+
 
 @media (max-width: 768px) {
     .image-thumbnail {
@@ -1070,24 +1126,45 @@ body {
 
 
 .box-container {
-    padding-right: 100px;
-    padding-left: 10%;
     display: flex;
-    justify-content: space-between;
-    /* Distribute space evenly between boxes */
-    align-items: center;
-    /* Align items vertically center */
+    justify-content: center;
+    /* Horizontally center the boxes */
+
 }
 
 .box {
-    flex: 1;
-    /* Make all boxes take equal space */
-    margin: 0 1px;
-    /* Apply margin for gaps between boxes */
-    text-align: center;
-    /* Center text inside boxes */
-    padding: 10px;
-    /* Optional: add padding for visual spacing */
-    border: 1px solid gray;
-    /* Optional: add border for visual effect */
+    width: 275px;
+    height: 376px;
+    margin: 0 20px;
+    /* text-align: center; */
+    /* padding: 10px; */
+    box-sizing: border-box;
+    /* border: 1px solid gray; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+}
+
+.box-2 {
+    width: 275px;
+    height: 376px;
+    margin: 0 5px;
+
+    display: flex;
+    /* justify-content: center; */
+    /* align-items: center; */
+    flex-direction: column;
+    text-align: left;
+
+}
+
+.vid-content {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    border-radius: 10px;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
 }
