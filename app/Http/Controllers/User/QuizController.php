@@ -24,8 +24,15 @@ class QuizController extends Controller
 
         $options = $contents->shuffle();
 
+
         return view('userUser.quiz.quiz', compact('course', 'lesson', 'questions', 'options'));
     }
+
+
+
+
+
+
 
 
     public function multipleChoice($courseId, $lessonId)
