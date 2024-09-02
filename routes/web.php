@@ -18,6 +18,7 @@ use App\Http\Controllers\User\CourseController as UserCourseController;
 use App\Http\Controllers\User\LessonController as UserLessonController;
 use App\Http\Controllers\User\ContentController as UserContentController;
 use App\Http\Controllers\User\QuizController;
+use App\Http\Controllers\ControllerProfile as  UserControllerProfile;
 
 
 
@@ -159,16 +160,23 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
         'destroy' => 'user.contents.destroy',
     ]);
 
+
+
+
+
+
+
+
     Route::get('/quiz', [UserController::class, 'show'])->name('user.quiz');
 
     Route::get('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'showQuiz'])->name('user.quiz.show');
-
-
     Route::post('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
     Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
 
 
 
+    Route::get('/profile', [UserControllerProfile::class, 'show'])->name('user.profile.show');
+    Route::get('/profile/edit', [UserControllerProfile::class, 'edit'])->name('user.profile.edit');
 
 
 
@@ -180,16 +188,8 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
 
 
-    // Route::resource('courses.lessons.contents', ContentController::class);
-    // Route::resource('courses.lessons.contents.questions', QuestionController::class);
-    // Route::resource('courses.lessons.contents.questions.answers', AnswerController::class);
 
-    // Additional lesson and question routes
-    // Route::get('lessons', [LessonController::class, 'index'])->name('lessons.index');
-    // Route::get('/questions', function () {
-    //     return view('questions');
-    // });
 
-    // User resource
-    // Route::resource('users', UserController::class);
+
+    
 });
