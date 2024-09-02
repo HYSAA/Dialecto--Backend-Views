@@ -159,7 +159,7 @@ class ContentController extends Controller
 
         $content->save();
 
-        return redirect()->route('admin.contents.index', [$course->id, $lesson->id])
+        return redirect()->route('admin.lessons.show', [$course->id, $lesson->id])
             ->with('success', 'Content updated successfully.');
     }
 

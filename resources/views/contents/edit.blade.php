@@ -28,22 +28,24 @@
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
-                    <strong>Text:</strong>
-                    <textarea class="form-control" style="height:150px" name="text" placeholder="Text">{{ $content->text }}</textarea>
+                    <strong>{{$course->name}} Text</strong>
+                    <textarea class="form-control" style="height:150px" name="text" placeholder="English Text">{{ $content->text }}</textarea>
                 </div>
                 <div class="form-group">
-                    <strong>Image:</strong>
-                    <input type="file" name="image" class="form-control">
-                    @if ($content->image)
-                    <img src="{{ $content->image }}" width="300px" class="mt-2">
-                    @endif
+                    <strong>English Text</strong>
+                    <textarea class="form-control" style="height:150px" name="english" placeholder="English Text">{{ $content->english }}</textarea>
+                </div>
+
+
+                <div class="form-group">
+            
+
+
+
                     <strong>Video:</strong>
                     <input type="file" name="video" class="form-control">
-                    @if ($content->video)
-                    <video width="150px" controls>
-                        <source src="{{ $content->video }}" type="video/mp4">
-                    </video>
-                    @endif
+
+                   
 
 
 
