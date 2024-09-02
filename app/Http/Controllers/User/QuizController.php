@@ -15,6 +15,21 @@ class QuizController extends Controller
 {
     public function showQuiz($courseId, $lessonId)
     {
+        $course = Course::find($courseId);
+        $lesson = Lesson::find($lessonId);
+
+        $contents = Content::where('lesson_id', $lessonId)->get();
+
+        $questions = $contents->shuffle();
+
+        $options = $contents->shuffle();
+
+        return view('userUser.quiz.quiz', compact('course', 'lesson', 'questions', 'options'));
+    }
+
+
+    public function multipleChoice($courseId, $lessonId)
+    {
         // Get the course and lesson
         $course = Course::find($courseId);
         $lesson = Lesson::find($lessonId);
@@ -28,7 +43,7 @@ class QuizController extends Controller
         // Create an array of shuffled options (Content text)
         $options = $contents->shuffle();
 
-        return view('userUser.quiz.quiz', compact('course', 'lesson', 'questions', 'options'));
+        return view('userUser.quiz.quizMC', compact('course', 'lesson', 'questions', 'options'));
     }
 
 
@@ -48,8 +63,12 @@ class QuizController extends Controller
             }
         }
 
+
         return redirect()->route('quiz.result', [$courseId, $lessonId])->with('score', $score);
     }
+
+
+
 
     public function showResult($courseId, $lessonId)
     {

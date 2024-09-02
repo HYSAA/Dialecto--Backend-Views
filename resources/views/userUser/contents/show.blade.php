@@ -83,14 +83,15 @@
                     <a class="btn btn-main" style="width: 100%; margin-bottom: 5px;" type="button" href="{{ route('user.contents.show', [$course->id, $lesson->id, $nextContent->id]) }}">Next Word</a>
 
 
-
-
                     @else
+
                     <a class="btn btn-main" style="width: 100%; margin-bottom: 5px;" type="button" href="{{ route('user.quiz.show', [$course->id, $lesson->id]) }}">Take Quiz</a>
+
+                    <a class="btn btn-main" style="width: 100%; margin-bottom: 5px;" type="button" href="{{ route('user.multipleChoice.show', [$course->id, $lesson->id]) }}">Take Quiz Multiple Choice</a>
+
+
+
                     @endif
-
-
-
 
 
                 </div>

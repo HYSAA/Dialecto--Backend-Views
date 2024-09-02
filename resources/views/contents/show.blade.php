@@ -35,8 +35,6 @@
             </div>
 
 
-
-
             <div class="box-2 mt-3">
                 <div class="row ">
                     <h2>English</h2> <!-- Using h2 for larger text -->
