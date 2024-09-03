@@ -32,7 +32,7 @@
                     <!-- Password Field -->
                     <div class="mt-4 form-group">
                         <x-text-input id="password" class="block mt-1 w-full form-control" type="password" name="password" required autocomplete="current-password" placeholder="Password" />
-                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('password')" class="mt-2" /> <!--test drive-->
                     </div>
 
                     <!-- Forgot Password Link -->
@@ -47,10 +47,14 @@
                     <!-- Login Button -->
                     <button type="submit" class="btn btn-login btn-block">{{ __('Log in') }}</button>
 
-                    <!-- Forgot Password Link (Temporary Placeholder) -->
-                    <a href="/forget-password" class="w-100 text-center forget-password">Forget password?</a>
-                    <hr>
-
+                    
+                    <div class="w-100 text-center forget-password">
+                        @if (Route::has('password.request'))
+                        <a  href="{{ route('password.request') }}">
+                            {{ __('Forgot your password?') }}
+                        </a>
+                        @endif
+                    </div>
                     <!-- Register Button -->
                     <button type="button" class="btn btn-login btn-block" id="registerButton">Create new account</button>
 
