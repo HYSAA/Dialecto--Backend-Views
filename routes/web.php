@@ -65,8 +65,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('lessons', [LessonController::class, 'index'])->name('lessons.index');
 
     // Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
-
-
+    // Route::get('users.show', [LessonController::class, 'index'])->name('lessons.index');
+    
     Route::resource('courses', CourseController::class)->names([
         'index' => 'admin.courses.index',
         'create' => 'admin.courses.create',
