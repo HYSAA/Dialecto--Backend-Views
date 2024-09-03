@@ -37,7 +37,6 @@
 
 
                 <div class="col-lg-2 addborder" style="padding: 0;">
-                    <p> NO Side Testing Side</p>
                 </div>
 
             </div>
