@@ -37,7 +37,7 @@
 
 
                 <div class="col-lg-2 addborder" style="padding: 0;">
-                    <p>Side shit</p>
+                    <p>Side </p>
                 </div>
 
             </div>
