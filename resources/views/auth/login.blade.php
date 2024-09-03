@@ -47,6 +47,11 @@
                     <!-- Login Button -->
                     <button type="submit" class="btn btn-login btn-block">{{ __('Log in') }}</button>
 
+                    @if ($errors->has('email'))
+    <div class="alert alert-danger">
+        {{ $errors->first('email') }}
+    </div>
+@endif
                     
                     <div class="w-100 text-center forget-password">
                         @if (Route::has('password.request'))

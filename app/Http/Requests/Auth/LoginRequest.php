@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\User; // Import the User model
 
 class LoginRequest extends FormRequest
 {
@@ -39,6 +40,16 @@ class LoginRequest extends FormRequest
      */
     public function authenticate(): void
     {
+        // Check if the email exists in the database
+        $user = User::where('email', $this->email)->first();
+
+        if (!$user) {
+            // Redirect back with an error if the email is not registered
+            throw ValidationException::withMessages([
+                'email' => 'No account found with this email.',
+            ]);
+        }
+
         $this->ensureIsNotRateLimited();
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
