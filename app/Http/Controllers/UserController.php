@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-
+use App\Models\Course;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +30,9 @@ class UserController extends Controller
 
     public function show(string $id)
     {
-        //
+        $courses = Course::all();
+        
+        return view('users.show',compact('courses'));
     }
 
     /**
