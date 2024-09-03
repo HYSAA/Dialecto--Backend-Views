@@ -28,11 +28,11 @@ class UserController extends Controller
 
 
 
-    public function show(string $id)
+    public function show($userId)
     {
         $courses = Course::all();
-        
-        return view('users.show',compact('courses'));
+        $user = User::findOrFail($userId);
+        return view('users.show',compact('courses','user'));
     }
 
     /**
