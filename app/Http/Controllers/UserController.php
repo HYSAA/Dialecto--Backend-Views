@@ -56,19 +56,15 @@ class UserController extends Controller
     
     public function show($userId)
 {
-    // Retrieve all courses
     $courses = Course::all();
 
-    // Retrieve lessons with the count of contents
     $lessons = Lesson::withCount('contents')->get();
 
-    // Query to get distinct lesson IDs and their counts for the given user
     $userProgress = UserProgress::where('user_id', $userId)
         ->select('lesson_id', DB::raw('count(*) as count'))
         ->groupBy('lesson_id')
         ->get();
 
-    // Find the user by ID
     $user = User::findOrFail($userId);
 
     // Calculate content counts for each lesson under each course
