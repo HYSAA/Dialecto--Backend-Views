@@ -19,7 +19,7 @@
                      <!-- much better if it also say which course it would be -->
                     <div class="top"  style="padding: 5px;">
 
-                    <h5>User Lesson Progress:</h5>
+                    <h5>Lesson's Progress:</h5>
                     @foreach($userProgress as $progress)
                         @foreach($courses as $course)
                             @foreach($course->lessons as $lesson)

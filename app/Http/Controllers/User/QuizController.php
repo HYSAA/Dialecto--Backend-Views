@@ -10,7 +10,8 @@ use App\Models\Content;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Storage as FirebaseStorage;
-
+//Added
+use App\Models\UserProgress;
 class QuizController extends Controller
 {
     public function showQuiz($courseId, $lessonId)
@@ -23,8 +24,15 @@ class QuizController extends Controller
         $questions = $contents->shuffle();
 
         $options = $contents->shuffle();
-
-
+        // Count of Content_id Does not increment but stores the id that is done dependent ont eh button nextcontent
+        foreach ($contents as $content) {
+            UserProgress::firstOrCreate([
+                'user_id' => auth()->id(),
+                'course_id' => $courseId,
+                'lesson_id' => $lessonId,
+                'content_id' => $content->id,
+            ]);
+        }
         return view('userUser.quiz.quiz', compact('course', 'lesson', 'questions', 'options'));
     }
 

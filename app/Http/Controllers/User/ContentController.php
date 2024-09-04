@@ -207,7 +207,7 @@ class ContentController extends Controller
         $nextContent = Content::where('lesson_id', $lessonId)->where('id', '>', $contentId)->orderBy('id')->first();
         $previousContent = Content::where('lesson_id', $lessonId)->where('id', '<', $contentId)->orderBy('id', 'desc')->first();
 
-        // Count of Content_id Does not increment but stores the id that is done
+        // Count of Content_id Does not increment but stores the id that is done dependent ont eh button nextcontent
         if ($nextContent) {
             $userProgress = UserProgress::firstOrCreate([
                 'user_id' => auth()->id(),
