@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Content;
+use App\Models\UserProgress;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Course;
-
+use App\Models\Lesson;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class UserController extends Controller
@@ -25,15 +28,59 @@ class UserController extends Controller
 
 
 
+    // public function show($userId)
+    // {
+    //     $courses = Course::all();
+    //     $lessons = Lesson::withCount('contents')->get();
 
+    //     $userProgress = UserProgress::where('user_id', $userId)
+    //         ->select('lesson_id')
+    //         ->distinct()
+    //         ->get();
+    //     foreach($userProgress as $progress) {
+    //         $lessonid = $progress->lesson_id;
+    //     }
 
+    //     $contents = Content::all();
 
+    //     $user = User::findOrFail($userId);
+
+    //     foreach ($courses as $course) {
+    //         foreach ($course->lessons as $lesson) {
+    //             $lesson->contents_count = $lesson->contents->count();
+    //         }
+    //     }
+
+    //     return view('users.show', compact('courses', 'lessons', 'user', 'userProgress'));
+    // }
+    
     public function show($userId)
-    {
-        $courses = Course::all();
-        $user = User::findOrFail($userId);
-        return view('users.show',compact('courses','user'));
+{
+    $courses = Course::all();
+
+    $lessons = Lesson::withCount('contents')->get();
+
+    $userProgress = UserProgress::where('user_id', $userId)
+        ->select('lesson_id', DB::raw('count(*) as count'))
+        ->groupBy('lesson_id')
+        ->get();
+
+    $user = User::findOrFail($userId);
+
+    // Calculate content counts for each lesson under each course
+    foreach ($courses as $course) {
+        foreach ($course->lessons as $lesson) {
+            $lesson->contents_count = $lesson->contents->count();
+        }
     }
+
+    // Pass all the necessary data to the view
+    return view('users.show', compact('courses', 'lessons', 'user', 'userProgress'));
+}
+
+
+
+
 
     /**
      * Show the form for editing the specified resource.

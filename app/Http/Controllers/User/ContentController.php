@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Content;
+//Added
+use App\Models\UserProgress;
+use Illuminate\Support\Facades\App;
+//
 use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Storage as FirebaseStorage;
@@ -203,6 +207,15 @@ class ContentController extends Controller
         $nextContent = Content::where('lesson_id', $lessonId)->where('id', '>', $contentId)->orderBy('id')->first();
         $previousContent = Content::where('lesson_id', $lessonId)->where('id', '<', $contentId)->orderBy('id', 'desc')->first();
 
+        // Count of Content_id Does not increment but stores the id that is done
+        if ($nextContent) {
+            $userProgress = UserProgress::firstOrCreate([
+                'user_id' => auth()->id(),
+                'course_id' => $courseId,
+                'lesson_id' => $lessonId,
+                'content_id' => $nextContent->id,
+            ]); 
+        }
         return view('userUser.contents.show', compact('course', 'lesson', 'content', 'nextContent', 'previousContent'));
     }
 
