@@ -15,7 +15,7 @@
             <div class="col-md-6 right-side">
 
                 <!-- Session Status Message -->
-                <x-auth-session-status class="mb-4" :status="session('status')" />
+            
 
 
 
@@ -46,7 +46,7 @@
 
                     <!-- Login Button -->
                     <button type="submit" class="btn btn-login btn-block">{{ __('Log in') }}</button>
-
+                    <x-auth-session-status class="mb-4" :status="session('status')" />
                     @if ($errors->has('email'))
     <div class="alert alert-danger">
         {{ $errors->first('email') }}
