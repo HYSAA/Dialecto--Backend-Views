@@ -25,3 +25,18 @@ and below near last line of code in ini.
 it would be [curl] and [openssl]
 curl.cainfo = "C:\Programming\PHP\PHP8.2\extras\ssl\cacert.pem"
 openssl.capath="C:\Programming\PHP\PHP8.2\extras\ssl"
+
+
+
+
+FIREBASE REALTIME DATABASE Installation DOCS
+
+1. composer require kreait/laravel-firebase
+
+2.php artisan vendor:publish --provider="Kreait\Laravel\Firebase\ServiceProvider" --tag=config
+
+3.Configure your config/database.php file to include Firebase
+'firebase' => [
+    'driver' => 'firebase',
+    'database_url' => env('FIREBASE_DATABASE_URL'),
+],
