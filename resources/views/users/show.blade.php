@@ -20,18 +20,56 @@
                     <div class="top"  style="padding: 5px;">
 
                     <h5>Lesson's Progress:</h5>
-                    @foreach($userProgress as $progress)
-                        @foreach($courses as $course)
-                            @foreach($course->lessons as $lesson)
-                                @if($lesson->id == $progress->lesson_id)
-                                    <p>{{ $lesson->title }} =  {{ $progress->count }} / {{ $lesson->contents_count }}</p>
-                                @endif
+
+                        <!-- @foreach($userProgress as $progress)
+                            @foreach($courses as $course)
+                                <h1>{{$course->name}}</h1>
+                                @foreach($course->lessons as $lesson)
+                                    @if($lesson->id == $progress->lesson_id)
+                                        <p>{{ $lesson->title }} =  {{ $progress->count }} / {{ $lesson->contents_count }}</p>
+                                    @endif
+                                @endforeach
                             @endforeach
+                        @endforeach -->
+                        <!-- @foreach($courses as $course)
+                            <h1>{{ $course->name }}</h1>
+                            @foreach($userProgress as $progress)
+                                @foreach($course->lessons as $lesson)
+                                    @if($lesson->id == $progress->lesson_id)
+                                        <p>{{ $lesson->title }} = {{ $progress->count }} / {{ $lesson->contents_count }}</p>
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        @endforeach -->
+                        @foreach($courses as $course)
+                            @php
+                                $hasProgress = false;
+                                foreach ($userProgress as $progress) {
+                                    foreach ($course->lessons as $lesson) {
+                                        if ($lesson->id == $progress->lesson_id) {
+                                            $hasProgress = true;
+                                            break 2;
+                                        }
+                                    }
+                                }
+                            @endphp
+
+                            @if($hasProgress)
+                                <h4>{{ $course->name }}</h4>
+                                @foreach($userProgress as $progress)
+                                    @foreach($course->lessons as $lesson)
+                                        @if($lesson->id == $progress->lesson_id)
+                                            <p>{{ $lesson->title }} = {{ $progress->count }} / {{ $lesson->contents_count }}</p> <!-- Display lesson progress -->
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                            @endif
                         @endforeach
-                    @endforeach
+
+
                     </div>
                 </div>
-                @foreach ($courses as $course)
+                <!-- @foreach ($courses as $course)
                     <div class="card mb-2 mr-2">
                         <div class="top">
 
@@ -48,18 +86,7 @@
                                 </div>
 
                                 <div class="col-6 d-flex justify-content-end ">
-                                    <!-- @foreach ($course->lessons as $lesson)
-                                                                    <div class="lesson-info">
-                                                                        <p>{{$lesson->name}}: {{ $lesson->contents_count }}</p>
-                                                                    </div>
-                                                                @endforeach -->
-                                    <!-- @foreach($course->lessons as $lesson)
-                                                                <div class="lesson">
-                                                                    <h3>{{ $lesson->title }}</h3>
-                                                                    <p>Contents in this Lesson: {{ $lesson->contents_count }}</p>
-                                                                </div>
-                                                            @endforeach -->
-
+            
                                 </div>
                             </div>
                         </div>
@@ -71,35 +98,20 @@
                                     Current Completion %
                                 </div>
                             </div>
-                            <!-- {{$userProgress}} -->
                             <h5>User Scores:</h5>
-                            <!-- @foreach($userProgress as $progress)
-                                                            <p>Lesson ID: {{ $progress->lesson_id }} = {{ $progress->count }}</p>
-                                                        @endforeach -->
-                            <!-- @foreach($userProgress as $progress)
-
-                                                            @foreach ($course->lessons as $lessons)
-                                                            <p>{{ $lesson->title }} = {{ $lesson->contents_count }}</p>
-                                                            @endforeach 
-                                                            /{{ $progress->count }}
-                                                        @endforeach -->
-
-                            <!-- @foreach($userProgress as $progress)
-                                @foreach($courses as $course)
-                                    @foreach($course->lessons as $lesson)
-                                        @if($lesson->id == $progress->lesson_id)
-                                            <p>{{ $lesson->title }} = {{ $lesson->contents_count }} / {{ $progress->count }}</p>
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            @endforeach -->
+                            <div>
+                                
+                            @foreach($course->lessons as $lesson)
+                            <p>{{$lesson->title}}</p>
+                            @endforeach
+                            </div>
 
                         </div>
                     </div>
                 @endforeach
             </div>
         </div>
-    </div>
+    </div> -->
 
 
     @endsection
