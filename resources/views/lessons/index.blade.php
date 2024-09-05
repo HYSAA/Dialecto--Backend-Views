@@ -43,7 +43,7 @@
             <td>{{ $lesson->course->name }}</td>
             <td>
                 <form action="{{ route('admin.lessons.destroy', [$lesson->course->id, $lesson->id]) }}" method="POST">
-                    <a class="btn btn-info" href="{{ route('admin.lessons.show', [$lesson->course->id, $lesson->id]) }}">Shosssw</a>
+                    <a class="btn btn-info" href="{{ route('admin.lessons.show', [$lesson->course->id, $lesson->id]) }}">Show</a>
                     <a class="btn btn-primary" href="{{ route('admin.lessons.edit', [$lesson->course->id, $lesson->id]) }}">Edit</a>
 
                     @csrf
