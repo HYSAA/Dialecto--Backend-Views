@@ -5,21 +5,14 @@
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-                <h2>{{ $course->name }} - Lesson: {{ $lesson->title }}</h2>
+                <h2>{{ $course['name'] }} - Lesson: {{ $lesson['title'] }}</h2>
             </div>
             <div class="pull-right">
-                <!-- <a class="btn btn-primary" href="{{ route('courses.lessons.index', $course->id) }}">Back to Lessons</a>  -->
-                <a class="btn btn-primary" href="{{ route('courses.show', $course->id) }}">Back to Course</a>
+                <a class="btn btn-primary" href="{{ route('courses.show', $courseId) }}">Back to Course</a>
+                <a class="btn btn-success" href="{{ route('courses.lessons.contents.index', [$courseId, $lessonId]) }}">Add Content</a>
 
-                <a class="btn btn-success"
-                    href="{{ route('courses.lessons.contents.create', [$course->id, $lesson->id]) }}">Add Content</a>
-
-                    <a href="{{ route('courses.lessons.questions.create', [$course->id, $lesson->id]) }}" class="btn btn-primary">Add New Question</a>
-
-                    <a class="btn btn-primary"href="{{route('courses.lessons.questions.index',[$course->id,$lesson->id]) }}">View Questions</a>
-
-
-     
+                <a href="{{ route('courses.lessons.questions.create', [$courseId, $lessonId]) }}" class="btn btn-primary">Add New Question</a>
+                <a class="btn btn-primary" href="{{ route('courses.lessons.questions.index', [$courseId, $lessonId]) }}">View Questions</a>
             </div>
         </div>
     </div>
@@ -35,27 +28,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($lesson->contents as $content)
+                    @foreach ($contents as $contentId => $content)
                     <tr>
-                        <td>{{ $content->text }}</td>
-                        <td>{{$content->english}}</td>
-                        
+                        <td>{{ $content['text'] }}</td>
+                        <td>{{ $content['english'] }}</td>
                         <td>
-                        @if ($content->video)
+                        @if (isset($content['video']))
                             <video width="100%" height="100" controls>
-                            <source src="{{ $content->video }}" type="video/mp4">
+                            <source src="{{ $content['video'] }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
-                            @endif
+                        @endif
                         </td>
                         <td>
-                            <a class="btn btn-info"
-                                href="{{ route('courses.lessons.contents.show', [$course->id, $lesson->id, $content->id]) }}">Show</a>
-                            <a class="btn btn-primary"
-                                href="{{ route('courses.lessons.contents.edit', [$course->id, $lesson->id, $content->id]) }}">Edit</a>
-                            <form
-                                action="{{ route('courses.lessons.contents.destroy', [$course->id, $lesson->id, $content->id]) }}"
-                                method="POST" style="display:inline">
+                            <a class="btn btn-info" href="{{ route('courses.lessons.contents.show', [$courseId, $lessonId, $contentId]) }}">Show</a>
+                            <a class="btn btn-primary" href="{{ route('courses.lessons.contents.edit', [$courseId, $lessonId, $contentId]) }}">Edit</a>
+                            <form action="{{ route('courses.lessons.contents.destroy', [$courseId, $lessonId, $contentId]) }}" method="POST" style="display:inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Delete</button>
@@ -67,6 +55,5 @@
             </table>
         </div>
     </div>
-
 </div>
 @endsection

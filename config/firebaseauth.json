@@ -1,0 +1,86 @@
+[
+{"type":"header","version":"5.2.1","comment":"Export to JSON plugin for PHPMyAdmin"},
+{"type":"database","name":"firebaseauth"},
+{"type":"table","name":"answers","database":"firebaseauth","data":
+[
+{"id":"5","question_id":"8","answer_text":"Spain","is_correct":"1","created_at":"2024-08-26 12:14:58","updated_at":"2024-08-26 12:14:58"},
+{"id":"6","question_id":"8","answer_text":"G3","is_correct":"0","created_at":"2024-08-26 12:15:04","updated_at":"2024-08-26 12:15:04"}
+]
+}
+,{"type":"table","name":"cache","database":"firebaseauth","data":
+[
+{"key":"user@gmail.com|127.0.0.1","value":"i:2;","expiration":"1724675408"},
+{"key":"user@gmail.com|127.0.0.1:timer","value":"i:1724675408;","expiration":"1724675408"}
+]
+}
+,{"type":"table","name":"cache_locks","database":"firebaseauth","data":
+[
+
+]
+}
+,{"type":"table","name":"contents","database":"firebaseauth","data":
+[
+{"id":"2","lesson_id":"2","text":"asdasd","english":"asdasdasd","image":"https:\/\/storage.googleapis.com\/dialecto-c14c1.appspot.com\/images\/hwasa.jpg?GoogleAccessId=firebase-adminsdk-q80as%40dialecto-c14c1.iam.gserviceaccount.com&Expires=4880348663&Signature=aB9AGsyqkKuwzm%2B58EAhS7KUj8HIX%2F8jtMPnR2ok%2BpTM8m3QmRDrjAQsDNWdNPsakgOTolxgF41h%2F%2B%2BVY0KoJNFjkxjEHpJt4zMMVkdVzrwtWz%2FXKqjrNba2b7JmBX4n1uVvjFhQULuqLgnEEdaG9Ig3ylMIZX4aXmnI34wDrKsTDzXzsZzWEvJmuop10lqujQ1ZZmY3%2BMAbCfPIBV80KVCJXLnZAHG8D1nL5HjKuJBqA0T4biXSDlIAcfFGH2Yq9NXXHe22WoJBnh9o8hb1IUPA5%2F3WQikFYgYT0mEffeU5HXY05tTG5Kqxk1xjAyEgqnXDyRyJqlgAvwSfRelI7g%3D%3D","video":"https:\/\/storage.googleapis.com\/dialecto-c14c1.appspot.com\/videos\/cat.mp4?GoogleAccessId=firebase-adminsdk-q80as%40dialecto-c14c1.iam.gserviceaccount.com&Expires=4880348682&Signature=byK5JD20cJbtBWWDkXARLcVA5IFt41Thr6%2BtKVJy0ZYrKMj%2FZ%2FOptrRJepGyolWyf6Oy5pZnmMnpBvXjaB2vRGneYPallXzqALdvAijP1kZ1Hv2HbdM2L0fPzpvrgW8hHy7PVRjkyYVRmeDMss%2B4JDvMOLvuuUamkKphNrF5FEeTRuo0ng3%2BH0hUNPv1YvTL0OqaUPlv4ZPUIC2LXWoSARYXE1D3M%2BMHz4fvd5jw93rlSrTMy4nYrNcj2TM0ueTEu9I8nbMd%2FIJRDPA%2BOF7gvl9Nw%2FSdmxy4aeXtMlC9COTbj6gEeEovAlEeZLmH7jez3AIukvEM4ZDOywMbMAn12A%3D%3D","created_at":"2024-08-26 12:24:23","updated_at":"2024-08-26 12:24:42"}
+]
+}
+,{"type":"table","name":"courses","database":"firebaseauth","data":
+[
+{"id":"2","name":"Surigaonon","description":"bisaya","created_at":"2024-08-26 12:12:23","updated_at":"2024-08-26 12:12:23","image":"images\/ev3xoiQJfYANIg2BkxndCLJrmmbMWfH6Ig49hvaN.jpg"}
+]
+}
+,{"type":"table","name":"failed_jobs","database":"firebaseauth","data":
+[
+
+]
+}
+,{"type":"table","name":"jobs","database":"firebaseauth","data":
+[
+
+]
+}
+,{"type":"table","name":"job_batches","database":"firebaseauth","data":
+[
+
+]
+}
+,{"type":"table","name":"lessons","database":"firebaseauth","data":
+[
+{"id":"2","course_id":"2","title":"asdasd","created_at":"2024-08-26 12:14:31","updated_at":"2024-08-26 12:14:31","image":"images\/DJIUXSySW191m3nkBnkXCEAK3Yk3sxbO1awnsifd.jpg"}
+]
+}
+,{"type":"table","name":"migrations","database":"firebaseauth","data":
+[
+{"id":"81","migration":"0001_01_01_000000_create_users_table","batch":"1"},
+{"id":"82","migration":"0001_01_01_000001_create_cache_table","batch":"1"},
+{"id":"83","migration":"0001_01_01_000002_create_jobs_table","batch":"1"},
+{"id":"84","migration":"2024_07_22_214505_create_courses_table","batch":"1"},
+{"id":"85","migration":"2024_07_22_214506_create_lessons_table","batch":"1"},
+{"id":"86","migration":"2024_07_22_214507_create_contents_table","batch":"1"},
+{"id":"87","migration":"2024_07_29_065808_create_questions_table","batch":"1"},
+{"id":"88","migration":"2024_07_29_065901_create_answers_table","batch":"1"},
+{"id":"89","migration":"2024_08_19_165517_add_image_to_courses_table","batch":"1"},
+{"id":"90","migration":"2024_08_20_045424_add_image_to_lessons_table","batch":"1"}
+]
+}
+,{"type":"table","name":"password_reset_tokens","database":"firebaseauth","data":
+[
+
+]
+}
+,{"type":"table","name":"questions","database":"firebaseauth","data":
+[
+{"id":"8","lesson_id":"2","question_text":"Capital of france","correct_answer_id":null,"created_at":"2024-08-26 12:14:39","updated_at":"2024-08-26 12:14:39"}
+]
+}
+,{"type":"table","name":"sessions","database":"firebaseauth","data":
+[
+{"id":"xrTtGicEFFEXCQ8AGd9OOTBQRpzlTYREuVN0yUNI","user_id":"2","ip_address":"127.0.0.1","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/127.0.0.0 Safari\/537.36","payload":"YTo0OntzOjY6Il90b2tlbiI7czo0MDoiVXJIaW5EbXZWemdTSEw4NzZNWk1KZ1l1dlpncXc4ZFBkS1hxNU5JWCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC91c2VyL2Rhc2hib2FyZCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjI7fQ==","last_activity":"1724675369"}
+]
+}
+,{"type":"table","name":"users","database":"firebaseauth","data":
+[
+{"id":"1","name":"admin","email":"admin@gmail.com","usertype":"admin","email_verified_at":null,"password":"$2y$12$rn7vSSVfAaA\/uL5uw96XWeYzZtMx7ZcNq\/QuFMGPNaNKbX8M8JtmS","remember_token":null,"created_at":"2024-08-23 12:10:20","updated_at":"2024-08-23 12:10:20"},
+{"id":"2","name":"user","email":"user@gmail.com","usertype":"user","email_verified_at":null,"password":"$2y$12$yhiZPpSlMZa1FFcRvMGTIebjN22q9jPA\/ZPRxwze9ckDWBIt41M8G","remember_token":null,"created_at":"2024-08-26 12:29:21","updated_at":"2024-08-26 12:29:21"}
+]
+}
+]

@@ -9,9 +9,7 @@
                 <h2>Add New Content</h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('courses.lessons.show', [$course->id, $lesson->id]) }}">Back</a>
-                <!-- <a class="btn btn-success" href="{{ route('courses.lessons.contents.questions.create', [$course->id, $lesson->id, $content->id ?? 0]) }}">Manage Questions</a> -->
-             
+                <a class="btn btn-primary" href="{{ route('courses.lessons.show', [$courseId, $lessonId]) }}">Back</a>
             </div>
         </div>
     </div>
@@ -27,7 +25,7 @@
         </div>
     @endif
 
-    <form action="{{ route('courses.lessons.contents.store', [$course->id, $lesson->id]) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('courses.lessons.contents.store', [$courseId, $lessonId]) }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="row">

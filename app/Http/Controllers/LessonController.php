@@ -2,108 +2,106 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
-use App\Models\Lesson;
 use Illuminate\Http\Request;
+use Kreait\Firebase\Contract\Database;
+use Illuminate\Support\Facades\Storage;
 
 class LessonController extends Controller
 {
-    // public function index(Course $course)
-    // {
-    //     $lessons = $course->lessons;
-    //     return view('lessons.index', compact('course', 'lessons'));
-    // }
+    protected $database;
+    protected $coursesRef;
+
+    public function __construct(Database $database)
+    {
+        $this->database = $database;
+        $this->coursesRef = $this->database->getReference('courses');
+    }
+
     public function index($courseId = null)
     {
         if ($courseId) {
-            // Fetch lessons for the specific course   //BAG O NI 
-            $course = Course::findOrFail($courseId);
-            $lessons = $course->lessons;
+            $course = $this->coursesRef->getChild($courseId)->getValue();
+            $lessons = $course['lessons'] ?? [];
         } else {
-            // Fetch all lessons, possibly with course information  /BAG O NI
-            $lessons = Lesson::with('course')->get();
+            $lessons = [];
+            $courses = $this->coursesRef->getValue();
+            foreach ($courses as $courseId => $course) {
+                if (isset($course['lessons'])) {
+                    foreach ($course['lessons'] as $lessonId => $lesson) {
+                        $lessons[] = [
+                            'id' => $lessonId,
+                            'title' => $lesson['title'],
+                            'course_id' => $courseId,
+                            'course_name' => $course['name']
+                        ];
+                    }
+                }
+            }
         }
 
-        return view('lessons.index', compact('lessons'));
+        return view('lessons.index', compact('lessons', 'courseId'));
     }
-    public function create(Course $course)
+
+    public function create($courseId)
     {
-        return view('lessons.create', compact('course'));
+        $course = $this->coursesRef->getChild($courseId)->getValue();
+        return view('lessons.create', compact('course', 'courseId'));
     }
 
-
-
-
-
-    public function store(Request $request, Course $course)
+    public function store(Request $request, $courseId)
     {
         $request->validate([
             'title' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
 
-        $imagePath = null; // Initialize the imagePath variable
-
-        // Check if the image file is present and store it
+        $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
         }
 
-
-        Lesson::create([
-            'course_id' => $course->id,
+        $newLesson = $this->coursesRef->getChild($courseId)->getChild('lessons')->push([
             'title' => $request->title,
             'image' => $imagePath,
         ]);
 
-
-        // $course->lessons()->create($request->all());
-
-        return redirect()->route('courses.show', $course->id)->with('success', 'Lesson created successfully.');
+        return redirect()->route('courses.show', $courseId)->with('success', 'Lesson created successfully.');
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    // public function show(Course $course, Lesson $lesson)
-    // {
-    //     return view('lessons.show', compact('course', 'lesson'));
-    // }
-    public function show(Course $course, Lesson $lesson)
+    public function show($courseId, $lessonId)
     {
-        $contents = $lesson->contents; // Fetch contents associated with the lesson
-        return view('lessons.show', compact('course', 'lesson', 'contents'));
+        $course = $this->coursesRef->getChild($courseId)->getValue();
+        $lesson = $course['lessons'][$lessonId] ?? null;
+        $contents = $lesson['contents'] ?? [];
+
+        return view('lessons.show', compact('course', 'lesson', 'contents', 'courseId', 'lessonId'));
     }
 
-    public function edit(Course $course, Lesson $lesson)
+    public function edit($courseId, $lessonId)
     {
-        return view('lessons.edit', compact('course', 'lesson'));
+        $course = $this->coursesRef->getChild($courseId)->getValue();
+        $lesson = $course['lessons'][$lessonId] ?? null;
+
+        return view('lessons.edit', compact('course', 'lesson', 'courseId', 'lessonId'));
     }
 
-    public function update(Request $request, Course $course, Lesson $lesson)
+    public function update(Request $request, $courseId, $lessonId)
     {
         $request->validate([
             'title' => 'required',
         ]);
 
-        $lesson->update($request->all());
+        $this->coursesRef->getChild($courseId)->getChild('lessons')->getChild($lessonId)->update([
+            'title' => $request->title,
+        ]);
 
-        return redirect()->route('courses.show', $course->id)->with('success', 'Lesson updated successfully.');
+        return redirect()->route('courses.show', $courseId)->with('success', 'Lesson updated successfully.');
     }
 
-    public function destroy(Course $course, Lesson $lesson)
+    public function destroy($courseId, $lessonId)
     {
-        $lesson->delete();
+        $this->coursesRef->getChild($courseId)->getChild('lessons')->getChild($lessonId)->remove();
 
-        return redirect()->route('courses.show', $course->id)->with('success', 'Lesson deleted successfully.');
+        return redirect()->route('courses.show', $courseId)->with('success', 'Lesson deleted successfully.');
     }
 }

@@ -8,7 +8,7 @@
                 <h2>Edit Lesson</h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('courses.lessons.index', $course->id) }}"> Back</a>
+                <a class="btn btn-primary" href="{{ route('courses.lessons.index', $courseId) }}"> Back</a>
             </div>
         </div>
     </div>
@@ -24,7 +24,7 @@
         </div>
     @endif
 
-    <form action="{{ route('courses.lessons.update', [$course->id, $lesson->id]) }}" method="POST">
+    <form action="{{ route('courses.lessons.update', [$courseId, $lessonId]) }}" method="POST">
         @csrf
         @method('PUT')
 

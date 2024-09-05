@@ -5,15 +5,15 @@
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-                @if(isset($course))
-                <h2>Lessons for {{ $course->name }}</h2>
+                @if(isset($courseId))
+                <h2>Lessons for Course ID: {{ $courseId }}</h2>
                 @else
                 <h2>All Lessons</h2>
                 @endif
             </div>
-            @if(isset($course))
+            @if(isset($courseId))
             <div class="pull-right">
-                <a class="btn btn-success" href="{{ route('courses.lessons.create', $course->id) }}">Create New Lesson</a>
+                <a class="btn btn-success" href="{{ route('courses.lessons.create', $courseId) }}">Create New Lesson</a>
             </div>
             @endif
         </div>
@@ -38,12 +38,12 @@
         @foreach ($lessons as $lesson)
         <tr>
             <td>{{ ++$i }}</td>
-            <td>{{ $lesson->title }}</td>
-            <td>{{ $lesson->course->name }}</td>
+            <td>{{ $lesson['title'] }}</td>
+            <td>{{ $lesson['course_name'] ?? 'N/A' }}</td>
             <td>
-                <form action="{{ route('courses.lessons.destroy', [$lesson->course->id, $lesson->id]) }}" method="POST">
-                    <a class="btn btn-info" href="{{ route('courses.lessons.show', [$lesson->course->id, $lesson->id]) }}">Shosssw</a>
-                    <a class="btn btn-primary" href="{{ route('courses.lessons.edit', [$lesson->course->id, $lesson->id]) }}">Edit</a>
+                <form action="{{ route('courses.lessons.destroy', [$lesson['course_id'], $lesson['id']]) }}" method="POST">
+                    <a class="btn btn-info" href="{{ route('courses.lessons.show', [$lesson['course_id'], $lesson['id']]) }}">Show</a>
+                    <a class="btn btn-primary" href="{{ route('courses.lessons.edit', [$lesson['course_id'], $lesson['id']]) }}">Edit</a>
 
                     @csrf
                     @method('DELETE')

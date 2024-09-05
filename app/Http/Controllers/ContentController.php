@@ -8,14 +8,13 @@ use App\Models\Content;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Storage as FirebaseStorage;
+use Kreait\Firebase\Contract\Database;
 
 class ContentController extends Controller
 {
     protected $firebaseStorage;
+    protected $firebaseDatabase;
 
-
-    ///ang construct is to validate if working ba ang imo configuration sa firebase
-    //mura siyag nahug na gate na tig check if complete ba imo config before accesing firebase
     public function __construct()
     {
         $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
@@ -24,9 +23,11 @@ class ContentController extends Controller
             throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");
         }
 
-        $this->firebaseStorage = (new Factory)
-            ->withServiceAccount($firebaseCredentialsPath)
-            ->createStorage();
+        $firebase = (new Factory)
+            ->withServiceAccount($firebaseCredentialsPath);
+
+        $this->firebaseStorage = $firebase->createStorage();
+        $this->firebaseDatabase = $firebase->createDatabase();
     }
 
     public function create($courseId, $lessonId)
@@ -40,20 +41,19 @@ class ContentController extends Controller
     {
         $request->validate([
             'text' => 'nullable',
-            'english'=>'nullable',
+            'english' => 'nullable',
             'image' => 'nullable|image|max:2048',
             'video' => 'nullable|mimes:mp4,avi,mov|max:10000', // Add validation for video files
         ]);
 
         $content = new Content();
-        $content->english =$request->english;
+        $content->english = $request->english;
         $content->text = $request->text;
         $content->lesson_id = $lessonId;
 
         $bucket = $this->firebaseStorage->getBucket();
 
         if ($request->hasFile('image')) {
-            // Upload image to Firebase Storage
             $uploadedFile = $request->file('image');
             $firebasePath = 'images/' . $uploadedFile->getClientOriginalName();
 
@@ -62,15 +62,11 @@ class ContentController extends Controller
                 ['name' => $firebasePath]
             );
 
-            // Get the public URL of the uploaded image
             $imageUrl = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
-
-            // Save the image URL to the database
             $content->image = $imageUrl;
         }
 
         if ($request->hasFile('video')) {
-            // Upload video to Firebase Storage
             $uploadedFile = $request->file('video');
             $firebasePath = 'videos/' . $uploadedFile->getClientOriginalName();
 
@@ -79,17 +75,24 @@ class ContentController extends Controller
                 ['name' => $firebasePath]
             );
 
-            // Get the public URL of the uploaded video
             $videoUrl = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
-
-            // Save the video URL to the database
             $content->video = $videoUrl;
         }
 
         $content->save();
 
+        // Save content data to Firebase Realtime Database
+        $this->firebaseDatabase
+            ->getReference("courses/{$courseId}/lessons/{$lessonId}/contents/{$content->id}")
+            ->set([
+                'english' => $content->english,
+                'text' => $content->text,
+                'image' => $content->image,
+                'video' => $content->video,
+            ]);
+
         return redirect()->route('courses.lessons.show', [$courseId, $lessonId])
-                         ->with('success', 'Content created successfully.');
+            ->with('success', 'Content created successfully.');
     }
 
     public function update(Request $request, Course $course, Lesson $lesson, Content $content)
@@ -102,12 +105,12 @@ class ContentController extends Controller
         ]);
 
         $content->text = $request->text;
+        $content->english = $request->english;
 
         $bucket = $this->firebaseStorage->getBucket();
 
         if ($request->hasFile('image')) {
             if ($content->image) {
-                // Delete the previous image from Firebase Storage if needed
                 $previousImagePath = parse_url($content->image, PHP_URL_PATH);
                 $object = $bucket->object($previousImagePath);
                 if ($object->exists()) {
@@ -115,7 +118,6 @@ class ContentController extends Controller
                 }
             }
 
-            // Upload new image to Firebase Storage
             $uploadedFile = $request->file('image');
             $firebasePath = 'images/' . $uploadedFile->getClientOriginalName();
 
@@ -124,16 +126,12 @@ class ContentController extends Controller
                 ['name' => $firebasePath]
             );
 
-            // Get the public URL of the uploaded image
             $imageUrl = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
-
-            // Update the image URL in the database
             $content->image = $imageUrl;
         }
 
         if ($request->hasFile('video')) {
             if ($content->video) {
-                // Delete the previous video from Firebase Storage if needed
                 $previousVideoPath = parse_url($content->video, PHP_URL_PATH);
                 $object = $bucket->object($previousVideoPath);
                 if ($object->exists()) {
@@ -141,7 +139,6 @@ class ContentController extends Controller
                 }
             }
 
-            // Upload new video to Firebase Storage
             $uploadedFile = $request->file('video');
             $firebasePath = 'videos/' . $uploadedFile->getClientOriginalName();
 
@@ -150,25 +147,32 @@ class ContentController extends Controller
                 ['name' => $firebasePath]
             );
 
-            // Get the public URL of the uploaded video
             $videoUrl = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
-
-            // Update the video URL in the database
             $content->video = $videoUrl;
         }
 
         $content->save();
 
+        // Update content data in Firebase Realtime Database
+        $this->firebaseDatabase
+            ->getReference("courses/{$course->id}/lessons/{$lesson->id}/contents/{$content->id}")
+            ->update([
+                'english' => $content->english,
+                'text' => $content->text,
+                'image' => $content->image,
+                'video' => $content->video,
+            ]);
+
         return redirect()->route('courses.lessons.contents.index', [$course->id, $lesson->id])
-                         ->with('success', 'Content updated successfully.');
+            ->with('success', 'Content updated successfully.');
     }
-    
+
     public function destroy(Course $course, Lesson $lesson, Content $content)
     {
+        $bucket = $this->firebaseStorage->getBucket();
+
         if ($content->image) {
-            // Delete image from Firebase Storage
             $imagePath = parse_url($content->image, PHP_URL_PATH);
-            $bucket = $this->firebaseStorage->getBucket();
             $object = $bucket->object($imagePath);
             if ($object->exists()) {
                 $object->delete();
@@ -176,9 +180,7 @@ class ContentController extends Controller
         }
 
         if ($content->video) {
-            // Delete video from Firebase Storage
             $videoPath = parse_url($content->video, PHP_URL_PATH);
-            $bucket = $this->firebaseStorage->getBucket();
             $object = $bucket->object($videoPath);
             if ($object->exists()) {
                 $object->delete();
@@ -187,35 +189,39 @@ class ContentController extends Controller
 
         $content->delete();
 
+        // Delete content data from Firebase Realtime Database
+        $this->firebaseDatabase
+            ->getReference("courses/{$course->id}/lessons/{$content->lesson_id}/contents/{$content->id}")
+            ->remove();
+
         return redirect()->route('courses.lessons.contents.index', [$course->id, $lesson->id])
-                         ->with('success', 'Content deleted successfully.');
+            ->with('success', 'Content deleted successfully.');
     }
 
     public function show($courseId, $lessonId, $contentId)
-{
-    $course = Course::find($courseId);
-    $lesson = Lesson::find($lessonId);
-    $content = Content::find($contentId);
+    {
+        $course = Course::find($courseId);
+        $lesson = Lesson::find($lessonId);
+        $content = Content::find($contentId);
 
-    // diri mag retrieve sa new ug before na content
-    $nextContent = Content::where('lesson_id', $lessonId)->where('id', '>', $contentId)->orderBy('id')->first();
-    $previousContent = Content::where('lesson_id', $lessonId)->where('id', '<', $contentId)->orderBy('id', 'desc')->first();
+        $nextContent = Content::where('lesson_id', $lessonId)->where('id', '>', $contentId)->orderBy('id')->first();
+        $previousContent = Content::where('lesson_id', $lessonId)->where('id', '<', $contentId)->orderBy('id', 'desc')->first();
 
-    return view('contents.show', compact('course', 'lesson', 'content', 'nextContent', 'previousContent'));
-}
+        return view('contents.show', compact('course', 'lesson', 'content', 'nextContent', 'previousContent'));
+    }
+
     public function edit($courseId, $lessonId, $contentId)
-{
-    // Fetch the content, lesson, and course from the database
-    $content = Content::findOrFail($contentId);
-    $lesson = Lesson::findOrFail($lessonId);
-    $course = Course::findOrFail($courseId);
+    {
+        $content = Content::findOrFail($contentId);
+        $lesson = Lesson::findOrFail($lessonId);
+        $course = Course::findOrFail($courseId);
 
-    // Return the view with the data to edit
-    return view('contents.edit', compact('content', 'lesson', 'course'));
-}
-public function index(Course $course, Lesson $lesson)
-{
-    $contents = $lesson->contents;
-    return view('contents.index', compact('course', 'lesson', 'contents'));
-}
+        return view('contents.edit', compact('content', 'lesson', 'course'));
+    }
+
+    public function index(Course $course, Lesson $lesson)
+    {
+        $contents = $lesson->contents;
+        return view('contents.index', compact('course', 'lesson', 'contents'));
+    }
 }

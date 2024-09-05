@@ -1,82 +1,25 @@
 <?php
 
-// namespace App\Http\Controllers;
-
-// use App\Models\Course;
-// use Illuminate\Http\Request;
-
-// class CourseController extends Controller
-// {
-//     public function index()
-//     {
-//         $courses = Course::all();
-//         return view('courses.index', compact('courses'));
-//     }
-//     public function userIndex()
-// {
-//     $courses = Course::all(); // Adjust as needed to filter or format courses for users
-//     return view('courses.index', compact('courses'));
-// }
-
-//     public function create()
-//     {
-//         return view('courses.create');
-//     }
-
-//     public function store(Request $request)
-//     {
-//         $request->validate([
-//             'name' => 'required',
-//             'description' => 'nullable',
-//         ]);
-
-//         Course::create($request->all());
-
-//         return redirect()->route('courses.index')->with('success', 'Course created successfully.');
-//     }
-
-//     public function show(Course $course)
-//     {
-//         return view('courses.show', compact('course'));
-//     }
-
-//     public function edit(Course $course)
-//     {
-//         return view('courses.edit', compact('course'));
-//     }
-
-//     public function update(Request $request, Course $course)
-//     {
-//         $request->validate([
-//             'name' => 'required',
-//             'description' => 'nullable',
-//         ]);
-
-//         $course->update($request->all());
-
-//         return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
-//     }
-
-
-//     public function destroy(Course $course)
-//     {
-//         $course->delete();
-
-//         return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');
-//     }
-// }
-
-
 namespace App\Http\Controllers;
 
-use App\Models\Course;
 use Illuminate\Http\Request;
+use Kreait\Firebase\Contract\Database;
+use Illuminate\Support\Facades\Storage;
 
 class CourseController extends Controller
 {
+    protected $database;
+    protected $coursesRef;
+
+    public function __construct(Database $database)
+    {
+        $this->database = $database;
+        $this->coursesRef = $this->database->getReference('courses');
+    }
+
     public function index()
     {
-        $courses = Course::all();
+        $courses = $this->coursesRef->getValue();
         return view('courses.index', compact('courses'));
     }
 
@@ -85,56 +28,41 @@ class CourseController extends Controller
         return view('courses.create');
     }
 
-
-
     public function store(Request $request)
     {
-        // Validate the incoming request
         $request->validate([
             'name' => 'required',
             'description' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
-
         ]);
 
-        $imagePath = null; // Initialize the imagePath variable
-
-        // Check if the image file is present and store it
+        $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
         }
 
-        // Create the course with the image path
-        Course::create([
+        $newCourse = $this->coursesRef->push([
             'name' => $request->name,
             'description' => $request->description,
-            'image' => $imagePath, // Store the image path in the database
+            'image' => $imagePath,
         ]);
 
-        // Redirect with a success message
         return redirect()->route('courses.index')->with('success', 'Course created successfully.');
     }
 
-
-
-
-    public function show(Course $course)
+    public function show($id)
     {
-        return view('courses.show', compact('course'));
+        $course = $this->coursesRef->getChild($id)->getValue();
+        return view('courses.show', compact('course', 'id'));
     }
 
-    public function edit(Course $course)
+    public function edit($id)
     {
-        return view('courses.edit', compact('course'));
+        $course = $this->coursesRef->getChild($id)->getValue();
+        return view('courses.edit', compact('course', 'id'));
     }
 
-
-
-
-
-
-
-    public function update(Request $request, Course $course)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'name' => 'required',
@@ -142,15 +70,18 @@ class CourseController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
 
-        // Retain the existing image path unless a new image is uploaded
-        $imagePath = $course->image;
+        $courseRef = $this->coursesRef->getChild($id);
+        $currentCourse = $courseRef->getValue();
 
+        $imagePath = $currentCourse['image'] ?? null;
         if ($request->hasFile('image')) {
+            if ($imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
             $imagePath = $request->file('image')->store('images', 'public');
         }
 
-        // Update the course with the new or existing image path
-        $course->update([
+        $courseRef->update([
             'name' => $request->name,
             'description' => $request->description,
             'image' => $imagePath,
@@ -159,21 +90,9 @@ class CourseController extends Controller
         return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    public function destroy(Course $course)
+    public function destroy($id)
     {
-        $course->delete();
-
+        $this->coursesRef->getChild($id)->remove();
         return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');
     }
 }
