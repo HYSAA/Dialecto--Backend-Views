@@ -15,7 +15,7 @@
             <div class="col-md-6 right-side">
 
                 <!-- Session Status Message -->
-            
+
 
 
 
@@ -46,16 +46,19 @@
 
                     <!-- Login Button -->
                     <button type="submit" class="btn btn-login btn-block">{{ __('Log in') }}</button>
+
                     <x-auth-session-status class="mb-4" :status="session('status')" />
                     @if ($errors->has('email'))
-    <div class="alert alert-danger">
-        {{ $errors->first('email') }}
-    </div>
-@endif
-                    
+
+
+                    <div class="alert alert-danger" style="border-radius: 10px; margin-top: 10px;">
+                        {{ $errors->first('email') }}
+                    </div>
+                    @endif
+
                     <div class="w-100 text-center forget-password">
                         @if (Route::has('password.request'))
-                        <a  href="{{ route('password.request') }}">
+                        <a href="{{ route('password.request') }}">
                             {{ __('Forgot your password?') }}
                         </a>
                         @endif

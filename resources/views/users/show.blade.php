@@ -16,10 +16,10 @@
             <div class="row">
                 <div class="card mb-2 mr-2" style="padding: 10px;">
                     <!-- emptycell for now -->
-                     <!-- much better if it also say which course it would be -->
-                    <div class="top"  style="padding: 5px;">
+                    <!-- much better if it also say which course it would be -->
+                    <div class="top" style="padding: 5px;">
 
-                    <h5>Lesson's Progress:</h5>
+                        <h5>Lesson's Progress:</h5>
 
                         <!-- @foreach($userProgress as $progress)
                             @foreach($courses as $course)
@@ -42,28 +42,28 @@
                             @endforeach
                         @endforeach -->
                         @foreach($courses as $course)
-                            @php
-                                $hasProgress = false;
-                                foreach ($userProgress as $progress) {
-                                    foreach ($course->lessons as $lesson) {
-                                        if ($lesson->id == $progress->lesson_id) {
-                                            $hasProgress = true;
-                                            break 2;
-                                        }
-                                    }
-                                }
-                            @endphp
+                        @php
+                        $hasProgress = false;
+                        foreach ($userProgress as $progress) {
+                        foreach ($course->lessons as $lesson) {
+                        if ($lesson->id == $progress->lesson_id) {
+                        $hasProgress = true;
+                        break 2;
+                        }
+                        }
+                        }
+                        @endphp
 
-                            @if($hasProgress)
-                                <h4>{{ $course->name }}</h4>
-                                @foreach($userProgress as $progress)
-                                    @foreach($course->lessons as $lesson)
-                                        @if($lesson->id == $progress->lesson_id)
-                                            <p>{{ $lesson->title }} = {{ $progress->count }} / {{ $lesson->contents_count }}</p> <!-- Display lesson progress -->
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
+                        @if($hasProgress)
+                        <h4>{{ $course->name }}</h4>
+                        @foreach($userProgress as $progress)
+                        @foreach($course->lessons as $lesson)
+                        @if($lesson->id == $progress->lesson_id)
+                        <p>{{ $lesson->title }} = {{ $progress->count }} / {{ $lesson->contents_count }}</p> <!-- Display lesson progress -->
+                        @endif
+                        @endforeach
+                        @endforeach
+                        @endif
                         @endforeach
 
 
@@ -114,4 +114,4 @@
     </div> -->
 
 
-    @endsection
+                @endsection

@@ -12,8 +12,8 @@
 
 
                 <a class="btn btn-main" href="{{ route('admin.contents.create', [$course->id, $lesson->id]) }}">Add Contents</a>
-                <a href="{{ route('courses.lessons.questions.create', [$course->id, $lesson->id]) }}" class="btn btn-primary">Add New Question</a>
-                <a href="{{route('courses.lessons.questions.index',[$course->id,$lesson->id])}}" class="btn btn-primary">View Questions</a>
+                <!-- <a href="{{ route('courses.lessons.questions.create', [$course->id, $lesson->id]) }}" class="btn btn-primary">Add New Question</a>
+                <a href="{{route('courses.lessons.questions.index',[$course->id,$lesson->id])}}" class="btn btn-primary">View Questions</a> -->
 
 
             </div>
@@ -37,15 +37,34 @@
                         <td>{{ $content->text }}</td>
                         <td>{{$content->english}}</td>
 
-                        <td>
-                            @if ($content->video)
-                            <video controls class="vid-thumbnail">
-                                <source src="{{ $content->video }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                            @else
-                            No video available
-                            @endif
+                        <td style="display: flex; justify-content: center; align-items: center; height: 100%;">
+
+                            <div class="box ">
+
+
+
+                                <!-- @if ($content->video)
+                                <video controls class="vid-thumbnail">
+                                    <source src="{{ $content->video }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                @else
+                                No video available
+                                @endif -->
+
+
+                                @if ($content->video)
+                                <video controls class="vid-content">
+                                    <source src="{{ $content->video }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                @else
+                                No video available
+                                @endif
+
+                            </div>
+
+
                         </td>
 
                         <td>

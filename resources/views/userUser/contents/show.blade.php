@@ -64,10 +64,16 @@
                         Your browser does not support the video tag.
                     </video>
 
+
+
+
+
+
                     <audio id="audioElement" controls style="display: none;">
                         <source src="{{ $content->video }}" type="audio/mp4">
                         Your browser does not support the audio tag.
                     </audio>
+
                     @else
                     No audio available
                     @endif
@@ -87,7 +93,7 @@
 
                     <a class="btn btn-main" style="width: 100%; margin-bottom: 5px;" type="button" href="{{ route('user.quiz.show', [$course->id, $lesson->id]) }}">Take Quiz</a>
 
-                    <a class="btn btn-main" style="width: 100%; margin-bottom: 5px;" type="button" href="{{ route('user.multipleChoice.show', [$course->id, $lesson->id]) }}">Take Quiz Multiple Choice</a>
+                    <!-- <a class="btn btn-main" style="width: 100%; margin-bottom: 5px;" type="button" href="{{ route('user.multipleChoice.show', [$course->id, $lesson->id]) }}">Take Quiz Multiple Choice</a> -->
 
 
 

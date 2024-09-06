@@ -100,6 +100,8 @@ class ContentController extends Controller
 
     public function update(Request $request, Course $course, Lesson $lesson, Content $content)
     {
+
+
         $request->validate([
             'text' => 'nullable',
             'english' => 'nullable',
@@ -108,6 +110,7 @@ class ContentController extends Controller
         ]);
 
         $content->text = $request->text;
+        $content->english = $request->english;
 
         $bucket = $this->firebaseStorage->getBucket();
 
@@ -214,7 +217,7 @@ class ContentController extends Controller
                 'course_id' => $courseId,
                 'lesson_id' => $lessonId,
                 'content_id' => $nextContent->id,
-            ]); 
+            ]);
         }
         return view('userUser.contents.show', compact('course', 'lesson', 'content', 'nextContent', 'previousContent'));
     }

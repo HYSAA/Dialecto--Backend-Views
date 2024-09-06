@@ -102,6 +102,7 @@ class ContentController extends Controller
         ]);
 
         $content->text = $request->text;
+        $content->english = $request->english;
 
         $bucket = $this->firebaseStorage->getBucket();
 

@@ -39,7 +39,7 @@
         <div class="col-lg-12 margin-tb">
             <table class="table table-bordered">
                 <tr>
-                    <th>Lesson ID</th>
+                    <!-- <th>Lesson ID</th> -->
                     <th>Title</th>
                     <th>Lesson Image</th>
 
@@ -48,15 +48,21 @@
 
                 @foreach ($course->lessons as $lesson)
                 <tr>
-                    <td>{{ $lesson->id }}</td>
+                    <!-- <td>{{ $lesson->id }}</td> -->
                     <td>{{ $lesson->title }}</td>
 
-                    <td>
-                        @if($lesson->image)
-                        <img src="{{ asset('storage/' . $lesson->image) }}" alt="lesson Image" class="image-thumbnail">
-                        @else
-                        No image available
-                        @endif
+                    <td style="width: 150px;">
+
+                        <div class="" style="width: 150px; height: 150px;">
+
+
+                            @if($lesson->image)
+                            <img src="{{ asset('storage/' . $lesson->image) }}" alt="lesson Image" class="image-thumbnail">
+                            @else
+                            No image available
+                            @endif
+
+                        </div>
                     </td>
 
 

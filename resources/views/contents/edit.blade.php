@@ -29,7 +29,7 @@
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>{{$course->name}} Text</strong>
-                    <textarea class="form-control" style="height:150px" name="text" placeholder="English Text">{{ $content->text }}</textarea>
+                    <textarea class="form-control" style="height:150px" name="text" placeholder="Dialect Text">{{ $content->text }}</textarea>
                 </div>
                 <div class="form-group">
                     <strong>English Text</strong>
@@ -38,14 +38,11 @@
 
 
                 <div class="form-group">
-            
 
 
 
                     <strong>Video:</strong>
                     <input type="file" name="video" class="form-control">
-
-                   
 
 
 

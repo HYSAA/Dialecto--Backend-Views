@@ -38,7 +38,7 @@
 
             <table class="table table-bordered">
                 <tr>
-                    <th>ID Number</th>
+
                     <th>Course Name</th>
                     <th>Course Description</th>
                     <th>Course Image</th>
@@ -48,16 +48,20 @@
 
                 @foreach ($courses as $course)
                 <tr>
-                    <td>{{ $course->id }}</td>
+
                     <td>{{ $course->name }}</td>
                     <td>{{ $course->description }}</td>
 
-                    <td>
-                        @if($course->image)
-                        <img src="{{ asset('storage/' . $course->image) }}" alt="Course Image" class="image-thumbnail">
-                        @else
-                        No image available
-                        @endif
+                    <td style="width: 150px;">
+
+                        <div class="" style="width: 150px; height: 150px;">
+                            @if($course->image)
+                            <img src="{{ asset('storage/' . $course->image) }}" alt="Course Image" class="image-thumbnail">
+                            @else
+                            No image available
+                            @endif
+
+                        </div>
                     </td>
                     <td>
                         <form action="{{ route('admin.courses.destroy', $course->id) }}" method="POST">
