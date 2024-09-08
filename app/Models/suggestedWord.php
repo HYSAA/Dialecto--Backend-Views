@@ -11,7 +11,7 @@ class suggestedWord extends Model
 
     protected $table = 'suggested_words'; // Specify the table name if it doesn't follow Laravel's naming convention
 
-    protected $fillable = ['user_id', 'content_id', 'lesson_id', 'course_id', 'text', 'english'];
+    protected $fillable = ['user_id', 'content_id', 'lesson_id', 'course_id','video', 'text', 'english'];
 
     /**
      * Get the user that suggested the word.
