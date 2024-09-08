@@ -81,7 +81,7 @@
                     <a class="btn btn-nav" href="{{ route('user.profile.show') }}">
 
                         <i class="bi bi-person-circle"></i>
-    
+
 
                         <span class="btn-text">Profile</span>
                     </a>
@@ -104,8 +104,16 @@
 
                 <li class="nav-item">
                     <a class="btn btn-nav" href="{{ url('/progress') }}">
-                        <i class="bi bi-bar-chart"></i> 
+                        <i class="bi bi-bar-chart"></i>
                         <span class="btn-text">Ranking</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a class="btn btn-nav" href="{{ route('user.wordSuggested') }}">
+                        <i class="bi bi-book"></i>
+                        <span class="btn-text">View Your Suggested Words</span>
                     </a>
                 </li>
 
