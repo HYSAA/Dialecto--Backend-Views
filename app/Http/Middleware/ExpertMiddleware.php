@@ -4,10 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
-class UserMiddleware
+class ExpertMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,10 +16,12 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && auth::user()->usertype == 'user') {
+        // Check if the authenticated user is an expert
+        if (Auth::check() && auth::user()->usertype == 'expert') {
             return $next($request);
         }
-        return redirect('expert/dashboard');
-        // return redirect('/');  ///return sa homepage 
+
+        // Redirect non-experts
+        return redirect('/');  // or wherever you want to redirect them
     }
 }

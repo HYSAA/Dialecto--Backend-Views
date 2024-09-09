@@ -76,7 +76,7 @@
                             <select name="usertype" class="form-control">
                                 <option value="admin" {{ $user->usertype === 'admin' ? 'selected' : '' }}>Admin</option>
                                 <option value="user" {{ $user->usertype === 'user' ? 'selected' : '' }}>User</option>
-                                <option value="contributor" {{ $user->usertype === 'contributor' ? 'selected' : '' }}>Contributor</option>
+                                <option value="expert" {{ $user->usertype === 'expert' ? 'selected' : '' }}>Expert</option>
                             </select>
                         </div>
                     </div>

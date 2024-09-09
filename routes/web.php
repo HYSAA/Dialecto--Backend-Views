@@ -1,7 +1,7 @@
 <?php
 
 // admin
-
+use App\Http\Controllers\WordController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -21,6 +21,16 @@ use App\Http\Controllers\User\QuizController;
 use App\Http\Controllers\ControllerProfile as  UserControllerProfile;
 
 
+//expert
+use App\Http\Controllers\Expert\CourseController as  ExpertCourseController;
+
+use App\Http\Controllers\Expert\LessonController as  ExpertLessonController;
+
+use App\Http\Controllers\Expert\ContentController as  ExpertContentController;
+
+use App\Http\Controllers\Expert\QuizController as ExpertQuizController;
+
+use App\Http\Controllers\Expert\ControllerProfile as  ExpertControllerProfile;
 
 
 
@@ -123,6 +133,61 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 
 
+Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
+
+    // Dashboard route
+    Route::get('/dashboard', [ExpertCourseController::class, 'index'])->name('expert.dashboard');
+
+    Route::resource('courses', ExpertCourseController::class)->names([
+        'index' => 'expert.courses.index',
+        'create' => 'expert.courses.create',
+        'store' => 'expert.courses.store',
+        'show' => 'expert.courses.show',
+        'edit' => 'expert.courses.edit',
+        'update' => 'expert.courses.update',
+        'destroy' => 'expert.courses.destroy'
+    ]);
+
+    Route::resource('courses.lessons', ExpertLessonController::class)->names([
+        'index' => 'expert.lessons.index',
+        'create' => 'expert.lessons.create',
+        'store' => 'expert.lessons.store',
+        'show' => 'expert.lessons.show',
+        'edit' => 'expert.lessons.edit',
+        'update' => 'expert.lessons.update',
+        'destroy' => 'expert.lessons.destroy'
+    ]);
+
+    Route::resource('courses.lessons.contents', ExpertContentController::class)->names([
+        'index' => 'expert.contents.index',
+        'create' => 'expert.contents.create',
+        'store' => 'expert.contents.store',
+        'show' => 'expert.contents.show',
+        'edit' => 'expert.contents.edit',
+        'update' => 'expert.contents.update',
+        'destroy' => 'expert.contents.destroy',
+    ]);
+    
+   
+
+
+    // Quiz routes
+    Route::get('/quiz', [ExpertQuizController::class, 'show'])->name('expert.quiz');
+
+    Route::get('/courses/{courseId}/lessons/{lessonId}/quiz', [ExpertQuizController::class, 'showQuiz'])->name('expert.quiz.show');
+    Route::post('/courses/{courseId}/lessons/{lessonId}/quiz', [ExpertQuizController::class, 'submitQuiz'])->name('expert.quiz.submit');
+    Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [ExpertQuizController::class, 'showResult'])->name('expert.quiz.result');
+
+    // Multiple choice quiz
+    Route::get('/courses/{courseId}/lessons/{lessonId}/multipleChoice', [ExpertQuizController::class, 'multipleChoice'])->name('expert.multipleChoice.show');
+
+    // Profile routes
+    Route::get('/profile', [ExpertControllerProfile::class, 'show'])->name('expert.profile.show');
+    Route::get('/profile/edit', [ExpertControllerProfile::class, 'edit'])->name('expert.profile.edit');
+});
+
+
+
 
 
 Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
@@ -194,3 +259,4 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/profile', [UserControllerProfile::class, 'show'])->name('user.profile.show');
     Route::get('/profile/edit', [UserControllerProfile::class, 'edit'])->name('user.profile.edit');
 });
+
