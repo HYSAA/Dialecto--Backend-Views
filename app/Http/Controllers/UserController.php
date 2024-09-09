@@ -7,6 +7,7 @@ use App\Models\UserProgress;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Course;
+
 use App\Models\Lesson;
 use App\Models\suggestedWord;
 
@@ -210,6 +211,5 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Word suggestion submitted successfully!');
     }
 
-    
 }
 

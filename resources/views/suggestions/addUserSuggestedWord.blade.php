@@ -3,11 +3,12 @@
 @section('content')
 
 <div class="main-container" style="padding: 15px;">
-                @foreach ($lesson->contents as $content)
-                    <li>{{$content->text}} - {{ $content->english }}</li>
-                @endforeach
+    <h1>Current Contents in Selected Lesson</h1>
+    @foreach ($lesson->contents as $content)
+        <li>{{$content->text}} - {{ $content->english }}</li>
+    @endforeach
 
-    <form action="{{ route('user.submitwordSuggested', [$course->id, $lesson->id]) }}" method="POST">          
+    <form action="{{ route('user.submitWordSuggested', [$course->id, $lesson->id]) }}" method="POST">
         @csrf
         <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
         <input type="hidden" name="course_id" value="{{ $course->id }}">
@@ -16,7 +17,7 @@
         <div>
             <label for="video">Video:</label>
             <input type="file" name="video" class="form-control">
-            </div>
+        </div>
 
         <div>
             <label for="text">Text:</label>
