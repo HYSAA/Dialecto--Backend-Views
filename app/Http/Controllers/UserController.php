@@ -7,6 +7,7 @@ use App\Models\UserProgress;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Course;
+
 use App\Models\Lesson;
 use App\Models\suggestedWord;
 
@@ -180,64 +181,26 @@ class UserController extends Controller
 
     public function submitWordSuggested(Request $request, $courseId, $lessonId)
     {
-        // Validate the request
-        $request->validate([
-            'user_id' => 'required|integer|exists:users,id',
-            'course_id' => 'required|integer|exists:courses,id',
-            'lesson_id' => 'required|integer|exists:lessons,id',
-            'content_id' => 'required|integer|exists:courses,id',
-            'video' => 'nullable|file|mimes:mp4,avi,mov|max:10240', // 10MB max file size
-            'text' => 'required|string',
-            'english' => 'required|string',
-        ]);
+       
 
-        $customFolder = 'C:\Users\John\OneDrive\Desktop\Dialecto Pics';
-
-
-        // Handle file upload
-        $videoPath = null;
-        if ($request->hasFile('video')) {
-            $videoPath = $request->file('video')->store($customFolder, 'public');
-        }
-
-        $contentId = $this->generateUniqueContentId();
-
-        
-        $wordAdded = New suggestedWord();
-        $wordAdded->user_id = $request->user_id;
-        $wordAdded->course_id = $request->course_id;
-        $wordAdded->text = $request->text;
-        $wordAdded->english = $request->english;
-        $wordAdded->video = $videoPath;
-        $wordAdded->content_id = $contentId;
-
-        $wordAdded->save();
-        // Save the suggested word
-        // suggestedWord::create([
-        //     'user_id' => $validated['user_id'],
-        //     'course_id' => $validated['course_id'],
-        //     'lesson_id' => $validated['lesson_id'],
-        //     'video' => $videoPath,
-        //     'text' => $validated['text'],
-        //     'english' => $validated['english'],
-        // ]);
-
-        // Redirect or respond with success message
-        return redirect()->route('user.addUserSuggestedWord', [
-            'courseId' => $courseId,
-            'lessonId' => $lessonId
-        ])->with('success', 'Word suggested successfully!');    
     }
 
-    private function generateUniqueContentId()
+    // private function generateUniqueContentId()
+    // {
+    //     do {
+    //         $content_id = rand(1000, 9999);
+    //     } while (Content::where('id', $content_id)->exists());
+
+    //     return $content_id;
+    // }
+
+    private function generateContentId($lessonId)
     {
-        do {
-            $content_id = rand(1000, 9999);
-        } while (Content::where('id', $content_id)->exists());
+        // Check if a content already exists for this lesson
+        $lastContent = Content::where('lesson_id', $lessonId)->latest('content_id')->first();
 
-        return $content_id;
+        // If content exists, increment the content_id, otherwise start at 1
+        return $lastContent ? $lastContent->content_id + 1 : 1;
     }
-
-
 }
 
