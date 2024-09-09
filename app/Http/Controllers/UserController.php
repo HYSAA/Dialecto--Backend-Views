@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\Lesson;
+use App\Models\suggestedWord;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -53,30 +55,30 @@ class UserController extends Controller
 
     //     return view('users.show', compact('courses', 'lessons', 'user', 'userProgress'));
     // }
-    
+
     public function show($userId)
-{
-    $courses = Course::all();
+    {
+        $courses = Course::all();
 
-    $lessons = Lesson::withCount('contents')->get();
+        $lessons = Lesson::withCount('contents')->get();
 
-    $userProgress = UserProgress::where('user_id', $userId)
-        ->select('lesson_id', DB::raw('count(*) as count'))
-        ->groupBy('lesson_id')
-        ->get();
+        $userProgress = UserProgress::where('user_id', $userId)
+            ->select('lesson_id', DB::raw('count(*) as count'))
+            ->groupBy('lesson_id')
+            ->get();
 
-    $user = User::findOrFail($userId);
+        $user = User::findOrFail($userId);
 
-    // Calculate content counts for each lesson under each course
-    foreach ($courses as $course) {
-        foreach ($course->lessons as $lesson) {
-            $lesson->contents_count = $lesson->contents->count();
+        // Calculate content counts for each lesson under each course
+        foreach ($courses as $course) {
+            foreach ($course->lessons as $lesson) {
+                $lesson->contents_count = $lesson->contents->count();
+            }
         }
-    }
 
-    // Pass all the necessary data to the view
-    return view('users.show', compact('courses', 'lessons', 'user', 'userProgress'));
-}
+        // Pass all the necessary data to the view
+        return view('users.show', compact('courses', 'lessons', 'user', 'userProgress'));
+    }
 
 
 
@@ -152,4 +154,90 @@ class UserController extends Controller
 
         return redirect()->route('users.index')->with('success', 'Course deleted successfully.');
     }
+
+
+    public function wordSuggested()
+    {
+        return view('suggestions.userwords');
+    }
+
+    public function selectUserCourseLesson(Course $course, Lesson $lesson)
+    {
+        $courses = Course::with('lessons')->get();
+        $lessons = Lesson::with('course')->get();
+
+
+        return view('suggestions.selectUserCourseLesson', compact('courses', 'lessons'));
+    }
+
+    public function addUserSuggestedWord($courseId, $lessonId)
+    {
+        $course = Course::findOrFail($courseId);
+        $lesson = Lesson::findOrFail($lessonId);
+
+        return view('suggestions.addUserSuggestedWord', compact('course', 'lesson'));
+    }
+
+    public function submitWordSuggested(Request $request, $courseId, $lessonId)
+    {
+        // Validate the request
+        $request->validate([
+            'user_id' => 'required|integer|exists:users,id',
+            'course_id' => 'required|integer|exists:courses,id',
+            'lesson_id' => 'required|integer|exists:lessons,id',
+            'content_id' => 'required|integer|exists:courses,id',
+            'video' => 'nullable|file|mimes:mp4,avi,mov|max:10240', // 10MB max file size
+            'text' => 'required|string',
+            'english' => 'required|string',
+        ]);
+
+        $customFolder = 'C:\Users\John\OneDrive\Desktop\Dialecto Pics';
+
+
+        // Handle file upload
+        $videoPath = null;
+        if ($request->hasFile('video')) {
+            $videoPath = $request->file('video')->store($customFolder, 'public');
+        }
+
+        $contentId = $this->generateUniqueContentId();
+
+        
+        $wordAdded = New suggestedWord();
+        $wordAdded->user_id = $request->user_id;
+        $wordAdded->course_id = $request->course_id;
+        $wordAdded->text = $request->text;
+        $wordAdded->english = $request->english;
+        $wordAdded->video = $videoPath;
+        $wordAdded->content_id = $contentId;
+
+        $wordAdded->save();
+        // Save the suggested word
+        // suggestedWord::create([
+        //     'user_id' => $validated['user_id'],
+        //     'course_id' => $validated['course_id'],
+        //     'lesson_id' => $validated['lesson_id'],
+        //     'video' => $videoPath,
+        //     'text' => $validated['text'],
+        //     'english' => $validated['english'],
+        // ]);
+
+        // Redirect or respond with success message
+        return redirect()->route('user.addUserSuggestedWord', [
+            'courseId' => $courseId,
+            'lessonId' => $lessonId
+        ])->with('success', 'Word suggested successfully!');    
+    }
+
+    private function generateUniqueContentId()
+    {
+        do {
+            $content_id = rand(1000, 9999);
+        } while (Content::where('id', $content_id)->exists());
+
+        return $content_id;
+    }
+
+
 }
+

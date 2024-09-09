@@ -44,7 +44,7 @@
 
                             <div class="col-6 d-flex justify-content-end ">
 
-                                <a href="{{ route('user.courses.show', $course->id) }}" class="btn btn-main pull-right ">Views</a>
+                                <a href="{{ route('expert.courses.show', $course->id) }}" class="btn btn-main pull-right ">View</a>
 
                             </div>
                         </div>
