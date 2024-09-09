@@ -73,6 +73,70 @@
 
             @endif
 
+            <!--EXPERT SIDE-->
+
+            @if(Auth::user()->usertype == 'expert')
+
+                <li class="nav-item">
+                    <a class="btn btn-nav" href="{{ route('expert.profile.show') }}">
+
+                        <i class="bi bi-person-circle"></i>
+
+
+                        <span class="btn-text">Profile</span>
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="btn btn-nav" href="{{ route('expert.courses.index') }}">
+                        <i class="fas fa-book btn-icon"></i>
+                        <span class="btn-text">Courses</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="btn btn-nav" href="{{ url('/progress') }}">
+                        <i class="fas fa-tachometer-alt btn-icon"></i>
+                        <span class="btn-text">Progress</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-nav" href="{{ route('expert.dashboard') }}">
+                        <i class="fas fa-tachometer-alt btn-icon"></i>
+                        <span class="btn-text">Word Approval</span>
+                    </a>
+                </li>
+
+                <!-- <li class="nav-item">
+                        <a class="btn btn-nav" href="{{ url('/progress')}}">
+                          <i class="bi bi-bar-chart"></i> 
+                        <span class="btn-text">Word Approval</span>
+                    </li> -->
+
+                <li class="nav-item">
+                    <a class="btn btn-nav" href="{{ url('/progress') }}">
+                        <i class="bi bi-bar-chart"></i>
+                        <span class="btn-text">Ranking</span>
+                    </a>
+                </li>
+
+
+
+
+                <li>
+                    <a class="btn btn-nav" href="{{ route('user.wordSuggested') }}">
+                        <i class="bi bi-book"></i>
+                        <span class="btn-text">View Your Suggested Words</span>
+                    </a>
+                </li>
+
+            @endif
+
+
+
+
+
 
 
             @if(Auth::user()->usertype == 'user')
@@ -109,7 +173,6 @@
                     </a>
                 </li>
 
-
                 <li>
                     <a class="btn btn-nav" href="{{ route('user.wordSuggested') }}">
                         <i class="bi bi-book"></i>
@@ -118,6 +181,7 @@
                 </li>
 
             @endif
+
 
 
 

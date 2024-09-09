@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Expert;
 
 
 use App\Http\Controllers\Controller;
@@ -22,14 +22,14 @@ class ControllerProfile extends Controller
     {
         $currentUserId = Auth::user(); // Get the currently authenticated user's ID
         $users = User::where('id', '!=', $currentUserId)->get(); // Retrieve all users except the current one
-        return view('userUser.profile.show', compact('users','currentUserId')); // Pass filtered users to the view
+        return view('userExpert.profile.show', compact('users','currentUserId')); // Pass filtered users to the view
     }
 
 
     public function edit(User $user)
     {
 
-        return view('userUser.profile.edit', compact('user'));
+        return view('userExpert.profile.edit', compact('user'));
     }
 
 
@@ -54,7 +54,7 @@ class ControllerProfile extends Controller
 
         ]);
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('expert.users.index')->with('success', 'User updated successfully.');
     }
 
 

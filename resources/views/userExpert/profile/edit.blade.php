@@ -14,9 +14,9 @@
 
             <div class="pull-right">
 
-            <form action="{{ route('users.update', $user->id) }}" method="POST"></form>
+            <form action="{{ route('expert.update', $user->id) }}" method="POST"></form>
 
-                <a class="btn btn-main" href="{{ route('user.profile.update', [$currentUserId->id]) }}">Edit Profiles</a>
+                <a class="btn btn-main" href="{{ route('expert.profile.update', [$currentUserId->id]) }}">Edit Profiless</a>
 
                 
 

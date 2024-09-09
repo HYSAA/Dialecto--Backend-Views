@@ -181,26 +181,35 @@ class UserController extends Controller
 
     public function submitWordSuggested(Request $request, $courseId, $lessonId)
     {
-       
+        // Validate the form data
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'course_id' => 'required|exists:courses,id',
+            'lesson_id' => 'required|exists:lessons,id',
+            'video' => 'nullable|file|mimes:mp4,mov,avi,wmv|max:20480', // assuming you allow video upload
+            'text' => 'required|string',
+            'english' => 'required|string',
+        ]);
 
+        // Handle the video file upload if it exists
+        $videoPath = null;
+        if ($request->hasFile('video')) {
+            $videoPath = $request->file('video')->store('videos', 'public');  // store video in 'videos' directory
+        }
+
+        // Store the data into the database
+        SuggestedWord::firstOrCreate([
+            'user_id' => auth()->id(),
+            'course_id' => $courseId,
+            'lesson_id' => $lessonId,
+            'video' => $videoPath,
+            'text' => $request->text,
+            'english' => $request->english,
+        ]);
+
+        // Redirect or send a response after successful submission
+        return redirect()->back()->with('success', 'Word suggestion submitted successfully!');
     }
 
-    // private function generateUniqueContentId()
-    // {
-    //     do {
-    //         $content_id = rand(1000, 9999);
-    //     } while (Content::where('id', $content_id)->exists());
-
-    //     return $content_id;
-    // }
-
-    private function generateContentId($lessonId)
-    {
-        // Check if a content already exists for this lesson
-        $lastContent = Content::where('lesson_id', $lessonId)->latest('content_id')->first();
-
-        // If content exists, increment the content_id, otherwise start at 1
-        return $lastContent ? $lastContent->content_id + 1 : 1;
-    }
 }
 

@@ -9,8 +9,8 @@ class suggestedWord extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'content_id', 'lesson_id', 'course_id', 'text', 'english'];
 
-    
+    protected $fillable = ['user_id', 'lesson_id', 'course_id','video', 'text', 'english'];
+
 }
 
