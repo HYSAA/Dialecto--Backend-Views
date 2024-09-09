@@ -20,4 +20,9 @@ class Lesson extends Model
     {
         return $this->hasMany(Content::class);
     }
+
+    public function suggestedWords()
+    {
+        return $this->hasMany(SuggestedWord::class);
+    }
 }
