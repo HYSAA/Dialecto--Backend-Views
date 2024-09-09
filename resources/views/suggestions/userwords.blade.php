@@ -17,19 +17,23 @@
             <th>Status</th>
             <th>Actions</th>
         </tr>
-        <tr>
-            <td>Word</td>
-            <td>Definition Word</td>
-            <td>Course ID</td>
-            <td>Lesson ID</td>
-            <td>Status</td>
-            <td>Edit and Delete</td>
-        </tr>
+        @foreach ($suggestedWords as $word)
+            <tr>
+                <td>{{ $word->text }}</td>
+                <td>{{ $word->english }}</td>
+                <td>{{ $word->course->name }}</td>
+                <td>{{ $word->lesson->title }}</td>
+                <td>Status</td>
+                <td>Edit and Delete</td>
+            </tr>
+        @endforeach
+
     </table>
 </div>
 
 <style>
-    table.no-border td,table.no-border th {
+    table.no-border td,
+    table.no-border th {
         border: none;
         padding: 10px;
     }

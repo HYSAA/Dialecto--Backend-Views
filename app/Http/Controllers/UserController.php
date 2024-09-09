@@ -159,7 +159,12 @@ class UserController extends Controller
 
     public function wordSuggested()
     {
-        return view('suggestions.userwords');
+        $user = Auth::user();
+
+        $suggestedWords = SuggestedWord::with(['course', 'lesson'])
+            ->where('user_id', $user->id)
+            ->get();
+        return view('suggestions.userwords', compact('suggestedWords'));
     }
 
     public function selectUserCourseLesson(Course $course, Lesson $lesson)
