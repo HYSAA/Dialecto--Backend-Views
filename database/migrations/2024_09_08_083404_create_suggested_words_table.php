@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('content_id')->constrained()->onDelete('cascade');
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->text('text')->nullable();
@@ -26,7 +25,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique(['user_id', 'content_id']);
+            $table->unique(['user_id']);
         });
     }
 

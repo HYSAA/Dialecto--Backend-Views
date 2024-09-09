@@ -180,64 +180,36 @@ class UserController extends Controller
 
     public function submitWordSuggested(Request $request, $courseId, $lessonId)
     {
-        // Validate the request
+        // Validate the form data
         $request->validate([
-            'user_id' => 'required|integer|exists:users,id',
-            'course_id' => 'required|integer|exists:courses,id',
-            'lesson_id' => 'required|integer|exists:lessons,id',
-            'content_id' => 'required|integer|exists:courses,id',
-            'video' => 'nullable|file|mimes:mp4,avi,mov|max:10240', // 10MB max file size
+            'user_id' => 'required|exists:users,id',
+            'course_id' => 'required|exists:courses,id',
+            'lesson_id' => 'required|exists:lessons,id',
+            'video' => 'nullable|file|mimes:mp4,mov,avi,wmv|max:20480', // assuming you allow video upload
             'text' => 'required|string',
             'english' => 'required|string',
         ]);
 
-        $customFolder = 'C:\Users\John\OneDrive\Desktop\Dialecto Pics';
-
-
-        // Handle file upload
+        // Handle the video file upload if it exists
         $videoPath = null;
         if ($request->hasFile('video')) {
-            $videoPath = $request->file('video')->store($customFolder, 'public');
+            $videoPath = $request->file('video')->store('videos', 'public');  // store video in 'videos' directory
         }
 
-        $contentId = $this->generateUniqueContentId();
+        // Store the data into the database
+        SuggestedWord::firstOrCreate([
+            'user_id' => auth()->id(),
+            'course_id' => $courseId,
+            'lesson_id' => $lessonId,
+            'video' => $videoPath,
+            'text' => $request->text,
+            'english' => $request->english,
+        ]);
 
-        
-        $wordAdded = New suggestedWord();
-        $wordAdded->user_id = $request->user_id;
-        $wordAdded->course_id = $request->course_id;
-        $wordAdded->text = $request->text;
-        $wordAdded->english = $request->english;
-        $wordAdded->video = $videoPath;
-        $wordAdded->content_id = $contentId;
-
-        $wordAdded->save();
-        // Save the suggested word
-        // suggestedWord::create([
-        //     'user_id' => $validated['user_id'],
-        //     'course_id' => $validated['course_id'],
-        //     'lesson_id' => $validated['lesson_id'],
-        //     'video' => $videoPath,
-        //     'text' => $validated['text'],
-        //     'english' => $validated['english'],
-        // ]);
-
-        // Redirect or respond with success message
-        return redirect()->route('user.addUserSuggestedWord', [
-            'courseId' => $courseId,
-            'lessonId' => $lessonId
-        ])->with('success', 'Word suggested successfully!');    
+        // Redirect or send a response after successful submission
+        return redirect()->back()->with('success', 'Word suggestion submitted successfully!');
     }
 
-    private function generateUniqueContentId()
-    {
-        do {
-            $content_id = rand(1000, 9999);
-        } while (Content::where('id', $content_id)->exists());
-
-        return $content_id;
-    }
-
-
+    
 }
 
