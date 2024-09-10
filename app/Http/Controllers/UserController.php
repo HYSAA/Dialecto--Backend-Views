@@ -167,6 +167,12 @@ class UserController extends Controller
         return view('suggestions.userwords', compact('suggestedWords'));
     }
 
+    public function viewUpdateSelected()
+    {
+        
+        return view('suggestions.updateSelected');
+    }
+
     public function selectUserCourseLesson(Course $course, Lesson $lesson)
     {
         $courses = Course::with('lessons')->get();

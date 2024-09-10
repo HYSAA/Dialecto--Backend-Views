@@ -23,9 +23,9 @@
                 <td>{{ $word->english }}</td>
                 <td>{{ $word->course->name }}</td>
                 <td>{{ $word->lesson->title }}</td>
-                <td>Status</td>
+                <td>{{ $word->status }}</td>
                 <td>
-                <a class="btn btn-main">Edit</a>
+                <a  class="btn btn-main" href="{{ route('user.viewUpdateSelected', ['id' => $word->id]) }}">Update Selected</a>
                 <a class="btn btn-main">Delete</a>
                 </td>
             </tr>
