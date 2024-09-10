@@ -130,7 +130,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 
     Route::resource('users', UserController::class);
+
+
+    Route::get('/pending-expert', [UserController::class, 'showPendingExpert'])->name('admin.showPendingExpert');
+    Route::get('/post-verify/{id}', [UserController::class, 'postVerify'])->name('admin.postVerify');
 });
+
+
+
 
 Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
 
@@ -227,9 +234,6 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
         'update' => 'user.contents.update',
         'destroy' => 'user.contents.destroy',
     ]);
-
-
-
 
 
 

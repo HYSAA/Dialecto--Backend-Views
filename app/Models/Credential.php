@@ -14,6 +14,7 @@ class Credential extends Model
         'user_id',
         'language_experty', // updated column name
         'credentials', // updated column name (for image path)
+        'status', // included the new column
     ];
 
     // Define the inverse relationship

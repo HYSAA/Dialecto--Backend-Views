@@ -65,7 +65,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="btn btn-nav" href="{{ route('users.index') }}">
+                <a class="btn btn-nav" href="{{ route('admin.showPendingExpert') }}">
                     <i class="fas fa-chalkboard-teacher btn-icon"></i>
                     <span class="btn-text">Pending Verification</span>
                 </a>
