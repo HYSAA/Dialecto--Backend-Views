@@ -167,6 +167,30 @@ class UserController extends Controller
         return view('suggestions.userwords', compact('suggestedWords'));
     }
 
+    public function viewUpdateSelected($id)
+    {
+        $suggestedWord = SuggestedWord::findOrFail($id);
+        return view('suggestions.updateSelected',compact('suggestedWord'));
+    }
+
+    public function updateSelected(Request $request, $id)
+    {
+        $request->validate([
+            'text' => 'required|string|max:255',
+            'english' => 'required|string|max:255',
+            'video' => 'nullable|file|mimes:mp4,avi,mov|max:20480' // Adjust mime types and size as needed
+        ]);
+
+        $suggestedWord = SuggestedWord::findOrFail($id); // Use the $id parameter directly
+        $suggestedWord->text = $request->input('text');
+        $suggestedWord->english = $request->input('english');
+        $suggestedWord->save();
+
+        return redirect()->route('user.wordSuggested')->with('success', 'Course updated successfully.');
+
+        // return view('suggestions.userwords');
+    }
+
     public function selectUserCourseLesson(Course $course, Lesson $lesson)
     {
         $courses = Course::with('lessons')->get();
