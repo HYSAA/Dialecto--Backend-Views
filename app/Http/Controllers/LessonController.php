@@ -26,6 +26,8 @@ class LessonController extends Controller
 
         return view('lessons.index', compact('lessons'));
     }
+
+
     public function create(Course $course)
     {
         return view('lessons.create', compact('course'));
@@ -97,7 +99,7 @@ class LessonController extends Controller
         // Update the course with the new or existing image path
         $lesson->update([
             'title' => $request->title,
-            
+
             'image' => $imagePath,
         ]);
 

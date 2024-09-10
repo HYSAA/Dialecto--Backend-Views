@@ -77,7 +77,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     // Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
     // Route::get('users.show', [LessonController::class, 'index'])->name('lessons.index');
-    
+
     Route::resource('courses', CourseController::class)->names([
         'index' => 'admin.courses.index',
         'create' => 'admin.courses.create',
@@ -132,8 +132,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('users', UserController::class);
 });
 
-
-
 Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
 
     // Dashboard route
@@ -173,7 +171,7 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
     Route::get('/expert/pending-words', [ExpertController::class, 'index'])->name('expert.pendingWords');
     Route::post('/expert/approve-word/{id}', [ExpertController::class, 'approveWord'])->name('expert.approveWord');
     Route::post('/expert/disapprove-word/{id}', [ExpertController::class, 'disapproveWord'])->name('expert.disapproveWord');
-   
+
 
 
     // Quiz routes
@@ -192,9 +190,6 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
 });
 
 
-
-
-
 Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
     // Dashboard route
@@ -209,6 +204,9 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
         'update' => 'user.courses.update',
         'destroy' => 'user.courses.destroy'
     ]);
+
+
+
 
     Route::resource('courses.lessons', UserLessonController::class)->names([
         'index' => 'user.lessons.index',
@@ -234,6 +232,9 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
 
 
+
+
+
     Route::get('/wordSuggested/{id}/viewUpdateSelected', [UserController::class, 'viewUpdateSelected'])->name('user.viewUpdateSelected');
     Route::post('/wordSuggested/{id}/updateSelected', [UserController::class, 'updateSelected'])->name('user.updateSelected');
 
@@ -243,7 +244,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
     Route::post('/selectUserCourseLesson/courses/{courseId}/lessons/{lessonId}/submitwordSuggested', [UserController::class, 'submitWordSuggested'])->name('user.submitWordSuggested');
     // Route::get('/get-lessons/{course}', [UserController::class, 'getLessons']);
-    
+
 
     Route::get('/quiz', [UserController::class, 'show'])->name('user.quiz');
 
@@ -264,11 +265,25 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
 
 
-    
 
 
 
-    Route::get('/profile', [UserControllerProfile::class, 'show'])->name('user.profile.show');
+
+    Route::get('/profile/{id}', [UserControllerProfile::class, 'show'])->name('user.profile.show');
+
+
     Route::get('/profile/edit', [UserControllerProfile::class, 'edit'])->name('user.profile.edit');
-});
 
+
+    // Route::get('/profile/applyExpert', [UserControllerProfile::class, 'applyExpert'])->name('user.profile.applyExpert');
+
+    Route::get('/profile/{id}/apply-expert', [UserControllerProfile::class, 'applyExpert'])->name('user.profile.applyExpert');
+
+
+
+
+
+    Route::post('/profile/posting-credentials', [UserControllerProfile::class, 'postCredentials'])->name('user.profile.postCredentials');
+
+    Route::get('/profile/submitted-creds/{name}', [UserControllerProfile::class, 'submittedCredentials'])->name('user.profile.submittedCredentials');
+});

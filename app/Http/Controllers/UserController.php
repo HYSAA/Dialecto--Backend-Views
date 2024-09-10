@@ -91,6 +91,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
 
+
         return view('users.edit', compact('user'));
     }
 
@@ -170,7 +171,7 @@ class UserController extends Controller
     public function viewUpdateSelected($id)
     {
         $suggestedWord = SuggestedWord::findOrFail($id);
-        return view('suggestions.updateSelected',compact('suggestedWord'));
+        return view('suggestions.updateSelected', compact('suggestedWord'));
     }
 
     public function updateSelected(Request $request, $id)
@@ -239,6 +240,4 @@ class UserController extends Controller
         // Redirect or send a response after successful submission
         return redirect()->back()->with('success', 'Word suggestion submitted successfully!');
     }
-
 }
-
