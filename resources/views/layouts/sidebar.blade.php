@@ -102,7 +102,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('expert.dashboard') }}">
+                    <a class="btn btn-nav" href="{{ route('expert.pendingWords') }}">
                         <i class="fas fa-tachometer-alt btn-icon"></i>
                         <span class="btn-text">Word Approval</span>
                     </a>
@@ -123,13 +123,13 @@
 
 
 
-
+<!-- 
                 <li>
                     <a class="btn btn-nav" href="{{ route('user.wordSuggested') }}">
                         <i class="bi bi-book"></i>
                         <span class="btn-text">View Your Suggested Words</span>
                     </a>
-                </li>
+                </li> -->
 
             @endif
 
