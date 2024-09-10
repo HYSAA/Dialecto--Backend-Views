@@ -32,6 +32,7 @@ use App\Http\Controllers\Expert\QuizController as ExpertQuizController;
 
 use App\Http\Controllers\Expert\ControllerProfile as  ExpertControllerProfile;
 
+use App\Http\Controllers\Expert\ExpertController;
 
 
 use App\Http\Controllers\AdminController;
@@ -167,7 +168,11 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
         'update' => 'expert.contents.update',
         'destroy' => 'expert.contents.destroy',
     ]);
-    
+    Route::get('/expert/contribute-word', [ExpertController::class, 'contributeWord'])->name('expert.contributeWord');
+    Route::post('/expert/submit-contribute-word', [ExpertController::class, 'submitContributeWord'])->name('expert.submitContributeWord');
+    Route::get('/expert/pending-words', [ExpertController::class, 'index'])->name('expert.pendingWords');
+    Route::post('/expert/approve-word/{id}', [ExpertController::class, 'approveWord'])->name('expert.approveWord');
+    Route::post('/expert/disapprove-word/{id}', [ExpertController::class, 'disapproveWord'])->name('expert.disapproveWord');
    
 
 
