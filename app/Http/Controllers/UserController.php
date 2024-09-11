@@ -143,14 +143,37 @@ class UserController extends Controller
         $suggestedWords = SuggestedWord::with(['course', 'lesson'])
             ->where('user_id', $user->id)
             ->get();
-        return view('suggestions.userwords', compact('suggestedWords'));
+        return view('userUser.suggestions.userwords', compact('suggestedWords'));
     }
 
     public function viewUpdateSelected($id)
     {
         $suggestedWord = SuggestedWord::findOrFail($id);
-        return view('suggestions.updateSelected', compact('suggestedWord'));
+        return view('userUser.suggestions.updateSelected', compact('suggestedWord'));
     }
+
+
+    public function deleteSelectedWord($id)
+    {
+        // Find the word by its ID or throw a 404 if not found
+        $word = SuggestedWord::findOrFail($id);
+
+        // Delete the word
+        $word->delete();
+
+        // Redirect with a success message
+        return redirect()->route('user.wordSuggested')->with('success', 'Translation deleted successfully.');
+    }
+
+
+
+
+
+
+
+
+
+
 
     public function updateSelected(Request $request, $id)
     {
@@ -176,7 +199,7 @@ class UserController extends Controller
         $lessons = Lesson::with('course')->get();
 
 
-        return view('suggestions.selectUserCourseLesson', compact('courses', 'lessons'));
+        return view('userUser.suggestions.selectUserCourseLesson', compact('courses', 'lessons'));
     }
 
     public function addUserSuggestedWord($courseId, $lessonId)
@@ -184,7 +207,7 @@ class UserController extends Controller
         $course = Course::findOrFail($courseId);
         $lesson = Lesson::findOrFail($lessonId);
 
-        return view('suggestions.addUserSuggestedWord', compact('course', 'lesson'));
+        return view('userUser.suggestions.addUserSuggestedWord', compact('course', 'lesson'));
     }
 
     public function submitWordSuggested(Request $request, $courseId, $lessonId)
@@ -216,8 +239,21 @@ class UserController extends Controller
         ]);
 
         // Redirect or send a response after successful submission
-        return redirect()->back()->with('success', 'Word suggestion submitted successfully!');
+        return redirect()->route('user.wordSuggested')->with('success', 'Suggestions submitted successfully.');
+
+
+
+        // return redirect()->back()->with('success', 'Word suggestion submitted successfully!');
     }
+
+
+
+
+
+
+
+
+
 
 
     public function showPendingExpert()
@@ -285,10 +321,6 @@ class UserController extends Controller
             return redirect()->route('admin.showPendingExpert')->with('success', 'User has been verified.');
         }
     }
-
-
-
-
 
     public function postDeny()
     {

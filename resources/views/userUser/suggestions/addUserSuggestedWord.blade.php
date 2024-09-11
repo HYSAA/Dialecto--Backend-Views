@@ -4,7 +4,7 @@
 
 <div class="main-container" style="padding: 15px;">
     <div class="pull-right " style="padding:15px;">
-        <a class="btn btn-back-main" href="{{ route('user.selectUserCourseLesson') }}">Back</a>
+        <a class="btn btn-main" href="{{ route('user.selectUserCourseLesson') }}">Back</a>
     </div>
 
     <div class="row" style="overflow-y: auto;">
@@ -14,9 +14,10 @@
 
                 <div class="card mb-2 mr-2" style="padding:15px;">
                     <div style="background:white;border-radius: 10px;padding:15px;height:100%;">
-                        <h4>Current Contents in Selected Lesson</h4>
+                        <h4 class="mb-2">Current content in {{$course->name}}</h4>
+
                         @foreach ($lesson->contents as $content)
-                            <li>{{$content->text}} - {{ $content->english }}</li>
+                        <li>{{$content->text}} - {{ $content->english }}</li>
                         @endforeach
                     </div>
 
@@ -28,8 +29,6 @@
                     <form action="{{ route('user.submitWordSuggested', [$course->id, $lesson->id]) }}" method="POST">
                         @csrf
 
-
-
                         <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                         <input type="hidden" name="course_id" value="{{ $course->id }}">
                         <input type="hidden" name="lesson_id" value="{{ $lesson->id }}">
@@ -39,11 +38,11 @@
                                 <input type="file" name="video" class="form-control form-control-lg">
                             </div>
                             <div style="padding-top:15px;">
-                                <strong for="text" class="form-group">Text:</strong><br>
+                                <strong for="text" class="form-group">{{$course->name}} text:</strong><br>
                                 <input type="text" name="text" id="text" required class="form-control form-control-lg">
                             </div>
                             <div style="padding-top:15px;">
-                                <strong for="english">English:</strong><br>
+                                <strong for="english">English text:</strong><br>
                                 <input type="text" name="english" id="english" required
                                     class="form-control form-control-lg">
                             </div>

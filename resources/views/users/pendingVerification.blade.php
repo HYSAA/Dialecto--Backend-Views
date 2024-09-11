@@ -5,11 +5,11 @@
 <div class="main-container">
 
     <div class="row mb-2">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left mb-2">
 
-                <h2 id="title">Pending Unverified Experts
-                </h2>
+        <div class="col-lg-12 margin-tb">
+
+            <div class="pull-left mb-2">
+                <h2 id="title">Pending Unverified Experts</h2>
             </div>
 
             <div class="pull-right mb-2">
@@ -29,39 +29,43 @@
 
     <div class="row" id="pendingTable" style="overflow-y: auto;">
         <div class="col-lg-12 margin-tb">
-            <table class="table table-bordered">
-                <tr>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>List of Languages</th>
-                    <th>Credentials</th>
-                    <th width=" 280px">Action</th>
-                </tr>
+
+            <table class="table table-striped table-bordered">
+
+                <tbody>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>List of Languages</th>
+                        <th>Credentials</th>
+                        <th width=" 280px">Action</th>
+                    </tr>
 
 
-                @foreach ($unverifiedUsers as $user)
-                <tr>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->credential->language_experty }}</td>
-                    <td style="width: 350px;">
-                        <div style="width: 350px; height: 350px;">
-                            @if($user->credential->credentials)
-                            <img src="{{ asset('storage/' . $user->credential->credentials) }}" alt="Course Image" class="image-thumbnail">
-                            @else
-                            No image available
-                            @endif
-                        </div>
-                    </td>
-                    <td>
+                    @foreach ($unverifiedUsers as $user)
+                    <tr>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->credential->language_experty }}</td>
+                        <td style="width: 350px;">
+                            <div style="width: 350px; height: 350px;">
+                                @if($user->credential->credentials)
+                                <img src="{{ asset('storage/' . $user->credential->credentials) }}" alt="Course Image" class="image-thumbnail">
+                                @else
+                                No image available
+                                @endif
+                            </div>
+                        </td>
+                        <td>
 
-                        <a class="btn btn-success" href="{{ route('admin.postVerify', ['id' => $user->id]) }}">Verify</a>
+                            <a class="btn btn-success" href="{{ route('admin.postVerify', ['id' => $user->id]) }}">Verify</a>
 
-                        <a class="btn btn-danger" href="#">Deny</a>
+                            <a class="btn btn-danger" href="#">Deny</a>
 
-                    </td>
-                </tr>
-                @endforeach
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
 
             </table>
         </div>
@@ -69,7 +73,7 @@
 
     <div class="row" id="approvedTable" style="overflow-y: auto; display: none;">
         <div class="col-lg-12 margin-tb">
-            <table class="table table-bordered">
+            <table class="table table-striped table-bordered">
                 <tr>
                     <th>Full Name</th>
                     <th>Email</th>
@@ -139,6 +143,7 @@
         </div>
     </div>
 </div>
+
 
 
 <script>

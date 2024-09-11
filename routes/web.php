@@ -23,16 +23,12 @@ use App\Http\Controllers\ControllerProfile as  UserControllerProfile;
 
 //expert
 use App\Http\Controllers\Expert\CourseController as  ExpertCourseController;
-
 use App\Http\Controllers\Expert\LessonController as  ExpertLessonController;
-
 use App\Http\Controllers\Expert\ContentController as  ExpertContentController;
-
 use App\Http\Controllers\Expert\QuizController as ExpertQuizController;
-
 use App\Http\Controllers\Expert\ControllerProfile as  ExpertControllerProfile;
-
 use App\Http\Controllers\Expert\ExpertController;
+use App\Http\Controllers\Expert\WordBankController;
 
 
 use App\Http\Controllers\AdminController;
@@ -171,9 +167,16 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
         'update' => 'expert.contents.update',
         'destroy' => 'expert.contents.destroy',
     ]);
+
     Route::get('/expert/contribute-word', [ExpertController::class, 'contributeWord'])->name('expert.contributeWord');
     Route::post('/expert/submit-contribute-word', [ExpertController::class, 'submitContributeWord'])->name('expert.submitContributeWord');
+
+
+
     Route::get('/expert/pending-words', [ExpertController::class, 'index'])->name('expert.pendingWords');
+
+
+
     Route::post('/expert/approve-word/{id}', [ExpertController::class, 'approveWord'])->name('expert.approveWord');
     Route::post('/expert/disapprove-word/{id}', [ExpertController::class, 'disapproveWord'])->name('expert.disapproveWord');
 
@@ -211,8 +214,6 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     ]);
 
 
-
-
     Route::resource('courses.lessons', UserLessonController::class)->names([
         'index' => 'user.lessons.index',
         'create' => 'user.lessons.create',
@@ -238,9 +239,27 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
 
     Route::get('/wordSuggested/{id}/viewUpdateSelected', [UserController::class, 'viewUpdateSelected'])->name('user.viewUpdateSelected');
+
+    Route::get('/wordSuggested/{id}/deleteSelectedWord', [UserController::class, 'deleteSelectedWord'])->name('user.deleteSelectedWord');
+
+
+
+
+
+
+
+
+
+
+
     Route::post('/wordSuggested/{id}/updateSelected', [UserController::class, 'updateSelected'])->name('user.updateSelected');
 
+
     Route::get('/wordSuggested', [UserController::class, 'wordSuggested'])->name('user.wordSuggested');
+
+
+
+
     Route::get('/selectUserCourseLesson', [UserController::class, 'selectUserCourseLesson'])->name('user.selectUserCourseLesson');
     Route::get('/selectUserCourseLesson/courses/{courseId}/lessons/{lessonId}/addUserSuggestedWord', [UserController::class, 'addUserSuggestedWord'])->name('user.addUserSuggestedWord');
 

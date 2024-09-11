@@ -104,7 +104,7 @@
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('expert.pendingWords') }}">
                     <i class="fas fa-tachometer-alt btn-icon"></i>
-                    <span class="btn-text">Word Approval</span>
+                    <span class="btn-text">Word Bank</span>
                 </a>
             </li>
 

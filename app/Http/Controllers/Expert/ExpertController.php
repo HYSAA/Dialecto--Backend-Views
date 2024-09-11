@@ -15,8 +15,8 @@ class ExpertController extends Controller
     public function contributeWord()
     {
         // Fetch all courses and lessons for the dropdowns
-        $courses = Course::all(); 
-        $lessons = Lesson::all(); 
+        $courses = Course::all();
+        $lessons = Lesson::all();
 
         // Return the view with the necessary data
         return view('expert.contribute_word', compact('courses', 'lessons'));
@@ -58,7 +58,8 @@ class ExpertController extends Controller
     // Display all pending suggested words
     public function index()
     {
-        $pendingWords = SuggestedWord::where('status', 'pending')->with(['course', 'lesson'])->get();
+        // $pendingWords = SuggestedWord::where('status', 'pending')->with(['course', 'lesson'])->get();
+        $pendingWords = SuggestedWord::with(['course', 'lesson'])->get();
         return view('userExpert.wordApproved.pending_words', compact('pendingWords'));
     }
 
@@ -71,10 +72,10 @@ class ExpertController extends Controller
                 'status' => 'approved',
                 'expert_id' => Auth::id(),
             ]);
-           
+
             return redirect()->route('expert.pendingWords')->with('success', 'Word approved successfully.');
         } catch (\Exception $e) {
-        
+
             return redirect()->route('expert.pendingWords')->with('error', 'An error occurred while approving the word: ' . $e->getMessage());
         }
     }
@@ -88,10 +89,10 @@ class ExpertController extends Controller
                 'status' => 'disapproved',
                 'expert_id' => Auth::id(),
             ]);
-      
+
             return redirect()->route('expert.pendingWords')->with('success', 'Word disapproved successfully.');
         } catch (\Exception $e) {
-        
+
             return redirect()->route('expert.pendingWords')->with('error', 'An error occurred while disapproving the word: ' . $e->getMessage());
         }
     }
