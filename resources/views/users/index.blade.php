@@ -4,7 +4,7 @@
 
 <div class="main-container">
 
-    <div class="row">
+    <div class="row mb-2">
         <div class="col-lg-12 ">
             <h2>Users</h2>
         </div>
@@ -24,9 +24,6 @@
                     <th width="280px">Action</th>
 
                 </tr>
-
-
-
                 @foreach ($users as $user)
                 <tr>
 

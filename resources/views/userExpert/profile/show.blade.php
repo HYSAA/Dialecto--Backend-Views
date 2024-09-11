@@ -7,12 +7,12 @@
     <div class="row">
         <div class="col-lg-12">
 
-            <div class="pull-left">
+            <div class="pull-left mb-2">
                 <h2>Profile </h2>
             </div>
 
 
-            <div class="pull-right">
+            <div class="pull-right mb-2">
 
                 <span class="btn " style="background-color: #d4edda; color: #155724;border-color: #c3e6cb; box-sizing: border-box; border-radius: 4px; text-align: center; text-decoration: none; box-shadow: none;">
                     Verified Expert for {{$currentUserId->credential->language_experty}}</span>
