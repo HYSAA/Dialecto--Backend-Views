@@ -172,7 +172,7 @@
             <li>
                 <a class="btn btn-nav" href="{{ route('user.wordSuggested') }}">
                     <i class="bi bi-book"></i>
-                    <span class="btn-text">View Your Suggested Words</span>
+                    <span class="btn-text">My Suggested Words</span>
                 </a>
             </li>
 
