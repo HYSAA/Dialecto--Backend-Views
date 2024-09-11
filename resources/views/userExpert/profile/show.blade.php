@@ -14,9 +14,8 @@
 
             <div class="pull-right">
 
-                <a class="btn btn-main" href="{{ route('expert.profile.edit', [$currentUserId->id]) }}">Edit Profile</a>
-
-                <a class="btn btn-back-main" href="# ">Apply as verifier</a>
+                <span class="btn " style="background-color: #d4edda; color: #155724;border-color: #c3e6cb; box-sizing: border-box; border-radius: 4px; text-align: center; text-decoration: none; box-shadow: none;">
+                    Verified Expert for {{$currentUserId->credential->language_experty}}</span>
 
             </div>
 
@@ -42,7 +41,7 @@
             </div>
 
         </div>
-        
+
 
 
 
@@ -70,7 +69,7 @@
 
 
 
-    
+
 </div>
 
 

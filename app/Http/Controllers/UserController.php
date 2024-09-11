@@ -7,6 +7,7 @@ use App\Models\UserProgress;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Course;
+use App\Models\Credential;
 
 use App\Models\Lesson;
 use App\Models\suggestedWord;
@@ -24,6 +25,7 @@ class UserController extends Controller
     {
         $currentUserId = Auth::id(); // Get the currently authenticated user's ID
         $users = User::where('id', '!=', $currentUserId)->get(); // Retrieve all users except the current one
+
         return view('users.index', compact('users')); // Pass filtered users to the view
     }
 
@@ -82,14 +84,12 @@ class UserController extends Controller
     }
 
 
-
-
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(User $user)
     {
+
 
         return view('users.edit', compact('user'));
     }
@@ -116,27 +116,6 @@ class UserController extends Controller
 
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Update the specified resource in storage.
@@ -170,7 +149,7 @@ class UserController extends Controller
     public function viewUpdateSelected($id)
     {
         $suggestedWord = SuggestedWord::findOrFail($id);
-        return view('suggestions.updateSelected',compact('suggestedWord'));
+        return view('suggestions.updateSelected', compact('suggestedWord'));
     }
 
     public function updateSelected(Request $request, $id)
@@ -240,5 +219,79 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Word suggestion submitted successfully!');
     }
 
-}
 
+    public function showPendingExpert()
+    {
+
+        // $unverifiedUsers = User::where('usertype', 'user')
+        //     ->where('credentials', 1)
+        //     ->with('credential')
+        //     ->get();
+
+
+        $unverifiedUsers = User::where('usertype', 'user')
+            ->where('credentials', 1)
+            ->whereHas('credential', function ($query) {
+                $query->where('status', null);
+            })
+            ->with('credential')
+            ->get();
+
+
+
+        $verifiedUsers = User::where('usertype', 'expert')
+            ->where('credentials', 1)
+            ->whereHas('credential', function ($query) {
+                $query->where('status', 1);
+            })
+            ->with('credential')
+            ->get();
+
+        $deniedUsers = User::where('usertype', 'user')
+            ->where('credentials', 1)
+            ->whereHas('credential', function ($query) {
+                $query->where('status', 0);
+            })
+            ->with('credential')
+            ->get();
+        // return view('suggestions.addUserSuggestedWord', compact());
+        return view('users.pendingVerification', compact('unverifiedUsers', 'verifiedUsers', 'deniedUsers'));
+    }
+
+
+    public function postVerify($id)
+    {
+        // Find the user by ID
+        $user = User::find($id);
+
+        // Check if the user exists
+        if ($user) {
+            // Update the usertype to 'expert'
+            $user->usertype = 'expert';
+
+            // Save the changes to the database
+            $user->save();
+
+            // Optional: Fetch related credentials if needed
+            $cred = $user->credential;
+
+            $cred->status = '1';
+
+            $cred->save();
+
+
+
+
+            return redirect()->route('admin.showPendingExpert')->with('success', 'User has been verified.');
+        }
+    }
+
+
+
+
+
+    public function postDeny()
+    {
+        return view('users.pendingVerification', compact('unverifiedUsers', 'verifiedUsers', 'deniedUsers'));
+    }
+}

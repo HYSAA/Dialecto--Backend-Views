@@ -723,17 +723,14 @@ body {
 
 /* css:learner.course */
 
-/* .main-container {
-    padding-top: 19px;
 
-}
 
-.custom-container {
+/* .custom-container {
     background-color: white;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    
+
 } */
 
 
@@ -1181,4 +1178,18 @@ body {
     /* Change to your desired color */
     color: #fff;
     /* Text color */
+}
+
+
+.scrollable {
+
+    /* Subtract padding from the height of the parent container */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    /* border: 1px solid #ddd; */
+    /* Optional: to visually show the borders */
+    padding: 10px;
+    margin-bottom: 10px;
+
+    /* Optional: to add some padding inside the column */
 }

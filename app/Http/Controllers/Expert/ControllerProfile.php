@@ -21,8 +21,11 @@ class ControllerProfile extends Controller
     public function show()
     {
         $currentUserId = Auth::user(); // Get the currently authenticated user's ID
-        $users = User::where('id', '!=', $currentUserId)->get(); // Retrieve all users except the current one
-        return view('userExpert.profile.show', compact('users','currentUserId')); // Pass filtered users to the view
+        $users = User::where('id', '!=', $currentUserId)->get();
+
+
+
+        return view('userExpert.profile.show', compact('users', 'currentUserId')); // Pass filtered users to the view
     }
 
 
@@ -56,7 +59,4 @@ class ControllerProfile extends Controller
 
         return redirect()->route('expert.users.index')->with('success', 'User updated successfully.');
     }
-
-
-
 }
