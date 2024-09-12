@@ -168,12 +168,23 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
         'destroy' => 'expert.contents.destroy',
     ]);
 
-    Route::get('/expert/contribute-word', [ExpertController::class, 'contributeWord'])->name('expert.contributeWord');
+
+
+
+
+
+    Route::get('/contribute-word', [ExpertController::class, 'contributeWord'])->name('expert.contributeWord');
+
+
+
+
+
+
     Route::post('/expert/submit-contribute-word', [ExpertController::class, 'submitContributeWord'])->name('expert.submitContributeWord');
 
 
 
-    Route::get('/expert/pending-words', [ExpertController::class, 'index'])->name('expert.pendingWords');
+    Route::get('/pending-words', [ExpertController::class, 'index'])->name('expert.pendingWords');
 
 
 

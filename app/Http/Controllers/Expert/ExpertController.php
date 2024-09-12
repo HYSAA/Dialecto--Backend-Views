@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Expert;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Credential;
 use App\Models\Lesson;
 use App\Models\SuggestedWord;
 use Illuminate\Http\Request;
@@ -15,24 +16,49 @@ class ExpertController extends Controller
     public function contributeWord()
     {
         // Fetch all courses and lessons for the dropdowns
-        $courses = Course::all();
-        $lessons = Lesson::all();
 
-        // Return the view with the necessary data
-        return view('expert.contribute_word', compact('courses', 'lessons'));
+
+        $thisUser = Auth::user();
+
+        $userCredentials = Credential::where('user_id', $thisUser->id)->first();
+
+
+
+        $language =  $userCredentials->language_experty;
+
+        $course = Course::where('name', $language)->first();
+
+
+
+
+        $thisLessons = Lesson::whereHas('course', function ($query) use ($language) {
+            $query->where('name', $language);
+        })->get();
+
+
+
+
+        return view('userExpert.wordApproved.contribute_word', compact('language', 'thisLessons', 'course'));
     }
+
+
 
     // Handle the submission of the new suggested word
     public function submitContributeWord(Request $request)
     {
+
+
         // Validate the incoming request
         $request->validate([
-            'course_id' => 'required|exists:courses,id',
             'lesson_id' => 'required|exists:lessons,id',
+            'course_id' => 'required|exists:courses,id',
             'text' => 'required|string',
             'english' => 'required|string',
             'video' => 'nullable|file|mimes:mp4,mov,avi,wmv|max:20480', // Max 20MB
         ]);
+
+
+
 
         // Handle the video upload if provided
         $videoPath = null;
@@ -41,27 +67,69 @@ class ExpertController extends Controller
         }
 
         // Create the new suggested word
-        SuggestedWord::create([
+
+        $created = SuggestedWord::create([
             'user_id' => Auth::id(), // Assuming the expert is also a user
             'course_id' => $request->course_id,
             'lesson_id' => $request->lesson_id,
             'video' => $videoPath,
             'text' => $request->text,
             'english' => $request->english,
-            'status' => 'pending', // Initial status set to 'pending'
+            'status' => 'expert',
         ]);
 
+
         // Redirect back with a success message
-        return redirect()->back()->with('success', 'Word suggestion submitted successfully!');
+
+        return redirect()->route('expert.pendingWords')
+            ->with('success', 'Word uploaded successfully.');
     }
 
-    // Display all pending suggested words
+
+
+
+
+
+
+
+
+
     public function index()
     {
         // $pendingWords = SuggestedWord::where('status', 'pending')->with(['course', 'lesson'])->get();
         $pendingWords = SuggestedWord::with(['course', 'lesson'])->get();
-        return view('userExpert.wordApproved.pending_words', compact('pendingWords'));
+
+
+        $userWords = SuggestedWord::with(['course', 'lesson'])
+            ->where('status', '!=', 'expert')
+            ->get();
+
+
+        $expertWords = SuggestedWord::with(['course', 'lesson'])
+            ->where('status', '=', 'expert')
+            ->get();
+
+
+
+
+
+
+
+        return view('userExpert.wordApproved.pending_words', compact('expertWords', 'userWords'));
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Approve the suggested word
     public function approveWord(Request $request, $id)

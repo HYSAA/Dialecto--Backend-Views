@@ -1,33 +1,111 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Contribute a New Word</h1>
 
-<form action="{{ route('expert.submitContributeWord') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    <label for="course">Course:</label>
-    <select name="course_id" id="course">
-        @foreach($courses as $course)
-        <option value="{{ $course->id }}">{{ $course->name }}</option>
-        @endforeach
-    </select>
+<div class="main-container">
 
-    <label for="lesson">Lesson:</label>
-    <select name="lesson_id" id="lesson">
-        @foreach($lessons as $lesson)
-        <option value="{{ $lesson->id }}">{{ $lesson->name }}</option>
-        @endforeach
-    </select>
+    <div class="row mb-2">
 
-    <label for="text">Text:</label>
-    <input type="text" name="text" id="text" required>
+        <div class="col-lg-12 margin-tb">
+            <div class="pull-left mb-2">
+                <h2 id="title">Contribute word for the language <strong> {{$language}}</strong></h2>
 
-    <label for="english">English:</label>
-    <input type="text" name="english" id="english" required>
+            </div>
 
-    <label for="video">Video (optional):</label>
-    <input type="file" name="video" id="video" accept="video/*">
+        </div>
 
-    <button type="submit">Submit</button>
-</form>
+    </div>
+
+
+
+
+
+
+    <div class="row" id="wordsFromUser" style="overflow-y: auto;">
+
+        <div class="col-lg-12 margin-tb">
+
+            <form action="{{ route('expert.submitContributeWord') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+
+                <input type="hidden" name="course_id" value="{{ $course->id }}">
+
+
+                <div class="row">
+                    <label for="lesson">Select a lesson you want to contribute to:</label>
+                </div>
+
+
+                <div class="row ">
+
+                    <div class="col-lg-3">
+
+
+
+                        <div class="row mb-2">
+
+                            <select name="lesson_id" id="lesson" style="width: 100%;">
+                                @foreach($thisLessons as $lesson)
+                                <option value="{{ $lesson->id }}">{{ $lesson->title }}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
+
+                        <div class="row mb-2">
+
+                            <label for="text">Text: </label>
+                        </div>
+
+                        <div class="row mb-2">
+
+                            <input type="text" name="text" id="text" style="width: 100%;" required>
+                        </div>
+
+                        <div class="row mb-2">
+
+                            <label for="english">English:</label>
+                        </div>
+
+                        <div class="row mb-4">
+
+                            <input type="text" name="english" id="english" style="width: 100%;" required>
+                        </div>
+
+
+                        <div class="row mb-2">
+                            <button class="btn btn-main" type="submit">Submit</button>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-lg-4  ">
+                        <div class=" row mb-2">
+
+
+                            <label for="video">Video (optional):</label>
+
+                        </div>
+
+                        <div class="row mb-2">
+
+                            <input type="file" name="video" id="video" accept="video/*">
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+            </form>
+        </div>
+    </div>
+
+
+</div>
 @endsection

@@ -84,9 +84,7 @@ class UserController extends Controller
     }
 
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(User $user)
     {
 
@@ -117,17 +115,7 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(Request $request, string $id)
-    // {
 
-    // }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(User $user)
     {
         $user->delete();
@@ -202,6 +190,15 @@ class UserController extends Controller
         return view('userUser.suggestions.selectUserCourseLesson', compact('courses', 'lessons'));
     }
 
+
+
+
+
+
+
+
+
+
     public function addUserSuggestedWord($courseId, $lessonId)
     {
         $course = Course::findOrFail($courseId);
@@ -230,6 +227,7 @@ class UserController extends Controller
 
         // Store the data into the database
         SuggestedWord::firstOrCreate([
+
             'user_id' => auth()->id(),
             'course_id' => $courseId,
             'lesson_id' => $lessonId,
@@ -245,6 +243,13 @@ class UserController extends Controller
 
         // return redirect()->back()->with('success', 'Word suggestion submitted successfully!');
     }
+
+
+
+
+
+
+
 
 
 
