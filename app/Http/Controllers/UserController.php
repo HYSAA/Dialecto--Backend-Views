@@ -135,7 +135,13 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Course deleted successfully.');
     }
 
+    public function removeWordSuggested($id)
+{
+    $word = SuggestedWord::findOrFail($id); // Find the word by ID
+    $word->delete(); // Delete the word
 
+    return redirect()->route('user.wordSuggested')->with('success', 'Word deleted successfully');
+}
     public function wordSuggested()
     {
         $user = Auth::user();

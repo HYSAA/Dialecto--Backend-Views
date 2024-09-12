@@ -241,6 +241,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
     Route::get('/wordSuggested/{id}/viewUpdateSelected', [UserController::class, 'viewUpdateSelected'])->name('user.viewUpdateSelected');
     Route::post('/wordSuggested/{id}/updateSelected', [UserController::class, 'updateSelected'])->name('user.updateSelected');
+    Route::delete('/wordSuggested/{id}/remove', [UserController::class, 'removeWordSuggested'])->name('user.removeWordSuggested');
 
     Route::get('/wordSuggested', [UserController::class, 'wordSuggested'])->name('user.wordSuggested');
     Route::get('/selectUserCourseLesson', [UserController::class, 'selectUserCourseLesson'])->name('user.selectUserCourseLesson');

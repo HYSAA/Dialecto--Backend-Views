@@ -3,19 +3,19 @@
 @section('content')
 
 
-<div class="main-container" style="padding: 15px;">
+<div class="main-container" style="padding: 15px; max-height: max-content; overflow-y: auto;"">
     <div class="pull-right " style="padding-bottom: 15px;">
         <a class="btn btn-main" href="{{ route('user.selectUserCourseLesson') }}"> Suggest A Word To Add</a>
     </div>
 
-    <table class="table table-striped table-hover no-border " style="content:center">
+    <table class="table table-striped table-hover no-border ">
         <tr>
             <th>Word</th>
             <th>English Equivalent</th>
             <th>Course</th>
             <th>Lesson</th>
             <th>Status</th>
-            <th>Actions</th>
+            <th colspan="2">Actions</th>
         </tr>
         <!-- @foreach ($suggestedWords as $word)
              @php
@@ -54,7 +54,13 @@
                             href="{{ $isClickable ? route('user.viewUpdateSelected', ['id' => $word->id]) : '#' }}" {{ !$isClickable ? 'aria-disabled="true"' : '' }}>
                             Update Selected
                         </a>
-                        <a class="btn btn-main" >Delete</a>
+                        <!-- <a class="btn btn-main" >Delete</a> -->
+                        <form action="{{ route('user.removeWordSuggested', ['id' => $word->id]) }}" method="POST"
+                            onsubmit="return confirm('Are you sure you want to delete this word?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-main">Delete</button>
+                        </form>
                     </td>
                 </tr>
         @endforeach
