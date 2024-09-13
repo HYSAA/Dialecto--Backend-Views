@@ -11,6 +11,7 @@ use App\Http\Controllers\ContentController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WordBankController;
 
 // user 
 
@@ -28,7 +29,7 @@ use App\Http\Controllers\Expert\ContentController as  ExpertContentController;
 use App\Http\Controllers\Expert\QuizController as ExpertQuizController;
 use App\Http\Controllers\Expert\ControllerProfile as  ExpertControllerProfile;
 use App\Http\Controllers\Expert\ExpertController;
-use App\Http\Controllers\Expert\WordBankController;
+
 
 
 use App\Http\Controllers\AdminController;
@@ -130,7 +131,28 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     Route::get('/pending-expert', [UserController::class, 'showPendingExpert'])->name('admin.showPendingExpert');
     Route::get('/post-verify/{id}', [UserController::class, 'postVerify'])->name('admin.postVerify');
+
+
+
+    Route::get('/word-bank', [WordBankController::class, 'showWordBank'])->name('admin.showWordBank');
+
+    Route::get('/word-bank/{id}', [WordBankController::class, 'wordBankCourse'])->name('admin.wordBankCourse');
+
+    Route::get('/word-bank/{courseid}/addWordToLesson/{wordid}', [WordBankController::class, 'addWordToLesson'])->name('admin.addWordToLesson');
+    Route::get('/word-bank/{courseid}/removeWord/{wordid}', [WordBankController::class, 'removeWord'])->name('admin.removeWord');
 });
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
@@ -176,17 +198,9 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
     Route::get('/contribute-word', [ExpertController::class, 'contributeWord'])->name('expert.contributeWord');
 
 
-
-
-
-
     Route::post('/expert/submit-contribute-word', [ExpertController::class, 'submitContributeWord'])->name('expert.submitContributeWord');
 
-
-
     Route::get('/pending-words', [ExpertController::class, 'index'])->name('expert.pendingWords');
-
-
 
     Route::post('/expert/approve-word/{id}', [ExpertController::class, 'approveWord'])->name('expert.approveWord');
     Route::post('/expert/disapprove-word/{id}', [ExpertController::class, 'disapproveWord'])->name('expert.disapproveWord');

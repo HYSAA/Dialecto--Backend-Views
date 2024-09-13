@@ -13,7 +13,7 @@
 
             <li class="nav-item" style="display: flex; justify-content: center; align-items: center;">
 
-                <i class="bi bi-person" style="color: white; font-size: 80px;"></i>
+                <i class="bi bi-person" style="color: white; font-size: 50px;"></i>
             </li>
 
             <li class="nav-item" style="display: flex; justify-content: center; align-items: center;">
@@ -21,7 +21,7 @@
                 <h5 class="btn-text" style="color: white;"> Welcome, {{ Auth::user()->name }}</h5>
             </li>
 
-            <hr style="border: 0; height: 1px; background-color: #939393; margin: 20px 0 65px 0;">
+            <hr style="border: 0; height: 1px; background-color: #939393; margin: 20px 0 35px 0;">
 
 
 
@@ -70,6 +70,20 @@
                     <span class="btn-text">Pending Verification</span>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('admin.showWordBank') }}">
+                    <i class="fas fa-chalkboard-teacher btn-icon"></i>
+                    <span class="btn-text">Word Bank</span>
+                </a>
+            </li>
+
+
+
+
+
+
+
 
             @endif
 
