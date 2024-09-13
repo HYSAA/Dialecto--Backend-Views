@@ -20,8 +20,8 @@
                 @csrf
 
                 @foreach($questionsWithOptions as $item)
-                <div class="quiz-item mb-4 ">
-                    <p><strong>{{ $item['question']->english }}</strong></p>
+                <div class="quiz-item mb-4" style="border: 1px solid #0d6efd; border-radius: 5px; padding: 15px;">
+                    <p class="mb-4"><strong>{{ $item['question']->english }}</strong></p>
 
 
 
