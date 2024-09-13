@@ -12,26 +12,44 @@
     </div>
 
     <div class="row justify-content-center">
-        <div class="col-lg-8 margin-tb text-center" style="padding-top: 70px;">
+        <div class="col-lg-10 margin-tb text-center" style="padding-top: 70px;">
             <h1>Finished quiz on</h1>
-            <h2>{{ $lesson->title }}</h2>
-            <h4 style="color: #90949C;">Completed {{ $score }} questions</h4>
-            <h4 style="color: #90949C;">Total Score: {{ $score }}</h4>
+            <h2 class="mb-2">{{ $lesson->title }}</h2>
+            <h4 style="color: #90949C;"> You answered {{ $score }} questions correctly out of {{ $items }}</h4>
 
+            <div class="row mt-4 mb-2 ">
+                <div class="col-lg-6 addborder " style="display: flex; justify-content:center; ">
 
+                    <!-- <div class="container mt-5 addborder" style="display: flex; justify-content: center; align-items: center;"> -->
+                    <div id="canvas-holder " class="addborder" style="width: 500px;">
+                        <canvas id="chart"></canvas>
+                        <div class="row justify-content-center">
 
-
-            <div class="container mt-5" style="display: flex; justify-content: center; align-items: center;">
-                <div id="canvas-holder" style="width: 500px; height: 500px;">
-                    <canvas id="chart"></canvas>
-                    <div class="row justify-content-center">
-                        <div class="col-lg-6 margin-tb pt-4 d-flex flex-column">
-                            <a class="btn btn-back-main mb-2" href="{{ route('user.courses.index') }}">Go back to Courses</a>
-                            <a class="btn btn-main" href="{{ route('user.quiz.show', [$course->id, $lesson->id]) }}">Retake Quiz</a>
                         </div>
                     </div>
+                    <!-- </div> -->
+                </div>
+
+                <div class="col-lg-6">
+                    BAdge goes here
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12 ">
+
+                    <a class="btn btn-main" href="{{ route('user.quiz.show', [$course->id, $lesson->id]) }}">Retake Quiz</a>
+                    <a class="btn btn-back-main " href="{{ route('user.courses.index') }}">Go back to Courses</a>
                 </div>
             </div>
+
+
+
+
+
+
         </div>
     </div>
 

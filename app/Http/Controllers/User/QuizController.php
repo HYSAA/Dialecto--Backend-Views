@@ -87,34 +87,6 @@ class QuizController extends Controller
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function multipleChoice($courseId, $lessonId)
     {
         // Get the course and lesson
@@ -141,6 +113,16 @@ class QuizController extends Controller
         $answers = $request->input('answers');
         $score = 0;
 
+
+        $lessons = Lesson::where('id', $lessonId)->get();
+
+
+        $contents = Content::where('lesson_id', $lessonId)->get();
+
+
+
+        // dd($items);
+
         foreach ($answers as $questionId => $selectedOptionId) {
             $content = Content::find($questionId);
 
@@ -151,7 +133,18 @@ class QuizController extends Controller
         }
 
 
-        return redirect()->route('quiz.result', [$courseId, $lessonId])->with('score', $score);
+        // dd($score, $lessonId);
+
+        $items = count($contents);
+
+        return redirect()->route('quiz.result', [$courseId, $lessonId])
+            ->with([
+                'score' => $score,
+                'items' => $items
+            ]);
+
+
+        // return redirect()->route('quiz.result', [$courseId, $lessonId])->with('score', $score);
     }
 
 
@@ -162,7 +155,8 @@ class QuizController extends Controller
         $course = Course::find($courseId);
         $lesson = Lesson::find($lessonId);
         $score = session('score');
+        $items = session('items');
 
-        return view('userUser.quiz.results', compact('course', 'lesson', 'score'));
+        return view('userUser.quiz.results', compact('course', 'lesson', 'score', 'items'));
     }
 }

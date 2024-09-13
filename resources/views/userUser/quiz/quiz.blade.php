@@ -30,9 +30,6 @@
                     <div style="display: flex; flex-wrap: wrap; width: 100%; ">
 
 
-
-
-
                         @foreach($item['options'] as $option)
                         <div class="" style="width: 50%; box-sizing: border-box;">
                             <input type="radio" name="answers[{{ $item['question']->id }}]"
