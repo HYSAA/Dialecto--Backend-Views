@@ -63,7 +63,45 @@
                 </tr>
 
 
-                @foreach($userWords as $word)
+                <!-- @foreach($userWords as $word)
+                <tr>
+                    <td>{{ $word->text }}</td>
+                    <td>{{ $word->english }}</td>
+                    <td>{{ $word->course->name ?? 'No course found' }}</td>
+                    <td>{{ $word->lesson->title ?? 'No lesson found' }}</td>
+
+
+                    <td style="color: 
+    @if ($word->status === 'approved')
+        green;
+    @elseif ($word->status === 'disapproved')
+        red;
+    @elseif ($word->status === 'pending')
+        gray;
+    @else
+        black; /* Default color */
+    @endif
+">
+                        {{ $word->status }}
+                    </td>
+
+                    <td>
+                        <form action="{{ route('expert.approveWord', $word->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </form>
+
+                        <form action="{{ route('expert.disapproveWord', $word->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Disapprove</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+
+            </table>
+        </div> -->
+          @foreach($userWords as $word)
                 <tr>
                     <td>{{ $word->text }}</td>
                     <td>{{ $word->english }}</td>
@@ -135,7 +173,7 @@
                         <div class="box ">
 
                             @if ($word->video)
-                            <video width="150px" controls>
+                            <video controls class="vid-content">
                                 <source src="{{ $word->video }}" type="video/mp4">
                             </video>
                             @else

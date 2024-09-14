@@ -72,13 +72,13 @@ class WordBankController extends Controller
 
 
 
-
+            //para ni ma retrieve ni wordbank ang contents sa controller
             $content = new Content();
             $content->english = $suggestedWord->english;
-
             $content->text = $suggestedWord->text;
+            $content->video = $suggestedWord->video;
             $content->lesson_id = $lesson->id;
-            $content->save(); // Save the new Content record
+            $content->save(); 
 
             $suggestedWord->usedID = $content->id;
 
@@ -103,46 +103,29 @@ class WordBankController extends Controller
 
         // return redirect()->route('expert.pendingWords')->with('success', 'Word uploaded successfully.');
     }
-
     public function removeWord($courseid, $wordid)
-
     {
-
         $suggestedWord = suggestedWord::find($wordid);
-
         $trackID = $suggestedWord->usedID;
-
-
+    
         $lesson = Lesson::find($suggestedWord->lesson_id);
-
-
-
+    
+        // Check if the content exists
         $contentToDelete = $lesson->contents()->find($trackID);
-        $contentToDelete->delete();
-
-        $suggestedWord->usedID = null;
-
-        $suggestedWord->save();
-
-
-
-
-
-
-
-        return redirect()->route('admin.wordBankCourse', ['id' => $courseid])
-            ->with([
-                'success' => 'Word has been removed in lesson.'
-            ]);
-
-
-
-
-
-        // hoyyy ang vid aniii di pa ka save 
-
-        // return view('admin.wordBank.wordBankCourse', compact('course', 'suggestions'));
-
-        // return redirect()->route('expert.pendingWords')->with('success', 'Word uploaded successfully.');
+    
+        if ($contentToDelete) {
+            // Delete content
+            $contentToDelete->delete();
+    
+            // Reset usedID
+            $suggestedWord->usedID = null;
+            $suggestedWord->save();
+    
+            return redirect()->route('admin.wordBankCourse', ['id' => $courseid])
+                ->with('success', 'Word has been removed in lesson.');
+        } else {
+            return redirect()->route('admin.wordBankCourse', ['id' => $courseid])
+                ->with('fail', 'Content not found.');
+        }
     }
 }

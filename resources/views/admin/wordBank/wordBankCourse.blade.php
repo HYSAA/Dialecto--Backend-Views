@@ -60,7 +60,13 @@
                         <!-- <td>{{ $word->status }}</td> -->
 
 
-                        <td>Kay wala pa na set si video</td>
+                        <td>    @if ($word->video)
+                            <video width="200px" controls>
+                                <source src="{{ $word->video }}" type="video/mp4">
+                            </video>
+                            @else
+                            No video available
+                            @endif</td>
 
 
                         <td>
