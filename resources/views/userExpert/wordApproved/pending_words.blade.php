@@ -58,17 +58,29 @@
                     <th>English</th>
                     <th>Course</th>
                     <th>Lesson</th>
+                    <th>Video</th>
                     <th>Status</th>
                     <th width="280px">Action</th>
                 </tr>
-
-
-                <!-- @foreach($userWords as $word)
+                @foreach($userWords as $word)
                 <tr>
                     <td>{{ $word->text }}</td>
                     <td>{{ $word->english }}</td>
                     <td>{{ $word->course->name ?? 'No course found' }}</td>
                     <td>{{ $word->lesson->title ?? 'No lesson found' }}</td>
+
+                    <td style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                        <div class="box ">
+                            @if ($word->video)
+                            <video controls class="vid-content">
+                                <source src="{{ $word->video }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            @else
+                            No video available
+                            @endif
+                        </div>
+                    </td>
 
 
                     <td style="color: 
@@ -86,52 +98,28 @@
                     </td>
 
                     <td>
+                        <!-- Form for Approving -->
                         <form action="{{ route('expert.approveWord', $word->id) }}" method="POST" style="display:inline;">
                             @csrf
-                            <button type="submit" class="btn btn-success">Approve</button>
+                            <button
+                                type="submit"
+                                class="btn btn-success"
+                                @if($word->status === 'approved') disabled @endif
+                                >
+                                Approve
+                            </button>
                         </form>
 
+                        <!-- Form for Disapproving -->
                         <form action="{{ route('expert.disapproveWord', $word->id) }}" method="POST" style="display:inline;">
                             @csrf
-                            <button type="submit" class="btn btn-danger">Disapprove</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-
-            </table>
-        </div> -->
-          @foreach($userWords as $word)
-                <tr>
-                    <td>{{ $word->text }}</td>
-                    <td>{{ $word->english }}</td>
-                    <td>{{ $word->course->name ?? 'No course found' }}</td>
-                    <td>{{ $word->lesson->title ?? 'No lesson found' }}</td>
-
-
-                    <td style="color: 
-    @if ($word->status === 'approved')
-        green;
-    @elseif ($word->status === 'disapproved')
-        red;
-    @elseif ($word->status === 'pending')
-        gray;
-    @else
-        black; /* Default color */
-    @endif
-">
-                        {{ $word->status }}
-                    </td>
-
-                    <td>
-                        <form action="{{ route('expert.approveWord', $word->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            <button type="submit" class="btn btn-success">Approve</button>
-                        </form>
-
-                        <form action="{{ route('expert.disapproveWord', $word->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            <button type="submit" class="btn btn-danger">Disapprove</button>
+                            <button
+                                type="submit"
+                                class="btn btn-danger"
+                                @if($word->status === 'disapproved') disabled @endif
+                                >
+                                Disapprove
+                            </button>
                         </form>
                     </td>
                 </tr>
