@@ -89,16 +89,62 @@ class ExpertController extends Controller
 
     public function index()
     {
+
+        $thisUser = Auth::user();
+
+
+        $specialtyName = $thisUser->credential->language_experty;
+
+        // Assuming 'Course' is your model
+        $course = Course::where('name', $specialtyName)->first();
+
+        $specialtyID = $course->id;
+
+
         $pendingWords = SuggestedWord::with(['course', 'lesson'])->get();
+
+
+
+
         $userWords = SuggestedWord::with(['course', 'lesson'])
             ->where('status', '!=', 'expert')
+            ->where('course_id', $specialtyID)
             ->get();
+
+
+
+
+
+
+
+
+
+
         $expertWords = SuggestedWord::with(['course', 'lesson'])
             ->where('status', '=', 'expert')
             ->get();
 
+
+
+
+
+
         return view('userExpert.wordApproved.pending_words', compact('expertWords', 'userWords'));
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Approve the suggested word
     public function approveWord(Request $request, $id)
