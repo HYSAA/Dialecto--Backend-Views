@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="main-container">
-<div class="container">
+<div class="row" style="overflow-y: auto;">
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
@@ -26,7 +26,7 @@
     </div>
     @endif
 
-    <table class="table table-bordered">
+    <table class="table table-bordered" >
         <tr>
             <th>No</th>
             <th>Title</th>
