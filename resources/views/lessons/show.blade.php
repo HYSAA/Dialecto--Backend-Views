@@ -6,7 +6,7 @@
     <div class="row mb-4">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-                <h2>{{ $course->name }} - Lesson: {{ $lesson->title }}</h2>
+                <h2>{{ $course->name }} - Lessons: {{ $lesson->title }}</h2>
             </div>
             <div class="pull-right">
 

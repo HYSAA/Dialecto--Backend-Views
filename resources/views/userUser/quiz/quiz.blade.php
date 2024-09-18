@@ -14,50 +14,59 @@
                 <h2>Match the phrases.</h2>
             </div>
 
+
+
             <form method="POST" action="{{ route('quiz.submit', [$course->id, $lesson->id]) }}">
                 @csrf
 
-                @foreach($questions as $question)
-                <div class="quiz-item mb-4">
-                    <p><strong>{{ $question->english }}</strong></p>
+                @foreach($questionsWithOptions as $item)
+                <div class="quiz-item mb-4" style="border: 1px solid #0d6efd; border-radius: 5px; padding: 15px;">
+                    <p class="mb-4"><strong>{{ $item['question']->english }}</strong></p>
 
-                    @foreach($options as $option)
 
-                    <div class="d-inline-block mb-2">
 
-                        <input type="radio" name="answers[{{ $question->id }}]"
-                            value="{{ $option->id }}"
-                            id="option{{ $option->id }}-{{ $question->id }}"
-                            class="d-none"
-                            onclick="selectOption(this)">
 
-                        @if ($option->video)
-                        <label class="btn btn-outline-primary playAudioButton"
-                            for="option{{ $option->id }}-{{ $question->id }}">
-                            {{ $option->text }}
-                        </label>
 
-                        <video class="videoElement vid-content" controls style="display: none;">
-                            <source src="{{ $option->video }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
+                    <div style="display: flex; flex-wrap: wrap; width: 100%; ">
 
-                        <audio class="audioElement" style="display: none;">
-                            <source src="{{ $option->video }}" type="audio/mp4">
-                            Your browser does not support the audio tag.
-                        </audio>
-                        @else
-                        No audio available
-                        @endif
+
+                        @foreach($item['options'] as $option)
+                        <div class="" style="width: 50%; box-sizing: border-box;">
+                            <input type="radio" name="answers[{{ $item['question']->id }}]"
+                                value="{{ $option->id }}"
+                                id="option{{ $option->id }}-{{ $item['question']->id }}"
+                                class="d-none"
+                                onclick="selectOption(this)">
+
+                            @if ($option->video)
+                            <label class="btn btn-outline-primary playAudioButton" style="width: 95%;"
+                                for="option{{ $option->id }}-{{ $item['question']->id }}">
+                                {{ $option->text }}
+                            </label>
+
+                            <video class="videoElement vid-content" controls style="display: none;">
+                                <source src="{{ $option->video }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+
+                            <audio class="audioElement" style="display: none;">
+                                <source src="{{ $option->video }}" type="audio/mp4">
+                                Your browser does not support the audio tag.
+                            </audio>
+                            @else
+                            No audio available
+                            @endif
+                        </div>
+                        @endforeach
+
 
                     </div>
-
-                    @endforeach
                 </div>
                 @endforeach
 
                 <button type="submit" class="btn btn-primary mt-1">Submit Answers</button>
             </form>
+
 
 
 

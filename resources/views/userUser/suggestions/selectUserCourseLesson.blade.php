@@ -9,7 +9,7 @@
             <h1 class="mb-2">Select Course</h1>
             <div class="row">
                 @foreach ($courses as $course)
-                <div class="card mb-2 mr-2">
+                <div class="card mb-2 mr-2" style="overflow-y: auto;">
                     <div class="top">
                         <td>
                             @if($course->image)

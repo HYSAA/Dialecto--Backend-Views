@@ -12,8 +12,35 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\Storage as FirebaseStorage;
 //Added
 use App\Models\UserProgress;
+
 class QuizController extends Controller
 {
+    // public function showQuiz($courseId, $lessonId)
+    // {
+    //     $course = Course::find($courseId);
+    //     $lesson = Lesson::find($lessonId);
+
+    //     $contents = Content::where('lesson_id', $lessonId)->get();
+
+    //     $questions = $contents->shuffle();
+
+    //     $options = $contents->shuffle();
+
+    //     foreach ($contents as $content) {
+    //         UserProgress::firstOrCreate([
+    //             'user_id' => auth()->id(),
+    //             'course_id' => $courseId,
+    //             'lesson_id' => $lessonId,
+    //             'content_id' => $content->id,
+    //         ]);
+    //     }
+
+
+
+    //     return view('userUser.quiz.quiz', compact('course', 'lesson', 'questions', 'options', 'contents'));
+    // }
+
+
     public function showQuiz($courseId, $lessonId)
     {
         $course = Course::find($courseId);
@@ -21,10 +48,31 @@ class QuizController extends Controller
 
         $contents = Content::where('lesson_id', $lessonId)->get();
 
+        // Shuffle contents to randomize questions
         $questions = $contents->shuffle();
 
-        $options = $contents->shuffle();
-        // Count of Content_id Does not increment but stores the id that is done dependent ont eh button nextcontent
+        // Prepare the questions and options
+        $questionsWithOptions = [];
+
+        foreach ($questions as $question) {
+            // Get the correct answer
+            $correctAnswer = $question;
+
+            // Get a random selection of 3 other options and include the correct answer
+            $options = $contents->where('id', '!=', $question->id)
+                ->shuffle()
+                ->take(3)
+                ->push($correctAnswer)
+                ->shuffle();
+
+            // Add to the array of questions with options
+            $questionsWithOptions[] = [
+                'question' => $question,
+                'options' => $options
+            ];
+        }
+
+        // Track user progress
         foreach ($contents as $content) {
             UserProgress::firstOrCreate([
                 'user_id' => auth()->id(),
@@ -33,13 +81,9 @@ class QuizController extends Controller
                 'content_id' => $content->id,
             ]);
         }
-        return view('userUser.quiz.quiz', compact('course', 'lesson', 'questions', 'options'));
+
+        return view('userUser.quiz.quiz', compact('course', 'lesson', 'questionsWithOptions'));
     }
-
-
-
-
-
 
 
 
@@ -69,6 +113,16 @@ class QuizController extends Controller
         $answers = $request->input('answers');
         $score = 0;
 
+
+        $lessons = Lesson::where('id', $lessonId)->get();
+
+
+        $contents = Content::where('lesson_id', $lessonId)->get();
+
+
+
+        // dd($items);
+
         foreach ($answers as $questionId => $selectedOptionId) {
             $content = Content::find($questionId);
 
@@ -79,7 +133,18 @@ class QuizController extends Controller
         }
 
 
-        return redirect()->route('quiz.result', [$courseId, $lessonId])->with('score', $score);
+        // dd($score, $lessonId);
+
+        $items = count($contents);
+
+        return redirect()->route('quiz.result', [$courseId, $lessonId])
+            ->with([
+                'score' => $score,
+                'items' => $items
+            ]);
+
+
+        // return redirect()->route('quiz.result', [$courseId, $lessonId])->with('score', $score);
     }
 
 
@@ -90,7 +155,8 @@ class QuizController extends Controller
         $course = Course::find($courseId);
         $lesson = Lesson::find($lessonId);
         $score = session('score');
+        $items = session('items');
 
-        return view('userUser.quiz.results', compact('course', 'lesson', 'score'));
+        return view('userUser.quiz.results', compact('course', 'lesson', 'score', 'items'));
     }
 }

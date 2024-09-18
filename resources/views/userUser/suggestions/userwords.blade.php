@@ -36,31 +36,11 @@
                     <th>English Equivalent</th>
                     <th>Course</th>
                     <th>Lesson</th>
+                    <th>Video</th>
                     <th>Status</th>
                     <th style="width: 280px;">Actions</th>
                 </tr>
-                <!-- @foreach ($suggestedWords as $word)
-             @php
-                $isClickable = $word->status === 'pending';
-                $rowClass = $isClickable ? '' : 'disabled-row';
-            @endphp
-            <tr>
-                <td>{{ $word->text }}</td>
-                <td>{{ $word->english }}</td>
-                <td>{{ $word->course->name }}</td>
-                <td>{{ $word->lesson->title }}</td>
-                <td>{{ $word->status }}</td>
-                <td>
-                    @if ($isClickable)
-                        <a class="btn btn-main" href="{{ route('user.viewUpdateSelected', ['id' => $word->id]) }}">Update Selected</a>
-                            <a class="btn btn-main">Delete</a>
-                        @else
-                            <span class="btn btn-main disabled">Update Selected</span>
-                            <span class="btn btn-main disabled">Delete</span>
-                        @endif
-                    </td>
-                </tr>
-        @endforeach -->
+
                 @foreach ($suggestedWords as $word)
                 @php
                 $isClickable = $word->status === 'pending';
@@ -71,7 +51,31 @@
                     <td>{{ $word->course->name }}</td>
                     <td>{{ $word->lesson->title }}</td>
 
-                    <td style="color: {{ $word->status === 'approved' ? 'green' : 'red' }};">
+
+                    <td style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                        <div class="box ">
+                            @if ($word->video)
+                            <video controls class="vid-content">
+                                <source src="{{ $word->video }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            @else
+                            No video available
+                            @endif
+                        </div>
+                    </td>
+
+                    <td style="color: 
+    @if ($word->status === 'approved')
+        green;
+    @elseif ($word->status === 'disapproved')
+        red;
+    @elseif ($word->status === 'pending')
+        gray;
+    @else
+        black; /* Default color */
+    @endif
+">
                         {{ $word->status }}
                     </td>
 

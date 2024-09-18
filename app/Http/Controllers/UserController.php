@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\Credential;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Storage as FirebaseStorage;
 
 use App\Models\Lesson;
 use App\Models\suggestedWord;
@@ -84,9 +86,7 @@ class UserController extends Controller
     }
 
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(User $user)
     {
 
@@ -117,17 +117,7 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(Request $request, string $id)
-    // {
 
-    // }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(User $user)
     {
         $user->delete();
@@ -135,6 +125,30 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Course deleted successfully.');
     }
 
+
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////////////
+     //second logic// 
+     
+     protected $firebaseStorage;
+
+     public function __construct()
+     {
+         $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
+ 
+         if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
+             throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");
+         }
+ 
+         $this->firebaseStorage = (new Factory)
+             ->withServiceAccount($firebaseCredentialsPath)
+             ->createStorage();
+     }
 
     public function wordSuggested()
     {
@@ -155,13 +169,21 @@ class UserController extends Controller
 
     public function deleteSelectedWord($id)
     {
-        // Find the word by its ID or throw a 404 if not found
         $word = SuggestedWord::findOrFail($id);
-
-        // Delete the word
+        $bucket = $this->firebaseStorage->getBucket();
+    
+        if ($word->video) {
+            // Delete video from Firebase Storage
+            $videoPath = parse_url($word->video, PHP_URL_PATH);
+            $object = $bucket->object($videoPath);
+            if ($object->exists()) {
+                $object->delete();
+            }
+        }
+    
+        // Delete the word from the database
         $word->delete();
-
-        // Redirect with a success message
+    
         return redirect()->route('user.wordSuggested')->with('success', 'Translation deleted successfully.');
     }
 
@@ -180,17 +202,44 @@ class UserController extends Controller
         $request->validate([
             'text' => 'required|string|max:255',
             'english' => 'required|string|max:255',
-            'video' => 'nullable|file|mimes:mp4,avi,mov|max:20480' // Adjust mime types and size as needed
+            'video' => 'nullable|file|mimes:mp4,avi,mov|max:20480',
         ]);
-
-        $suggestedWord = SuggestedWord::findOrFail($id); // Use the $id parameter directly
+    
+        $suggestedWord = SuggestedWord::findOrFail($id);
         $suggestedWord->text = $request->input('text');
         $suggestedWord->english = $request->input('english');
+    
+        $bucket = $this->firebaseStorage->getBucket();
+    
+        if ($request->hasFile('video')) {
+            if ($suggestedWord->video) {
+                // Delete the previous video from Firebase Storage
+                $previousVideoPath = parse_url($suggestedWord->video, PHP_URL_PATH);
+                $object = $bucket->object($previousVideoPath);
+                if ($object->exists()) {
+                    $object->delete();
+                }
+            }
+    
+            // Upload new video to Firebase Storage
+            $uploadedFile = $request->file('video');
+            $firebasePath = 'videos/' . $uploadedFile->getClientOriginalName();
+    
+            $bucket->upload(
+                fopen($uploadedFile->getRealPath(), 'r'),
+                ['name' => $firebasePath]
+            );
+    
+            // Get the public URL of the uploaded video
+            $videoUrl = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
+    
+            // Update the video URL in the database
+            $suggestedWord->video = $videoUrl;
+        }
+    
         $suggestedWord->save();
-
-        return redirect()->route('user.wordSuggested')->with('success', 'Course updated successfully.');
-
-        // return view('suggestions.userwords');
+    
+        return redirect()->route('user.wordSuggested')->with('success', 'Word updated successfully.');
     }
 
     public function selectUserCourseLesson(Course $course, Lesson $lesson)
@@ -201,6 +250,15 @@ class UserController extends Controller
 
         return view('userUser.suggestions.selectUserCourseLesson', compact('courses', 'lessons'));
     }
+
+
+
+
+
+
+
+
+
 
     public function addUserSuggestedWord($courseId, $lessonId)
     {
@@ -217,33 +275,39 @@ class UserController extends Controller
             'user_id' => 'required|exists:users,id',
             'course_id' => 'required|exists:courses,id',
             'lesson_id' => 'required|exists:lessons,id',
-            'video' => 'nullable|file|mimes:mp4,mov,avi,wmv|max:20480', // assuming you allow video upload
+            'video' => 'nullable|file|mimes:mp4,mov,avi,wmv|max:20480',
             'text' => 'required|string',
             'english' => 'required|string',
         ]);
-
-        // Handle the video file upload if it exists
-        $videoPath = null;
+    
+        // Handle the video file upload to Firebase Storage if it exists
+        $videoUrl = null;
         if ($request->hasFile('video')) {
-            $videoPath = $request->file('video')->store('videos', 'public');  // store video in 'videos' directory
+            $uploadedFile = $request->file('video');
+            $firebasePath = 'videos/' . $uploadedFile->getClientOriginalName();
+    
+            $bucket = $this->firebaseStorage->getBucket();
+            $bucket->upload(
+                fopen($uploadedFile->getRealPath(), 'r'),
+                ['name' => $firebasePath]
+            );
+    
+            // Get the public URL of the uploaded video
+            $videoUrl = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
         }
-
+    
         // Store the data into the database
-        SuggestedWord::firstOrCreate([
+        SuggestedWord::create([
             'user_id' => auth()->id(),
             'course_id' => $courseId,
             'lesson_id' => $lessonId,
-            'video' => $videoPath,
+            'video' => $videoUrl, // Save Firebase video URL
             'text' => $request->text,
             'english' => $request->english,
         ]);
-
-        // Redirect or send a response after successful submission
+    
+        // Redirect after successful submission
         return redirect()->route('user.wordSuggested')->with('success', 'Suggestions submitted successfully.');
-
-
-
-        // return redirect()->back()->with('success', 'Word suggestion submitted successfully!');
     }
 
 
@@ -252,6 +316,11 @@ class UserController extends Controller
 
 
 
+
+
+
+
+//////////////////////////////////////////////////////////////////////
 
 
 
