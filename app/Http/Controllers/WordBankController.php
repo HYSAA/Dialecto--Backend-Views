@@ -41,14 +41,37 @@ class WordBankController extends Controller
     }
 
     public function wordBankCourse($id)
-
     {
         $course = Course::find($id);
-        // $lessons = $course->lessons;
+
+        // $courseID = $course->id;
+        
+
+        // $suggestions = suggestedWord::with('lesson')
+        //     ->whereIn('status', ['approved', 'expert'])
+        //     ->get();
+
+
+        $courseID = $course->id;
 
         $suggestions = suggestedWord::with('lesson')
-            ->whereIn('status', ['approved', 'expert'])
+            ->where('course_id', $courseID) // Filter by course_id
+            ->whereIn('status', ['approved', 'expert']) // Filter by status
             ->get();
+
+            // dd($suggestions);
+
+
+
+
+
+
+
+
+        // dd($courseID);
+        // dd($suggestions);
+
+
 
 
         return view('admin.wordBank.wordBankCourse', compact('course', 'suggestions'));
@@ -58,7 +81,6 @@ class WordBankController extends Controller
 
 
     public function addWordToLesson($courseid, $wordid)
-
     {
 
 
@@ -78,7 +100,7 @@ class WordBankController extends Controller
             $content->text = $suggestedWord->text;
             $content->video = $suggestedWord->video;
             $content->lesson_id = $lesson->id;
-            $content->save(); 
+            $content->save();
 
             $suggestedWord->usedID = $content->id;
 
@@ -107,20 +129,20 @@ class WordBankController extends Controller
     {
         $suggestedWord = suggestedWord::find($wordid);
         $trackID = $suggestedWord->usedID;
-    
+
         $lesson = Lesson::find($suggestedWord->lesson_id);
-    
+
         // Check if the content exists
         $contentToDelete = $lesson->contents()->find($trackID);
-    
+
         if ($contentToDelete) {
             // Delete content
             $contentToDelete->delete();
-    
+
             // Reset usedID
             $suggestedWord->usedID = null;
             $suggestedWord->save();
-    
+
             return redirect()->route('admin.wordBankCourse', ['id' => $courseid])
                 ->with('success', 'Word has been removed in lesson.');
         } else {

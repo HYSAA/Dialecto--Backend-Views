@@ -50,7 +50,7 @@
                         <th width=" 280px">Action</th>
                     </tr>
 
-
+                
                     @foreach ($suggestions as $word)
                     <tr>
                         <td>{{ $word->lesson->title }}</td>

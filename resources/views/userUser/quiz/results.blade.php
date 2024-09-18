@@ -18,22 +18,14 @@
             <h4 style="color: #90949C;"> You answered {{ $score }} questions correctly out of {{ $items }}</h4>
 
             <div class="row mt-4 mb-2 ">
-                <div class="col-lg-6 addborder " style="display: flex; justify-content:center; ">
-
-                    <!-- <div class="container mt-5 addborder" style="display: flex; justify-content: center; align-items: center;"> -->
+                <!-- <div class="col-lg-6 addborder " style="display: flex; justify-content:center; ">
                     <div id="canvas-holder " class="addborder" style="width: 500px;">
                         <canvas id="chart"></canvas>
                         <div class="row justify-content-center">
 
                         </div>
                     </div>
-                    <!-- </div> -->
-                </div>
-
-                <div class="col-lg-6">
-                    BAdge goes here
-                </div>
-
+                </div> -->
 
             </div>
 
