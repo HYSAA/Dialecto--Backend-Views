@@ -1,76 +1,12 @@
 <?php
 
-// namespace App\Http\Controllers;
-
-// use App\Models\Course;
-// use Illuminate\Http\Request;
-
-// class CourseController extends Controller
-// {
-//     public function index()
-//     {
-//         $courses = Course::all();
-//         return view('courses.index', compact('courses'));
-//     }
-//     public function userIndex()
-// {
-//     $courses = Course::all(); // Adjust as needed to filter or format courses for users
-//     return view('courses.index', compact('courses'));
-// }
-
-//     public function create()
-//     {
-//         return view('courses.create');
-//     }
-
-//     public function store(Request $request)
-//     {
-//         $request->validate([
-//             'name' => 'required',
-//             'description' => 'nullable',
-//         ]);
-
-//         Course::create($request->all());
-
-//         return redirect()->route('courses.index')->with('success', 'Course created successfully.');
-//     }
-
-//     public function show(Course $course)
-//     {
-//         return view('courses.show', compact('course'));
-//     }
-
-//     public function edit(Course $course)
-//     {
-//         return view('courses.edit', compact('course'));
-//     }
-
-//     public function update(Request $request, Course $course)
-//     {
-//         $request->validate([
-//             'name' => 'required',
-//             'description' => 'nullable',
-//         ]);
-
-//         $course->update($request->all());
-
-//         return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
-//     }
-
-
-//     public function destroy(Course $course)
-//     {
-//         $course->delete();
-
-//         return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');
-//     }
-// }
-
 
 namespace App\Http\Controllers;
 
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Database;
 
 class CourseController extends Controller
 {
@@ -94,7 +30,6 @@ class CourseController extends Controller
             'name' => 'required',
             'description' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
-
         ]);
 
         $imagePath = null; // Initialize the imagePath variable
@@ -104,12 +39,30 @@ class CourseController extends Controller
             $imagePath = $request->file('image')->store('images', 'public');
         }
 
-        // Create the course with the image path
-        Course::create([
+        // Create the course in the local database
+        $course = Course::create([
             'name' => $request->name,
             'description' => $request->description,
             'image' => $imagePath, // Store the image path in the database
         ]);
+        $courseId = $course->id;
+
+        // Initialize Firebase
+        $factory = (new Factory)->withServiceAccount('C:\laravel\Dialecto--Backend-Views\config\dialecto-c14c1-firebase-adminsdk-q80as-e6ee6b1b18.json')
+            ->withDatabaseUri(env('FIREBASE_DATABASE_URL'));
+
+        $database = $factory->createDatabase();
+
+        // Prepare the data for Firebase
+        $courseData = [
+            'id' => $courseId,
+            'name' => $request->name,
+            'description' => $request->description,
+            'image' => $imagePath, // Firebase will store the path as a string
+        ];
+
+        // Store the data in Firebase Realtime Database
+        $database->getReference('courses')->push($courseData);
 
         // Redirect with a success message
         return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
