@@ -10,7 +10,10 @@ return [
      */
 
     'default' => env('FIREBASE_PROJECT', 'app'),
-
+    'credentials' => env('FIREBASE_CREDENTIALS'),
+    'database' => [
+        'url' => 'https://dialecto-c14c1-default-rtdb.asia-southeast1.firebasedatabase.app',
+    ],
     /*
      * ------------------------------------------------------------------------
      * Firebase project configurations
