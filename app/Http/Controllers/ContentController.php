@@ -7,6 +7,9 @@ use App\Models\Lesson;
 use App\Models\Content;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
+
+use Kreait\Firebase\Database;
+
 use Kreait\Firebase\Storage as FirebaseStorage;
 
 class ContentController extends Controller
@@ -16,18 +19,18 @@ class ContentController extends Controller
 
     ///ang construct is to validate if working ba ang imo configuration sa firebase
     //mura siyag nahug na gate na tig check if complete ba imo config before accesing firebase
-    public function __construct()
-    {
-        $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
+    // public function __construct()
+    // {
+    //     $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config\firebase_credentials.json');
 
-        if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
-            throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");
-        }
+    //     if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
+    //         throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");
+    //     }
 
-        $this->firebaseStorage = (new Factory)
-            ->withServiceAccount($firebaseCredentialsPath)
-            ->createStorage();
-    }
+    //     $this->firebaseStorage = (new Factory)
+    //         ->withServiceAccount($firebaseCredentialsPath)
+    //         ->createStorage();
+    // }
 
     public function create($courseId, $lessonId)
     {
@@ -50,7 +53,12 @@ class ContentController extends Controller
         $content->text = $request->text;
         $content->lesson_id = $lessonId;
 
-        $bucket = $this->firebaseStorage->getBucket();
+        // Initialize Firebase Storage
+        $factory = (new Factory)->withServiceAccount('C:\laravel\Dialecto--Backend-Views\config\dialecto-c14c1-firebase-adminsdk-q80as-e6ee6b1b18.json')
+            ->withDatabaseUri(env('FIREBASE_DATABASE_URL'));
+
+        $database = $factory->createDatabase();
+        $bucket = $factory->createStorage()->getBucket();
 
         if ($request->hasFile('image')) {
             // Upload image to Firebase Storage
@@ -87,6 +95,18 @@ class ContentController extends Controller
         }
 
         $content->save();
+
+        // Prepare the data for Firebase Realtime Database
+        $contentData = [
+            'text' => $request->text,
+            'english' => $request->english,
+            'image' => $content->image,
+            'video' => $content->video,
+            'lesson_id' => $lessonId,
+        ];
+
+        // Store the data in Firebase Realtime Database
+        $database->getReference('contents')->push($contentData);
 
         return redirect()->route('admin.lessons.show', [$courseId, $lessonId])
             ->with('success', 'Content created successfully.');
