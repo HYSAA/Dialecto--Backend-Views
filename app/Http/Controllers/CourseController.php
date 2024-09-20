@@ -1,82 +1,31 @@
 <?php
 
-// namespace App\Http\Controllers;
-
-// use App\Models\Course;
-// use Illuminate\Http\Request;
-
-// class CourseController extends Controller
-// {
-//     public function index()
-//     {
-//         $courses = Course::all();
-//         return view('courses.index', compact('courses'));
-//     }
-//     public function userIndex()
-// {
-//     $courses = Course::all(); // Adjust as needed to filter or format courses for users
-//     return view('courses.index', compact('courses'));
-// }
-
-//     public function create()
-//     {
-//         return view('courses.create');
-//     }
-
-//     public function store(Request $request)
-//     {
-//         $request->validate([
-//             'name' => 'required',
-//             'description' => 'nullable',
-//         ]);
-
-//         Course::create($request->all());
-
-//         return redirect()->route('courses.index')->with('success', 'Course created successfully.');
-//     }
-
-//     public function show(Course $course)
-//     {
-//         return view('courses.show', compact('course'));
-//     }
-
-//     public function edit(Course $course)
-//     {
-//         return view('courses.edit', compact('course'));
-//     }
-
-//     public function update(Request $request, Course $course)
-//     {
-//         $request->validate([
-//             'name' => 'required',
-//             'description' => 'nullable',
-//         ]);
-
-//         $course->update($request->all());
-
-//         return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
-//     }
-
-
-//     public function destroy(Course $course)
-//     {
-//         $course->delete();
-
-//         return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');
-//     }
-// }
-
-
 namespace App\Http\Controllers;
 
-use App\Models\Course;
 use Illuminate\Http\Request;
+use Kreait\Firebase\Contract\Database;
+use Kreait\Firebase\Contract\Storage;
+use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
+    protected $database;
+    protected $storage;
+
+    public function __construct(Database $database, Storage $storage)
+    {
+        $this->database = $database;
+        $this->storage = $storage;
+    }
+
     public function index()
     {
-        $courses = Course::all();
+        $courses = $this->database->getReference('courses')->getValue();
+
+        if ($courses === null) {
+            $courses = [];
+        }
+        
         return view('courses.index', compact('courses'));
     }
 
@@ -85,58 +34,48 @@ class CourseController extends Controller
         return view('courses.create');
     }
 
-
-
     public function store(Request $request)
     {
-        // Validate the incoming request
         $request->validate([
             'name' => 'required',
             'description' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
-
         ]);
 
-        $imagePath = null; // Initialize the imagePath variable
-
-        // Check if the image file is present and store it
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-        }
-
-        // Create the course with the image path
-        Course::create([
+        $courseData = [
             'name' => $request->name,
             'description' => $request->description,
-            'image' => $imagePath, // Store the image path in the database
-        ]);
+        ];
 
-        // Redirect with a success message
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $bucket = $this->storage->getBucket();
+            $bucket->upload(
+                file_get_contents($image->getRealPath()),
+                ['name' => 'images/' . $imageName]
+            );
+            $courseData['image'] = $bucket->object('images/' . $imageName)->signedUrl(new \DateTime('+ 1000 years'));
+        }
+
+        $newCourse = $this->database->getReference('courses')->push($courseData);
+
         return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
     }
 
-
-
-
-    public function show(Course $course)
+    public function show($id)
     {
-
-
-        return view('courses.show', compact('course'));
+        $course = $this->database->getReference('courses/' . $id)->getValue();
+        return view('courses.show', compact('course', 'id'));
     }
 
-    public function edit(Course $course)
+    public function edit($id)
     {
-        return view('courses.edit', compact('course'));
+        $course = $this->database->getReference('courses/' . $id)->getValue();
+        return view('courses.edit', compact('course', 'id'));
     }
 
-
-
-
-
-
-
-    public function update(Request $request, Course $course)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'name' => 'required',
@@ -144,38 +83,30 @@ class CourseController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
 
-        // Retain the existing image path unless a new image is uploaded
-        $imagePath = $course->image;
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-        }
-
-        // Update the course with the new or existing image path
-        $course->update([
+        $courseData = [
             'name' => $request->name,
             'description' => $request->description,
-            'image' => $imagePath,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $bucket = $this->storage->getBucket();
+            $bucket->upload(
+                file_get_contents($image->getRealPath()),
+                ['name' => 'images/' . $imageName]
+            );
+            $courseData['image'] = $bucket->object('images/' . $imageName)->signedUrl(new \DateTime('+ 1000 years'));
+        }
+
+        $this->database->getReference('courses/' . $id)->update($courseData);
 
         return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully.');
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    public function destroy(Course $course)
+    public function destroy($id)
     {
-        $course->delete();
-
+        $this->database->getReference('courses/' . $id)->remove();
         return redirect()->route('admin.courses.index')->with('success', 'Course deleted successfully.');
     }
 }

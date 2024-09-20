@@ -35,7 +35,7 @@
     <div class="row" style="overflow-y: auto;">
 
         <div class="col-lg-12 margin-tb">
-
+        @if(count($courses) > 0)
             <table class="table table-bordered">
                 <tr>
 
@@ -46,36 +46,33 @@
                     <th width="280px">Action</th>
                 </tr>
 
-                @foreach ($courses as $course)
-                <tr>
-
-                    <td>{{ $course->name }}</td>
-                    <td>{{ $course->description }}</td>
-
-                    <td style="width: 150px;">
-
-                        <div class="" style="width: 150px; height: 150px;">
-                            @if($course->image)
-                            <img src="{{ asset('storage/' . $course->image) }}" alt="Course Image" class="image-thumbnail">
-                            @else
-                            No image available
-                            @endif
-
-                        </div>
-                    </td>
-                    <td>
-                        <form action="{{ route('admin.courses.destroy', $course->id) }}" method="POST">
-                            <a href="{{ route('admin.courses.edit', $course->id) }}" class="btn btn-success ">Edit</a>
-                            <a href="{{ route('admin.courses.show', $course->id) }}" class="btn btn-primary">View</a>
-
-                            @csrf
-                            @method('DELETE')
-
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
+                @foreach ($courses as $id => $course)
+<tr>
+    <td>{{ $course['name'] }}</td>
+    <td>{{ $course['description'] }}</td>
+    <td style="width: 150px;">
+        <div style="width: 150px; height: 150px;">
+            @if(isset($course['image']))
+                <img src="{{ $course['image'] }}" alt="Course Image" class="image-thumbnail">
+            @else
+                No image available
+            @endif
+        </div>
+    </td>
+    <td>
+        <form action="{{ route('admin.courses.destroy', $id) }}" method="POST">
+            <a href="{{ route('admin.courses.edit', $id) }}" class="btn btn-success">Edit</a>
+            <a href="{{ route('admin.courses.show', $id) }}" class="btn btn-primary">View</a>
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </td>
+</tr>
+@endforeach
+@else
+    <p>No courses found.</p>
+@endif
             </table>
 
         </div>

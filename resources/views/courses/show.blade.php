@@ -46,49 +46,29 @@
                     <th width="280px">Action</th>
                 </tr>
 
-                @foreach ($course->lessons as $lesson)
-                <tr>
-                    <!-- <td>{{ $lesson->id }}</td> -->
-                    <td>{{ $lesson->title }}</td>
-
-                    <td style="width: 150px;">
-
-                        <div class="" style="width: 150px; height: 150px;">
-
-
-                            @if($lesson->image)
-                            <img src="{{ asset('storage/' . $lesson->image) }}" alt="lesson Image" class="image-thumbnail">
-                            @else
-                            No image available
-                            @endif
-
-                        </div>
-                    </td>
-
-
-
-
-                    <td>
-                        <form action="{{ route('admin.lessons.destroy', [$course->id, $lesson->id]) }}" method="POST">
-
-
-                            <a class="btn btn-success" href="{{ route('admin.lessons.edit', [$course->id, $lesson->id]) }}">Edit</a>
-
-                            <a class="btn btn-primary" href="{{ route('admin.lessons.show', [$course->id, $lesson->id]) }}">View</a>
-
-
-
-                            @csrf
-                            @method('DELETE')
-
-                            <button type="submit" class="btn btn-danger">Delete</button>
-
-
-
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
+                @foreach ($course['lessons'] ?? [] as $lessonId => $lesson)
+<tr>
+    <td>{{ $lesson['title'] }}</td>
+    <td style="width: 150px;">
+        <div style="width: 150px; height: 150px;">
+            @if(isset($lesson['image']))
+                <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="image-thumbnail">
+            @else
+                No image available
+            @endif
+        </div>
+    </td>
+    <td>
+        <form action="{{ route('admin.lessons.destroy', [$id, $lessonId]) }}" method="POST">
+            <a class="btn btn-success" href="{{ route('admin.lessons.edit', [$id, $lessonId]) }}">Edit</a>
+            <a class="btn btn-primary" href="{{ route('admin.lessons.show', [$id, $lessonId]) }}">View</a>
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </td>
+</tr>
+@endforeach
             </table>
         </div>
 

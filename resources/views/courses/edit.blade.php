@@ -28,7 +28,7 @@
 
 
 
-    <form action="{{ route('admin.courses.update', $course->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.courses.update', $id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -36,14 +36,14 @@
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Name:</strong>
-                    <input type="text" name="name" value="{{ $course->name }}" class="form-control" placeholder="Name" required>
+                    <input type="text" name="name" value="{{ $course['name'] }}" class="form-control" placeholder="Name" required>
                 </div>
             </div>
 
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Description:</strong>
-                    <textarea class="form-control" style="height:150px" name="description" placeholder="Description">{{ $course->description }}</textarea>
+                    <textarea class="form-control" style="height:150px" name="description" placeholder="Description">{{ $course['description'] }}</textarea>
                 </div>
             </div>
 
