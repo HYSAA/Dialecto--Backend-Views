@@ -25,46 +25,38 @@ class CourseController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the incoming request
         $request->validate([
             'name' => 'required',
             'description' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
 
-        $imagePath = null; // Initialize the imagePath variable
+        $imagePath = null; 
 
-        // Check if the image file is present and store it
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
         }
 
-        // Create the course in the local database
         $course = Course::create([
             'name' => $request->name,
             'description' => $request->description,
-            'image' => $imagePath, // Store the image path in the database
+            'image' => $imagePath, 
         ]);
         $courseId = $course->id;
 
-        // Initialize Firebase
         $factory = (new Factory)->withServiceAccount('C:\laravel\Dialecto--Backend-Views\config\dialecto-c14c1-firebase-adminsdk-q80as-e6ee6b1b18.json')
             ->withDatabaseUri(env('FIREBASE_DATABASE_URL'));
 
         $database = $factory->createDatabase();
-
-        // Prepare the data for Firebase
         $courseData = [
             'id' => $courseId,
             'name' => $request->name,
             'description' => $request->description,
-            'image' => $imagePath, // Firebase will store the path as a string
+            'image' => $imagePath, 
         ];
 
-        // Store the data in Firebase Realtime Database
         $database->getReference('courses')->push($courseData);
 
-        // Redirect with a success message
         return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
     }
 
