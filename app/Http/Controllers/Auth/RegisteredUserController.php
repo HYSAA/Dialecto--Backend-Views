@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Kreait\Firebase\Factory;
 
 class RegisteredUserController extends Controller
 {
@@ -28,23 +29,48 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+{
+    // Validate the request data
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    // Hash the password
+    $hashedPassword = Hash::make($request->password);
 
-        event(new Registered($user));
+    // Create the user in the local Laravel database
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => $hashedPassword,
+    ]);
 
-        Auth::login($user);
+    // Fire the Registered event
+    event(new Registered($user));
 
-        return redirect(route('dashboard', absolute: false));
-    }
+    // Log in the user
+    Auth::login($user);
+
+    // Set up Firebase connection
+    $factory = (new Factory)->withServiceAccount('C:\laravel\Dialecto--Backend-Views\config\dialecto-c14c1-firebase-adminsdk-q80as-e6ee6b1b18.json')
+        ->withDatabaseUri(env('FIREBASE_DATABASE_URL'));
+
+    $database = $factory->createDatabase();
+
+    // Prepare user data for Firebase including hashed password
+    $userData = [
+        'id' => $user->id,
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => $hashedPassword, // Storing hashed password in Firebase
+    ];
+
+    // Store user data in Firebase Realtime Database
+    $database->getReference('users')->push($userData);
+
+    // Redirect to the dashboard after successful registration
+    return redirect(route('dashboard'))->with('success', 'User registered successfully.');
+}
 }
