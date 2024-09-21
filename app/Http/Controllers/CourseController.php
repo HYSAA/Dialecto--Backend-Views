@@ -31,7 +31,7 @@ class CourseController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
 
-        $imagePath = null; 
+        $imagePath = null;
 
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
@@ -40,11 +40,14 @@ class CourseController extends Controller
         $course = Course::create([
             'name' => $request->name,
             'description' => $request->description,
-            'image' => $imagePath, 
+            'image' => $imagePath,
         ]);
         $courseId = $course->id;
 
-        $factory = (new Factory)->withServiceAccount('C:\laravel\Dialecto--Backend-Views\config\dialecto-c14c1-firebase-adminsdk-q80as-e6ee6b1b18.json')
+        // $factory = (new Factory)->withServiceAccount('C:\laravel\Dialecto--Backend-Views\config\dialecto-c14c1-firebase-adminsdk-q80as-e6ee6b1b18.json')
+        //     ->withDatabaseUri(env('FIREBASE_DATABASE_URL'));
+        $factory = (new Factory)
+            ->withServiceAccount(base_path(env('FIREBASE_CREDENTIALS')))
             ->withDatabaseUri(env('FIREBASE_DATABASE_URL'));
 
         $database = $factory->createDatabase();
@@ -52,7 +55,7 @@ class CourseController extends Controller
             'id' => $courseId,
             'name' => $request->name,
             'description' => $request->description,
-            'image' => $imagePath, 
+            'image' => $imagePath,
         ];
 
         $database->getReference('courses')->push($courseData);
