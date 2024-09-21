@@ -6,33 +6,11 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <h2>{{ $lesson->title }} - Edit Lesson</h2>
+            <h2>{{ $lesson['title'] }} - Edit Lesson</h2>
         </div>
     </div>
 
-    <!-- @if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
-
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif -->
-
-    <form action="{{ route('admin.lessons.update', [$course->id, $lesson->id]) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.lessons.update', [$courseId, $lessonId]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -40,15 +18,13 @@
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Title:</strong>
-                    <input type="text" name="title" value="{{ $lesson->title }}" class="form-control" placeholder="Title" required>
+                    <input type="text" name="title" value="{{ $lesson['title'] }}" class="form-control" placeholder="Title" required>
                 </div>
             </div>
 
-            
-
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
-                    <label for="image"><strong>Lesson Image:</strong> </label>
+                    <label for="image"><strong>Lesson Image:</strong></label>
                     <input type="file" class="form-control" name="image" id="image">
                     <small>If you want to change the image, upload a new one. Otherwise, leave it blank.</small>
                 </div>
@@ -56,7 +32,7 @@
 
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                 <button type="submit" class="btn btn-primary">Save</button>
-                <a class="btn btn-danger" href="{{ route('admin.courses.index') }}">Discard</a>
+                <a href="{{ route('admin.courses.show', $courseId) }}" class="btn btn-danger">Discard</a>
             </div>
         </div>
     </form>

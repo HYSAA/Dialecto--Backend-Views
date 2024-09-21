@@ -2,114 +2,126 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
-use App\Models\Lesson;
 use Illuminate\Http\Request;
+use Kreait\Firebase\Contract\Database;
+use Kreait\Firebase\Contract\Storage;
+use Illuminate\Support\Str;
 
 class LessonController extends Controller
 {
-    // public function index(Course $course)
-    // {
-    //     $lessons = $course->lessons;
-    //     return view('lessons.index', compact('course', 'lessons'));
-    // }
+    protected $database;
+    protected $storage;
+
+    public function __construct(Database $database, Storage $storage)
+    {
+        $this->database = $database;
+        $this->storage = $storage;
+    }
+
     public function index($courseId = null)
     {
         if ($courseId) {
-            // Fetch lessons for the specific course   //BAG O NI 
-            $course = Course::findOrFail($courseId);
-            $lessons = $course->lessons;
+            // Fetch lessons for the specific course
+            $lessons = $this->database->getReference('courses/'.$courseId.'/lessons')->getValue();
         } else {
-            // Fetch all lessons, possibly with course information  /BAG O NI
-            $lessons = Lesson::with('course')->get();
+            // Fetch all lessons from all courses
+            $lessons = $this->database->getReference('lessons')->getValue();
+        }
+
+        if ($lessons === null) {
+            $lessons = [];
         }
 
         return view('lessons.index', compact('lessons'));
     }
 
-
-    public function create(Course $course)
+    public function create($courseId)
     {
-        return view('lessons.create', compact('course'));
-    }
-
-
-
-
-
-    public function store(Request $request, Course $course)
-    {
-        $request->validate([
-            'title' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
-        ]);
-
-        $imagePath = null; // Initialize the imagePath variable
-
-        // Check if the image file is present and store it
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
+        // Fetch course details using courseId
+        $course = $this->database->getReference('courses/' . $courseId)->getValue();
+    
+        // Ensure the course exists
+        if (!$course) {
+            return redirect()->route('admin.courses.index')->with('error', 'Course not found.');
         }
-
-
-        Lesson::create([
-            'course_id' => $course->id,
-            'title' => $request->title,
-            'image' => $imagePath,
-        ]);
-
-
-        // $course->lessons()->create($request->all());
-
-        return redirect()->route('admin.courses.show', $course->id)->with('success', 'Lesson created successfully.');
+    
+        // Pass both course and courseId to the view
+        return view('lessons.create', compact('course', 'courseId'));
     }
 
-
-    // public function show(Course $course, Lesson $lesson)
-    // {
-    //     return view('lessons.show', compact('course', 'lesson'));
-    // }
-    public function show(Course $course, Lesson $lesson)
-    {
-        $contents = $lesson->contents; // Fetch contents associated with the lesson
-        return view('lessons.show', compact('course', 'lesson', 'contents'));
-    }
-
-
-
-
-
-    public function edit(Course $course, Lesson $lesson)
-    {
-        return view('lessons.edit', compact('course', 'lesson'));
-    }
-
-    public function update(Request $request, Course $course, Lesson $lesson)
+    public function store(Request $request, $courseId)
     {
         $request->validate([
             'title' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
-        $imagePath = $lesson->image;
+
+        $lessonData = [
+            'title' => $request->title,
+        ];
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $bucket = $this->storage->getBucket();
+            $bucket->upload(
+                file_get_contents($image->getRealPath()),
+                ['name' => 'images/' . $imageName]
+            );
+            $lessonData['image'] = $bucket->object('images/' . $imageName)->signedUrl(new \DateTime('+ 1000 years'));
         }
 
-        // Update the course with the new or existing image path
-        $lesson->update([
-            'title' => $request->title,
+        // Store lesson in Firebase Realtime Database
+        $this->database->getReference('courses/' . $courseId . '/lessons')->push($lessonData);
 
-            'image' => $imagePath,
-        ]);
-
-        return redirect()->route('admin.courses.show', $course->id)->with('success', 'Lesson updated successfully.');
+        return redirect()->route('admin.courses.show', $courseId)->with('success', 'Lesson created successfully.');
     }
 
-    public function destroy(Course $course, Lesson $lesson)
+    public function show($courseId, $lessonId)
     {
-        $lesson->delete();
+        $lesson = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId)->getValue();
+        return view('lessons.show', compact('lesson', 'courseId', 'lessonId'));
+    }
 
-        return redirect()->route('admin.courses.show', $course->id)->with('success', 'Lesson deleted successfully.');
+    public function edit($courseId, $lessonId)
+    {
+        $lesson = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId)->getValue();
+        return view('lessons.edit', compact('lesson', 'courseId', 'lessonId'));
+    }
+
+    public function update(Request $request, $courseId, $lessonId)
+    {
+        $request->validate([
+            'title' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+        ]);
+
+        $lessonData = [
+            'title' => $request->title,
+        ];
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $bucket = $this->storage->getBucket();
+            $bucket->upload(
+                file_get_contents($image->getRealPath()),
+                ['name' => 'images/' . $imageName]
+            );
+            $lessonData['image'] = $bucket->object('images/' . $imageName)->signedUrl(new \DateTime('+ 1000 years'));
+        }
+
+        // Update lesson in Firebase Realtime Database
+        $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId)->update($lessonData);
+
+        return redirect()->route('admin.courses.show', $courseId)->with('success', 'Lesson updated successfully.');
+    }
+
+    public function destroy($courseId, $lessonId)
+    {
+        // Delete lesson from Firebase Realtime Database
+        $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId)->remove();
+
+        return redirect()->route('admin.courses.show', $courseId)->with('success', 'Lesson deleted successfully.');
     }
 }
