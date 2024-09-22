@@ -22,14 +22,14 @@
 
             <div class="row">
 
-                @foreach ($courses as $course)
+            @foreach($courses as $id => $course)
 
                 <div class="card mb-2 mr-2">
                     <div class="top">
 
                         <td>
-                            @if($course->image)
-                            <img src="{{ asset('storage/' . $course->image) }}" alt="Course Image" class="card-img">
+                            @if($course['image'])
+                            <img src="{{ $course['image'] }}" alt="Course Image" class="card-img">
                             @else
                             <img src="{{ asset('images/cebuano.png') }}" alt="Course Image" class="card-img">
                             @endif
@@ -38,13 +38,13 @@
 
                         <div class="row align-items-center mt-3 mb-3 " style="height: 50px;">
                             <div class="col-6 d-flex align-items-center ">
-                                <h3 class="card-title mb-0">{{ $course->name }}</h3>
+                                <h3 class="card-title mb-0">{{ $course['name'] }}</h3>
                             </div>
 
 
                             <div class="col-6 d-flex justify-content-end ">
 
-                                <a href="{{ route('user.courses.show', $course->id) }}" class="btn btn-main pull-right ">Views</a>
+                            <a href="{{ route('user.courses.show', $id) }}" class="btn btn-main pull-right">Views</a>
 
                             </div>
                         </div>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="card-content">
                         <h5>Description</h5>
-                        <p class="card-description">{{ $course->description }}</p>
+                        <p class="card-description">{{ $course['description'] }}</p>
                     </div>
                 </div>
 

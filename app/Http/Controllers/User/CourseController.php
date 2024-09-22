@@ -2,6 +2,7 @@
 
 
 namespace App\Http\Controllers\User;
+use Kreait\Firebase\Contract\Database;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
@@ -9,18 +10,41 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
+
+    protected $database;
+
+    public function __construct(Database $database)
+    {
+        $this->database = $database;
+
+    }
+
     public function index()
     {
-        $courses = Course::all();
-        // dd($courses);
+        $courses = $this->database->getReference('courses')->getValue();
+
+        if ($courses === null) {
+            $courses = [];
+        }
         return view('userUser.courses.index', compact('courses'));
     }
 
 
-    public function show(Course $course)
+//     public function show($courseId)
+// {
+//     $course = $this->database->getReference('courses/' . $courseId)->getValue();
 
+//     if ($course === null) {
+//         // Handle the case where the course is not found
+//         return redirect()->route('user.courses.index')->with('error', 'Course not found.');
+//     }
+
+//     return view('userUser.courses.show', compact('course'));
+// }
+
+public function show($id)
     {
-        // dd($course->lessons);
-        return view('userUser.courses.show', compact('course'));
+        $course = $this->database->getReference('courses/' . $id)->getValue();
+        return view('userUser.courses.show', compact('course', 'id'));
     }
 }

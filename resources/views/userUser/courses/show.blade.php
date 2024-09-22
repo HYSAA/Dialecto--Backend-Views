@@ -3,100 +3,66 @@
 @section('content')
 
 <div class="main-container">
-
     <div class="row mb-4">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-
-                <h2> {{ $course->name }} - Lessons</h2>
-
+                <h2>{{ $course['description'] }} - Lessons</h2> <!-- Use 'description' if that's your key -->
             </div>
-
-
         </div>
     </div>
 
     <div class="row" style="overflow-y: auto;">
         <div class="col-lg-12 margin-tb">
-
             <div class="row">
-
-
-                @foreach ($course->lessons as $lesson)
+                @foreach ($course['lessons'] ?? [] as $lessonId => $lesson)
 
                 <div class="cardsmall mb-2 mr-2">
-                    <div class="top ">
+                    <div class="top">
                         <div>
-                            @if($course->image)
-                            <img src="{{ asset('storage/' . $lesson->image) }}" alt="Course Image" class="card-img-small ">
-                            @else
-                            <img src="{{ asset('images/cebuano.png') }}" alt="Course Image" class="card-img">
+                            @if($lesson['image']) 
+                                <img src="{{ $lesson['image'] }}" alt="Course Image" class="card-img-small">
+                            @else 
+                                <img src="{{ asset('images/cebuano.png') }}" alt="Course Image" class="card-img">
                             @endif
                         </div>
 
-                        <div class="row align-items-center mt-3 mb-3 " style="height: 50px;">
-                            <div class="col-6 d-flex align-items-center ">
-                                <h3 class="card-title mb-0">{{ $lesson->title }}</h3>
-
+                        <div class="row align-items-center mt-3 mb-3" style="height: 50px;">
+                            <div class="col-6 d-flex align-items-center">
+                                <h3 class="card-title mb-0">{{ $lesson['title'] }}</h3> <!-- Access lesson name correctly -->
                             </div>
 
-                            <div class="col-6 d-flex justify-content-end ">
-
-                                <!-- <a class="btn btn-main" href="{{ route('user.lessons.show', [$course->id, $lesson->id]) }}">View</a> -->
-
-                                <!-- <button class="btn btn-main lessonButton" data-title="{{ $lesson->title }}">
-                                    Show Lesson Title
-                                </button> -->
-
+                            <div class="col-6 d-flex justify-content-end">
                                 <button class="btn btn-main lessonButton"
-                                    data-title="{{ $lesson->title }}"
-                                    data-contents="{{ json_encode($lesson->contents) }}"
-                                    data-course-id="{{ $course->id }}"
-                                    data-lesson-id="{{ $lesson->id }}">
+                                    data-title="{{ $lesson['title'] }}"
+                                    data-lesson-id="{{ $lessonId }}">
                                     View
                                 </button>
                             </div>
-
                         </div>
                     </div>
                 </div>
                 @endforeach
-
-
-
             </div>
         </div>
     </div>
 </div>
 
-
 <!-- Lesson Modal -->
 <div class="l-modal-overlay" id="lessonModal" style="display:none;">
-
-    <div class="l-modal-content text-center ">
-
+    <div class="l-modal-content text-center">
         <div class="container-fluid position-relative" style="height: 80px;">
             <i class="bi bi-x-circle position-absolute btn" id="closeLessonModal" style="top: 0; right: 0; padding: 10px; font-size: 32px;"></i>
         </div>
 
-
-
         <h3 id="modalLessonTitle">Lesson Title</h3>
-        <h5 id="modalLessonCount" style="font-weight: 50; color: #90949C; margin-bottom: 3  0px;">Total Contents: 0</h5>
+        <h5 id="modalLessonCount" style="font-weight: 50; color: #90949C; margin-bottom: 0px;">Total Contents: 0</h5>
 
         <a class="btn btn-main" id="modalShowButton" style="margin-bottom: 20px;" href="#">Show</a>
 
-
-        <div id="modalLessonContents">
-
-        </div>
-
-
-
-
-
+        <div id="modalLessonContents"></div>
     </div>
 </div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
