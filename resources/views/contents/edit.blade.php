@@ -21,37 +21,29 @@
     </div>
     @endif
 
-    <form action="{{ route('admin.contents.update', [$course->id, $lesson->id, $content->id]) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.contents.update', [$courseId, $lessonId, $contentId]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
-                    <strong>{{$course->name}} Text</strong>
-                    <textarea class="form-control" style="height:150px" name="text" placeholder="Dialect Text">{{ $content->text }}</textarea>
+                    <strong>{{ $course['name'] }} Text</strong>
+                    <textarea class="form-control" style="height:150px" name="text" placeholder="Dialect Text">{{ $content['text'] }}</textarea>
                 </div>
                 <div class="form-group">
                     <strong>English Text</strong>
-                    <textarea class="form-control" style="height:150px" name="english" placeholder="English Text">{{ $content->english }}</textarea>
+                    <textarea class="form-control" style="height:150px" name="english" placeholder="English Text">{{ $content['english'] }}</textarea>
                 </div>
 
-
                 <div class="form-group">
-
-
-
                     <strong>Video:</strong>
                     <input type="file" name="video" class="form-control">
-
-
-
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                 <button type="submit" class="btn btn-primary">Save</button>
                 <a class="btn btn-danger" href="{{ route('admin.courses.index') }}">Back</a>
-
             </div>
         </div>
 
