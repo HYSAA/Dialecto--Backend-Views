@@ -79,10 +79,17 @@ class LessonController extends Controller
 
     public function show($courseId, $lessonId)
     {
+        // Fetch course and lesson data from Firebase Realtime Database
+        $course = $this->database->getReference('courses/' . $courseId)->getValue();
         $lesson = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId)->getValue();
-        return view('lessons.show', compact('lesson', 'courseId', 'lessonId'));
+        $contents = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents')->getValue();
+    
+        if ($contents === null) {
+            $contents = [];
+        }
+    
+        return view('lessons.show', compact('course', 'lesson', 'contents', 'courseId', 'lessonId'));
     }
-
     public function edit($courseId, $lessonId)
     {
         $lesson = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId)->getValue();

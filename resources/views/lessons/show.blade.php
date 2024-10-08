@@ -41,12 +41,7 @@
                             @endif
                         </td>
                         <td>
-                            <a class="btn btn-success" href="{{ route('admin.contents.edit', [$courseId, $lessonId, $contentId]) }}">Edit</a>
-                            <form action="{{ route('admin.contents.destroy', [$courseId, $lessonId, $contentId]) }}" method="POST" style="display:inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
+                        <!--FOR THE EDIT BUTTON  -->
                         </td>
                     </tr>
                     @endforeach

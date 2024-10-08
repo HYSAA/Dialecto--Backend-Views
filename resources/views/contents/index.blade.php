@@ -6,11 +6,11 @@
         <div class="row">
             <div class="col-lg-12 margin-tb">
                 <div class="pull-left">
-                    <h2>{{ $course->name }} - Lesson: {{ $lesson->title }}</h2>
+                    <h2>{{ $course['name'] }} - Lesson: {{ $lesson['title'] }}</h2>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-primary" href="{{ route('courses.lessons.index', $course->id) }}">Back to Lessons</a>
-                    <a class="btn btn-success" href="{{ route('courses.lessons.contents.create', [$course->id, $lesson->id]) }}">Add Content</a>
+                    <a class="btn btn-primary" href="{{ route('courses.lessons.index', $courseId) }}">Back to Lessons</a>
+                    <a class="btn btn-success" href="{{ route('courses.lessons.contents.create', [$courseId, $lessonId]) }}">Add Content</a>
                 </div>
             </div>
         </div>
@@ -25,28 +25,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($contents as $content)
+                        @foreach ($contents as $contentId => $content)
                         <tr>
                             <td>
-                                @if ($content->text)
-                                <p>{{ $content->text }}</p>
+                                @if (isset($content['text']))
+                                <p>{{ $content['text'] }}</p>
                                 @endif
-                                @if ($content->text)
-                                <p>{{ $content->english }}</p>
+                                @if (isset($content['english']))
+                                <p>{{ $content['english'] }}</p>
                                 @endif
-                                @if ($content->image)
-                                <img src="{{ $content->image }}" width="150px" alt="Content Image">
+                                @if (isset($content['image']))
+                                <img src="{{ $content['image'] }}" width="150px" alt="Content Image">
                                 @endif
-                                @if ($content->video)
+                                @if (isset($content['video']))
                                 <video width="150px" controls>
-                                    <source src="{{ $content->video }}" type="video/mp4">
+                                    <source src="{{ $content['video'] }}" type="video/mp4">
                                 </video>
                                 @endif
                             </td>
                             <td>
-                                <a class="btn btn-info" href="{{ route('courses.lessons.contents.show', [$course->id, $lesson->id, $content->id]) }}">Show</a>
-                                <a class="btn btn-primary" href="{{ route('courses.lessons.contents.edit', [$course->id, $lesson->id, $content->id]) }}">Edit</a>
-                                <form action="{{ route('admin.contents.destroy', [$course->id, $lesson->id, $content->id]) }}" method="POST" style="display:inline">
+                                <a class="btn btn-info" href="{{ route('courses.lessons.contents.show', [$courseId, $lessonId, $contentId]) }}">Show</a>
+                                <a class="btn btn-primary" href="{{ route('courses.lessons.contents.edit', [$courseId, $lessonId, $contentId]) }}">Edit</a>
+                                <form action="{{ route('admin.contents.destroy', [$courseId, $lessonId, $contentId]) }}" method="POST" style="display:inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Delete</button>
