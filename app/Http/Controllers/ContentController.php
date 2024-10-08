@@ -6,15 +6,26 @@ use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Storage as FirebaseStorage;
 
+use Kreait\Firebase\Factory;
 class ContentController extends Controller
 {
     protected $firebaseStorage;
     protected $database;
 
-    public function __construct(Database $database, FirebaseStorage $firebaseStorage)
+    public function __construct(Database $database,FirebaseStorage $firebaseStorage)
     {
-        $this->firebaseStorage = $firebaseStorage;
+        $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
+        
+        if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
+            throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");
+        }
+    
+        $this->firebaseStorage = (new Factory)
+            ->withServiceAccount($firebaseCredentialsPath)
+            ->createStorage();
+        
         $this->database = $database;
+        // $this->firebaseStorage = $firebaseStorage;
     }
 
     public function create($courseId, $lessonId)
