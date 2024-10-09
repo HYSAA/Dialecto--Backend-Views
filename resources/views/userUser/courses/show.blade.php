@@ -6,7 +6,7 @@
     <div class="row mb-4">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-                <h2>{{ $course['description'] }} - Lessons</h2> <!-- Use 'description' if that's your key -->
+                <h2>{{ $course['name'] ?? 'Course Name' }} - Lessons</h2> <!-- Use 'description' if necessary -->
             </div>
         </div>
     </div>
@@ -19,22 +19,23 @@
                 <div class="cardsmall mb-2 mr-2">
                     <div class="top">
                         <div>
-                            @if($lesson['image']) 
-                                <img src="{{ $lesson['image'] }}" alt="Course Image" class="card-img-small">
+                            @if(isset($lesson['image']) && $lesson['image']) 
+                                <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="card-img-small">
                             @else 
-                                <img src="{{ asset('images/cebuano.png') }}" alt="Course Image" class="card-img">
+                                <img src="{{ asset('images/cebuano.png') }}" alt="Lesson Image" class="card-img">
                             @endif
                         </div>
 
                         <div class="row align-items-center mt-3 mb-3" style="height: 50px;">
                             <div class="col-6 d-flex align-items-center">
-                                <h3 class="card-title mb-0">{{ $lesson['title'] }}</h3> <!-- Access lesson name correctly -->
+                                <h3 class="card-title mb-0">{{ $lesson['title'] ?? 'Lesson Title' }}</h3>
                             </div>
 
                             <div class="col-6 d-flex justify-content-end">
                                 <button class="btn btn-main lessonButton"
                                     data-title="{{ $lesson['title'] }}"
-                                    data-lesson-id="{{ $lessonId }}">
+                                    data-lesson-id="{{ $lessonId }}"
+                                    data-contents="{{ json_encode($lesson['contents'] ?? []) }}">
                                     View
                                 </button>
                             </div>
@@ -63,12 +64,11 @@
     </div>
 </div>
 
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.lessonButton').forEach(button => {
             button.addEventListener('click', function() {
-                // Get the lesson title, contents, course ID, and lesson ID from the data attributes
+                // Get lesson data
                 const lessonTitle = this.getAttribute('data-title');
                 const lessonContents = JSON.parse(this.getAttribute('data-contents'));
                 const courseId = this.getAttribute('data-course-id');
@@ -80,36 +80,24 @@
                 // Count the number of contents
                 document.getElementById('modalLessonCount').textContent = `${lessonContents.length} Words`;
 
-                // Generate the contents and inject them into the modal
+                // Generate the contents HTML and inject into modal
                 let contentsHtml = '';
-
                 lessonContents.forEach(content => {
                     contentsHtml += `
-                <div class="content-row">
-                    <div class="content-text">${content.text}</div>
-                    <div class="content-separator">-</div>
-                    <div class="content-english">${content.english}</div>
-                </div>
-                <hr>`;
+                    <div class="content-row">
+                        <div class="content-text">${content.text}</div>
+                        <div class="content-separator">-</div>
+                        <div class="content-english">${content.english}</div>
+                    </div>
+                    <hr>`;
                 });
                 document.getElementById('modalLessonContents').innerHTML = contentsHtml;
 
-
-
-
-                // lessonContents.forEach(content => {
-                //     contentsHtml += `<p>${content.text} - ${content.english}</p>
-                //      <hr>`;
-                // });
-                // document.getElementById('modalLessonContents').innerHTML = contentsHtml;
-
-
-                // Dynamically set the href for the Show button
+                // Set the href for the Show button to point to the first content
                 const firstContentId = lessonContents.length > 0 ? lessonContents[0].id : null;
                 const showButton = document.getElementById('modalShowButton');
                 if (firstContentId) {
                     showButton.href = `/user/courses/${courseId}/lessons/${lessonId}/contents/${firstContentId}`;
-                    // showButton.style.display = 'inline-block';
                 } else {
                     showButton.style.display = 'none'; // Hide the button if no content exists
                 }
