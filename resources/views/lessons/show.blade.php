@@ -26,7 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($contents as $content)
+                    @foreach ($contents as $contentId =>$content)
                     <tr>
                         <td>{{ $content['text'] }}</td>
                         <td>{{ $content['english'] }}</td>
@@ -41,7 +41,15 @@
                             @endif
                         </td>
                         <td>
-                        <!--FOR THE EDIT BUTTON  -->
+                            <!-- Edit Button -->
+                            <a class="btn btn-sm btn-primary" href="{{ route('admin.contents.edit', [$courseId, $lessonId, $contentId]) }}">Edit</a>
+
+                            <!-- Delete Button -->
+                            <form action="{{ route('admin.contents.destroy', [$courseId, $lessonId, $contentId]) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this content?')">Deletes</button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach

@@ -138,25 +138,18 @@ class ContentController extends Controller
 
     public function destroy($courseId, $lessonId, $contentId)
     {
+        // Get the reference to the specific content in Firebase
         $contentReference = $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId.'/contents/'.$contentId);
-        $content = $contentReference->getValue();
-
-        if (isset($content['image'])) {
-            $bucket = $this->firebaseStorage->getBucket();
-            $bucket->object(parse_url($content['image'], PHP_URL_PATH))->delete();
-        }
-
-        if (isset($content['video'])) {
-            $bucket = $this->firebaseStorage->getBucket();
-            $bucket->object(parse_url($content['video'], PHP_URL_PATH))->delete();
-        }
-
-        // Remove content from Firebase Realtime Database
+        
+        // Remove the content entry from Firebase Realtime Database
         $contentReference->remove();
-
+    
+        // Redirect back to the lesson view with a success message
         return redirect()->route('admin.lessons.show', [$courseId, $lessonId])
             ->with('success', 'Content deleted successfully.');
     }
+    
+    
 
     public function show($courseId, $lessonId, $contentId)
     {
@@ -170,11 +163,15 @@ class ContentController extends Controller
     }
 
     public function edit($courseId, $lessonId, $contentId)
-    {
+    { 
+        $course =$this->database->getReference('courses/'.$courseId)->getValue();
+        $lesson = $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId)->getValue();
         $content = $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId.'/contents/'.$contentId)->getValue();
-        return view('contents.edit', compact('content', 'courseId', 'lessonId'));
-    }
+    
 
+        return view('contents.edit', compact('content', 'course', 'lesson', 'courseId', 'lessonId', 'contentId'));
+    }
+    
     public function index($courseId, $lessonId)
     {
         $contents = $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId.'/contents')->getValue();
