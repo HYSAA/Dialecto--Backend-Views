@@ -1,42 +1,33 @@
 <?php
 
-
 namespace App\Http\Controllers\Expert;
 
 use App\Http\Controllers\Controller;
-use App\Models\Course;
-use App\Models\Lesson;
-
+use Kreait\Firebase\Contract\Database;
 use Illuminate\Http\Request;
 
 class LessonController extends Controller
 {
-    // public function index(Course $course)
-    // {
-    //     $lessons = $course->lessons;
-    //     return view('lessons.index', compact('course', 'lessons'));
-    // }
-    public function index($courseId = null)
-    {
-        if ($courseId) {
-            // Fetch lessons for the specific course   //BAG O NI 
-            $course = Course::findOrFail($courseId);
-            $lessons = $course->lessons;
-        } else {
-            // Fetch all lessons, possibly with course information  /BAG O NI
-            $lessons = Lesson::with('course')->get();
-        }
+    protected $database;
 
-        return view('lessons.index', compact('lessons'));
-    }
-    public function create(Course $course)
+    public function __construct(Database $database)
     {
-        return view('lessons.create', compact('course'));
+        $this->database = $database;
     }
 
-    public function show(Course $course, Lesson $lesson)
+    public function index($courseId)
     {
-        $contents = $lesson->contents; // Fetch contents associated with the lesson
-        return view('lessons.show', compact('course', 'lesson', 'contents'));
+        // Fetch lessons for the specified course
+        $lessons = $this->database->getReference('courses/' . $courseId . '/lessons')->getValue() ?? [];
+
+        return view('userExpert.lessons.index', compact('lessons', 'courseId'));
+    }
+
+    public function show($courseId, $lessonId)
+    {
+        // Fetch the specific lesson
+        $lesson = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId)->getValue();
+
+        return view('userExpert.lessons.show', compact('lesson', 'courseId'));
     }
 }
