@@ -25,7 +25,7 @@ class CourseController extends Controller
         if ($courses === null) {
             $courses = [];
         }
-        
+
         return view('courses.index', compact('courses'));
     }
 

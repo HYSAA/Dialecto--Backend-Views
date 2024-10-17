@@ -22,7 +22,7 @@
 
             <div class="row">
 
-            @foreach($courses as $id => $course)
+                @foreach($courses as $id => $course)
 
                 <div class="card mb-2 mr-2">
                     <div class="top">
@@ -44,7 +44,7 @@
 
                             <div class="col-6 d-flex justify-content-end ">
 
-                            <a href="{{ route('user.courses.show', $id) }}" class="btn btn-main pull-right">Views</a>
+                                <a href="{{ route('user.courses.show', $id) }}" class="btn btn-main pull-right">Views</a>
 
                             </div>
                         </div>
