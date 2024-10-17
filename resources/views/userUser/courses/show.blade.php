@@ -137,17 +137,25 @@
 
 
 
-
-
-
-
-
                 const showButton = document.getElementById('modalShowButton');
+
+
                 if (firstContentId) {
                     showButton.href = `/user/courses/${courseId}/lessons/${lessonId}/contents/${firstContentId}`;
+
+                    // Show the button if firstContentId exists
+                    showButton.style.display = 'inline-flex'; // Change this to 'block', 'inline', or 'inline-block' based on your needs
                 } else {
-                    showButton.style.display = 'none'; // Hide the button if no content exists
+                    // Hide the button if no content exists
+                    showButton.style.display = 'none';
                 }
+
+
+
+
+
+
+
 
                 // Show the modal
                 document.getElementById('lessonModal').style.display = 'block';
