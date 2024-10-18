@@ -13,17 +13,21 @@ use Illuminate\Support\Facades\App;
 //
 use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
+use Kreait\Firebase\Contract\Database;
+
 use Kreait\Firebase\Storage as FirebaseStorage;
 
 class ContentController extends Controller
 {
     protected $firebaseStorage;
+    protected $database;
 
-
-    ///ang construct is to validate if working ba ang imo configuration sa firebase
-    //mura siyag nahug na gate na tig check if complete ba imo config before accesing firebase
-    public function __construct()
+    public function __construct(Database $database)
     {
+        // Initialize the database property
+        $this->database = $database;
+
+        // Set up Firebase credentials and storage
         $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
 
         if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
@@ -34,6 +38,10 @@ class ContentController extends Controller
             ->withServiceAccount($firebaseCredentialsPath)
             ->createStorage();
     }
+
+
+
+
 
     public function create($courseId, $lessonId)
     {
@@ -200,27 +208,104 @@ class ContentController extends Controller
             ->with('success', 'Content deleted successfully.');
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
     public function show($courseId, $lessonId, $contentId)
     {
-        $course = Course::find($courseId);
-        $lesson = Lesson::find($lessonId);
-        $content = Content::find($contentId);
+        // Retrieve the course, lesson, and content from the Firebase Realtime Database
+        $course = $this->database->getReference('courses/' . $courseId)->getValue();
+        $lesson = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId)->getValue();
+        $content = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents/' . $contentId)->getValue();
 
-        // diri mag retrieve sa new ug before na content
-        $nextContent = Content::where('lesson_id', $lessonId)->where('id', '>', $contentId)->orderBy('id')->first();
-        $previousContent = Content::where('lesson_id', $lessonId)->where('id', '<', $contentId)->orderBy('id', 'desc')->first();
+
+
+        // Retrieve all contents for the lesson
+        $allContents = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents')->getValue();
+
+        // Initialize nextContent and previousContent variables
+        $nextContent = null;
+        $previousContent = null;
+
+        if ($allContents) {
+            // Convert contents to an array
+            $contentsArray = [];
+            foreach ($allContents as $key => $value) {
+                $contentsArray[] = [
+                    'id' => $key,
+                    'data' => $value,
+                ];
+            }
+
+            // Sort contents by ID
+            usort($contentsArray, function ($a, $b) {
+                return $a['id'] <=> $b['id'];
+            });
+
+            // Find the next content after the current content ID
+            foreach ($contentsArray as $item) {
+                if ($item['id'] > $contentId) {
+                    $nextContent = $item; // This is the next content
+                    break; // Exit the loop once we find the next content
+                }
+            }
+
+            // Find the previous content before the current content ID
+            for ($i = count($contentsArray) - 1; $i >= 0; $i--) {
+                if ($contentsArray[$i]['id'] < $contentId) {
+                    $previousContent = $contentsArray[$i]; // This is the previous content
+                    break; // Exit the loop once we find the previous content
+                }
+            }
+        }
+
+
+
+
 
         // Count of Content_id Does not increment but stores the id that is done dependent ont eh button nextcontent
-        if ($nextContent) {
-            $userProgress = UserProgress::firstOrCreate([
-                'user_id' => auth()->id(),
-                'course_id' => $courseId,
-                'lesson_id' => $lessonId,
-                'content_id' => $nextContent->id,
-            ]);
-        }
-        return view('userUser.contents.show', compact('course', 'lesson', 'content', 'nextContent', 'previousContent'));
+        // if ($nextContent) {
+        //     $userProgress = UserProgress::firstOrCreate([
+        //         'user_id' => auth()->id(),
+        //         'course_id' => $courseId,
+        //         'lesson_id' => $lessonId,
+        //         'content_id' => $nextContent->id,
+        //     ]);
+        // }
+        return view('userUser.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent'));
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public function edit($courseId, $lessonId, $contentId)
