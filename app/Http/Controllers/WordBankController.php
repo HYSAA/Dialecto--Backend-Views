@@ -10,141 +10,104 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\Storage as FirebaseStorage;
 use Illuminate\Http\Request;
 
+
 class WordBankController extends Controller
 {
-    protected $firebaseStorage;
+    protected $firebaseDatabase;
 
     public function __construct()
     {
         $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
-
+    
         if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
             throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");
         }
-
-        $this->firebaseStorage = (new Factory)
+    
+        // Ensure you are using the correct Realtime Database URL
+        $this->firebaseDatabase = (new Factory)
             ->withServiceAccount($firebaseCredentialsPath)
-            ->createStorage();
+            ->withDatabaseUri('https://dialecto-c14c1-default-rtdb.asia-southeast1.firebasedatabase.app/') // Use the correct URL
+            ->createDatabase();
     }
+    
 
-
+    
 
     public function showWordBank()
     {
-
-        $courses = Course::all();
-
+        $coursesRef = $this->firebaseDatabase->getReference('courses');
+        $courses = $coursesRef->getValue();
 
         return view('admin.wordBank.showWordBank', compact('courses'));
-
-        // return redirect()->route('expert.pendingWords')->with('success', 'Word uploaded successfully.');
     }
 
     public function wordBankCourse($id)
     {
-        $course = Course::find($id);
+        $courseRef = $this->firebaseDatabase->getReference('courses/' . $id);
+        $course = $courseRef->getValue();
 
-        // $courseID = $course->id;
-        
+        $suggestionsRef = $this->firebaseDatabase->getReference('suggestedWords')
+            ->orderByChild('course_id')
+            ->equalTo($id)
+            ->getSnapshot()
+            ->getValue();
 
-        // $suggestions = suggestedWord::with('lesson')
-        //     ->whereIn('status', ['approved', 'expert'])
-        //     ->get();
+        $approvedSuggestions = [];
+        if ($suggestionsRef) {
+            foreach ($suggestionsRef as $suggestion) {
+                if (in_array($suggestion['status'], ['approved', 'expert'])) {
+                    $approvedSuggestions[] = $suggestion;
+                }
+            }
+        }
 
-
-        $courseID = $course->id;
-
-        $suggestions = suggestedWord::with('lesson')
-            ->where('course_id', $courseID) // Filter by course_id
-            ->whereIn('status', ['approved', 'expert']) // Filter by status
-            ->get();
-
-            // dd($suggestions);
-
-
-
-
-
-
-
-
-        // dd($courseID);
-        // dd($suggestions);
-
-
-
-
-        return view('admin.wordBank.wordBankCourse', compact('course', 'suggestions'));
-
-        // return redirect()->route('expert.pendingWords')->with('success', 'Word uploaded successfully.');
+        return view('admin.wordBank.wordBankCourse', compact('course', 'approvedSuggestions'));
     }
-
 
     public function addWordToLesson($courseid, $wordid)
     {
+        $suggestedWordRef = $this->firebaseDatabase->getReference('suggestedWords/' . $wordid);
+        $suggestedWord = $suggestedWordRef->getValue();
 
+        if (empty($suggestedWord['usedID'])) {
+            $lessonRef = $this->firebaseDatabase->getReference('lessons/' . $suggestedWord['lesson_id']);
+            $lesson = $lessonRef->getValue();
 
+            $contentRef = $this->firebaseDatabase->getReference('contents')->push();
+            $contentRef->set([
+                'english' => $suggestedWord['english'],
+                'text' => $suggestedWord['text'],
+                'video' => $suggestedWord['video'],
+                'lesson_id' => $lesson['id']
+            ]);
 
-        $suggestedWord = suggestedWord::find($wordid);
-        $lesson = Lesson::find($suggestedWord->lesson_id);
-        $course = Course::find($courseid);
-
-
-        if ($suggestedWord->usedID == null) {
-
-
-
-            //para ni ma retrieve ni wordbank ang contents sa controller
-            $content = new Content();
-            $content->english = $suggestedWord->english;
-            $content->text = $suggestedWord->text;
-            $content->video = $suggestedWord->video;
-            $content->lesson_id = $lesson->id;
-            $content->save();
-
-            $suggestedWord->usedID = $content->id;
-
-            $suggestedWord->save();
-
+            // Update suggestedWord with the new content ID
+            $suggestedWordRef->update(['usedID' => $contentRef->getKey()]);
 
             return redirect()->route('admin.wordBankCourse', ['id' => $courseid])
-                ->with([
-                    'success' => 'Word added in lesson.'
-                ]);
+                ->with('success', 'Word added in lesson.');
         } else {
-
-
             return redirect()->route('admin.wordBankCourse', ['id' => $courseid])->with('fail', 'Word already in lesson.');
         }
-
-
-
-        // hoyyy ang vid aniii di pa ka save 
-
-        // return view('admin.wordBank.wordBankCourse', compact('course', 'suggestions'));
-
-        // return redirect()->route('expert.pendingWords')->with('success', 'Word uploaded successfully.');
     }
+
     public function removeWord($courseid, $wordid)
     {
-        $suggestedWord = suggestedWord::find($wordid);
-        $trackID = $suggestedWord->usedID;
+        $suggestedWordRef = $this->firebaseDatabase->getReference('suggestedWords/' . $wordid);
+        $suggestedWord = $suggestedWordRef->getValue();
 
-        $lesson = Lesson::find($suggestedWord->lesson_id);
-
-        // Check if the content exists
-        $contentToDelete = $lesson->contents()->find($trackID);
+        $contentToDeleteRef = $this->firebaseDatabase->getReference('contents/' . $suggestedWord['usedID']);
+        $contentToDelete = $contentToDeleteRef->getValue();
 
         if ($contentToDelete) {
             // Delete content
-            $contentToDelete->delete();
+            $contentToDeleteRef->remove();
 
             // Reset usedID
-            $suggestedWord->usedID = null;
-            $suggestedWord->save();
+            $suggestedWordRef->update(['usedID' => null]);
 
             return redirect()->route('admin.wordBankCourse', ['id' => $courseid])
-                ->with('success', 'Word has been removed in lesson.');
+                ->with('success', 'Word has been removed from lesson.');
         } else {
             return redirect()->route('admin.wordBankCourse', ['id' => $courseid])
                 ->with('fail', 'Content not found.');
