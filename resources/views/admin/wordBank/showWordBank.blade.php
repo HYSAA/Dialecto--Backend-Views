@@ -18,7 +18,8 @@
                 <div class="wordBankCard" style="overflow: hidden;">
                     <div style="width: 100%; height: 150px;">
                         @if(!empty($course['image']))
-                        <img src="{{ asset('storage/' . $course['image']) }}" alt="Course Image" class="image-thumbnail">
+                        <img src="{{ $course['image'] }}" alt="Course Image" class="image-thumbnail">
+
                         @else
                         No image available
                         @endif

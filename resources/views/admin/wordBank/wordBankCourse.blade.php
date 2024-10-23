@@ -44,7 +44,7 @@
                         <th width="280px">Action</th>
                     </tr>
 
-                    @foreach ($suggestions as $wordID => $word)
+                    @foreach ($approvedSuggestions as $wordID => $word)
                     <tr>
                         <td>{{ $word['lesson_title'] ?? 'No title available' }}</td>
                         <td>{{ $word['text'] }}</td>
