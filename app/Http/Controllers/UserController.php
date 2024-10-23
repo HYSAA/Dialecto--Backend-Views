@@ -26,10 +26,40 @@ class UserController extends Controller
     public function index()
     {
         $currentUserId = Auth::id(); // Get the currently authenticated user's ID
-        $users = User::where('id', '!=', $currentUserId)->get(); // Retrieve all users except the current one
-
-        return view('users.index', compact('users')); // Pass filtered users to the view
+    
+        $firebaseUrl = env('FIREBASE_DATABASE_URL') . '/users.json';
+    
+        // Create a context with SSL verification disabled
+        $context = stream_context_create([
+            "ssl" => [
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            ],
+        ]);
+    
+        // Use file_get_contents with the created context
+        $response = file_get_contents($firebaseUrl, false, $context);
+    
+        // Decode the JSON response
+        $allUsers = json_decode($response, true);
+    
+        // Filter out the current user
+        $users = array_filter($allUsers, function($userId) use ($currentUserId) {
+            return $userId !== $currentUserId;
+        }, ARRAY_FILTER_USE_KEY);
+    
+        // Convert filtered user IDs into an array of user objects if necessary
+        $filteredUsers = [];
+        foreach ($users as $userId => $userData) {
+            $filteredUsers[] = [
+                'id' => $userId,
+                'data' => $userData,
+            ];
+        }
+    
+        return view('users.index', compact('filteredUsers'));
     }
+    
 
 
 

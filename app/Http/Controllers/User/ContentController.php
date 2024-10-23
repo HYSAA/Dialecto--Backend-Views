@@ -220,22 +220,86 @@ class ContentController extends Controller
 
 
 
+    // public function show($courseId, $lessonId, $contentId)
+    // {
+    //     // Retrieve the course, lesson, and content from the Firebase Realtime Database
+    //     $course = $this->database->getReference('courses/' . $courseId)->getValue();
+    //     $lesson = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId)->getValue();
+    //     $content = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents/' . $contentId)->getValue();
+
+
+
+    //     // Retrieve all contents for the lesson
+    //     $allContents = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents')->getValue();
+
+    //     // Initialize nextContent and previousContent variables
+    //     $nextContent = null;
+    //     $previousContent = null;
+
+    //     if ($allContents) {
+    //         // Convert contents to an array
+    //         $contentsArray = [];
+    //         foreach ($allContents as $key => $value) {
+    //             $contentsArray[] = [
+    //                 'id' => $key,
+    //                 'data' => $value,
+    //             ];
+    //         }
+
+    //         // Sort contents by ID
+    //         usort($contentsArray, function ($a, $b) {
+    //             return $a['id'] <=> $b['id'];
+    //         });
+
+    //         // Find the next content after the current content ID
+    //         foreach ($contentsArray as $item) {
+    //             if ($item['id'] > $contentId) {
+    //                 $nextContent = $item; // This is the next content
+    //                 break; // Exit the loop once we find the next content
+    //             }
+    //         }
+
+    //         // Find the previous content before the current content ID
+    //         for ($i = count($contentsArray) - 1; $i >= 0; $i--) {
+    //             if ($contentsArray[$i]['id'] < $contentId) {
+    //                 $previousContent = $contentsArray[$i]; // This is the previous content
+    //                 break; // Exit the loop once we find the previous content
+    //             }
+    //         }
+    //     }
+
+
+
+
+    //     if ($nextContent) {
+    //         $userId = auth()->id(); // Replace with the user's ID
+    //         $userProgressRef = 'user_progress/' . $userId . '/' . $courseId . '/' . $lessonId;
+    
+    //         // Storing progress with the next content ID
+    //         $this->database->getReference($userProgressRef . '/' . $nextContent['id'])
+    //             ->set([
+    //                 'content_id' => $nextContent['id'],
+    //                 'progress_at' => now()->toDateTimeString() // Timestamp of progress
+    //             ]);
+    //     }
+    //     return view('userUser.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent'));
+    // }
+
+
     public function show($courseId, $lessonId, $contentId)
     {
         // Retrieve the course, lesson, and content from the Firebase Realtime Database
         $course = $this->database->getReference('courses/' . $courseId)->getValue();
         $lesson = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId)->getValue();
         $content = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents/' . $contentId)->getValue();
-
-
-
+    
         // Retrieve all contents for the lesson
         $allContents = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents')->getValue();
-
+    
         // Initialize nextContent and previousContent variables
         $nextContent = null;
         $previousContent = null;
-
+    
         if ($allContents) {
             // Convert contents to an array
             $contentsArray = [];
@@ -245,12 +309,12 @@ class ContentController extends Controller
                     'data' => $value,
                 ];
             }
-
+    
             // Sort contents by ID
             usort($contentsArray, function ($a, $b) {
                 return $a['id'] <=> $b['id'];
             });
-
+    
             // Find the next content after the current content ID
             foreach ($contentsArray as $item) {
                 if ($item['id'] > $contentId) {
@@ -258,7 +322,7 @@ class ContentController extends Controller
                     break; // Exit the loop once we find the next content
                 }
             }
-
+    
             // Find the previous content before the current content ID
             for ($i = count($contentsArray) - 1; $i >= 0; $i--) {
                 if ($contentsArray[$i]['id'] < $contentId) {
@@ -267,28 +331,36 @@ class ContentController extends Controller
                 }
             }
         }
-
-
-
-
-
-        // Count of Content_id Does not increment but stores the id that is done dependent ont eh button nextcontent
-        // if ($nextContent) {
-        //     $userProgress = UserProgress::firstOrCreate([
-        //         'user_id' => auth()->id(),
-        //         'course_id' => $courseId,
-        //         'lesson_id' => $lessonId,
-        //         'content_id' => $nextContent->id,
-        //     ]);
-        // }
+    
+        // User progress section
+        $userId = auth()->id(); // Replace with the user's ID
+        $userProgressRef = 'user_progress/' . $userId . '/' . $courseId . '/' . $lessonId;
+    
+        // Check if the current content progress already exists
+        $existingProgress = $this->database->getReference($userProgressRef . '/' . $contentId)->getValue();
+    
+        if (!$existingProgress) {
+            // If progress for this content doesn't exist, store it
+            $this->database->getReference($userProgressRef . '/' . $contentId)
+                ->set([
+                    'content_id' => $contentId,
+                    'progress_at' => now()->toDateTimeString(), // Timestamp of progress
+                    'view_count' => 1 // Initialize view count to 1
+                ]);
+        } else {
+            // If progress exists, increment the view count
+            $this->database->getReference($userProgressRef . '/' . $contentId)
+                ->update([
+                    'view_count' => $existingProgress['view_count'] + 1,
+                    'progress_at' => now()->toDateTimeString() // Update timestamp for the new view
+                ]);
+        }
+    
         return view('userUser.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent'));
     }
-
-
-
-
-
-
+    
+   
+    
 
 
 
