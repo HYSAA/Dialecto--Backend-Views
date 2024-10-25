@@ -11,6 +11,8 @@ use App\Models\Credential;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Storage as FirebaseStorage;
 
+use Kreait\Firebase\Database;
+use Kreait\Firebase\Storage;
 use App\Models\Lesson;
 use App\Models\suggestedWord;
 
@@ -22,7 +24,34 @@ class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
-     */
+     */protected $firebaseStorage;
+     protected $database;
+     public function __construct()
+     {
+         $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
+ 
+         if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
+             throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");
+         }
+ 
+         // Initialize the Realtime Database
+         $this->database = (new Factory)
+             ->withServiceAccount($firebaseCredentialsPath)
+             ->withDatabaseUri('https://dialecto-c14c1-default-rtdb.asia-southeast1.firebasedatabase.app/') // Use the correct URL
+             ->createDatabase();
+ 
+         // Initialize Firebase Storage
+         $this->firebaseStorage = (new Factory)
+             ->withServiceAccount($firebaseCredentialsPath)
+             ->createStorage();
+ 
+         // Check if the Storage instance is properly initialized
+         if ($this->firebaseStorage === null) {
+             throw new \Exception("Failed to initialize Firebase Storage.");
+         }
+     }
+
+
     public function index()
     {
         $currentUserId = Auth::id(); // Get the currently authenticated user's ID
@@ -165,181 +194,182 @@ class UserController extends Controller
     /////////////////////////////////////////////////////////////////////
      //second logic// 
      
-     protected $firebaseStorage;
-
-     public function __construct()
+     
+ 
+     // List word suggestions by current user
+     public function wordSuggested()
      {
-         $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
- 
-         if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
-             throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");
+         $userId = Auth::id();
+         // Fetch suggested words for the specific user
+         $suggestedWords = $this->database
+             ->getReference("suggested_words/{$userId}")
+             ->getValue();
+     
+         // Check if $suggestedWords is null and convert it to an empty array if needed
+         if (is_null($suggestedWords)) {
+             $suggestedWords = []; // Set to an empty array to prevent null error in Blade
+         } else {
+             // If the data is retrieved, convert it to a more manageable format
+             $suggestedWords = array_values($suggestedWords); // Optional: Reindex if needed
          }
- 
-         $this->firebaseStorage = (new Factory)
-             ->withServiceAccount($firebaseCredentialsPath)
-             ->createStorage();
+     
+         return view('userUser.suggestions.userwords', compact('suggestedWords'));
      }
 
-    public function wordSuggested()
-    {
-        $user = Auth::user();
+     public function selectUserCourseLesson()
+{
+    // Logic to get courses and lessons, for example:
+    $courses = $this->database->getReference('courses')->getValue(); // Adjust this based on your structure
+    
+    return view('userUser.suggestions.selectUserCourseLesson', compact('courses'));
+}  
 
-        $suggestedWords = SuggestedWord::with(['course', 'lesson'])
-            ->where('user_id', $user->id)
-            ->get();
-        return view('userUser.suggestions.userwords', compact('suggestedWords'));
+public function addUserSuggestedWord($courseId, $lessonId)
+{
+    // Retrieve the course from Firebase Realtime Database
+    $courseRef = $this->database->getReference("courses/{$courseId}");
+    $course = $courseRef->getValue();
+
+    // Retrieve the lesson from Firebase Realtime Database
+    $lessonRef = $this->database->getReference("courses/{$courseId}/lessons/{$lessonId}");
+    $lesson = $lessonRef->getValue();
+
+    // Check if course or lesson is null (similar to findOrFail in Eloquent)
+    if (!$course || !$lesson) {
+        abort(404, 'Course or Lesson not found.');
     }
 
-    public function viewUpdateSelected($id)
-    {
-        $suggestedWord = SuggestedWord::findOrFail($id);
-        return view('userUser.suggestions.updateSelected', compact('suggestedWord'));
-    }
+    return view('userUser.suggestions.addUserSuggestedWord', compact('course', 'lesson','courseId','lessonId'));
+}
 
 
-    public function deleteSelectedWord($id)
-    {
-        $word = SuggestedWord::findOrFail($id);
-        $bucket = $this->firebaseStorage->getBucket();
-    
-        if ($word->video) {
-            // Delete video from Firebase Storage
-            $videoPath = parse_url($word->video, PHP_URL_PATH);
-            $object = $bucket->object($videoPath);
-            if ($object->exists()) {
-                $object->delete();
-            }
-        }
-    
-        // Delete the word from the database
-        $word->delete();
-    
-        return redirect()->route('user.wordSuggested')->with('success', 'Translation deleted successfully.');
-    }
+     
+     // View a specific suggested word to update
+     public function viewUpdateSelected($id)
+     {
+        
+         $suggestedWord = $this->database->getReference("suggested_words/{$id}")->getValue();
+         
+         // Check if suggestedWord exists
+         if ($suggestedWord === null) {
+             return redirect()->route('user.wordSuggested')->with('error', 'Suggested word not found.');
+         }
+     
+         return view('userUser.suggestions.updateSelected', [
+             'suggestedWordId' => $id,
+             'suggestedWord' => $suggestedWord,
+         ]);
+     }
+     
+ 
+     // Delete a word from Firebase
+     public function deleteSelectedWord($id)
+     {
+         $word = $this->database->getReference("suggested_words/{$id}")->getValue();
+         $bucket = $this->firebaseStorage->getBucket();
+ 
+         if ($word['video']) {
+             // Delete video from Firebase Storage
+             $videoPath = parse_url($word['video'], PHP_URL_PATH);
+             $object = $bucket->object($videoPath);
+             if ($object->exists()) {
+                 $object->delete();
+             }
+         }
+ 
+         // Delete the word from Firebase Realtime Database
+         $this->database->getReference("suggested_words/{$id}")->remove();
+ 
+         return redirect()->route('user.wordSuggested')->with('success', 'Translation deleted successfully.');
+     }
+ 
+     // Update a selected word
+     public function updateSelected(Request $request, $id)
+     {
 
-
-
-
-
-
-
-
-
-
-
-    public function updateSelected(Request $request, $id)
-    {
-        $request->validate([
-            'text' => 'required|string|max:255',
-            'english' => 'required|string|max:255',
-            'video' => 'nullable|file|mimes:mp4,avi,mov|max:20480',
-        ]);
-    
-        $suggestedWord = SuggestedWord::findOrFail($id);
-        $suggestedWord->text = $request->input('text');
-        $suggestedWord->english = $request->input('english');
-    
-        $bucket = $this->firebaseStorage->getBucket();
-    
-        if ($request->hasFile('video')) {
-            if ($suggestedWord->video) {
-                // Delete the previous video from Firebase Storage
-                $previousVideoPath = parse_url($suggestedWord->video, PHP_URL_PATH);
-                $object = $bucket->object($previousVideoPath);
-                if ($object->exists()) {
-                    $object->delete();
-                }
-            }
-    
-            // Upload new video to Firebase Storage
-            $uploadedFile = $request->file('video');
-            $firebasePath = 'videos/' . $uploadedFile->getClientOriginalName();
-    
-            $bucket->upload(
-                fopen($uploadedFile->getRealPath(), 'r'),
-                ['name' => $firebasePath]
-            );
-    
-            // Get the public URL of the uploaded video
-            $videoUrl = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
-    
-            // Update the video URL in the database
-            $suggestedWord->video = $videoUrl;
-        }
-    
-        $suggestedWord->save();
-    
-        return redirect()->route('user.wordSuggested')->with('success', 'Word updated successfully.');
-    }
-
-    public function selectUserCourseLesson(Course $course, Lesson $lesson)
-    {
-        $courses = Course::with('lessons')->get();
-        $lessons = Lesson::with('course')->get();
-
-
-        return view('userUser.suggestions.selectUserCourseLesson', compact('courses', 'lessons'));
-    }
-
-
-
-
-
-
-
-
-
-
-    public function addUserSuggestedWord($courseId, $lessonId)
-    {
-        $course = Course::findOrFail($courseId);
-        $lesson = Lesson::findOrFail($lessonId);
-
-        return view('userUser.suggestions.addUserSuggestedWord', compact('course', 'lesson'));
-    }
-
-    public function submitWordSuggested(Request $request, $courseId, $lessonId)
-    {
-        // Validate the form data
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'course_id' => 'required|exists:courses,id',
-            'lesson_id' => 'required|exists:lessons,id',
-            'video' => 'nullable|file|mimes:mp4,mov,avi,wmv|max:20480',
-            'text' => 'required|string',
-            'english' => 'required|string',
-        ]);
-    
-        // Handle the video file upload to Firebase Storage if it exists
-        $videoUrl = null;
-        if ($request->hasFile('video')) {
-            $uploadedFile = $request->file('video');
-            $firebasePath = 'videos/' . $uploadedFile->getClientOriginalName();
-    
-            $bucket = $this->firebaseStorage->getBucket();
-            $bucket->upload(
-                fopen($uploadedFile->getRealPath(), 'r'),
-                ['name' => $firebasePath]
-            );
-    
-            // Get the public URL of the uploaded video
-            $videoUrl = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
-        }
-    
-        // Store the data into the database
-        SuggestedWord::create([
-            'user_id' => auth()->id(),
-            'course_id' => $courseId,
-            'lesson_id' => $lessonId,
-            'video' => $videoUrl, // Save Firebase video URL
-            'text' => $request->text,
-            'english' => $request->english,
-        ]);
-    
-        // Redirect after successful submission
-        return redirect()->route('user.wordSuggested')->with('success', 'Suggestions submitted successfully.');
-    }
-
+        
+         $request->validate([
+             'text' => 'required|string|max:255',
+             'english' => 'required|string|max:255',
+             'video' => 'nullable|file|mimes:mp4,avi,mov|max:20480',
+         ]);
+ 
+         $bucket = $this->firebaseStorage->getBucket();
+         $wordRef = $this->database->getReference("suggested_words/{$id}");
+ 
+         $updatedWord = [
+             'text' => $request->input('text'),
+             'english' => $request->input('english')
+         ];
+ 
+         if ($request->hasFile('video')) {
+             // Delete previous video if exists
+             $word = $wordRef->getValue();
+             if (isset($word['video'])) {
+                 $previousVideoPath = parse_url($word['video'], PHP_URL_PATH);
+                 $object = $bucket->object($previousVideoPath);
+                 if ($object->exists()) {
+                     $object->delete();
+                 }
+             }
+ 
+             // Upload new video to Firebase Storage
+             $uploadedFile = $request->file('video');
+             $firebasePath = 'videos/' . $uploadedFile->getClientOriginalName();
+             $bucket->upload(
+                 fopen($uploadedFile->getRealPath(), 'r'),
+                 ['name' => $firebasePath]
+             );
+ 
+             $updatedWord['video'] = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
+         }
+ 
+         $wordRef->update($updatedWord);
+ 
+         return redirect()->route('user.wordSuggested')->with('success', 'Word updated successfully.');
+     }
+ 
+     // Submit a new word suggestion
+     public function submitWordSuggested(Request $request, $courseId, $lessonId)
+     {
+         $request->validate([
+             'text' => 'required|string|max:255',
+             'english' => 'required|string|max:255',
+             'video' => 'nullable|file|mimes:mp4,mov,avi,wmv|max:20480',
+         ]);
+ 
+         $userId = Auth::id();
+         $videoUrl = null;
+         $status = 'pending';
+ 
+         if ($request->hasFile('video')) {
+             $uploadedFile = $request->file('video');
+             $firebasePath = 'videos/' . $uploadedFile->getClientOriginalName();
+             $bucket = $this->firebaseStorage->getBucket();
+             $bucket->upload(
+                 fopen($uploadedFile->getRealPath(), 'r'),
+                 ['name' => $firebasePath]
+             );
+ 
+             $videoUrl = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
+         }
+ 
+         $suggestedWord = [
+             'user_id' => $userId,
+             'course_id' => $courseId,
+             'lesson_id' => $lessonId,
+             'text' => $request->input('text'),
+             'english' => $request->input('english'),
+             'video' => $videoUrl,
+             'status' => $status,
+         ];
+ 
+         // Save the suggested word in Firebase
+         $this->database->getReference("suggested_words/{$userId}")->push($suggestedWord);
+ 
+         return redirect()->route('user.wordSuggested')->with('success', 'Word suggested successfully.');
+     }
+ 
 
 
 

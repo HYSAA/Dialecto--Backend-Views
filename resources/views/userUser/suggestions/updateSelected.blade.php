@@ -9,20 +9,21 @@
     <div class="col-lg-12 margin-tb">
         <div class="row justify-content-center" style="width: 100%;">
 
-            <form action="{{ route('user.updateSelected', [$suggestedWord->id]) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('user.updateSelected', [$suggestedWordId]) }}" method="POST" enctype="multipart/form-data">
+
                 @csrf
-                <input type="hidden" name="{{ $suggestedWord->id }}" value="{{ $suggestedWord->id }}">
+                <input type="hidden" name="suggestedWordId" value="{{ $suggestedWordId }}">
 
                 <div class="card mb-2 mr-2" style="padding:15px;">
                     <div style="padding-top:15px;">
                         <strong for="text" class="form-group">Word:</strong><br>
                         <input type="text" name="text" id="text" required class="form-control form-control-lg"
-                            value="{{$suggestedWord->text}}">
+                        value="{{ $suggestedWord['text'] ?? '' }}">
                     </div>
                     <div style="padding-top:15px;">
                         <strong for="english">English Word:</strong><br>
                         <input type="text" name="english" id="english" required class="form-control form-control-lg"
-                            value="{{$suggestedWord->english}}">
+                        value="{{ $suggestedWord['english'] ?? '' }}">
                     </div>
                     <div>
                         <strong for="video">Video:</strong><br>
@@ -52,3 +53,5 @@
         padding: 10px;
     }
 </style>
+
+@endsection
