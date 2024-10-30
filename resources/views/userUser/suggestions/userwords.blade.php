@@ -88,7 +88,7 @@
                         <span>{{ route('user.viewUpdateSelected', ['id' => $word['user_id'] ?? $wordId]) }}</span>
 
                         <a class="btn btn-success {{ !$isClickable ? 'disabled' : '' }}"
-                            href="{{ $isClickable ? route('user.viewUpdateSelected', ['id' => $word['user_id'] ?? $wordId]) : '#' }}"
+                            href="{{ $isClickable ? route('user.viewUpdateSelected', $wordId ) : '#' }}"
                             {{ !$isClickable ? 'aria-disabled=true' : '' }}>
                             Update Selected
                         </a>

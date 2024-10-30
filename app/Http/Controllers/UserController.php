@@ -256,8 +256,14 @@ class UserController extends Controller
     // View a specific suggested word to update
     public function viewUpdateSelected($id)
     {
+        $user = Auth::user();
+        $userId = $user->firebase_id;
 
-        $suggestedWord = $this->database->getReference("suggested_words/{$id}")->getValue();
+
+
+        $suggestedWord = $this->database->getReference("suggested_words/{$userId}/{$id}")->getValue();
+
+        // dd($suggestedWord);
 
         // Check if suggestedWord exists
         if ($suggestedWord === null) {
@@ -306,43 +312,49 @@ class UserController extends Controller
     // Update a selected word
     public function updateSelected(Request $request, $id)
     {
-
+        $user = Auth::user();
+        $userId = $user->firebase_id;
 
         $request->validate([
             'text' => 'required|string|max:255',
             'english' => 'required|string|max:255',
-            'video' => 'nullable|file|mimes:mp4,avi,mov|max:20480',
+            // 'video' => 'nullable|file|mimes:mp4,avi,mov|max:20480',
         ]);
 
         $bucket = $this->firebaseStorage->getBucket();
-        $wordRef = $this->database->getReference("suggested_words/{$id}");
+        $wordRef = $this->database->getReference("suggested_words/{$userId}/{$id}");
 
         $updatedWord = [
             'text' => $request->input('text'),
             'english' => $request->input('english')
         ];
 
-        if ($request->hasFile('video')) {
-            // Delete previous video if exists
-            $word = $wordRef->getValue();
-            if (isset($word['video'])) {
-                $previousVideoPath = parse_url($word['video'], PHP_URL_PATH);
-                $object = $bucket->object($previousVideoPath);
-                if ($object->exists()) {
-                    $object->delete();
-                }
-            }
+        //please fix ang video. dapat bisag walay vid ang entry dapat naay vid nga attribute
 
-            // Upload new video to Firebase Storage
-            $uploadedFile = $request->file('video');
-            $firebasePath = 'videos/' . $uploadedFile->getClientOriginalName();
-            $bucket->upload(
-                fopen($uploadedFile->getRealPath(), 'r'),
-                ['name' => $firebasePath]
-            );
 
-            $updatedWord['video'] = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
-        }
+
+
+        // if ($request->hasFile('video')) {
+
+        //     $word = $wordRef->getValue();
+        //     if (isset($word['video'])) {
+        //         $previousVideoPath = parse_url($word['video'], PHP_URL_PATH);
+        //         $object = $bucket->object($previousVideoPath);
+        //         if ($object->exists()) {
+        //             $object->delete();
+        //         }
+        //     }
+
+        //     // Upload new video to Firebase Storage
+        //     $uploadedFile = $request->file('video');
+        //     $firebasePath = 'videos/' . $uploadedFile->getClientOriginalName();
+        //     $bucket->upload(
+        //         fopen($uploadedFile->getRealPath(), 'r'),
+        //         ['name' => $firebasePath]
+        //     );
+
+        //     $updatedWord['video'] = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
+        // }
 
         $wordRef->update($updatedWord);
 
