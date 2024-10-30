@@ -34,27 +34,27 @@
 
                 @foreach ($suggestedWords as $wordId => $word)
                 @php
-    $statusColor = 'black';
-    $statusText = 'N/A';
+                $statusColor = 'black';
+                $statusText = 'N/A';
 
-    if (isset($word['status'])) {
-        $statusText = $word['status'];
-        switch ($statusText) {
-            case 'approved':
+                if (isset($word['status'])) {
+                $statusText = $word['status'];
+                switch ($statusText) {
+                case 'approved':
                 $statusColor = 'green';
                 break;
-            case 'disapproved':
+                case 'disapproved':
                 $statusColor = 'red';
                 break;
-            case 'pending':
+                case 'pending':
                 $statusColor = 'gray';
                 break;
-        }
-    }
+                }
+                }
 
-    // Button should be clickable only if the status is 'pending'
-    $isClickable = $statusText === 'pending';
-@endphp
+                // Button should be clickable only if the status is 'pending'
+                $isClickable = $statusText === 'pending';
+                @endphp
                 <tr>
                     <td>{{ $word['text'] ?? 'N/A' }}</td>
                     <td>{{ $word['english'] ?? 'N/A' }}</td>
@@ -64,12 +64,12 @@
                     <td style="display: flex; justify-content: center; align-items: center; height: 100%;">
                         <div class="box">
                             @if (isset($word['video']))
-                                <video controls class="vid-content">
-                                    <source src="{{ $word['video'] }}" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
+                            <video controls class="vid-content">
+                                <source src="{{ $word['video'] }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                             @else
-                                No video available
+                            No video available
                             @endif
                         </div>
                     </td>
@@ -79,8 +79,13 @@
                     </td>
 
                     <td>
-                    <a class="btn btn-success {{ !$isClickable ? 'disabled' : '' }}"
-                            href="{{ $isClickable ? route('user.viewUpdateSelected',['id' => $wordId]) : '#' }}" {{ !$isClickable ? 'aria-disabled="true"' : '' }}>
+
+
+                        <span>{{ route('user.viewUpdateSelected', ['id' => $word['user_id'] ?? $wordId]) }}</span>
+
+                        <a class="btn btn-success {{ !$isClickable ? 'disabled' : '' }}"
+                            href="{{ $isClickable ? route('user.viewUpdateSelected', ['id' => $word['user_id'] ?? $wordId]) : '#' }}"
+                            {{ !$isClickable ? 'aria-disabled=true' : '' }}>
                             Update Selected
                         </a>
 
@@ -88,7 +93,7 @@
                         <a href="{{ route('user.deleteSelectedWord', ['id' => $wordId]) }}" class="btn btn-danger {{ !$isClickable ? 'disabled' : '' }}">Delete</a>
 
 
-</td>
+                    </td>
                 </tr>
                 @endforeach
 
