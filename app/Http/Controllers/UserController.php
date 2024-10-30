@@ -186,11 +186,6 @@ class UserController extends Controller
 
 
 
-
-
-
-
-
     /////////////////////////////////////////////////////////////////////
     //second logic// 
 
@@ -203,20 +198,22 @@ class UserController extends Controller
         $user = Auth::user();
         $userId = $user->firebase_id;
 
+        // dd($user);
 
 
-        // Fetch suggested words for the specific user
+
         $suggestedWords = $this->database
             ->getReference("suggested_words/{$userId}")
             ->getValue();
 
+        // dd($suggestedWords); 
+
         // Check if $suggestedWords is null and convert it to an empty array if needed
         if (is_null($suggestedWords)) {
             $suggestedWords = []; // Set to an empty array to prevent null error in Blade
-        } else {
-            // If the data is retrieved, convert it to a more manageable format
-            $suggestedWords = array_values($suggestedWords); // Optional: Reindex if needed
         }
+
+
 
         return view('userUser.suggestions.userwords', compact('suggestedWords'));
     }
@@ -277,20 +274,31 @@ class UserController extends Controller
     // Delete a word from Firebase
     public function deleteSelectedWord($id)
     {
-        $word = $this->database->getReference("suggested_words/{$id}")->getValue();
+
+        $user = Auth::user();
+        $userId = $user->firebase_id;
+
+
+
+        $word = $this->database->getReference("suggested_words/{$userId}/{$id}")->getValue();
+
+        // dd($word);
         $bucket = $this->firebaseStorage->getBucket();
 
-        if ($word['video']) {
-            // Delete video from Firebase Storage
-            $videoPath = parse_url($word['video'], PHP_URL_PATH);
-            $object = $bucket->object($videoPath);
-            if ($object->exists()) {
-                $object->delete();
-            }
-        }
+
+        // dili ni mo work sa ubos kay walay na create video nga attribute
+
+        // if ($word['video']) {
+
+        //     $videoPath = parse_url($word['video'], PHP_URL_PATH);
+        //     $object = $bucket->object($videoPath);
+        //     if ($object->exists()) {
+        //         $object->delete();
+        //     }
+        // }
 
         // Delete the word from Firebase Realtime Database
-        $this->database->getReference("suggested_words/{$id}")->remove();
+        $this->database->getReference("suggested_words/{$userId}/{$id}")->remove();
 
         return redirect()->route('user.wordSuggested')->with('success', 'Translation deleted successfully.');
     }

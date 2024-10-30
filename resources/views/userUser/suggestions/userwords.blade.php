@@ -57,6 +57,10 @@
                 @endphp
                 <tr>
                     <td>{{ $word['text'] ?? 'N/A' }}</td>
+
+                    <td>{{ $wordId }}</td>
+
+
                     <td>{{ $word['english'] ?? 'N/A' }}</td>
                     <td>{{ $word['courseName'] ?? 'N/A' }}</td>
                     <td>{{ $word['lessonTitle'] ?? 'N/A' }}</td>
@@ -90,7 +94,7 @@
                         </a>
 
 
-                        <a href="{{ route('user.deleteSelectedWord', ['id' => $wordId]) }}" class="btn btn-danger {{ !$isClickable ? 'disabled' : '' }}">Delete</a>
+                        <a href="{{ route('user.deleteSelectedWord', $wordId) }}" class="btn btn-danger {{ !$isClickable ? 'disabled' : '' }}">Delete</a>
 
 
                     </td>
