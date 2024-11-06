@@ -446,9 +446,6 @@ class UserController extends Controller
             ->getValue();
 
 
-
-
-
         $unverifiedUsers = array_filter($userCredentials, function ($user) {
             return isset($user['status']) && $user['status'] === 'pending';
         });
@@ -468,35 +465,56 @@ class UserController extends Controller
     }
 
 
-    public function postVerify($id)
+    public function postVerify($userId)
     {
-        // Find the user by ID
-        $user = User::find($id);
 
-        // Check if the user exists
-        if ($user) {
-            // Update the usertype to 'expert'
-            $user->usertype = 'expert';
+        $type = 'expert';
+        $credChange = 'verified';
 
-            // Save the changes to the database
-            $user->save();
+        $updatedUserType = [
+            'usertype' => $type
+        ];
 
-            // Optional: Fetch related credentials if needed
-            $cred = $user->credential;
+        $updatedCredential = [
+            'status' => $credChange
+        ];
 
-            $cred->status = '1';
+        $userTypeRef = $this->database->getReference("users/{$userId}");
 
-            $cred->save();
+        $userTypeRef->update($updatedUserType);
 
 
 
+        $creChangeRef = $this->database->getReference("credentials/{$userId}");
 
-            return redirect()->route('admin.showPendingExpert')->with('success', 'User has been verified.');
-        }
+
+        $creChangeRef->update($updatedCredential);
+
+
+
+
+        return redirect()->route('admin.showPendingExpert')->with('success', 'User has been verified.');
     }
 
-    public function postDeny()
+    public function postDeny($userId)
     {
-        return view('users.pendingVerification', compact('unverifiedUsers', 'verifiedUsers', 'deniedUsers'));
+
+        $credChange = 'denied';
+
+
+        $updatedCredential = [
+            'status' => $credChange
+        ];
+
+
+        $creChangeRef = $this->database->getReference("credentials/{$userId}");
+
+
+        $creChangeRef->update($updatedCredential);
+
+
+
+
+        return redirect()->route('admin.showPendingExpert')->with('success', 'User application has been denied.');
     }
 }

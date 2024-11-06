@@ -130,7 +130,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 
     Route::get('/pending-expert', [UserController::class, 'showPendingExpert'])->name('admin.showPendingExpert');
+
     Route::get('/post-verify/{id}', [UserController::class, 'postVerify'])->name('admin.postVerify');
+    Route::get('/post-postDeny/{id}', [UserController::class, 'postDeny'])->name('admin.postDeny');
 
 
 

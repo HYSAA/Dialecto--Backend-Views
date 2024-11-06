@@ -60,15 +60,14 @@
                                 @endif
                             </div>
                         </td>
-
                         <td>
                             <a class="btn btn-success" href="{{ route('admin.postVerify', ['id' => $userId]) }}">Verify</a>
-                            <a class="btn btn-danger" href="#">Deny</a>
-                        </td>
-                        @endif
-                        @endforeach
+                            <a class="btn btn-danger" href="{{ route('admin.postDeny', ['id' => $userId]) }}">Deny</a>
 
+                        </td>
                     </tr>
+                    @endif
+                    @endforeach
 
                 </tbody>
 
