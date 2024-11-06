@@ -200,8 +200,6 @@ class UserController extends Controller
 
         // dd($user);
 
-
-
         $suggestedWords = $this->database
             ->getReference("suggested_words/{$userId}")
             ->getValue();
@@ -217,9 +215,6 @@ class UserController extends Controller
 
         return view('userUser.suggestions.userwords', compact('suggestedWords'));
     }
-
-
-
 
 
 
@@ -365,9 +360,25 @@ class UserController extends Controller
 
         $user = Auth::user();
         $userId = $user->firebase_id;
-
         $videoUrl = null;
         $status = 'pending';
+
+
+
+        $courseData = $this->database
+            ->getReference("courses/{$courseId}")
+            ->getValue();
+
+        $courseName = isset($courseData['name']) ? $courseData['name'] : null;
+
+
+
+
+        $lessonData = $this->database
+            ->getReference("courses/{$courseId}/lessons/{$lessonId}")
+            ->getValue();
+
+        $lessonName = isset($lessonData['title']) ? $lessonData['title'] : null;
 
 
 
@@ -390,7 +401,9 @@ class UserController extends Controller
         $suggestedWord = [
             'user_id' => $userId,
             'course_id' => $courseId,
+            'course_name' => $courseName,
             'lesson_id' => $lessonId,
+            'lesson_name' => $lessonName,
             'text' => $request->input('text'),
             'english' => $request->input('english'),
             'video' => $videoUrl,

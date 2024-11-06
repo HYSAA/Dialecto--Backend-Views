@@ -59,8 +59,8 @@
                     <td>{{ $word['text'] ?? 'N/A' }}</td>
 
                     <td>{{ $word['english'] ?? 'N/A' }}</td>
-                    <td>{{ $word['courseName'] ?? 'N/A' }}</td>
-                    <td>{{ $word['lessonTitle'] ?? 'N/A' }}</td>
+                    <td>{{ $word['course_name'] ?? 'N/A' }}</td>
+                    <td>{{ $word['lesson_name'] ?? 'N/A' }}</td>
 
                     <td style="display: flex; justify-content: center; align-items: center; height: 100%;">
                         <div class="box">
@@ -82,7 +82,7 @@
                     <td>
 
 
-                        <span>{{ route('user.viewUpdateSelected', ['id' => $word['user_id'] ?? $wordId]) }}</span>
+                        <!-- <span>{{ route('user.viewUpdateSelected', ['id' => $word['user_id'] ?? $wordId]) }}</span> -->
 
                         <a class="btn btn-success {{ !$isClickable ? 'disabled' : '' }}"
                             href="{{ $isClickable ? route('user.viewUpdateSelected', $wordId ) : '#' }}"
