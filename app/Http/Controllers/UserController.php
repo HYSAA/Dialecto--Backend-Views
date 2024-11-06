@@ -434,39 +434,37 @@ class UserController extends Controller
     public function showPendingExpert()
     {
 
-        // $unverifiedUsers = User::where('usertype', 'user')
-        //     ->where('credentials', 1)
-        //     ->with('credential')
-        //     ->get();
 
-
-        $unverifiedUsers = User::where('usertype', 'user')
-            ->where('credentials', 1)
-            ->whereHas('credential', function ($query) {
-                $query->where('status', null);
-            })
-            ->with('credential')
-            ->get();
+        $userCredentials = $this->database
+            ->getReference("credentials")
+            ->getValue();
 
 
 
-        $verifiedUsers = User::where('usertype', 'expert')
-            ->where('credentials', 1)
-            ->whereHas('credential', function ($query) {
-                $query->where('status', 1);
-            })
-            ->with('credential')
-            ->get();
+        $userDetails = $this->database
+            ->getReference("users")
+            ->getValue();
 
-        $deniedUsers = User::where('usertype', 'user')
-            ->where('credentials', 1)
-            ->whereHas('credential', function ($query) {
-                $query->where('status', 0);
-            })
-            ->with('credential')
-            ->get();
-        // return view('suggestions.addUserSuggestedWord', compact());
-        return view('users.pendingVerification', compact('unverifiedUsers', 'verifiedUsers', 'deniedUsers'));
+
+
+
+
+        $unverifiedUsers = array_filter($userCredentials, function ($user) {
+            return isset($user['status']) && $user['status'] === 'pending';
+        });
+
+        $verifiedUsers = array_filter($userCredentials, function ($user) {
+            return isset($user['status']) && $user['status'] === 'verified';
+        });
+
+        $deniedUsers = array_filter($userCredentials, function ($user) {
+            return isset($user['status']) && $user['status'] === 'denied';
+        });
+
+
+
+
+        return view('users.pendingVerification', compact('unverifiedUsers', 'verifiedUsers', 'deniedUsers', 'userDetails'));
     }
 
 

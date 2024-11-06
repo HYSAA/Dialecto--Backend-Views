@@ -42,34 +42,44 @@
                     </tr>
 
 
-                    @foreach ($unverifiedUsers as $user)
+                    @foreach ($unverifiedUsers as $userId => $user) <!-- Loop through unverified users -->
+                    @if (isset($userDetails[$userId])) <!-- Check if user details exist for this user -->
+                    @php
+                    $userDetail = $userDetails[$userId]; // Get the user details for the current user
+                    @endphp
                     <tr>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->credential->language_experty }}</td>
+                        <td>{{ $userDetail['name'] }}</td>
+                        <td>{{ $userDetail['email'] }}</td>
+                        <td>{{ $user['courseName'] ?? 'N/A' }}</td>
                         <td style="width: 350px;">
                             <div style="width: 350px; height: 350px;">
-                                @if($user->credential->credentials)
-                                <img src="{{ asset('storage/' . $user->credential->credentials) }}" alt="Course Image" class="image-thumbnail">
+                                @if($user['image'])
+                                <img src="{{ $user['image'] }}" alt="Credential Image" class="image-thumbnail">
                                 @else
                                 No image available
                                 @endif
                             </div>
                         </td>
+
                         <td>
-
-                            <a class="btn btn-success" href="{{ route('admin.postVerify', ['id' => $user->id]) }}">Verify</a>
-
+                            <a class="btn btn-success" href="{{ route('admin.postVerify', ['id' => $userId]) }}">Verify</a>
                             <a class="btn btn-danger" href="#">Deny</a>
-
                         </td>
+                        @endif
+                        @endforeach
+
                     </tr>
-                    @endforeach
+
                 </tbody>
 
             </table>
         </div>
     </div>
+
+
+
+
+
 
     <div class="row" id="approvedTable" style="overflow-y: auto; display: none;">
         <div class="col-lg-12 margin-tb">
@@ -83,15 +93,19 @@
                 </tr>
 
 
-                @foreach ($verifiedUsers as $user)
+                @foreach ($verifiedUsers as $userId => $user) <!-- Loop through unverified users -->
+                @if (isset($userDetails[$userId])) <!-- Check if user details exist for this user -->
+                @php
+                $userDetail = $userDetails[$userId]; // Get the user details for the current user
+                @endphp
                 <tr>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->credential->language_experty }}</td>
+                    <td>{{ $userDetail['name'] }}</td>
+                    <td>{{ $userDetail['email'] }}</td>
+                    <td>{{ $user['courseName'] ?? 'N/A' }}</td>
                     <td style="width: 350px;">
                         <div style="width: 350px; height: 350px;">
-                            @if($user->credential->credentials)
-                            <img src="{{ asset('storage/' . $user->credential->credentials) }}" alt="Course Image" class="image-thumbnail">
+                            @if($user['image'])
+                            <img src="{{ $user['image'] }}" alt="Credential Image" class="image-thumbnail">
                             @else
                             No image available
                             @endif
@@ -99,6 +113,7 @@
                     </td>
 
                 </tr>
+                @endif
                 @endforeach
 
 
@@ -116,16 +131,19 @@
 
                 </tr>
 
-
-                @foreach ($deniedUsers as $user)
+                @foreach ($deniedUsers as $userId => $user) <!-- Loop through unverified users -->
+                @if (isset($userDetails[$userId])) <!-- Check if user details exist for this user -->
+                @php
+                $userDetail = $userDetails[$userId]; // Get the user details for the current user
+                @endphp
                 <tr>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->credential->language_experty }}</td>
+                    <td>{{ $userDetail['name'] }}</td>
+                    <td>{{ $userDetail['email'] }}</td>
+                    <td>{{ $user['courseName'] ?? 'N/A' }}</td>
                     <td style="width: 350px;">
                         <div style="width: 350px; height: 350px;">
-                            @if($user->credential->credentials)
-                            <img src="{{ asset('storage/' . $user->credential->credentials) }}" alt="Course Image" class="image-thumbnail">
+                            @if($user['image'])
+                            <img src="{{ $user['image'] }}" alt="Credential Image" class="image-thumbnail">
                             @else
                             No image available
                             @endif
@@ -133,6 +151,7 @@
                     </td>
 
                 </tr>
+                @endif
                 @endforeach
 
 
@@ -142,6 +161,29 @@
             </table>
         </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
 
 

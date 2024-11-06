@@ -175,7 +175,7 @@ class ControllerProfile extends Controller
         }
 
 
-        $this->database->getReference("credentials/{$userId}")->push($credentials);
+        $this->database->getReference("credentials/{$userId}")->set($credentials);
 
 
 
