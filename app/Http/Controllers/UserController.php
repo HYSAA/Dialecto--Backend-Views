@@ -284,8 +284,6 @@ class UserController extends Controller
         $user = Auth::user();
         $userId = $user->firebase_id;
 
-
-
         $word = $this->database->getReference("suggested_words/{$userId}/{$id}")->getValue();
 
         // dd($word);
@@ -294,14 +292,14 @@ class UserController extends Controller
 
         // dili ni mo work sa ubos kay walay na create video nga attribute
 
-        // if ($word['video']) {
+        if ($word['video']) {
 
-        //     $videoPath = parse_url($word['video'], PHP_URL_PATH);
-        //     $object = $bucket->object($videoPath);
-        //     if ($object->exists()) {
-        //         $object->delete();
-        //     }
-        // }
+            $videoPath = parse_url($word['video'], PHP_URL_PATH);
+            $object = $bucket->object($videoPath);
+            if ($object->exists()) {
+                $object->delete();
+            }
+        }
 
         // Delete the word from Firebase Realtime Database
         $this->database->getReference("suggested_words/{$userId}/{$id}")->remove();
@@ -318,7 +316,7 @@ class UserController extends Controller
         $request->validate([
             'text' => 'required|string|max:255',
             'english' => 'required|string|max:255',
-            // 'video' => 'nullable|file|mimes:mp4,avi,mov|max:20480',
+            'video' => 'nullable|file|mimes:mp4,avi,mov|max:20480',
         ]);
 
         $bucket = $this->firebaseStorage->getBucket();
@@ -329,32 +327,27 @@ class UserController extends Controller
             'english' => $request->input('english')
         ];
 
-        //please fix ang video. dapat bisag walay vid ang entry dapat naay vid nga attribute
+        if ($request->hasFile('video')) {
 
+            $word = $wordRef->getValue();
+            if (isset($word['video'])) {
+                $previousVideoPath = parse_url($word['video'], PHP_URL_PATH);
+                $object = $bucket->object($previousVideoPath);
+                if ($object->exists()) {
+                    $object->delete();
+                }
+            }
 
+            // Upload new video to Firebase Storage
+            $uploadedFile = $request->file('video');
+            $firebasePath = 'videos/' . $uploadedFile->getClientOriginalName();
+            $bucket->upload(
+                fopen($uploadedFile->getRealPath(), 'r'),
+                ['name' => $firebasePath]
+            );
 
-
-        // if ($request->hasFile('video')) {
-
-        //     $word = $wordRef->getValue();
-        //     if (isset($word['video'])) {
-        //         $previousVideoPath = parse_url($word['video'], PHP_URL_PATH);
-        //         $object = $bucket->object($previousVideoPath);
-        //         if ($object->exists()) {
-        //             $object->delete();
-        //         }
-        //     }
-
-        //     // Upload new video to Firebase Storage
-        //     $uploadedFile = $request->file('video');
-        //     $firebasePath = 'videos/' . $uploadedFile->getClientOriginalName();
-        //     $bucket->upload(
-        //         fopen($uploadedFile->getRealPath(), 'r'),
-        //         ['name' => $firebasePath]
-        //     );
-
-        //     $updatedWord['video'] = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
-        // }
+            $updatedWord['video'] = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
+        }
 
         $wordRef->update($updatedWord);
 
@@ -373,11 +366,11 @@ class UserController extends Controller
         $user = Auth::user();
         $userId = $user->firebase_id;
 
-
-
-
         $videoUrl = null;
         $status = 'pending';
+
+
+
 
         if ($request->hasFile('video')) {
             $uploadedFile = $request->file('video');
@@ -389,7 +382,10 @@ class UserController extends Controller
             );
 
             $videoUrl = $bucket->object($firebasePath)->signedUrl(new \DateTime('+100 years'));
+        } else {
+            $videoUrl = 'null';
         }
+
 
         $suggestedWord = [
             'user_id' => $userId,

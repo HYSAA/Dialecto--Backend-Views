@@ -58,16 +58,13 @@
                 <tr>
                     <td>{{ $word['text'] ?? 'N/A' }}</td>
 
-                    <td>{{ $wordId }}</td>
-
-
                     <td>{{ $word['english'] ?? 'N/A' }}</td>
                     <td>{{ $word['courseName'] ?? 'N/A' }}</td>
                     <td>{{ $word['lessonTitle'] ?? 'N/A' }}</td>
 
                     <td style="display: flex; justify-content: center; align-items: center; height: 100%;">
                         <div class="box">
-                            @if (isset($word['video']))
+                            @if (isset($word['video']) && $word['video'] !== null && $word['video'] !== 'null')
                             <video controls class="vid-content">
                                 <source src="{{ $word['video'] }}" type="video/mp4">
                                 Your browser does not support the video tag.
