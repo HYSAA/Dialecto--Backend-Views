@@ -31,10 +31,16 @@
 
                     <select name="langExperties" id="experties" class="form-control" required>
                         <option value="" disabled selected>Select a language expertise</option>
-                        @foreach($courses as $course)
-                        <option value="{{ $course->name }}">{{ $course->name }}</option>
+                        @if($courses)
+                        @foreach($courses as $id => $courseDetails)
+                        <option value="{{ $id }}">{{ $courseDetails['name'] }}</option>
                         @endforeach
+                        @else
+                        <option value="" disabled>No courses available</option>
+                        @endif
                     </select>
+
+
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12">
@@ -55,23 +61,12 @@
 
 
 
-            <!-- <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="form-group">
-                            <label for="image"><strong>Course Image:</strong> </label>
-                            <input type="file" class="form-control" name="image" id="image">
-                        </div>
-                    </div> -->
-
-
-
-
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
 
 
                 <button type="submit" class="btn btn-primary">Save</button>
 
 
-                <!-- <a class="btn btn-danger" href="{{ route('admin.courses.index') }}">Back</a> -->
 
             </div>
 

@@ -181,12 +181,7 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
     ]);
 
 
-
-
-
-
     Route::get('/contribute-word', [ExpertController::class, 'contributeWord'])->name('expert.contributeWord');
-
 
     Route::post('/expert/submit-contribute-word', [ExpertController::class, 'submitContributeWord'])->name('expert.submitContributeWord');
 
@@ -295,13 +290,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
 
     Route::get('/profile/{id}', [UserControllerProfile::class, 'show'])->name('user.profile.show');
-
-
     Route::get('/profile/edit', [UserControllerProfile::class, 'edit'])->name('user.profile.edit');
-
-
-    // Route::get('/profile/applyExpert', [UserControllerProfile::class, 'applyExpert'])->name('user.profile.applyExpert');
-
     Route::get('/profile/{id}/apply-expert', [UserControllerProfile::class, 'applyExpert'])->name('user.profile.applyExpert');
 
 

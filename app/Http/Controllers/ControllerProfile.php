@@ -12,6 +12,10 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
+use Kreait\Firebase\Contract\Database;
+use Kreait\Firebase\Contract\Storage;
+
+use Kreait\Firebase\Factory;
 
 
 
@@ -20,21 +24,67 @@ use Illuminate\Support\Facades\Auth;
 
 class ControllerProfile extends Controller
 {
-    public function show($id)
 
+    /**
+     * Display a listing of the resource.
+     */
+    protected $firebaseStorage;
+    protected $database;
+
+    public function __construct()
+    {
+        $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
+
+        if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
+            throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");
+        }
+
+        // Initialize the Realtime Database
+        $this->database = (new Factory)
+            ->withServiceAccount($firebaseCredentialsPath)
+            ->withDatabaseUri('https://dialecto-c14c1-default-rtdb.asia-southeast1.firebasedatabase.app/') // Use the correct URL
+            ->createDatabase();
+
+        // Initialize Firebase Storage
+        $this->firebaseStorage = (new Factory)
+            ->withServiceAccount($firebaseCredentialsPath)
+            ->createStorage();
+
+        // Check if the Storage instance is properly initialized
+        if ($this->firebaseStorage === null) {
+            throw new \Exception("Failed to initialize Firebase Storage.");
+        }
+    }
+
+
+    public function show($userId)
     {
 
-        // dd($id);
-
-        // Get the authenticated user's ID
-        $currentUserId = Auth::user();
-
         // Retrieve all users except the current one
-        $users = User::where('id', '!=', $currentUserId)->get();
 
-        // Pass filtered users and the current user's ID to the view
-        return view('userUser.profile.show', compact('users', 'currentUserId'));
+        $UserId = $userId;
+
+        $user = $this->database
+            ->getReference("users/{$userId}")
+            ->getValue();
+
+        $credentials = $this->database
+            ->getReference("credentials/{$userId}")
+            ->getValue();
+
+
+
+
+
+        // Pass filtered users and the current user's userId to the view
+        return view('userUser.profile.show', compact('user', 'userId', 'credentials'));
     }
+
+
+
+
+
+
 
     public function edit(User $user)
     {
@@ -67,12 +117,15 @@ class ControllerProfile extends Controller
 
 
 
-    public function applyExpert($currentUserId)
+    public function applyExpert($userId)
     {
 
-        $courses = Course::all();
+        $courses = $this->database
+            ->getReference("courses")
+            ->getValue();
 
-        return view('userUser.profile.applyVerifier', compact('currentUserId', 'courses'));
+
+        return view('userUser.profile.applyVerifier', compact('userId', 'courses'));
     }
 
 
@@ -85,34 +138,49 @@ class ControllerProfile extends Controller
     public function postCredentials(Request $request)
     {
         // Validate the request
+        $userId = Auth::user()->firebase_id;
+
         $request->validate([
             'langExperties' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
 
-        // Get the authenticated user
-        $user = Auth::user();
+        // dd($request);
 
-        // Handle the image upload
-        $imagePath = null;
+        $courses = $this->database
+            ->getReference("courses")
+            ->getValue();
+
+        $courseId = $request->langExperties;
+        $courseName = isset($courses[$courseId]) ? $courses[$courseId]['name'] : "Course not found";
+
+
+        $credentials = [
+            'langExperties' => $request->langExperties,
+            'courseName' => $courseName,
+            'status' => 'pending',
+
+
+        ];
+
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $bucket = $this->firebaseStorage->getBucket();
+            $bucket->upload(
+                file_get_contents($image->getRealPath()),
+                ['name' => 'images/' . $imageName]
+            );
+            $credentials['image'] = $bucket->object('images/' . $imageName)->signedUrl(new \DateTime('+ 1000 years'));
         }
 
-        // Create a new credential or update the existing one
-        Credential::updateOrCreate(
-            ['user_id' => $user->id], // Use this to find the existing record
-            [
-                'language_experty' => $request->input('langExperties'),
-                'credentials' => $imagePath,
-            ]
-        );
 
-        // Update the user's boolean field to true
-        $user->update(['credentials' => true]);
+        $this->database->getReference("credentials/{$userId}")->push($credentials);
+
+
 
         // Redirect with success message
-        return redirect()->route('user.profile.show', ['id' => $user->id])
+        return redirect()->route('user.profile.show', ['id' => $userId])
             ->with('success', 'Credentials uploaded successfully.');
     }
 
