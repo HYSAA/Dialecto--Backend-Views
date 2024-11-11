@@ -57,28 +57,51 @@ class ControllerProfile extends Controller
     }
 
 
+    // public function show($userId)
+    // {
+
+    //     // Retrieve all users except the current one
+
+    //     $UserId = $userId;
+
+    //     $user = $this->database
+    //         ->getReference("users/{$userId}")
+    //         ->getValue();
+
+    //     $credentials = $this->database
+    //         ->getReference("credentials/{$userId}")
+    //         ->getValue();
+
+
+
+
+
+    //     // Pass filtered users and the current user's userId to the view
+    //     return view('userUser.profile.show', compact('user', 'userId', 'credentials'));
+    // }
+
     public function show($userId)
-    {
+{
+    // Assuming $userId is already the encoded Firebase ID, like "-O7LC-27ESLUIkwACCHU"
+    
+    // Retrieve the user data from Firebase using the encoded user ID
+    $user = $this->database
+        ->getReference("users/{$userId}")
+        ->getValue();
 
-        // Retrieve all users except the current one
+    // Retrieve the user's credentials data from Firebase using the same user ID
+    $credentials = $this->database
+        ->getReference("credentials/{$userId}")
+        ->getValue();
 
-        $UserId = $userId;
-
-        $user = $this->database
-            ->getReference("users/{$userId}")
-            ->getValue();
-
-        $credentials = $this->database
-            ->getReference("credentials/{$userId}")
-            ->getValue();
-
-
-
-
-
-        // Pass filtered users and the current user's userId to the view
-        return view('userUser.profile.show', compact('user', 'userId', 'credentials'));
+    // Check if the user or credentials are null (in case they don't exist)
+    if (!$user || !$credentials) {
+        return redirect()->back()->withErrors(['User not found or credentials missing']);
     }
+
+    // Pass user data, credentials, and the userId to the view
+    return view('userUser.profile.show', compact('user', 'userId', 'credentials'));
+}
 
 
 
