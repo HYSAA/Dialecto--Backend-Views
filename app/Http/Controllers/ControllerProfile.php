@@ -68,9 +68,31 @@ class ControllerProfile extends Controller
             ->getReference("users/{$userId}")
             ->getValue();
 
+
+
+
+
         $credentials = $this->database
             ->getReference("credentials/{$userId}")
             ->getValue();
+
+        // dd($credentials);
+
+
+        if ($credentials == null) {
+            // dd('this is null');
+
+            $credentials = ['status' => null];
+
+            dd($credentials);
+        } else {
+            // dd('naay sulod', $credentials);
+        }
+
+
+
+
+        // dd($credentials);
 
 
 

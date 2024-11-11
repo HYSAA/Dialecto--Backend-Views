@@ -20,13 +20,23 @@
 
             <div class="pull-right mb-2">
 
-                @if ($credentials)
+                @if ($credentials['status'] = 'pending' && !empty($credentials))
                 <!-- Show "Pending" if credentials boolean is 1 -->
                 <span class="btn " style="background-color: #d4edda; color: #155724;border-color: #c3e6cb; box-sizing: border-box; border-radius: 4px; text-align: center; text-decoration: none; box-shadow: none;">
                     Pending Expert Approval</span>
+
+
                 @else
-                <!-- Show "Apply as verifier" button if credentials boolean is 0 -->
+
+
                 <a class="btn btn-back-main" href="{{ route('user.profile.applyExpert', ['id' => $userId]) }}">Apply as verifier</a>
+
+                @if ($credentials['status'] == 'denied' )
+
+                <a class="btn btn-back-main" href="{{ route('user.profile.applyExpert', ['id' => $userId]) }}" style="pointer-events: none; cursor: not-allowed; background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;">Application has been denied. Submit another application.</a>
+                @endif
+
+
 
                 @endif
 
