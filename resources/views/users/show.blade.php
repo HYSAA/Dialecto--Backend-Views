@@ -3,115 +3,52 @@
 @section('content')
 
 <div class="main-container">
+    <div class="container" style="overflow-y: auto;">
+        <h2>User Details</h2>
+        <p><strong>User ID:</strong> {{ $id }}</p>
+        <p><strong>Name:</strong> {{ $user['name'] ?? 'N/A' }}</p>
+        <p><strong>Email:</strong> {{ $user['email'] ?? 'N/A' }}</p>
+        <p><strong>Usertype:</strong> {{ $user['usertype'] ?? 'N/A' }}</p>
+        
+        @foreach($coursesWithLessonsAndContents as $courseId => $courseData)
+            @foreach ($courseData['lessons'] as $lessonId => $lessonData)
+                @php
+                    // Get user progress count for the current lesson
+                    $userProgressCount = isset($progressData[$courseId][$lessonId]) ? count($progressData[$courseId][$lessonId]) : 0;
 
-    <div class="row">
-        <div class="col-lg-12 ">
-            <h2> Current Progression of {{$user->name}} </h2>
-        </div>
-    </div>
+                    // Get the total content count for the lesson
+                    $totalContentCount = $lessonData['content_count'];
+                @endphp
 
+                <li>
+                    <!-- Display the lesson title and progress -->
+                    {{ $lessonData['lesson']['title'] }}
+                    ({{ $userProgressCount }} / {{ $totalContentCount }} contents)
 
-    <div class="row" style="overflow-y: auto;">
-        <div class="col-lg-12 margin-tb">
-            <div class="row">
-                <div class="card mb-2 mr-2" style="padding: 10px;">
-                    <!-- emptycell for now -->
-                    <!-- much better if it also say which course it would be -->
-                    <div class="top" style="padding: 5px;">
-
-                        <h5>Lesson's Progress:</h5>
-
-                        <!-- @foreach($userProgress as $progress)
-                            @foreach($courses as $course)
-                                <h1>{{$course->name}}</h1>
-                                @foreach($course->lessons as $lesson)
-                                    @if($lesson->id == $progress->lesson_id)
-                                        <p>{{ $lesson->title }} =  {{ $progress->count }} / {{ $lesson->contents_count }}</p>
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        @endforeach -->
-                        <!-- @foreach($courses as $course)
-                            <h1>{{ $course->name }}</h1>
-                            @foreach($userProgress as $progress)
-                                @foreach($course->lessons as $lesson)
-                                    @if($lesson->id == $progress->lesson_id)
-                                        <p>{{ $lesson->title }} = {{ $progress->count }} / {{ $lesson->contents_count }}</p>
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        @endforeach -->
-                        @foreach($courses as $course)
-                        @php
-                        $hasProgress = false;
-                        foreach ($userProgress as $progress) {
-                        foreach ($course->lessons as $lesson) {
-                        if ($lesson->id == $progress->lesson_id) {
-                        $hasProgress = true;
-                        break 2;
-                        }
-                        }
-                        }
-                        @endphp
-
-                        @if($hasProgress)
-                        <h4>{{ $course->name }}</h4>
-                        @foreach($userProgress as $progress)
-                        @foreach($course->lessons as $lesson)
-                        @if($lesson->id == $progress->lesson_id)
-                        <p>{{ $lesson->title }} = {{ $progress->count }} / {{ $lesson->contents_count }}</p> <!-- Display lesson progress -->
-                        @endif
-                        @endforeach
-                        @endforeach
-                        @endif
-                        @endforeach
-
-
-                    </div>
-                </div>
-                <!-- @foreach ($courses as $course)
-                    <div class="card mb-2 mr-2">
-                        <div class="top">
-
-                            <td>
-                                @if($course->image)
-                                    <img src="{{ asset('storage/' . $course->image) }}" alt="Course Image" class="card-img">
-                                @else
-                                    <img src="{{ asset('images/cebuano.png') }}" alt="Course Image" class="card-img">
-                                @endif
-                            </td>
-                            <div class="row align-items-center mt-3 mb-3 " style="height: 50px;">
-                                <div class="col-6 d-flex align-items-center ">
-                                    <h3 class="card-title mb-0">{{ $course->name }}</h3>
-                                </div>
-
-                                <div class="col-6 d-flex justify-content-end ">
-            
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-content">
-                            <h5>Course Percentage Completed</h5>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="50%"
-                                    aria-valuemin="0" aria-valuemax="100">
-                                    Current Completion %
-                                </div>
-                            </div>
-                            <h5>User Scores:</h5>
-                            <div>
+                    <!-- Progress bar -->
+                    <div class="progress mt-2" style="height: 20px;">
+                        @if($totalContentCount > 0)
+                            <div class="progress-bar" role="progressbar"
+                                style="width: {{ ($userProgressCount / $totalContentCount) * 100 }}%;"
+                                aria-valuenow="{{ ($userProgressCount / $totalContentCount) * 100 }}" aria-valuemin="0" aria-valuemax="100">
                                 
-                            @foreach($course->lessons as $lesson)
-                            <p>{{$lesson->title}}</p>
-                            @endforeach
+                                {{ round(($userProgressCount / $totalContentCount) * 100) }}%
                             </div>
-
-                        </div>
+                        @else
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 100%;" aria-valuenow="100"
+                                aria-valuemin="0" aria-valuemax="100">
+                                No content available
+                            </div>
+                        @endif
                     </div>
-                @endforeach
-            </div>
-        </div>
-    </div> -->
+                </li>
+            @endforeach
+        @endforeach
 
 
-                @endsection
+        <a href="{{ route('users.index') }}" class="btn btn-primary">Back to Users</a>
+
+
+    </div>
+</div>
+@endsection

@@ -24,13 +24,22 @@
                     <th>Full Name</th>
                     <th>Email</th>
                     <th>Usertype</th>
+                    <th>User Lessons Progress</th>
+
                 </tr>
                 @foreach ($sortedUsers as $user)
-                    <tr>
-                        <td>{{ $user['data']['name'] ?? 'N/A' }}</td>
-                        <td>{{ $user['data']['email'] ?? 'N/A' }}</td>
-                        <td>{{ $user['data']['usertype'] ?? 'N/A' }}</td>
-                    </tr>
+                    @if ($user['id'] !== auth()->user()->firebase_id)
+                        <tr>
+                            <td>{{$user['id']}}</td>
+                            <td>{{ $user['data']['name'] ?? 'N/A' }}</td>
+                            <td>{{ $user['data']['email'] ?? 'N/A' }}</td>
+                            <td>{{ $user['data']['usertype'] ?? 'N/A' }}</td>
+                            <td>
+                                <a class="btn btn-back-main" style="width: 100%; margin-bottom: 5px;" type="button" href="{{ route('users.show', [$user['id']]) }}">View User Progress</a>
+                            </td>
+
+                        </tr>
+                    @endif
                 @endforeach
             </table>
         </div>
