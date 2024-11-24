@@ -3,25 +3,42 @@
 @section('content')
 
 <div class="main-container">
-    <div class="container" style="overflow-y: auto;">
-        <h2>User Details</h2>
-        <p><strong>User ID:</strong> {{ $id }}</p>
-        <p><strong>Name:</strong> {{ $user['name'] ?? 'N/A' }}</p>
-        <p><strong>Email:</strong> {{ $user['email'] ?? 'N/A' }}</p>
-        <p><strong>Usertype:</strong> {{ $user['usertype'] ?? 'N/A' }}</p>
-        
+    <div class="top-container" style="display: grid;grid-template-columns: 1fr 1fr;gap: 20px;">
+        <div class="container" style="border: 1px  #ccc;padding: 10px;">
+            <h2>User Details</h2>
+            <p><strong>User ID:</strong> {{ $id }}</p>
+            <p><strong>Name:</strong> {{ $user['name'] ?? 'N/A' }}</p>
+            <p><strong>Email:</strong> {{ $user['email'] ?? 'N/A' }}</p>
+            <p><strong>Usertype:</strong> {{ $user['usertype'] ?? 'N/A' }}</p>
+        </div>
+
+        <!-- QUiz Data Shoud Be Here -->
+        <div class="container" style="border: 1px  #ccc;padding: 10px;">
+            <h2>User Details</h2>
+            <p><strong>User ID:</strong> {{ $id }}</p>
+            <p><strong>Name:</strong> {{ $user['name'] ?? 'N/A' }}</p>
+            <p><strong>Email:</strong> {{ $user['email'] ?? 'N/A' }}</p>
+            <p><strong>Usertype:</strong> {{ $user['usertype'] ?? 'N/A' }}</p>
+        </div>
+    </div>
+
+
+
+
+    <div class="card-container" style="overflow-y: auto;">
         @foreach($coursesWithLessonsAndContents as $courseId => $courseData)
             @foreach ($courseData['lessons'] as $lessonId => $lessonData)
                 @php
                     // Get user progress count for the current lesson
                     $userProgressCount = isset($progressData[$courseId][$lessonId]) ? count($progressData[$courseId][$lessonId]) : 0;
-
                     // Get the total content count for the lesson
                     $totalContentCount = $lessonData['content_count'];
                 @endphp
 
-                <li>
+                <li style="list-style: none;">
                     <!-- Display the lesson title and progress -->
+                    <img src="{{ $lessonData['lesson']['image'] }}" alt="Course Image" class="card-img-small">
+
                     {{ $lessonData['lesson']['title'] }}
                     ({{ $userProgressCount }} / {{ $totalContentCount }} contents)
 
@@ -30,8 +47,9 @@
                         @if($totalContentCount > 0)
                             <div class="progress-bar" role="progressbar"
                                 style="width: {{ ($userProgressCount / $totalContentCount) * 100 }}%;"
-                                aria-valuenow="{{ ($userProgressCount / $totalContentCount) * 100 }}" aria-valuemin="0" aria-valuemax="100">
-                                
+                                aria-valuenow="{{ ($userProgressCount / $totalContentCount) * 100 }}" aria-valuemin="0"
+                                aria-valuemax="100">
+
                                 {{ round(($userProgressCount / $totalContentCount) * 100) }}%
                             </div>
                         @else
@@ -43,12 +61,13 @@
                     </div>
                 </li>
             @endforeach
+
         @endforeach
-
-
-        <a href="{{ route('users.index') }}" class="btn btn-primary">Back to Users</a>
-
-
     </div>
+    <br>
+    <div>
+        <a href="{{ route('users.index') }}" class="btn btn-primary">Back to Users</a>
+    </div>
+
 </div>
 @endsection
