@@ -20,6 +20,7 @@ use App\Http\Controllers\User\LessonController as UserLessonController;
 use App\Http\Controllers\User\ContentController as UserContentController;
 use App\Http\Controllers\User\QuizController;
 use App\Http\Controllers\ControllerProfile as  UserControllerProfile;
+use App\Http\Controllers\SurveyController;
 
 
 //expert
@@ -215,6 +216,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     // Dashboard route
     Route::get('/dashboard', [UserCourseController::class, 'index'])->name('user.dashboard');
 
+ 
     Route::resource('courses', UserCourseController::class)->names([
         'index' => 'user.courses.index',
         'create' => 'user.courses.create',
@@ -245,8 +247,6 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
         'update' => 'user.contents.update',
         'destroy' => 'user.contents.destroy',
     ]);
-
-
 
 
 
@@ -290,16 +290,21 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
 
 
+    Route::get('/survey', [SurveyController::class, 'showSurvey'])->name('survey.show');
+    Route::post('/survey', [SurveyController::class, 'submitSurvey'])->name('survey.submit');
 
-    Route::get('/profile/{id}', [UserControllerProfile::class, 'show'])->name('user.profile.show');
-    Route::get('/profile/edit', [UserControllerProfile::class, 'edit'])->name('user.profile.edit');
-    Route::get('/profile/{id}/apply-expert', [UserControllerProfile::class, 'applyExpert'])->name('user.profile.applyExpert');
+    Route::get('/profile/{id}', [UserController::class, 'show'])->name('user.profile.show');
+    Route::get('/profile/edit', [UserController::class, 'edit'])->name('user.profile.edit');
+    Route::get('/profile/{id}/apply-expert', [UserController::class, 'applyExpert'])->name('user.profile.applyExpert');
 
 
 
 
 
-    Route::post('/profile/posting-credentials', [UserControllerProfile::class, 'postCredentials'])->name('user.profile.postCredentials');
+    Route::post('/profile/posting-credentials', [UserController::class, 'postCredentials'])->name('user.profile.postCredentials');
 
-    Route::get('/profile/submitted-creds/{name}', [UserControllerProfile::class, 'submittedCredentials'])->name('user.profile.submittedCredentials');
+    Route::get('/profile/submitted-creds/{name}', [UserController::class, 'submittedCredentials'])->name('user.profile.submittedCredentials');
+
+    
+   
 });

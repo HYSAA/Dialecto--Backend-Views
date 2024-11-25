@@ -60,6 +60,7 @@ public function store(Request $request): RedirectResponse
         'email' => $request->email,
         'password' => $hashedPassword, // Storing hashed password in Firebase
         'usertype' => $usertype, // Make sure the usertype is explicitly set here
+        'survey_taken' => 0,
     ];
 
     // Log the user data for debugging
