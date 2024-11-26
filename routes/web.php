@@ -30,7 +30,7 @@ use App\Http\Controllers\Expert\ContentController as  ExpertContentController;
 use App\Http\Controllers\Expert\QuizController as ExpertQuizController;
 use App\Http\Controllers\Expert\ControllerProfile as  ExpertControllerProfile;
 use App\Http\Controllers\Expert\ExpertController;
-
+use App\Http\Controllers\Expert\ExpertProgresscontroller;
 
 
 use App\Http\Controllers\AdminController;
@@ -192,6 +192,9 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
 
     Route::post('/expert/approve-word/{id}', [ExpertController::class, 'approveWord'])->name('expert.approveWord');
     Route::post('/expert/disapprove-word/{id}', [ExpertController::class, 'disapproveWord'])->name('expert.disapproveWord');
+
+    //Progress
+    Route::get('/expert/progress/{id}', [ExpertProgresscontroller::class, 'expertprogress'])->name('expert.progress');
 
 
 

@@ -58,7 +58,7 @@
     </div>
     <br>
     <div>
-        <a href="{{ route('user.dashboard') }}" class="btn btn-primary">Back</a>
+        <a href="{{ route('expert.dashboard') }}" class="btn btn-primary">Back</a>
     </div>
 
 @endsection

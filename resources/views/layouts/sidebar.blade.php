@@ -110,7 +110,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ url('/progress') }}">
+                    <a class="btn btn-nav" href="{{ route('expert.progress',  ['id' => Auth::user()->firebase_id]) }}">
                         <i class="fas fa-tachometer-alt btn-icon"></i>
                         <span class="btn-text">Progress</span>
                     </a>
