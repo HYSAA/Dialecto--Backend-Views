@@ -20,6 +20,7 @@ use App\Http\Controllers\User\LessonController as UserLessonController;
 use App\Http\Controllers\User\ContentController as UserContentController;
 use App\Http\Controllers\User\QuizController;
 use App\Http\Controllers\ControllerProfile as  UserControllerProfile;
+use App\Http\Controllers\User\UserProgressController;
 
 
 //expert
@@ -296,6 +297,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/profile/{id}/apply-expert', [UserControllerProfile::class, 'applyExpert'])->name('user.profile.applyExpert');
 
 
+    Route::get('/user/progress/{id}', [UserProgressController::class, 'userprogress'])->name('user.progress');
 
 
 
