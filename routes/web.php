@@ -21,7 +21,7 @@ use App\Http\Controllers\User\ContentController as UserContentController;
 use App\Http\Controllers\User\QuizController;
 use App\Http\Controllers\ControllerProfile as  UserControllerProfile;
 use App\Http\Controllers\User\UserProgressController;
-
+use App\Http\Controllers\SurveyController;
 
 //expert
 use App\Http\Controllers\Expert\CourseController as  ExpertCourseController;
@@ -289,7 +289,8 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
 
 
-
+    Route::get('/survey', [SurveyController::class, 'showSurvey'])->name('survey.show');
+    Route::post('/survey', [SurveyController::class, 'submitSurvey'])->name('survey.submit');
 
 
 

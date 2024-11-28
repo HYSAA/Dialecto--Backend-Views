@@ -64,6 +64,10 @@ class AuthenticatedSessionController extends Controller
         // Retrieve usertype from Firebase
         $usertype = $firebaseUser['usertype'] ?? 'user'; // Default to 'user' if no usertype is set
 
+        //para survey
+        $surveyTaken = $firebaseUser['survey_taken'] ?? 0; 
+      
+
         // Check if the user exists locally in the Laravel database
         $localUser = \App\Models\User::where('email', $firebaseUser['email'])->first();
 
@@ -75,6 +79,7 @@ class AuthenticatedSessionController extends Controller
                 'password' => $firebasePasswordHash, // Using the converted hashed password from Firebase
                 'usertype' => $usertype, // Storing the usertype from Firebase
                 'firebase_id' => $firebaseUserId, // Save Firebase ID
+                'survey_taken' => $firebaseUser['survey_taken'],
             ]);
         } else {
             // If the user exists, check if the usertype has changed or if the firebase_id is missing
@@ -88,9 +93,21 @@ class AuthenticatedSessionController extends Controller
         // Authenticate the user locally
         Auth::login($localUser);
 
+        session(['firebase_id' => $localUser->firebase_id]);
         // Regenerate the session to prevent fixation attacks
         $request->session()->regenerate();
 
+  // Check if the survey is taken
+  if ($surveyTaken == 0) {
+    return redirect()->route('survey.show');
+}
+// After retrieving Firebase user data
+if (!isset($firebaseUser['survey_taken'])) {
+// Set 'survey_taken' to 0 in Firebase if it doesn't exist
+$database->getReference('users/' . $firebaseUserId . '/survey_taken')->set(0);
+}
+
+        
         // Redirect based on user type or to the default dashboard
         if ($localUser->usertype === 'admin') {
             return redirect('admin/dashboard');

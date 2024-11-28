@@ -8,7 +8,7 @@ use Kreait\Firebase\Contract\Database;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class CourseController extends Controller
 {
 
@@ -22,7 +22,8 @@ class CourseController extends Controller
     public function index()
     {
         $courses = $this->database->getReference('courses')->getValue();
-
+        // $uid = Auth::user();
+        // dd($uid);
 
         if ($courses === null) {
             $courses = [];
