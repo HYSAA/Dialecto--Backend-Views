@@ -110,7 +110,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('expert.progress',  ['id' => Auth::user()->firebase_id]) }}">
+                    <a class="btn btn-nav" href="{{ route('expert.progress', ['id' => Auth::user()->firebase_id]) }}">
                         <i class="fas fa-tachometer-alt btn-icon"></i>
                         <span class="btn-text">Progress</span>
                     </a>
@@ -123,10 +123,10 @@
                 </li>
 
                 <!-- <li class="nav-item">
-                                <a class="btn btn-nav" href="{{ url('/progress')}}">
-                                  <i class="bi bi-bar-chart"></i> 
-                                <span class="btn-text">Word Approval</span>
-                            </li> -->
+                                    <a class="btn btn-nav" href="{{ url('/progress')}}">
+                                      <i class="bi bi-bar-chart"></i> 
+                                    <span class="btn-text">Word Approval</span>
+                                </li> -->
 
                 <li class="nav-item">
                     <a class="btn btn-nav" href="{{ url('/progress') }}">
@@ -138,12 +138,12 @@
 
 
                 <!-- 
-                        <li>
-                            <a class="btn btn-nav" href="{{ route('user.wordSuggested') }}">
-                                <i class="bi bi-book"></i>
-                                <span class="btn-text">View Your Suggested Words</span>
-                            </a>
-                        </li> -->
+                            <li>
+                                <a class="btn btn-nav" href="{{ route('user.wordSuggested') }}">
+                                    <i class="bi bi-book"></i>
+                                    <span class="btn-text">View Your Suggested Words</span>
+                                </a>
+                            </li> -->
 
             @endif
 
@@ -170,7 +170,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('user.progress',  ['id' => Auth::user()->firebase_id]) }}">
+                    <a class="btn btn-nav" href="{{ route('user.progress', ['id' => Auth::user()->firebase_id]) }}">
                         <i class="fas fa-tachometer-alt btn-icon"></i>
                         <span class="btn-text">Progress</span>
                     </a>
@@ -182,6 +182,14 @@
                         <span class="btn-text">Ranking</span>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="btn btn-nav" href="{{ route('user.dictionary', ['id' => Auth::user()->firebase_id]) }}">
+                        <i class="bi bi-bar-chart"></i>
+                        <span class="btn-text">Dictionary of Words Known</span>
+                    </a>
+                </li>
+
 
                 <li>
                     <a class="btn btn-nav" href="{{ route('user.wordSuggested') }}">
