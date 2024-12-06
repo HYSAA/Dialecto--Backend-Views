@@ -22,9 +22,7 @@ class CourseController extends Controller
     public function index()
     {
         $courses = $this->database->getReference('courses')->getValue();
-        // $uid = Auth::user();
-        // dd($uid);
-
+ 
         if ($courses === null) {
             $courses = [];
         }
@@ -43,13 +41,56 @@ class CourseController extends Controller
 
     //     return view('userUser.courses.show', compact('course'));
     // }
-
     public function show($id)
     {
+        // Retrieve the course data
         $course = $this->database->getReference('courses/' . $id)->getValue();
-
-        // dd($id);
-        // dd($course['id']);
-        return view('userUser.courses.show', compact('course', 'id'));
+    
+        if (!$course || !isset($course['lessons'])) {
+            return view('userUser.courses.show', compact('course', 'id'))->with('error', 'No lessons found.');
+        }
+    
+        // Get the user's Firebase ID
+        $firebaseId = Auth::user()->firebase_id;
+    
+        // Retrieve the user's data from Firebase using their firebase_id
+        $userData = $this->database->getReference('users/' . $firebaseId)->getValue();
+    
+        if (!$userData || !isset($userData['user_type'])) {
+            // Handle the case if user data or proficiency level is not found
+            return redirect()->route('user.dashboard')->with('error', 'User proficiency level not set.');
+        }
+    
+        // Get the user's proficiency level from the Firebase user data
+        $proficiencyLevel = $userData['user_type'];
+    
+        $levelOrder = ['Beginner', 'Intermediate', 'Advanced'];
+    
+        // Set max unlockable lessons based on proficiency level
+        $maxLessons = match ($proficiencyLevel) {
+            'Beginner' => 1,
+            'Intermediate' => 2,
+            'Advanced' => 3,
+            default => 1, // Default to 1 if proficiency level is not recognized
+        };
+    
+        // Filter lessons based on proficiency level
+        $filteredLessons = collect($course['lessons'])
+            ->filter(function ($lesson) use ($proficiencyLevel, $levelOrder) {
+                // Confirm the level indices
+                $lessonLevelIndex = array_search($lesson['proficiency_level'], $levelOrder);
+                $userLevelIndex = array_search($proficiencyLevel, $levelOrder);
+    
+                return $lessonLevelIndex <= $userLevelIndex; // Return lessons that match or are below the user's level
+            })
+            ->sortBy(function ($lesson) use ($levelOrder) {
+                return array_search($lesson['proficiency_level'], $levelOrder);
+            })
+            ->take($maxLessons);
+    
+        return view('userUser.courses.show', compact('course', 'filteredLessons', 'id'));
     }
+    
+    
+
 }

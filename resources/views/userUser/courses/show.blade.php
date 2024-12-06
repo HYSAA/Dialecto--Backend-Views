@@ -10,40 +10,50 @@
             </div>
         </div>
     </div>
+   
+    
 
     <div class="row" style="overflow-y: auto;">
         <div class="col-lg-12 margin-tb">
             <div class="row">
-                @foreach ($course['lessons'] ?? [] as $lessonId => $lesson)
-
-                <div class="cardsmall mb-2 mr-2">
-                    <div class="top">
-                        <div>
-                            @if(isset($lesson['image']) && $lesson['image'])
-                            <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="card-img-small">
-                            @else
-                            <img src="{{ asset('images/cebuano.png') }}" alt="Lesson Image" class="card-img">
-                            @endif
-                        </div>
-
-                        <div class="row align-items-center mt-3 mb-3" style="height: 50px;">
-                            <div class="col-6 d-flex align-items-center">
-                                <h3 class="card-title mb-0">{{ $lesson['title'] ?? 'Lesson Title' }}</h3>
-                            </div>
-
-                            <div class="col-6 d-flex justify-content-end">
-
-                                <button class="btn btn-main lessonButton"
-                                    data-title="{{ $lesson['title'] }}"
-                                    data-lesson-id="{{ $lessonId }}"
-                                    data-contents="{{ json_encode($lesson['contents'] ?? []) }}">
-                                    View
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+            @foreach ($filteredLessons as $lessonId => $lesson)
+    <div class="cardsmall mb-2 mr-2">
+        <div class="top">
+            <div>
+                @if(isset($lesson['image']) && $lesson['image'])
+                    <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="card-img-small">
+                @else
+                    <img src="{{ asset('images/cebuano.png') }}" alt="Lesson Image" class="card-img">
+                @endif
+            </div>
+            <div class="row align-items-center mt-3 mb-3" style="height: 50px;">
+                <div class="col-6 d-flex align-items-center">
+                    <h3 class="card-title mb-0">
+                        {{ $lesson['title'] ?? 'Lesson Title' }}
+                        {{-- Optional: Add proficiency level badge --}}
+                        <span class="badge bg-{{ 
+                            $lesson['proficiency_level'] === 'Beginner' ? 'success' : 
+                            ($lesson['proficiency_level'] === 'Intermediate' ? 'warning' : 'primary')
+                        }} ms-2 small">
+                            {{ $lesson['proficiency_level'] }}
+                        </span>
+                    </h3>
                 </div>
-                @endforeach
+                <div class="col-6 d-flex justify-content-end">
+                    <button class="btn btn-main lessonButton"
+                            data-title="{{ $lesson['title'] }}"
+                            data-lesson-id="{{ $lessonId }}"
+                            data-contents="{{ json_encode($lesson['contents'] ?? []) }}">
+                        View
+                    </button>
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+
             </div>
         </div>
     </div>

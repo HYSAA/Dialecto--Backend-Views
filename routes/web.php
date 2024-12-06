@@ -251,8 +251,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     ]);
 
 
-
-
+   
 
     Route::get('/wordSuggested/{id}/viewUpdateSelected', [UserController::class, 'viewUpdateSelected'])->name('user.viewUpdateSelected');
 
@@ -291,6 +290,8 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
     Route::get('/survey', [SurveyController::class, 'showSurvey'])->name('survey.show');
     Route::post('/survey', [SurveyController::class, 'submitSurvey'])->name('survey.submit');
+    Route::get('/courses/{course}/completed-lessons', [SurveyController::class, 'countCompletedLessons'])->name('course.completed.lessons');
+    Route::post('/courses/{course}/lessons/{lesson}/complete', [SurveyController::class, 'completeLesson'])->name('lesson.complete');
 
 
 
