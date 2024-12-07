@@ -14,7 +14,7 @@ class ContentController extends Controller
 
     public function __construct(Database $database,FirebaseStorage $firebaseStorage)
     {
-        $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
+        $firebaseCredentialsPath = config('firebase_credentials') ?: base_path('config/firebase_credentials.json');
         
         if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
             throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");

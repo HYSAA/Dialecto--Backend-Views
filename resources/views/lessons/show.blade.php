@@ -31,7 +31,7 @@
                         <td>{{ $content['text'] }}</td>
                         <td>{{ $content['english'] }}</td>
                         <td>
-                            @if ($content['video'])
+                            @if ($content['video'] ?? '')
                             <video controls class="vid-content">
                                 <source src="{{ $content['video'] }}" type="video/mp4">
                                 Your browser does not support the video tag.
