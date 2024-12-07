@@ -66,30 +66,22 @@ class CourseController extends Controller
     
         $levelOrder = ['Beginner', 'Intermediate', 'Advanced'];
     
-        // Set max unlockable lessons based on proficiency level
-        $maxLessons = match ($proficiencyLevel) {
-            'Beginner' => 1,
-            'Intermediate' => 2,
-            'Advanced' => 3,
-            default => 1, // Default to 1 if proficiency level is not recognized
-        };
-    
         // Filter lessons based on proficiency level
         $filteredLessons = collect($course['lessons'])
             ->filter(function ($lesson) use ($proficiencyLevel, $levelOrder) {
-                // Confirm the level indices
+                // Get the indices for the lesson and user proficiency levels
                 $lessonLevelIndex = array_search($lesson['proficiency_level'], $levelOrder);
                 $userLevelIndex = array_search($proficiencyLevel, $levelOrder);
     
-                return $lessonLevelIndex <= $userLevelIndex; // Return lessons that match or are below the user's level
+                return $lessonLevelIndex <= $userLevelIndex; // Include lessons up to the user's level
             })
             ->sortBy(function ($lesson) use ($levelOrder) {
                 return array_search($lesson['proficiency_level'], $levelOrder);
-            })
-            ->take($maxLessons);
+            });
     
         return view('userUser.courses.show', compact('course', 'filteredLessons', 'id'));
     }
+    
     
     
 
