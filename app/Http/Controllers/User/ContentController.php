@@ -398,10 +398,12 @@ class ContentController extends Controller
         $this->database->getReference('users/' . $firebaseId)->update([
             'user_type' => $nextLevel
         ]);
+        $congratulationsMessage = "Congratulations! You’ve been promoted to {$nextLevel}!";
+    } else {
+        $congratulationsMessage = null; // No promotion
     }
-
     // Pass data to the view
-    return view('userUser.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent'));
+    return view('userUser.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent',  'congratulationsMessage' ));
 }
 
 // Helper function to get the next level
