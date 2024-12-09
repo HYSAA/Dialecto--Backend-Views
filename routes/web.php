@@ -21,6 +21,7 @@ use App\Http\Controllers\User\ContentController as UserContentController;
 use App\Http\Controllers\User\QuizController;
 use App\Http\Controllers\ControllerProfile as  UserControllerProfile;
 use App\Http\Controllers\User\UserProgressController;
+use App\Http\Controllers\User\UserDictionary;
 
 
 //expert
@@ -33,6 +34,7 @@ use App\Http\Controllers\Expert\ExpertController;
 use App\Http\Controllers\Expert\ExpertProgresscontroller;
 use App\Http\Controllers\Expert\ExpertDictionary;
 
+use App\Http\Controllers\SurveyController;
 
 use App\Http\Controllers\AdminController;
 
