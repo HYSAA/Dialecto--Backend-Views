@@ -26,7 +26,8 @@ class CourseController extends Controller
         session([
             'score' => 0,
             'currentIndex' => 0,
-            'questions' => []
+            'questions' => [],
+            'quizHistory' => []
         ]);
 
         // dd(session()->all());

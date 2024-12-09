@@ -11,6 +11,8 @@ use Kreait\Firebase\Storage as FirebaseStorage;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Factory;
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\UserProgress;
 
 class QuizController extends Controller
@@ -91,9 +93,8 @@ class QuizController extends Controller
         // Retrieve the current index and score from session
         $currentIndex = session('currentIndex', 0);
         $score = session('score', 0);
-
-
         $questions = session('questions', []);
+        $quizHistory = session('quizHistory', []);
 
         // Convert the associative array to a numerically indexed array
         $questions = array_values($questions);
@@ -110,10 +111,31 @@ class QuizController extends Controller
         $selectedAnswer = $request->input('answer');
         $currentQuestion = $questions[$currentIndex];
 
+
+
         // Check if the answer is correct and add points
         if ($selectedAnswer === $currentQuestion['correct']) {
+
             $score += $currentQuestion['points'];
+
+            $quizHistory[$currentIndex] = [
+                'Question' => $currentQuestion['question'],
+                'Answer' => $selectedAnswer,
+                'Remarks' => 1
+
+            ];
+        } else {
+
+            $quizHistory[$currentIndex] = [
+                'Question' => $currentQuestion['question'],
+                'Answer' => $selectedAnswer,
+                'CorrectAnswer' => $currentQuestion['correct'],
+                'Remarks' => 0
+            ];
         }
+
+
+
 
         // Move to the next question by incrementing currentIndex
         $currentIndex++;
@@ -122,6 +144,7 @@ class QuizController extends Controller
         session([
             'score' => $score,
             'currentIndex' => $currentIndex,
+            'quizHistory' => $quizHistory,
         ]);
 
         // Check if this was the last question
@@ -156,15 +179,21 @@ class QuizController extends Controller
             $ttscore = $ttscore + $totalScore[$i]['points'];
         }
 
-
-
-
-
         $score = session('score', 0);
         $questions = session('questions', []);
+        $quizHistory = session('quizHistory', []);
 
 
-        // dd(session()->all());
+
+        $quizData = [
+            'score' => $score
+        ];
+
+        $user = Auth::user(); // Get the authenticated user
+        $user = $user->firebase_id; // Dump
+
+
+        $this->database->getReference("quiz_results/$user/$lessonId")->set($quizData);
 
 
         return view('userUser.quiz.results', [
@@ -173,6 +202,7 @@ class QuizController extends Controller
             'courseId' => $courseId,
             'lessonId' => $lessonId,
             'totalScore' => $ttscore,
+            'quizHistory' => $quizHistory,
         ]);
     }
 }
