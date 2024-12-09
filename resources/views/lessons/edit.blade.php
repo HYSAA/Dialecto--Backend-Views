@@ -30,6 +30,17 @@
                 </div>
             </div>
 
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    <label for="proficiency_level"><strong>Proficiency Level:</strong></label>
+                    <select name="proficiency_level" id="proficiency_level" class="form-control" required>
+                        <option value="Beginner" {{ $lesson['proficiency_level'] === 'Beginner' ? 'selected' : '' }}>Beginner</option>
+                        <option value="Intermediate" {{ $lesson['proficiency_level'] === 'Intermediate' ? 'selected' : '' }}>Intermediate</option>
+                        <option value="Advanced" {{ $lesson['proficiency_level'] === 'Advanced' ? 'selected' : '' }}>Advanced</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                 <button type="submit" class="btn btn-primary">Save</button>
                 <a href="{{ route('admin.courses.show', $courseId) }}" class="btn btn-danger">Discard</a>

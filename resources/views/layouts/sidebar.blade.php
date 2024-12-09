@@ -155,9 +155,10 @@
 
             @if(Auth::user()->usertype == 'user')
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('user.profile.show', ['id' => Auth::user()->firebase_id]) }}">
-                        <i class="bi bi-person-circle"></i>
+            
+            <li class="nav-item">
+            <a class="btn btn-nav" href="{{ route('user.profile.show',  ['id' => Auth::user()->firebase_id]) }}">
+                        <i class="fas fa-book btn-icon"></i>
                         <span class="btn-text">Profile</span>
                     </a>
                 </li>

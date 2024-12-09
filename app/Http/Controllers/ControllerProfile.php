@@ -134,9 +134,6 @@ class ControllerProfile extends Controller
         return view('userUser.profile.show', compact('user', 'userId', 'credentials'));
     }
 
-    // Pass user data, credentials, and the userId to the view
-    return view('userUser.profile.show', compact('user', 'userId', 'credentials'));
-}
 
 
 
