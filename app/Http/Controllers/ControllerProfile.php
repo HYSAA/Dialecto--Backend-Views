@@ -63,7 +63,11 @@ class ControllerProfile extends Controller
 
         // Retrieve all users except the current one
 
+
+
         $user = Auth::user(); // Get the authenticated user
+
+        // dd($user);
         $userId = $user->firebase_id; // Dump
 
         $UserId = $userId;

@@ -11,21 +11,40 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 
-
-
+use Kreait\Firebase\Contract\Database;
+use Kreait\Firebase\Contract\Storage;
 
 
 
 class ControllerProfile extends Controller
 {
+
+    protected $database;
+    protected $storage;
+
+    public function __construct(Database $database, Storage $storage)
+    {
+        $this->database = $database;
+        $this->storage = $storage;
+    }
+
+
     public function show()
     {
-        $currentUserId = Auth::user(); // Get the currently authenticated user's ID
-        $users = User::where('id', '!=', $currentUserId)->get();
+        $user = Auth::user(); // Get the currently authenticated user's ID
 
+        $userId = $user->firebase_id;
 
+        $credentials = $this->database->getReference("credentials/$userId")->getValue();
 
-        return view('userExpert.profile.show', compact('users', 'currentUserId')); // Pass filtered users to the view
+        $courseId = $credentials['langExperties'];
+
+        $languageExperty = $this->database->getReference("courses/$courseId")->getValue();
+        $languageExperty = $languageExperty['name'];
+
+        // dd($languageExperty);
+
+        return view('userExpert.profile.show', compact('user', 'credentials', 'languageExperty')); // Pass filtered users to the view
     }
 
 

@@ -11,13 +11,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Storage as FirebaseStorage;
+use Kreait\Firebase\Contract\Database;
+use Kreait\Firebase\Contract\Storage;
 
 class ExpertController extends Controller
 {
     protected $firebaseStorage;
+    protected $database;
+    protected $storage;
 
-    public function __construct()
+    public function __construct(Database $database, Storage $storage)
     {
+        $this->database = $database;
+        $this->storage = $storage;
+
+
         $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
 
         if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
@@ -32,9 +40,18 @@ class ExpertController extends Controller
     // Show the form to contribute a new word
     public function contributeWord()
     {
-        $thisUser = Auth::user();
-        $userCredentials = Credential::where('user_id', $thisUser->id)->first();
-        $language =  $userCredentials->language_experty;
+        $user = Auth::user(); // Get the currently authenticated user's ID
+
+        $userId = $user->firebase_id;
+
+        $credentials = $this->database->getReference("credentials/$userId")->getValue();
+
+        $courseId = $credentials['langExperties'];
+
+        $languageExperty = $this->database->getReference("courses/$courseId")->getValue();
+
+
+        $language = $languageExperty['name'];
 
         $course = Course::where('name', $language)->first();
         $thisLessons = Lesson::whereHas('course', function ($query) use ($language) {
@@ -89,14 +106,21 @@ class ExpertController extends Controller
 
     public function index()
     {
+        $user = Auth::user(); // Get the currently authenticated user's ID
 
-        $thisUser = Auth::user();
+        $userId = $user->firebase_id;
+
+        $credentials = $this->database->getReference("credentials/$userId")->getValue();
+
+        $courseId = $credentials['langExperties'];
+
+        $languageExperty = $this->database->getReference("courses/$courseId")->getValue();
+        $languageExperty = $languageExperty['name'];
 
 
-        $specialtyName = $thisUser->credential->language_experty;
 
         // Assuming 'Course' is your model
-        $course = Course::where('name', $specialtyName)->first();
+        $course = Course::where('name', $languageExperty)->first();
 
         $specialtyID = $course->id;
 
@@ -104,29 +128,14 @@ class ExpertController extends Controller
         $pendingWords = SuggestedWord::with(['course', 'lesson'])->get();
 
 
-
-
         $userWords = SuggestedWord::with(['course', 'lesson'])
             ->where('status', '!=', 'expert')
             ->where('course_id', $specialtyID)
             ->get();
 
-
-
-
-
-
-
-
-
-
         $expertWords = SuggestedWord::with(['course', 'lesson'])
             ->where('status', '=', 'expert')
             ->get();
-
-
-
-
 
 
         return view('userExpert.wordApproved.pending_words', compact('expertWords', 'userWords'));
