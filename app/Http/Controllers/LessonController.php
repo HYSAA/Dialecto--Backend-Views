@@ -72,10 +72,12 @@ class LessonController extends Controller
         $request->validate([
             'title' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+            'proficiency_level' =>'required|in:Beginner,Intermediate,Advanced',
         ]);
 
         $lessonData = [
             'title' => $request->title,
+            'proficiency_level' => $request->proficiency_level,
         ];
 
         if ($request->hasFile('image')) {
@@ -143,10 +145,12 @@ class LessonController extends Controller
         $request->validate([
             'title' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+            'proficiency_level' => 'required|in:Beginner,Intermediate,Advanced',
         ]);
 
         $lessonData = [
             'title' => $request->title,
+            'proficiency_level' => $request->proficiency_level,
         ];
 
         if ($request->hasFile('image')) {

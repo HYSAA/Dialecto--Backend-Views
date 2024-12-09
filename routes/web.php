@@ -21,7 +21,6 @@ use App\Http\Controllers\User\ContentController as UserContentController;
 use App\Http\Controllers\User\QuizController;
 use App\Http\Controllers\ControllerProfile as  UserControllerProfile;
 use App\Http\Controllers\User\UserProgressController;
-use App\Http\Controllers\User\UserDictionary;
 
 
 //expert
@@ -252,8 +251,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     ]);
 
 
-
-
+   
 
     Route::get('/wordSuggested/{id}/viewUpdateSelected', [UserController::class, 'viewUpdateSelected'])->name('user.viewUpdateSelected');
 
@@ -290,7 +288,10 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
 
 
-
+    Route::get('/survey', [SurveyController::class, 'showSurvey'])->name('survey.show');
+    Route::post('/survey', [SurveyController::class, 'submitSurvey'])->name('survey.submit');
+    Route::get('/courses/{course}/completed-lessons', [SurveyController::class, 'countCompletedLessons'])->name('course.completed.lessons');
+    Route::post('/courses/{course}/lessons/{lesson}/complete', [SurveyController::class, 'completeLesson'])->name('lesson.complete');
 
 
 

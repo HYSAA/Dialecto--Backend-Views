@@ -31,12 +31,14 @@
             <table class="table table-bordered">
                 <tr>
                     <th>Title</th>
+                    <th>Proficiency Level</th>
                     <th>Lesson Image</th>
                     <th width="280px">Action</th>
                 </tr>
                 @foreach ($course['lessons'] ?? [] as $lessonId => $lesson)
                 <tr>
                     <td>{{ $lesson['title'] ?? 'Unknown Title' }}</td>
+                    <td>{{ $lesson['proficiency_level'] ?? 'N/A' }}</td>
                     <td style="width: 150px;">
                         <div style="width: 150px; height: 150px;">
                             @if(isset($lesson['image']))
@@ -47,7 +49,6 @@
                         </div>
                     </td>
                     <td>
-                        <!-- Use `$id` for the course id instead of `$course['id']` if necessary -->
                         <form action="{{ route('admin.lessons.destroy', [$id, $lessonId]) }}" method="POST">
                             <a class="btn btn-success" href="{{ route('admin.lessons.edit', [$id, $lessonId]) }}">Edit</a>
                             <a class="btn btn-primary" href="{{ route('admin.lessons.show', [$id, $lessonId]) }}">View</a>
