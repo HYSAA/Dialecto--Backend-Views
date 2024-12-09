@@ -32,6 +32,7 @@ use App\Http\Controllers\Expert\QuizController as ExpertQuizController;
 use App\Http\Controllers\Expert\ControllerProfile as  ExpertControllerProfile;
 use App\Http\Controllers\Expert\ExpertController;
 use App\Http\Controllers\Expert\ExpertProgresscontroller;
+use App\Http\Controllers\Expert\ExpertDictionary;
 
 
 use App\Http\Controllers\AdminController;
@@ -196,6 +197,8 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
 
     //Progress
     Route::get('/expert/progress/{id}', [ExpertProgresscontroller::class, 'expertprogress'])->name('expert.progress');
+
+    Route::get('/expert/dictionary/{id}',[ExpertDictionary::class,'expertdictionary'])->name('expert.dictionary');
 
 
 

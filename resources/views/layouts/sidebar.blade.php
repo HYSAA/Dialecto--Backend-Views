@@ -115,6 +115,14 @@
                         <span class="btn-text">Progress</span>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="btn btn-nav" href="{{ route('expert.dictionary', ['id' => Auth::user()->firebase_id]) }}">
+                        <i class="bi bi-bar-chart"></i>
+                        <span class="btn-text">Dictionary of Words Known</span>
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     <a class="btn btn-nav" href="{{ route('expert.pendingWords') }}">
                         <i class="fas fa-tachometer-alt btn-icon"></i>
