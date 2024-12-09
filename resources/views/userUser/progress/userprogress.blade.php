@@ -29,7 +29,7 @@
 
                 <li style="list-style: none;">
                     <!-- Display the lesson title and progress -->
-                    <img src="{{ $lessonData['lesson'] ['image'] ?? " " }}" alt="Course Image" class="card-img-small">
+                    <img src="{{ $lessonData['lesson']['image'] ?? '' }}" alt="Course Image" class="card-img-small">
 
                     {{ $lessonData['lesson']['title'] }}
                     ({{ $userProgressCount }} / {{ $totalContentCount }} contents)

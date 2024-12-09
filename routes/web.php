@@ -21,7 +21,7 @@ use App\Http\Controllers\User\ContentController as UserContentController;
 use App\Http\Controllers\User\QuizController;
 use App\Http\Controllers\ControllerProfile as  UserControllerProfile;
 use App\Http\Controllers\User\UserProgressController;
-use App\Http\Controllers\SurveyController;
+
 
 //expert
 use App\Http\Controllers\Expert\CourseController as  ExpertCourseController;
@@ -304,6 +304,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
     Route::get('/user/progress/{id}', [UserProgressController::class, 'userprogress'])->name('user.progress');
 
+    Route::get('/user/dictionary/{id}',[UserDictionary::class,'userdictionary'])->name('user.dictionary');
 
 
     Route::post('/profile/posting-credentials', [UserControllerProfile::class, 'postCredentials'])->name('user.profile.postCredentials');
