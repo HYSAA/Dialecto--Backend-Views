@@ -16,7 +16,7 @@
             @foreach ($lesson as $lessonId => $lessons)
             <tr>
                 <td>{{ $lessons['title'] }}</td>
-                <td><img src="{{ $lessons['image'] }}" alt="{{ $lessons['title'] }}" width="100"></td>
+                <td><img src="{{ $lessons['image'] ?? '' }}" alt="{{ $lessons['title'] }}" width="100"></td>
             </tr>
             @endforeach
             @endforeach

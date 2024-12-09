@@ -284,8 +284,6 @@ class ContentController extends Controller
     //     }
     //     return view('userUser.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent'));
     // }
-
-
     public function show($courseId, $lessonId, $contentId)
     {
         // Retrieve the course, lesson, and content from the Firebase Realtime Database
@@ -302,85 +300,197 @@ class ContentController extends Controller
         $nextContent = null;
         $previousContent = null;
 
-        if ($allContents) {
-            // Convert contents to an array
-            $contentsArray = [];
-            foreach ($allContents as $key => $value) {
-                $contentsArray[] = [
-                    'id' => $key,
-                    'data' => $value,
-                ];
-            }
-
-            // Sort contents by ID
-            usort($contentsArray, function ($a, $b) {
-                return strcmp($a['id'], $b['id']); // String comparison for Firebase keys
-            });
-
-            // Find the next content after the current content ID
-            foreach ($contentsArray as $item) {
-                if ($item['id'] > $contentId) {
-                    $nextContent = $item; // This is the next content
-                    break; // Exit the loop once we find the next content
-                }
-            }
-
-            // Find the previous content before the current content ID
-            for ($i = count($contentsArray) - 1; $i >= 0; $i--) {
-                if ($contentsArray[$i]['id'] < $contentId) {
-                    $previousContent = $contentsArray[$i]; // This is the previous content
-                    break; // Exit the loop once we find the previous content
-                }
+        // Find the next content after the current content ID
+        foreach ($contentsArray as $item) {
+            if ($item['id'] > $contentId) {
+                $nextContent = $item; // This is the next content
+                break;
             }
         }
 
-        // User progress section
-        $firebaseId = auth()->user()->firebase_id; // Get the user's Firebase ID
-        $userProgressRef = 'user_progress/' . $firebaseId . '/' . $courseId . '/' . $lessonId;
-
-        // Check if the current content progress already exists
-        $existingProgress = $this->database->getReference($userProgressRef . '/' . $contentId)->getValue();
-
-        if (!$existingProgress) {
-            // If progress for this content doesn't exist, store it in Firebase
-            $this->database->getReference($userProgressRef . '/' . $contentId)
-                ->set([
-                    'content_id' => $contentId,
-                    'progress_at' => now()->toDateTimeString(), // Timestamp of progress
-                    'view_count' => 1 // Initialize view count to 1
-                ]);
-        } else {
-            // If progress exists, increment the view count in Firebase
-            $this->database->getReference($userProgressRef . '/' . $contentId)
-                ->update([
-                    'view_count' => $existingProgress['view_count'] + 1,
-                    'progress_at' => now()->toDateTimeString() // Update timestamp for the new view
-                ]);
+        // Find the previous content before the current content ID
+        for ($i = count($contentsArray) - 1; $i >= 0; $i--) {
+            if ($contentsArray[$i]['id'] < $contentId) {
+                $previousContent = $contentsArray[$i]; // This is the previous content
+                break;
+            }
         }
 
         // Pass data to the view
         return view('userUser.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent'));
     }
 
+    
+    $firebaseId = auth()->user()->firebase_id; // Get the user's Firebase ID
+
+    dd($firebaseId);
+    $userProgressRef = 'user_progress/' . $firebaseId . '/' . $courseId . '/' . $lessonId;
 
 
 
+    // Now handle the completed_lessons update
+    $userRef = 'users/' . $firebaseId; // Path to user data in Firebase
+    $completedLessonsRef = $userRef . '/completed_lessons';
+
+    // Get the user's current completed lessons data
+    $completedLessons = $this->database->getReference($completedLessonsRef)->getValue();
+
+    // Check if lesson exists in completed_lessons, if not initialize it
+    if (!isset($completedLessons[$lessonId])) {
+        $completedLessons[$lessonId] = [];
+    }
+
+    // Mark the content as completed
+    $completedLessons[$lessonId][$contentId] = true;
+
+    // Update the user's completed lessons data in Firebase
+    $this->database->getReference($completedLessonsRef)->set($completedLessons);
+
+    // Now check if all lessons for the current proficiency level are completed
+    $userData = $this->database->getReference('users/' . $firebaseId)->getValue();
+    $currentLevel = $userData['user_type']; // Beginner, Intermediate, or Advanced
+
+    // Fetch lessons based on current proficiency level
+    $lessonsForLevel = $this->database->getReference('courses/' . $courseId . '/lessons')
+                                     ->orderByChild('proficiency_level')
+                                     ->equalTo($currentLevel)
+                                     ->getValue();
+
+    $allLessonsCompleted = true;
+    foreach ($lessonsForLevel as $lessonKey => $lessonData) {
+        // If there are incomplete lessons, break the loop
+        if (!isset($completedLessons[$lessonKey]) || count($completedLessons[$lessonKey]) < count($lessonData['contents'])) {
+            $allLessonsCompleted = false;
+            break;
+        }
+    }
+
+    // If all lessons for current level are completed, promote user
+    if ($allLessonsCompleted) {
+        // Update user proficiency level
+        $nextLevel = $this->getNextLevel($currentLevel);
+        $this->database->getReference('users/' . $firebaseId)->update([
+            'user_type' => $nextLevel
+        ]);
+        $congratulationsMessage = "Congratulations! You’ve been promoted to {$nextLevel}!";
+    } else {
+        $congratulationsMessage = null; // No promotion
+    }
+    // Pass data to the view
+    return view('userUser.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent',  'congratulationsMessage' ));
+}
+
+// Helper function to get the next level
+private function getNextLevel($currentLevel)
+{
+    $levels = ['Beginner', 'Intermediate', 'Advanced'];
+    $currentIndex = array_search($currentLevel, $levels);
+    return $levels[$currentIndex + 1] ?? $currentLevel; // If no next level, stay at current level
+}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // /**
+    //  * Check and promote user level based on lesson completions
+    //  * 
+    //  * @param string $firebaseId User's Firebase ID
+    //  * @param string $courseId Current course ID
+    //  * @param string $currentUserType Current user type (Beginner/Intermediate/Advanced)
+    //  * @param array $completedLessons User's completed lessons
+    //  */
+    // private function checkAndPromoteUserLevel($firebaseId, $courseId, $currentUserType, $completedLessons)
+    // {
+    //     // Define the promotion path
+    //     $promotionPath = [
+    //         'Beginner' => 'Intermediate',
+    //         'Intermediate' => 'Advanced'
+    //     ];
+    
+    //     // If already at the highest level, no need to check for promotion
+    //     if ($currentUserType === 'Advanced') {
+    //         return;
+    //     }
+    
+    //     // Get the next user type for promotion
+    //     $nextUserType = $promotionPath[$currentUserType] ?? null;
+    //     if (!$nextUserType) {
+    //         return;
+    //     }
+    
+    //     // Retrieve course details
+    //     $courseDetails = $this->database->getReference('courses/' . $courseId)->getValue();
+    
+    //     if (!isset($courseDetails['lessons'])) {
+    //         return;
+    //     }
+    
+    //     $totalLessonsForUserType = 0;
+    //     $completedLessonsForUserType = 0;
+    
+    //     foreach ($courseDetails['lessons'] as $lessonId => $lesson) {
+    //         // Check if the lesson is for the current user type
+    //         if (isset($lesson['user_type']) && $lesson['user_type'] === $currentUserType) {
+    //             $totalLessonsForUserType++;
+    
+    //             // Check if this lesson is fully completed
+    //             if ($this->isLessonFullyCompleted($completedLessons, $lessonId, $lesson['user_type'])) {
+    //                 $completedLessonsForUserType++;
+    //             }
+    //         }
+    //     }
+    
+    //     // Promotion criteria: Complete all lessons of current user type
+    //     if ($totalLessonsForUserType > 0 && $completedLessonsForUserType === $totalLessonsForUserType) {
+    //         // Promote the user
+    //         $this->promoteUserLevel($firebaseId, $nextUserType);
+    //     }
+    // }
+    
+    // private function isLessonFullyCompleted($completedLessons, $lessonId, $lessonUserType) {
+    //     if (!isset($completedLessons[$lessonId])) {
+    //         \Log::info("Lesson $lessonId not found in completed lessons");
+    //         return false;
+    //     }
+    
+    //     $lessonContents = $completedLessons[$lessonId];
+    
+    //     // Check if the lesson's proficiency level matches the user's type
+    //     if ($lessonContents['proficiency_level'] !== $lessonUserType) {
+    //         \Log::info("Lesson $lessonId is not for the current user type: $lessonUserType");
+    //         return false;
+    //     }
+    
+    //     \Log::info("Checking lesson $lessonId with user type $lessonUserType");
+    
+    //     $totalContents = count($lessonContents);
+    //     $completedContents = 0;
+    
+    //     foreach ($lessonContents as $contentId => $completed) {
+    //         if ($completed !== true) {
+    //             \Log::info("Content $contentId in lesson $lessonId is not completed");
+    //             return false;
+    //         }
+    //         $completedContents++;
+    //     }
+    
+    //     if ($completedContents === $totalContents) {
+    //         \Log::info("Lesson $lessonId is fully completed");
+    //         return true;
+    //     } else {
+    //         \Log::info("Lesson $lessonId is not fully completed. Expected $totalContents, completed $completedContents");
+    //         return false;
+    //     }
+    // }
+    // private function promoteUserLevel($firebaseId, $newUserType)
+    // {
+    //     // Update user type in Firebase
+    //     $userRef = 'users/' . $firebaseId;
+    //     $this->database->getReference($userRef)->update([
+    //         'user_type' => $newUserType
+    //     ]);
+    
+    //     // Optional: Log the promotion or send a notification
+    //     \Log::info("User $firebaseId promoted to $newUserType");
+    // }
 
 
 

@@ -3,29 +3,21 @@
 @section('content')
 
 <div class="main-container">
-    <div class="top-container" style="display: grid;grid-template-columns: 1fr 1fr;gap: 20px;">
-        <div class="container" style="border: 1px  #ccc;padding: 10px;">
+    <div class="top-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="container" style="border: 1px #ccc; padding: 10px;">
             <h2>User Details</h2>
-            <p><strong>User ID:</strong> {{ $id }}</p>
             <p><strong>Name:</strong> {{ $user['name'] ?? 'N/A' }}</p>
             <p><strong>Email:</strong> {{ $user['email'] ?? 'N/A' }}</p>
-            <p><strong>Usertype:</strong> {{ $user['usertype'] ?? 'N/A' }}</p>
         </div>
 
-        <!-- QUiz Data Shoud Be Here -->
-        <div class="container" style="border: 1px  #ccc;padding: 10px;">
-            <h2>User Details</h2>
-            <p><strong>User ID:</strong> {{ $id }}</p>
-            <p><strong>Name:</strong> {{ $user['name'] ?? 'N/A' }}</p>
-            <p><strong>Email:</strong> {{ $user['email'] ?? 'N/A' }}</p>
-            <p><strong>Usertype:</strong> {{ $user['usertype'] ?? 'N/A' }}</p>
+        <!-- Placeholder for Additional Details or Quiz Data -->
+        <div class="container" style="border: 1px solid #ccc; padding: 10px;">
+            <h2>Quiz Data</h2>
+            <p>Placeholder for quiz-related information or other user-specific data.</p>
         </div>
     </div>
 
-
-
-
-    <div class="card-container" style="overflow-y: auto;margin-top: 20px;">
+    <div class="card-container" style="overflow-y: auto; margin-top: 20px;">
         @foreach($coursesWithLessonsAndContents as $courseId => $courseData)
             @foreach ($courseData['lessons'] as $lessonId => $lessonData)
                 @php
@@ -37,7 +29,7 @@
 
                 <li style="list-style: none;">
                     <!-- Display the lesson title and progress -->
-                    <img src="{{ $lessonData['lesson']['image'] ?? ''}}" alt="Course Image" class="card-img-small">
+                    <img src="{{ $lessonData['lesson']['image'] ?? '' }}" alt="Course Image" class="card-img-small">
 
                     {{ $lessonData['lesson']['title'] }}
                     ({{ $userProgressCount }} / {{ $totalContentCount }} contents)
@@ -66,8 +58,7 @@
     </div>
     <br>
     <div>
-        <a href="{{ route('users.index') }}" class="btn btn-primary">Back to Users</a>
+        <a href="{{ route('user.dashboard') }}" class="btn btn-primary">Back</a>
     </div>
 
-</div>
 @endsection
