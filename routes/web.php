@@ -295,10 +295,10 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
 
 
-    Route::get('/courses/{courseId}/lessons/{lessonId}/multipleChoice', [QuizController::class, 'multipleChoice'])->name('user.multipleChoice.show');
+    // Route::get('/courses/{courseId}/lessons/{lessonId}/multipleChoice', [QuizController::class, 'multipleChoice'])->name('user.multipleChoice.show');
 
-    Route::post('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
-    Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
+    // Route::post('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
+    // Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
 
 
     Route::get('/survey', [SurveyController::class, 'showSurvey'])->name('survey.show');
@@ -310,7 +310,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
 
 
-    Route::get('/profile/{id}', [UserControllerProfile::class, 'show'])->name('user.profile.show');
+    Route::get('/profile', [UserControllerProfile::class, 'show'])->name('user.profile.show');
     Route::get('/profile/edit', [UserControllerProfile::class, 'edit'])->name('user.profile.edit');
     Route::get('/profile/{id}/apply-expert', [UserControllerProfile::class, 'applyExpert'])->name('user.profile.applyExpert');
 

@@ -23,7 +23,7 @@ class UserDictionary extends Controller
 
         // change the config to the firebase_credentials
         $factory = (new Factory)
-            ->withServiceAccount(base_path('config/dialecto-c14c1-firebase-adminsdk-q80as-7401c37304.json'))
+            ->withServiceAccount(base_path('config/firebase_credentials.json'))
             ->withDatabaseUri(env('FIREBASE_DATABASE_URL'));
 
         $database = $factory->createDatabase();
@@ -45,10 +45,10 @@ class UserDictionary extends Controller
                     }
                     $filteredCourses[$courseId] = [
                         'id' => $courseId,
-                        'name'=>$course['name'],
+                        'name' => $course['name'],
                         'description' => $course['description'] ?? '',
                         'image' => $course['image'] ?? '',
-                        'lessons' => $course['lessons']?? '',
+                        'lessons' => $course['lessons'] ?? '',
                     ];
                 }
             }

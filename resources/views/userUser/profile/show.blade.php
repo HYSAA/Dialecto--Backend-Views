@@ -20,7 +20,7 @@
 
             <div class="pull-right mb-2">
 
-                @if ($credentials['status'] = 'pending' && !empty($credentials))
+                @if ($credentials['status'] == 'pending' && !empty($credentials))
                 <!-- Show "Pending" if credentials boolean is 1 -->
                 <span class="btn " style="background-color: #d4edda; color: #155724;border-color: #c3e6cb; box-sizing: border-box; border-radius: 4px; text-align: center; text-decoration: none; box-shadow: none;">
                     Pending Expert Approval</span>
