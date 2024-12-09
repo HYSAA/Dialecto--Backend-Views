@@ -13,12 +13,15 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WordBankController;
 
+
+use App\Http\Controllers\QuizController as AdminQuizController;
+
 // user 
 
 use App\Http\Controllers\User\CourseController as UserCourseController;
 use App\Http\Controllers\User\LessonController as UserLessonController;
 use App\Http\Controllers\User\ContentController as UserContentController;
-use App\Http\Controllers\User\QuizController;
+use App\Http\Controllers\User\QuizController as UserQuizController;
 use App\Http\Controllers\ControllerProfile as  UserControllerProfile;
 
 
@@ -109,6 +112,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         'destroy' => 'admin.contents.destroy',
     ]);
 
+
+    // admin access of quizzes
+
+    Route::get('/quizzes/{courseId}/{lessonId}', [AdminQuizController::class, 'index'])->name('admin.quizzes.index');
+    Route::get('/quizzes/{courseId}/{lessonId}/create', [AdminQuizController::class, 'create'])->name('admin.quizzes.create');
+    Route::post('/quizzes/{courseId}/{lessonId}', [AdminQuizController::class, 'store'])->name('admin.quizzes.store');
+
+    //void nani nga question controller
+
     Route::resource('courses.lessons.questions', QuestionController::class)->names([
         'index' => 'admin.questions.index',
         'create' => 'admin.questions.create',
@@ -118,7 +130,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         'update' => 'admin.questions.update',
         'destroy' => 'admin.questions.destroy',
     ]);
-
     Route::resource('courses.lessons.questions', QuestionController::class);
     Route::resource('courses.lessons.questions.answers', AnswerController::class);
     Route::get('/questions', function () {
@@ -126,20 +137,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     });
 
 
+
+
     Route::resource('users', UserController::class);
-
-
     Route::get('/pending-expert', [UserController::class, 'showPendingExpert'])->name('admin.showPendingExpert');
-
     Route::get('/post-verify/{id}', [UserController::class, 'postVerify'])->name('admin.postVerify');
     Route::get('/post-postDeny/{id}', [UserController::class, 'postDeny'])->name('admin.postDeny');
 
-
-
     Route::get('/word-bank', [WordBankController::class, 'showWordBank'])->name('admin.showWordBank');
-
     Route::get('/word-bank/{id}', [WordBankController::class, 'wordBankCourse'])->name('admin.wordBankCourse');
-
     Route::get('/word-bank/{courseid}/addWordToLesson/{wordid}', [WordBankController::class, 'addWordToLesson'])->name('admin.addWordToLesson');
     Route::get('/word-bank/{courseid}/removeWord/{wordid}', [WordBankController::class, 'removeWord'])->name('admin.removeWord');
 });
@@ -251,11 +257,8 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
 
     Route::get('/wordSuggested/{id}/viewUpdateSelected', [UserController::class, 'viewUpdateSelected'])->name('user.viewUpdateSelected');
-
     Route::get('/wordSuggested/{id}/deleteSelectedWord', [UserController::class, 'deleteSelectedWord'])->name('user.deleteSelectedWord');
-
     Route::post('/wordSuggested/{id}/updateSelected', [UserController::class, 'updateSelected'])->name('user.updateSelected');
-
     Route::get('/wordSuggested', [UserController::class, 'wordSuggested'])->name('user.wordSuggested');
 
 
@@ -267,22 +270,21 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::post('/selectUserCourseLesson/courses/{courseId}/lessons/{lessonId}/submitwordSuggested', [UserController::class, 'submitWordSuggested'])->name('user.submitWordSuggested');
     // Route::get('/get-lessons/{course}', [UserController::class, 'getLessons']);
 
+    // Route::get('/quiz', [UserController::class, 'show'])->name('user.quiz');
+    // Route::get('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'showQuiz'])->name('user.quiz.show');
+    // Route::post('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
+    // Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
 
-    Route::get('/quiz', [UserController::class, 'show'])->name('user.quiz');
-
-    Route::get('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'showQuiz'])->name('user.quiz.show');
-    Route::post('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
-    Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
-
-
-
-
+    // Route::get('/courses/{courseId}/lessons/{lessonId}/multipleChoice', [QuizController::class, 'multipleChoice'])->name('user.multipleChoice.show');
+    // Route::post('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
+    // Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
 
 
-    Route::get('/courses/{courseId}/lessons/{lessonId}/multipleChoice', [QuizController::class, 'multipleChoice'])->name('user.multipleChoice.show');
+    Route::get('/take-quiz/{courseId}/{lessonId}', [UserQuizController::class, 'showQuiz'])->name('user.quiz.show');
+    Route::post('/{courseId}/{lessonId}/submit', [UserQuizController::class, 'submitAnswer'])->name('user.question.submit');
+    Route::get('course/{courseId}/lesson/{lessonId}/quiz/results', [UserQuizController::class, 'showResults'])->name('user.question.results');
 
-    Route::post('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
-    Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
+
 
 
 
@@ -294,12 +296,6 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/profile/{id}', [UserControllerProfile::class, 'show'])->name('user.profile.show');
     Route::get('/profile/edit', [UserControllerProfile::class, 'edit'])->name('user.profile.edit');
     Route::get('/profile/{id}/apply-expert', [UserControllerProfile::class, 'applyExpert'])->name('user.profile.applyExpert');
-
-
-
-
-
     Route::post('/profile/posting-credentials', [UserControllerProfile::class, 'postCredentials'])->name('user.profile.postCredentials');
-
     Route::get('/profile/submitted-creds/{name}', [UserControllerProfile::class, 'submittedCredentials'])->name('user.profile.submittedCredentials');
 });

@@ -23,6 +23,15 @@ class CourseController extends Controller
     {
         $courses = $this->database->getReference('courses')->getValue();
 
+        session([
+            'score' => 0,
+            'currentIndex' => 0,
+            'questions' => []
+        ]);
+
+        // dd(session()->all());
+
+
 
         if ($courses === null) {
             $courses = [];

@@ -7,156 +7,172 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Content;
-use Illuminate\Http\Request;
-use Kreait\Firebase\Factory;
 use Kreait\Firebase\Storage as FirebaseStorage;
-//Added
+use Illuminate\Http\Request;
+use Kreait\Firebase\Contract\Database;
+use Kreait\Firebase\Factory;
 use App\Models\UserProgress;
 
 class QuizController extends Controller
 {
-    // public function showQuiz($courseId, $lessonId)
-    // {
-    //     $course = Course::find($courseId);
-    //     $lesson = Lesson::find($lessonId);
 
-    //     $contents = Content::where('lesson_id', $lessonId)->get();
+    protected $firebaseStorage;
+    protected $database;
 
-    //     $questions = $contents->shuffle();
+    public function __construct(Database $database, FirebaseStorage $firebaseStorage)
+    {
+        $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
 
-    //     $options = $contents->shuffle();
+        if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
+            throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");
+        }
 
-    //     foreach ($contents as $content) {
-    //         UserProgress::firstOrCreate([
-    //             'user_id' => auth()->id(),
-    //             'course_id' => $courseId,
-    //             'lesson_id' => $lessonId,
-    //             'content_id' => $content->id,
-    //         ]);
-    //     }
+        $this->firebaseStorage = (new Factory)
+            ->withServiceAccount($firebaseCredentialsPath)
+            ->createStorage();
+
+        $this->database = $database;
+        // $this->firebaseStorage = $firebaseStorage;
+    }
 
 
 
-    //     return view('userUser.quiz.quiz', compact('course', 'lesson', 'questions', 'options', 'contents'));
-    // }
 
 
     public function showQuiz($courseId, $lessonId)
     {
-        $course = Course::find($courseId);
-        $lesson = Lesson::find($lessonId);
 
-        $contents = Content::where('lesson_id', $lessonId)->get();
 
-        // Shuffle contents to randomize questions
-        $questions = $contents->shuffle();
+        $courseName = $this->database->getReference("courses/$courseId")->getValue()['name'];
+        $lessonName = $this->database->getReference("courses/$courseId/lessons/$lessonId")->getValue()['title'];
 
-        // Prepare the questions and options
-        $questionsWithOptions = [];
+        $currentIndex = session('currentIndex', 0);
+        $score = session('score', 0);
 
-        foreach ($questions as $question) {
-            // Get the correct answer
-            $correctAnswer = $question;
 
-            // Get a random selection of 3 other options and include the correct answer
-            $options = $contents->where('id', '!=', $question->id)
-                ->shuffle()
-                ->take(3)
-                ->push($correctAnswer)
-                ->shuffle();
 
-            // Add to the array of questions with options
-            $questionsWithOptions[] = [
-                'question' => $question,
-                'options' => $options
-            ];
+        $questions  = $this->database->getReference("quizzes/$lessonId")->getValue();
+
+
+
+        $questions = array_values($questions);
+        session(['questions' => $questions]);
+
+
+        for ($i = 0; $i < count($questions); $i++) {
+            shuffle($questions[$i]['choices']);
         }
 
-        // Track user progress
-        foreach ($contents as $content) {
-            UserProgress::firstOrCreate([
-                'user_id' => auth()->id(),
-                'course_id' => $courseId,
-                'lesson_id' => $lessonId,
-                'content_id' => $content->id,
-            ]);
-        }
 
-        return view('userUser.quiz.quiz', compact('course', 'lesson', 'questionsWithOptions'));
+
+        $currentQuestion = $questions[$currentIndex];
+
+
+
+        // Use compact to pass variables to the view
+        return view('userUser.quiz.quiz', compact(
+            'currentQuestion',
+            'currentIndex',
+            'questions',
+            'score',
+            'lessonId',
+            'courseId',
+            'courseName',
+            'lessonName'
+        ));
     }
 
 
 
-    public function multipleChoice($courseId, $lessonId)
+    public function submitAnswer(Request $request, $courseId, $lessonId)
     {
-        // Get the course and lesson
-        $course = Course::find($courseId);
-        $lesson = Lesson::find($lessonId);
-
-        // Retrieve all contents for the lesson
-        $contents = Content::where('lesson_id', $lessonId)->get();
-
-        // Create an array of questions (English content)
-        $questions = $contents->shuffle();
-
-        // Create an array of shuffled options (Content text)
-        $options = $contents->shuffle();
-
-        return view('userUser.quiz.quizMC', compact('course', 'lesson', 'questions', 'options'));
-    }
 
 
+        // Retrieve the current index and score from session
+        $currentIndex = session('currentIndex', 0);
+        $score = session('score', 0);
 
 
-    public function submitQuiz(Request $request, $courseId, $lessonId)
-    {
-        $answers = $request->input('answers');
-        $score = 0;
+        $questions = session('questions', []);
 
+        // Convert the associative array to a numerically indexed array
+        $questions = array_values($questions);
 
-        $lessons = Lesson::where('id', $lessonId)->get();
+        // dd($currentIndex, session()->all());
 
-
-        $contents = Content::where('lesson_id', $lessonId)->get();
-
-
-
-        // dd($items);
-
-        foreach ($answers as $questionId => $selectedOptionId) {
-            $content = Content::find($questionId);
-
-            // Check if the selected option is correct
-            if ($content->id == $selectedOptionId) {
-                $score++;
-            }
+        // Ensure there are questions for the lesson and that the currentIndex is valid
+        if (empty($questions)) {
+            return redirect()->route('user.question.results', [$courseId, $lessonId])
+                ->with('error', 'No questions found for this lesson.');
         }
 
+        // Get the selected answer
+        $selectedAnswer = $request->input('answer');
+        $currentQuestion = $questions[$currentIndex];
 
-        // dd($score, $lessonId);
+        // Check if the answer is correct and add points
+        if ($selectedAnswer === $currentQuestion['correct']) {
+            $score += $currentQuestion['points'];
+        }
 
-        $items = count($contents);
+        // Move to the next question by incrementing currentIndex
+        $currentIndex++;
 
-        return redirect()->route('quiz.result', [$courseId, $lessonId])
-            ->with([
-                'score' => $score,
-                'items' => $items
-            ]);
+        // Store the updated score and current index in session
+        session([
+            'score' => $score,
+            'currentIndex' => $currentIndex,
+        ]);
 
+        // Check if this was the last question
+        if ($currentIndex >= count($questions)) {
+            // Redirect to the results page
+            return redirect()->route('user.question.results', [$courseId, $lessonId]);
+        }
 
-        // return redirect()->route('quiz.result', [$courseId, $lessonId])->with('score', $score);
+        // Redirect to the next question
+        return redirect()->route('user.quiz.show', [$courseId, $lessonId]);
     }
 
 
 
 
-    public function showResult($courseId, $lessonId)
-    {
-        $course = Course::find($courseId);
-        $lesson = Lesson::find($lessonId);
-        $score = session('score');
-        $items = session('items');
 
-        return view('userUser.quiz.results', compact('course', 'lesson', 'score', 'items'));
+    public function showResults($courseId, $lessonId)
+    {
+        $totalScore  = $this->database->getReference("quizzes/$lessonId")->getValue();
+
+        $totalScore = array_values($totalScore);
+
+
+
+        $ttscore = 0;
+
+        // dd($totalScore);
+
+
+        for ($i = 0; $i < count($totalScore); $i++) {
+
+            $ttscore = $ttscore + $totalScore[$i]['points'];
+        }
+
+
+
+
+
+        $score = session('score', 0);
+        $questions = session('questions', []);
+
+
+        // dd(session()->all());
+
+
+        return view('userUser.quiz.results', [
+            'score' => $score,
+            'totalQuestions' => count($questions),
+            'courseId' => $courseId,
+            'lessonId' => $lessonId,
+            'totalScore' => $ttscore,
+        ]);
     }
 }
