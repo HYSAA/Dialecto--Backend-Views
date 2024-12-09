@@ -38,6 +38,18 @@
                 </div>
             </div>
 
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    <label for="proficiency_level">Proficiency Level:</label>
+                    <select name="proficiency_level" id="proficiency_level" class="form-control" required>
+                        <option value="">-- Select Proficiency Level --</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                 <button type="submit" class="btn btn-primary">Save</button>
                 <a href="{{ route('admin.courses.show', $courseId) }}" class="btn btn-danger">Discard</a>

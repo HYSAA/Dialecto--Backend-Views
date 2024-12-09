@@ -23,9 +23,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'usertype',  // Add this line
-        'credentials',
+        'usertype',
+        'firebase_id',  // Add this line
+        'survey_taken', // Add this line
+        'credentials',  // If needed
     ];
+    
 
 
     /**
