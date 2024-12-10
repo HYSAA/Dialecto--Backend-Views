@@ -31,52 +31,52 @@
 
             @if(Auth::user()->usertype == 'admin')
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('admin.courses.index') }}">
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('admin.courses.index') }}">
 
-                        <i class="bi bi-person-circle"></i>
-
-
-                        <span class="btn-text">Profile</span>
-                    </a>
-                </li>
+                    <i class="bi bi-person-circle"></i>
 
 
+                    <span class="btn-text">Profile</span>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('admin.courses.index') }}">
-                        <i class="fas fa-book btn-icon"></i>
-                        <span class="btn-text">Courses</span>
-                    </a>
-                </li>
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('lessons.index') }}">
-                        <i class="fas fa-chalkboard-teacher btn-icon"></i>
-                        <span class="btn-text">Lessons</span>
-                    </a>
-                </li>
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('users.index') }}">
-                        <i class="fas fa-chalkboard-teacher btn-icon"></i>
-                        <span class="btn-text">View Users</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('admin.courses.index') }}">
+                    <i class="fas fa-book btn-icon"></i>
+                    <span class="btn-text">Courses</span>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('admin.showPendingExpert') }}">
-                        <i class="fas fa-chalkboard-teacher btn-icon"></i>
-                        <span class="btn-text">Pending Verification</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('lessons.index') }}">
+                    <i class="fas fa-chalkboard-teacher btn-icon"></i>
+                    <span class="btn-text">Lessons</span>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('admin.showWordBank') }}">
-                        <i class="fas fa-chalkboard-teacher btn-icon"></i>
-                        <span class="btn-text">Word Bank</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('users.index') }}">
+                    <i class="fas fa-chalkboard-teacher btn-icon"></i>
+                    <span class="btn-text">View Users</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('admin.showPendingExpert') }}">
+                    <i class="fas fa-chalkboard-teacher btn-icon"></i>
+                    <span class="btn-text">Pending Verification</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('admin.showWordBank') }}">
+                    <i class="fas fa-chalkboard-teacher btn-icon"></i>
+                    <span class="btn-text">Word Bank</span>
+                </a>
+            </li>
 
 
 
@@ -91,61 +91,61 @@
 
             @if(Auth::user()->usertype == 'expert')
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('expert.profile.show') }}">
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('expert.profile.show') }}">
 
-                        <i class="bi bi-person-circle"></i>
-
-
-                        <span class="btn-text">Profile</span>
-                    </a>
-                </li>
+                    <i class="bi bi-person-circle"></i>
 
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('expert.courses.index') }}">
-                        <i class="fas fa-book btn-icon"></i>
-                        <span class="btn-text">Courses</span>
-                    </a>
-                </li>
+                    <span class="btn-text">Profile</span>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('expert.progress', ['id' => Auth::user()->firebase_id]) }}">
-                        <i class="fas fa-tachometer-alt btn-icon"></i>
-                        <span class="btn-text">Progress</span>
-                    </a>
-                </li>
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('expert.dictionary', ['id' => Auth::user()->firebase_id]) }}">
-                        <i class="bi bi-bar-chart"></i>
-                        <span class="btn-text">Dictionary of Words Known</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('expert.courses.index') }}">
+                    <i class="fas fa-book btn-icon"></i>
+                    <span class="btn-text">Courses</span>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('expert.pendingWords') }}">
-                        <i class="fas fa-tachometer-alt btn-icon"></i>
-                        <span class="btn-text">Word Bank</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('expert.progress', ['id' => Auth::user()->firebase_id]) }}">
+                    <i class="fas fa-tachometer-alt btn-icon"></i>
+                    <span class="btn-text">Progress</span>
+                </a>
+            </li>
 
-                <!-- <li class="nav-item">
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('expert.dictionary', ['id' => Auth::user()->firebase_id]) }}">
+                    <i class="bi bi-bar-chart"></i>
+                    <span class="btn-text">Dictionary of Words Known</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('expert.pendingWords') }}">
+                    <i class="fas fa-tachometer-alt btn-icon"></i>
+                    <span class="btn-text">Word Bank</span>
+                </a>
+            </li>
+
+            <!-- <li class="nav-item">
                                     <a class="btn btn-nav" href="{{ url('/progress')}}">
                                       <i class="bi bi-bar-chart"></i> 
                                     <span class="btn-text">Word Approval</span>
                                 </li> -->
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ url('/progress') }}">
-                        <i class="bi bi-bar-chart"></i>
-                        <span class="btn-text">Ranking</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ url('/progress') }}">
+                    <i class="bi bi-bar-chart"></i>
+                    <span class="btn-text">Ranking</span>
+                </a>
+            </li>
 
 
 
-                <!-- 
+            <!-- 
                             <li>
                                 <a class="btn btn-nav" href="{{ route('user.wordSuggested') }}">
                                     <i class="bi bi-book"></i>
@@ -163,49 +163,49 @@
 
             @if(Auth::user()->usertype == 'user')
 
-            
+
             <li class="nav-item">
-            <a class="btn btn-nav" href="{{ route('user.profile.show',  ['id' => Auth::user()->firebase_id]) }}">
-                        <i class="fas fa-book btn-icon"></i>
-                        <span class="btn-text">Profile</span>
-                    </a>
-                </li>
+                <a class="btn btn-nav" href="{{ route('user.profile.show') }}">
+                    <i class="fas fa-book btn-icon"></i>
+                    <span class="btn-text">Profile</span>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('user.dashboard') }}">
-                        <i class="fas fa-book btn-icon"></i>
-                        <span class="btn-text">Courses</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('user.dashboard') }}">
+                    <i class="fas fa-book btn-icon"></i>
+                    <span class="btn-text">Courses</span>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('user.progress', ['id' => Auth::user()->firebase_id]) }}">
-                        <i class="fas fa-tachometer-alt btn-icon"></i>
-                        <span class="btn-text">Progress</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('user.progress', ['id' => Auth::user()->firebase_id]) }}">
+                    <i class="fas fa-tachometer-alt btn-icon"></i>
+                    <span class="btn-text">Progress</span>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ url('/progress') }}">
-                        <i class="bi bi-bar-chart"></i>
-                        <span class="btn-text">Ranking</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ url('/progress') }}">
+                    <i class="bi bi-bar-chart"></i>
+                    <span class="btn-text">Ranking</span>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a class="btn btn-nav" href="{{ route('user.dictionary', ['id' => Auth::user()->firebase_id]) }}">
-                        <i class="bi bi-bar-chart"></i>
-                        <span class="btn-text">Dictionary of Words Known</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('user.dictionary', ['id' => Auth::user()->firebase_id]) }}">
+                    <i class="bi bi-bar-chart"></i>
+                    <span class="btn-text">Dictionary of Words Known</span>
+                </a>
+            </li>
 
 
-                <li>
-                    <a class="btn btn-nav" href="{{ route('user.wordSuggested') }}">
-                        <i class="bi bi-book"></i>
-                        <span class="btn-text">My Suggested Words</span>
-                    </a>
-                </li>
+            <li>
+                <a class="btn btn-nav" href="{{ route('user.wordSuggested') }}">
+                    <i class="bi bi-book"></i>
+                    <span class="btn-text">My Suggested Words</span>
+                </a>
+            </li>
 
             @endif
 

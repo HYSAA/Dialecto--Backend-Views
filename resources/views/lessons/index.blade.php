@@ -12,18 +12,18 @@
         </thead>
         <tbody>
             @if (count($lessons) > 0)
-                @foreach ($lessons as $courseKey => $lesson)
-                    @foreach ($lesson as $lessonId => $lessons)
-                        <tr>
-                            <td>{{ $lessons['title'] }}</td>
-                            <td><img src="{{ $lessons['image'] ?? '' }}" alt="{{ $lessons['title'] }}" width="100"></td>
-                        </tr>
-                    @endforeach
-                @endforeach
+            @foreach ($lessons as $courseKey => $lesson)
+            @foreach ($lesson as $lessonId => $lessons)
+            <tr>
+                <td>{{ $lessons['title'] }}</td>
+                <td><img src="{{ $lessons['image'] ?? '' }}" alt="{{ $lessons['title'] }}" width="100"></td>
+            </tr>
+            @endforeach
+            @endforeach
             @else
-                <tr>
-                    <td colspan="3">No lessons found.</td>
-                </tr>
+            <tr>
+                <td colspan="3">No lessons found.</td>
+            </tr>
             @endif
         </tbody>
     </table>

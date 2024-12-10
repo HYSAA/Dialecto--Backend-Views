@@ -10,7 +10,9 @@
             </div>
             <div class="pull-right">
                 <a class="btn btn-main" href="{{ route('admin.contents.create', [$courseId, $lessonId]) }}">Add Contents</a>
+
             </div>
+
         </div>
     </div>
 

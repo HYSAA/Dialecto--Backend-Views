@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use Kreait\Firebase\Contract\Database;
+
 use Kreait\Firebase\Contract\Storage;
 
 use Kreait\Firebase\Factory;
@@ -57,42 +58,17 @@ class ControllerProfile extends Controller
     }
 
 
-    // public function show($userId)
-    // {
+    public function show()
+    {
 
-    //     // Retrieve all users except the current one
-
-    //     $UserId = $userId;
-
-    //     $user = $this->database
-    //         ->getReference("users/{$userId}")
-    //         ->getValue();
-
-    //     $credentials = $this->database
-    //         ->getReference("credentials/{$userId}")
-    //         ->getValue();
+        // Retrieve all users except the current one
 
 
 
+        $user = Auth::user(); // Get the authenticated user
 
-
-    //     // Pass filtered users and the current user's userId to the view
-    //     return view('userUser.profile.show', compact('user', 'userId', 'credentials'));
-    // }
-
-    public function show($userId)
-{
-    // Assuming $userId is already the encoded Firebase ID, like "-O7LC-27ESLUIkwACCHU"
-    
-    // Retrieve the user data from Firebase using the encoded user ID
-    $user = $this->database
-        ->getReference("users/{$userId}")
-        ->getValue();
-
-    // Retrieve the user's credentials data from Firebase using the same user ID
-    $credentials = $this->database
-        ->getReference("credentials/{$userId}")
-        ->getValue();
+        // dd($user);
+        $userId = $user->firebase_id; // Dump
 
         $UserId = $userId;
 
@@ -116,24 +92,15 @@ class ControllerProfile extends Controller
 
             $credentials = ['status' => null];
 
-            dd($credentials);
+            // dd($credentials);
         } else {
             // dd('naay sulod', $credentials);
         }
 
 
-
-
-        // dd($credentials);
-
-
-
-
-
         // Pass filtered users and the current user's userId to the view
         return view('userUser.profile.show', compact('user', 'userId', 'credentials'));
     }
-
 
 
 

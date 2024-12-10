@@ -20,6 +20,9 @@ class CourseController extends Controller
 
     public function index()
     {
+        // dd('asdf');
+
+
         $courses = $this->database->getReference('courses')->getValue();
 
         if ($courses === null) {

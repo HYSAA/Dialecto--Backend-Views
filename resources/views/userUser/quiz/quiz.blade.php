@@ -4,7 +4,7 @@
 <div class="main-container">
     <div class="row mb-3">
         <div class="col-lg-12">
-            <h2>{{ $course->name }} - {{ $lesson->title }} - Quiz</h2>
+            <h2>{{ $courseName }} - {{ $lessonName }} - Quiz</h2>
         </div>
     </div>
 
@@ -15,57 +15,47 @@
             </div>
 
 
+            <h1>Question {{ $currentIndex + 1 }} of {{ count($questions) }}</h1>
+            <p>{{ $currentQuestion['question'] }}</p>
 
-            <form method="POST" action="{{ route('quiz.submit', [$course->id, $lesson->id]) }}">
+
+            <!-- paste here -->
+
+            <form action="{{ route('user.question.submit', [$courseId, $lessonId]) }}" method="POST">
                 @csrf
 
-                @foreach($questionsWithOptions as $item)
-                <div class="quiz-item mb-4" style="border: 1px solid #0d6efd; border-radius: 5px; padding: 15px;">
-                    <p class="mb-4"><strong>{{ $item['question']->english }}</strong></p>
+                <div class="choices-grid">
+                    @foreach ($currentQuestion['choices'] as $index => $choice)
+                    <div class="choice-item play-audio-button" type="button" data-audio-index="{{ $index }}" data-choice-value="{{ $choice['text'] }}">
+                        <label>{{ $choice['text'] }}</label>
 
 
 
 
+                        <audio id="audioElement-{{ $index }}" style="display: none;">
+                            <source src="{{ $choice['audioRef'] }}" type="audio/mp4">
+                            Your browser does not support the audio tag.
+                        </audio>
 
-                    <div style="display: flex; flex-wrap: wrap; width: 100%; ">
 
 
-                        @foreach($item['options'] as $option)
-                        <div class="" style="width: 50%; box-sizing: border-box;">
-                            <input type="radio" name="answers[{{ $item['question']->id }}]"
-                                value="{{ $option->id }}"
-                                id="option{{ $option->id }}-{{ $item['question']->id }}"
-                                class="d-none"
-                                onclick="selectOption(this)">
-
-                            @if ($option->video)
-                            <label class="btn btn-outline-primary playAudioButton" style="width: 95%;"
-                                for="option{{ $option->id }}-{{ $item['question']->id }}">
-                                {{ $option->text }}
-                            </label>
-
-                            <video class="videoElement vid-content" controls style="display: none;">
-                                <source src="{{ $option->video }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-
-                            <audio class="audioElement" style="display: none;">
-                                <source src="{{ $option->video }}" type="audio/mp4">
-                                Your browser does not support the audio tag.
-                            </audio>
-                            @else
-                            No audio available
-                            @endif
-                        </div>
-                        @endforeach
 
 
                     </div>
+                    @endforeach
                 </div>
-                @endforeach
 
-                <button type="submit" class="btn btn-primary mt-1">Submit Answers</button>
+                <input type="hidden" name="answer" id="selectedChoice" value="">
+                <button type="submit" class="btn btn-submit">Submit</button>
             </form>
+
+
+
+
+
+
+
+
 
 
 
@@ -80,42 +70,75 @@
     </div>
 
     <script>
-        function selectOption(radio) {
-            var labels = document.querySelectorAll('input[name="answers[' + radio.name.split('[')[1].split(']')[0] + ']"] + label');
-            labels.forEach(function(label) {
-                label.classList.remove('selected');
-            });
-            radio.nextElementSibling.classList.add('selected');
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
-            const playAudioButtons = document.querySelectorAll('.playAudioButton');
+            const playAudioButtons = document.querySelectorAll('.play-audio-button');
+            const choiceItems = document.querySelectorAll('.choice-item');
+            const selectedChoiceInput = document.getElementById('selectedChoice');
 
-            playAudioButtons.forEach(function(button, index) {
-                button.addEventListener('click', function() {
-                    // Hide all videos and audios except the current one
-                    const videoElements = document.querySelectorAll('.videoElement');
-                    const audioElements = document.querySelectorAll('.audioElement');
+            // Handle audio playback
+            playAudioButtons.forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.stopPropagation(); // Prevent triggering choice selection
+                    const audioIndex = button.getAttribute('data-audio-index');
+                    const audioElement = document.getElementById(`audioElement-${audioIndex}`);
 
-                    videoElements.forEach(function(video) {
-                        video.style.display = 'none';
-                    });
+                    if (audioElement) {
+                        if (audioElement.paused) {
+                            audioElement.style.display = 'none';
+                            audioElement.play();
+                        } else {
+                            audioElement.pause();
+                            audioElement.currentTime = 0;
+                        }
+                    }
+                });
+            });
 
-                    audioElements.forEach(function(audio) {
-                        audio.style.display = 'none';
-                        audio.pause(); // Pause any playing audio
-                    });
-
-                    const videoElement = videoElements[index];
-                    const audioElement = audioElements[index];
-
-                    videoElement.style.display = 'none'; // Hide the video
-                    audioElement.style.display = 'block'; // Show the audio player
-                    audioElement.controls = false; // Hide the audio controls
-                    audioElement.play(); // Start playing the audio
+            // Handle choice selection
+            choiceItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    choiceItems.forEach(i => i.classList.remove('selected')); // Remove 'selected' from all items
+                    item.classList.add('selected'); // Mark clicked item as selected
+                    selectedChoiceInput.value = item.getAttribute('data-choice-value'); // Update hidden input value
                 });
             });
         });
     </script>
+
+
+
 </div>
+
+</div> <!-- Closing your last div -->
+
+<style>
+    .choices-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        /* Two columns */
+        gap: 15px;
+        /* Space between grid items */
+    }
+
+    .choice-item {
+        padding: 20px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .choice-item:hover {
+        background-color: #f0f8ff;
+        border-color: #007bff;
+    }
+
+    .choice-item.selected {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #0056b3;
+    }
+</style>
+
 @endsection

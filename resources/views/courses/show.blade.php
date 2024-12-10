@@ -33,7 +33,7 @@
                     <th>Title</th>
                     <th>Proficiency Level</th>
                     <th>Lesson Image</th>
-                    <th width="280px">Action</th>
+                    <th width="350px">Action</th>
                 </tr>
                 @foreach ($course['lessons'] ?? [] as $lessonId => $lesson)
                 <tr>
@@ -42,20 +42,34 @@
                     <td style="width: 150px;">
                         <div style="width: 150px; height: 150px;">
                             @if(isset($lesson['image']))
-                                <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="image-thumbnail">
+                            <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="image-thumbnail">
                             @else
-                                No image available
+                            No image available
                             @endif
                         </div>
                     </td>
                     <td>
                         <form action="{{ route('admin.lessons.destroy', [$id, $lessonId]) }}" method="POST">
-                            <a class="btn btn-success" href="{{ route('admin.lessons.edit', [$id, $lessonId]) }}">Edit</a>
-                            <a class="btn btn-primary" href="{{ route('admin.lessons.show', [$id, $lessonId]) }}">View</a>
+                            <a class="btn btn-success" style="margin-bottom: 5px;" href="{{ route('admin.lessons.edit', [$id, $lessonId]) }}">Edit</a>
+                            <a class="btn btn-primary" style="margin-bottom: 5px;" href="{{ route('admin.lessons.show', [$id, $lessonId]) }}">View</a>
+
+
+                            <a class="btn btn-back-main" style="margin-bottom: 5px;" href="{{ route('admin.quizzes.index', [$id, $lessonId]) }}">Quizzes</a>
+
+
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="submit" style="margin-bottom: 5px;" class="btn btn-danger">Delete</button>
                         </form>
+
+
+
+
+
+
+
+
+
                     </td>
                 </tr>
                 @endforeach
