@@ -90,6 +90,56 @@ class UserProgressController extends Controller
         return view('userUser.progress.userprogress', compact('user', 'coursesWithLessonsAndContents', 'progressData'));
     }
 
+    public function index()
+    {
+        $currentUserId = Auth::id(); // Get the currently authenticated user's ID
 
+        $firebaseUrl = env('FIREBASE_DATABASE_URL') . '/users.json';
+        $context = stream_context_create([
+            "ssl" => [
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            ],
+        ]);
+        // Use file_get_contents with the created context
+        $response = file_get_contents($firebaseUrl, false, $context);
+        // Decode the JSON response
+        $allUsers = json_decode($response, true);
+        // Filter out the current user
+
+        if (!$allUsers) {
+            return redirect()->route('survey.show'); // Redirect to survey if users data is unavailable
+        }
+
+        // Get the currently authenticated user's data
+        $currentUser = $allUsers[$currentUserId] ?? null;
+
+        if (!$currentUser) {
+            return redirect()->route('survey.survey'); // Redirect to survey if current user not found
+        }
+
+        // Check if the current user has completed the survey
+        if (isset($currentUser['survey_taken']) && $currentUser['survey_taken'] == 0) {
+            return redirect()->route('survey.survey'); // Redirect to the survey page
+        }
+
+  
+  
+
+
+
+        $users = array_filter($allUsers, function ($userId) use ($currentUserId) {
+            return $userId !== $currentUserId;
+        }, ARRAY_FILTER_USE_KEY);
+        // Convert filtered user IDs into an array of user objects if necessary
+        $filteredUsers = [];
+        foreach ($users as $userId => $userData) {
+            $filteredUsers[] = [
+                'id' => $userId,
+                'data' => $userData,
+            ];
+        }
+        return view('users.index', compact('filteredUsers'));
+    }
 
 }

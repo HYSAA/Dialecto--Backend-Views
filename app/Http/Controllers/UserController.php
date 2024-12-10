@@ -69,28 +69,6 @@ class UserController extends Controller
         // Decode the JSON response
         $allUsers = json_decode($response, true);
         // Filter out the current user
-
-        if (!$allUsers) {
-            return redirect()->route('survey.show'); // Redirect to survey if users data is unavailable
-        }
-
-        // Get the currently authenticated user's data
-        $currentUser = $allUsers[$currentUserId] ?? null;
-
-        if (!$currentUser) {
-            return redirect()->route('survey.survey'); // Redirect to survey if current user not found
-        }
-
-        // Check if the current user has completed the survey
-        if (isset($currentUser['survey_taken']) && $currentUser['survey_taken'] == 0) {
-            return redirect()->route('survey.survey'); // Redirect to the survey page
-        }
-
-  
-  
-
-
-
         $users = array_filter($allUsers, function ($userId) use ($currentUserId) {
             return $userId !== $currentUserId;
         }, ARRAY_FILTER_USE_KEY);
@@ -104,6 +82,7 @@ class UserController extends Controller
         }
         return view('users.index', compact('filteredUsers'));
     }
+
 
 
 

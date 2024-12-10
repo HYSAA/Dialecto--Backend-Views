@@ -283,7 +283,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
 
 
-
+    
 
 
 

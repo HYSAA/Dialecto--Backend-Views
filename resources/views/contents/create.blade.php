@@ -37,10 +37,6 @@
                     <textarea class="form-control" style="height:150px" name="english" placeholder="English Equivalent"></textarea>
                 </div>
                 <div class="form-group">
-                    <strong>Image:</strong>
-                    <input type="file" name="image" class="form-control">
-                </div>
-                <div class="form-group">
                     <strong>Video:</strong>
                     <input type="file" name="video" class="form-control">
                 </div>

@@ -32,10 +32,10 @@
     @endif
 </div> -->
 
-<div class="main-container" style="padding: 20px; font-family: Arial, sans-serif;overflow:auto">
+<!-- <div class="main-container" style="padding: 20px; font-family: Arial, sans-serif;overflow:auto">
     <h1>Dictionary of Words</h1>
     @if (isset($courses) && count($courses) > 0)
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 20px;">
             @foreach ($courses as $course)
                 <div style="
                     border: 1px solid #ccc;
@@ -57,6 +57,57 @@
                                         <strong>In Dialect:</strong> {{ $content['text'] ?? 'No text content' }}
                                     </p>
                                 @endforeach
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @else
+        <p>No courses available.</p>
+    @endif
+</div> -->
+
+<div class="main-container" style="padding: 20px; font-family: Arial, sans-serif; overflow:auto">
+<h1 style="
+    font-size: 2.5rem; 
+    font-weight: bold; 
+    color: #ffffff; 
+    background-color: #FFCA58; 
+    padding: 15px 20px; 
+    text-align: center; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+">
+    Dictionary of Words
+</h1>
+    @if (!empty($courses))
+        <div style="display: flex; flex-wrap: wrap; gap: 20px;; padding-top: 15px">
+            @foreach ($courses as $course)
+                <div style="
+                    flex: 1 1 calc(50% - 20px); 
+                    border: 1px solid #ddd; 
+                    border-radius: 8px; 
+                    padding: 16px; 
+                    background-color: #f7f7f7; 
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                ">
+                    <h2 style="font-size: 2rem; margin-bottom: 10px; color: #222;">Dialect: {{ $course['name'] }}</h2>
+                    <div>
+                        @foreach ($course['lessons'] as $lesson)
+                            <h3 style="font-size: 1.5rem; margin: 10px 0 5px; color: #444;">Lesson: {{ $lesson['title'] ?? 'Untitled Lesson' }}</h3>
+                            @if (!empty($lesson['contents']))
+                                <ul style="list-style: none; padding: 0;">
+                                    @foreach ($lesson['contents'] as $content)
+                                        <li style="margin: 5px 0; font-size: 1.1rem; color: #333;">
+                                            <strong>English:</strong> {{ $content['english'] ?? 'N/A' }} 
+                                            
+                                            <strong>Dialect:</strong> {{ $content['text'] ?? 'N/A' }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <p style="color: #999; font-size: 1rem;">No content available for this lesson.</p>
                             @endif
                         @endforeach
                     </div>
