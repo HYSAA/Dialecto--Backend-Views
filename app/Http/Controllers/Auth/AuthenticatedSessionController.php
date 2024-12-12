@@ -41,7 +41,7 @@ class AuthenticatedSessionController extends Controller
         // Find user by email
         $firebaseUser = null;
         foreach ($firebaseUsers as $id => $user) {
-            if ($user['email'] === $request->email) {
+            if (is_array($user) && isset($user['email']) && $user['email'] === $request->email) {
                 $firebaseUser = $user;
                 $firebaseUserId = $id; // Capture the Firebase user ID
                 break;
