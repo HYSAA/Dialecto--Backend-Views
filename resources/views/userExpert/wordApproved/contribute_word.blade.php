@@ -28,7 +28,8 @@
             <form action="{{ route('expert.submitContributeWord') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <input type="hidden" name="course_id" value="{{ $course->id }}">
+                <input type="hidden" name="course_id" value="{{ $courseId }}">
+
 
 
                 <div class="row">
@@ -45,8 +46,8 @@
                         <div class="row mb-2">
 
                             <select name="lesson_id" id="lesson" style="width: 100%;">
-                                @foreach($thisLessons as $lesson)
-                                <option value="{{ $lesson->id }}">{{ $lesson->title }}</option>
+                                @foreach($thisLessons as $key => $lesson)
+                                <option value="{{ $key }}">{{ $lesson['title'] }}</option>
                                 @endforeach
                             </select>
 
@@ -92,6 +93,8 @@
 
                             <input type="file" name="video" id="video" accept="video/*">
                         </div>
+
+
                     </div>
                 </div>
 

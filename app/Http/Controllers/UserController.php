@@ -116,79 +116,79 @@ class UserController extends Controller
     // }
 
     public function show($id)
-{
-    // Firebase URL for user data
-    $firebaseUserUrl = env('FIREBASE_DATABASE_URL') . '/users/' . $id . '.json';
-    $context = stream_context_create([
-        "ssl" => [
-            "verify_peer" => false,
-            "verify_peer_name" => false,
-        ],
-    ]);
+    {
+        // Firebase URL for user data
+        $firebaseUserUrl = env('FIREBASE_DATABASE_URL') . '/users/' . $id . '.json';
+        $context = stream_context_create([
+            "ssl" => [
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            ],
+        ]);
 
-    // Get the user data from Firebase
-    $response = file_get_contents($firebaseUserUrl, false, $context);
-    $user = json_decode($response, true);
+        // Get the user data from Firebase
+        $response = file_get_contents($firebaseUserUrl, false, $context);
+        $user = json_decode($response, true);
 
-    if (!$user) {
-        abort(404, 'User not found.');
-    }
-
-    // Fetch courses data from Firebase
-    $firebaseCoursesUrl = env('FIREBASE_DATABASE_URL') . '/courses.json';
-    $courseResponse = file_get_contents($firebaseCoursesUrl, false, $context);
-    $courses = json_decode($courseResponse, true);
-
-    if (!$courses) {
-        abort(404, 'Courses not found.');
-    }
-
-    // Prepare an array to store lessons and content counts for each course
-    $coursesWithLessonsAndContents = [];
-
-    // Loop through each course and fetch lessons and content count
-    foreach ($courses as $courseId => $courseData) {
-        $lessonsWithContentCount = [];
-
-        if (isset($courseData['lessons'])) {
-            foreach ($courseData['lessons'] as $lessonId => $lessonData) {
-                // Fetch contents for each lesson
-                $contents = isset($lessonData['contents']) ? $lessonData['contents'] : [];
-                // Count the contents
-                $contentCount = count($contents);
-
-                // Store lesson name and content count
-                $lessonsWithContentCount[$lessonId] = [
-                    'lesson' => $lessonData,
-                    'content_count' => $contentCount
-                ];
-            }
+        if (!$user) {
+            abort(404, 'User not found.');
         }
 
-        // Store course data and its lessons with content count
-        $coursesWithLessonsAndContents[$courseId] = [
-            'course' => $courseData,
-            'lessons' => $lessonsWithContentCount
-        ];
+        // Fetch courses data from Firebase
+        $firebaseCoursesUrl = env('FIREBASE_DATABASE_URL') . '/courses.json';
+        $courseResponse = file_get_contents($firebaseCoursesUrl, false, $context);
+        $courses = json_decode($courseResponse, true);
+
+        if (!$courses) {
+            abort(404, 'Courses not found.');
+        }
+
+        // Prepare an array to store lessons and content counts for each course
+        $coursesWithLessonsAndContents = [];
+
+        // Loop through each course and fetch lessons and content count
+        foreach ($courses as $courseId => $courseData) {
+            $lessonsWithContentCount = [];
+
+            if (isset($courseData['lessons'])) {
+                foreach ($courseData['lessons'] as $lessonId => $lessonData) {
+                    // Fetch contents for each lesson
+                    $contents = isset($lessonData['contents']) ? $lessonData['contents'] : [];
+                    // Count the contents
+                    $contentCount = count($contents);
+
+                    // Store lesson name and content count
+                    $lessonsWithContentCount[$lessonId] = [
+                        'lesson' => $lessonData,
+                        'content_count' => $contentCount
+                    ];
+                }
+            }
+
+            // Store course data and its lessons with content count
+            $coursesWithLessonsAndContents[$courseId] = [
+                'course' => $courseData,
+                'lessons' => $lessonsWithContentCount
+            ];
+        }
+
+        // Reference to the user's progress in the database
+        $progressRef = $this->database->getReference('user_progress/' . $id);
+
+        // Get the progress data
+        $progressSnapshot = $progressRef->getSnapshot();
+        $progressData = $progressSnapshot->getValue();
+
+        // Check if progress data exists
+        if (!$progressData) {
+            $progressData = [];
+        }
+
+
+
+        // Pass the user data and courses with lessons and content count to the view
+        return view('users.show', compact('user', 'id', 'coursesWithLessonsAndContents', 'progressData'));
     }
-
-    // Reference to the user's progress in the database
-    $progressRef = $this->database->getReference('user_progress/' . $id);
-        
-    // Get the progress data
-    $progressSnapshot = $progressRef->getSnapshot();
-    $progressData = $progressSnapshot->getValue();
-
-    // Check if progress data exists
-    if (!$progressData) {
-        $progressData = [];
-    }
-
-
-
-    // Pass the user data and courses with lessons and content count to the view
-    return view('users.show', compact('user', 'id', 'coursesWithLessonsAndContents', 'progressData'));
-}
 
 
 
