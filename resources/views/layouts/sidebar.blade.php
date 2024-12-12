@@ -46,7 +46,7 @@
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('admin.courses.index') }}">
                     <i class="fas fa-book btn-icon"></i>
-                    <span class="btn-text">Courses</span>
+                    <span class="btn-text">Courses and Lessons</span>
                 </a>
             </li>
 

@@ -9,8 +9,9 @@
                 <h2>{{ $course['name'] }} - Lessons: {{ $lesson['title'] }}</h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-main" href="{{ route('admin.contents.create', [$courseId, $lessonId]) }}">Add Contents</a>
+            <a class="btn btn-back-main" href="{{ route('admin.courses.show', [$courseId]) }}"> Back To Lesson</a>
 
+            <a class="btn btn-main" href="{{ route('admin.contents.create', [$courseId, $lessonId]) }}">Add Contents</a>
             </div>
 
         </div>

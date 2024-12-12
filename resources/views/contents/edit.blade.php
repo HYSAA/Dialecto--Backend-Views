@@ -42,8 +42,8 @@
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <a class="btn btn-danger" href="{{ route('admin.courses.index') }}">Back</a>
+                <button type="submit" class="btn btn-primary" style="margin-bottom: 5px;">Save</button>
+                <a class="btn btn-danger" style="margin-bottom: 5px;" href="{{ route('admin.lessons.show', [$courseId, $lessonId]) }}">Back</a>
             </div>
         </div>
 

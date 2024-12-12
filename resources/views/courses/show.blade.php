@@ -11,6 +11,8 @@
             </div>
             <div class="pull-right">
                 <!-- Use the `$id` variable passed from the controller if the id is not within the course data -->
+                <a class="btn btn-back-main" href="{{ route('admin.courses.index') }}">Back To Course's</a>
+
                 <a class="btn btn-main" href="{{ route('admin.lessons.create', $id) }}">Create Lesson</a>
             </div>
         </div>
@@ -51,7 +53,7 @@
                     <td>
                         <form action="{{ route('admin.lessons.destroy', [$id, $lessonId]) }}" method="POST">
                             <a class="btn btn-success" style="margin-bottom: 5px;" href="{{ route('admin.lessons.edit', [$id, $lessonId]) }}">Edit</a>
-                            <a class="btn btn-primary" style="margin-bottom: 5px;" href="{{ route('admin.lessons.show', [$id, $lessonId]) }}">View</a>
+                            <a class="btn btn-primary" style="margin-bottom: 5px;" href="{{ route('admin.lessons.show', [$id, $lessonId]) }}">View Contents</a>
 
 
                             <a class="btn btn-back-main" style="margin-bottom: 5px;" href="{{ route('admin.quizzes.index', [$id, $lessonId]) }}">Quizzes</a>

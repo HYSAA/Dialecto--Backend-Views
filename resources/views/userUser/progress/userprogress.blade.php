@@ -29,13 +29,13 @@
                 @endphp
 
                 <div class="card"
-                    style="border: 1px solid #ddd; border-radius: 10px; padding: 15px; text-align: center; height: 280px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+                    style="border: 1px solid #ddd; border-radius: 10px ; padding: 15px; text-align: center; max-height: 300px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
                     <!-- Display the lesson image -->
                     <img src="{{ $lessonData['lesson']['image'] ?? '' }}" alt="Lesson Image" class="card-img-top"
                         style="max-width: 100%; height: 150px; object-fit: cover; border-radius: 8px;">
 
                     <!-- Lesson title -->
-                    <h5 style="margin: 10px 0;">{{ $lessonData['lesson']['title'] }}</h5>
+                    <h5 style="margin: 10px 0;height: 25px;overflow:auto">{{ $lessonData['lesson']['title'] }}</h5>
 
                     <!-- Progress details -->
                     <p style="margin-bottom: 10px;">Progress: {{ $userProgressCount }} / {{ $totalContentCount }} contents</p>
