@@ -60,20 +60,22 @@
                     <th>Lesson</th>
                     <th>Video</th>
                     <th>Status</th>
+                    <th>Approve</th>
+                    <th>Denied</th>
                     <th width="280px">Action</th>
                 </tr>
-                @foreach($userWords as $word)
+                @foreach($userWords as $key => $word)
                 <tr>
-                    <td>{{ $word->text }}</td>
-                    <td>{{ $word->english }}</td>
-                    <td>{{ $word->course->name ?? 'No course found' }}</td>
-                    <td>{{ $word->lesson->title ?? 'No lesson found' }}</td>
+                    <td>{{ $word['text'] }}</td>
+                    <td>{{ $word['english'] }}</td>
+                    <td>{{ $word['course_name'] ?? 'No course found' }}</td>
+                    <td>{{ $word['lesson_title'] ?? 'No lesson found' }}</td>
 
                     <td style="display: flex; justify-content: center; align-items: center; height: 100%;">
                         <div class="box ">
-                            @if ($word->video)
+                            @if ($word['video'])
                             <video controls class="vid-content">
-                                <source src="{{ $word->video }}" type="video/mp4">
+                                <source src="{{ $word['video'] }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                             @else
@@ -84,44 +86,94 @@
 
 
                     <td style="color: 
-    @if ($word->status === 'approved')
+    @if ($word['status'] === 'approved')
         green;
-    @elseif ($word->status === 'disapproved')
+    @elseif ($word['status'] === 'disapproved')
         red;
-    @elseif ($word->status === 'pending')
+    @elseif ($word['status'] === 'pending')
         gray;
     @else
         black; /* Default color */
     @endif
 ">
-                        {{ $word->status }}
+                        {{ $word['status'] }}
                     </td>
 
+
+
+                    <td style="color: green;">{{ $word['approve_count'] }}/3</td>
+
+                    <td style="color: red;">{{ $word['disapproved_count'] }}</td>
+
+                    @if((isset($word['approved']) && $word['approved'] === true) || (isset($word['approved']) && $word['approved'] === false))
                     <td>
                         <!-- Form for Approving -->
-                        <form action="{{ route('expert.approveWord', $word->id) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('expert.approveWord', $key) }}" method="POST" style="display:inline;">
                             @csrf
                             <button
                                 type="submit"
                                 class="btn btn-success"
-                                @if($word->status === 'approved') disabled @endif
-                                >
+                                style="pointer-events: none; opacity: 0.6; cursor: not-allowed;"
+                                @if($word['status']==='approved' ) disabled @endif>
                                 Approve
                             </button>
                         </form>
 
                         <!-- Form for Disapproving -->
-                        <form action="{{ route('expert.disapproveWord', $word->id) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('expert.disapproveWord', $key) }}" method="POST" style="display:inline;">
                             @csrf
                             <button
                                 type="submit"
                                 class="btn btn-danger"
-                                @if($word->status === 'disapproved') disabled @endif
-                                >
+                                style="pointer-events: none; opacity: 0.6; cursor: not-allowed;"
+                                @if($word['status']==='disapproved' ) disabled @endif>
                                 Disapprove
                             </button>
                         </form>
                     </td>
+
+
+                    @else
+
+
+                    <td>
+                        <!-- Form for Approving -->
+                        <form action="{{ route('expert.approveWord', $key) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button
+                                type="submit"
+                                class="btn btn-success"
+                                @if($word['status']==='approved' ) disabled @endif>
+                                Approve
+                            </button>
+                        </form>
+
+                        <!-- Form for Disapproving -->
+                        <form action="{{ route('expert.disapproveWord', $key) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button
+                                type="submit"
+                                class="btn btn-danger"
+                                @if($word['status']==='disapproved' ) disabled @endif>
+                                Disapprove
+                            </button>
+                        </form>
+                    </td>
+
+                    @endif
+
+
+
+
+
+
+
+
+
+
+
+
+
                 </tr>
                 @endforeach
 
@@ -145,13 +197,12 @@
 
                 </tr>
 
-
-                @foreach($expertWords as $word)
+                @foreach($expertWords as $key => $word)
                 <tr>
-                    <td>{{ $word->text }}</td>
-                    <td>{{ $word->english }}</td>
-                    <td>{{ $word->course->name ?? 'No course found' }}</td>
-                    <td>{{ $word->lesson->title ?? 'No lesson found' }}</td>
+                    <td>{{ $word['text'] }}</td>
+                    <td>{{ $word['english'] }}</td>
+                    <td>{{ $word['course_name'] ?? 'No course found' }}</td>
+                    <td>{{ $word['lesson_title'] ?? 'No lesson found' }}</td>
 
 
 
@@ -160,9 +211,9 @@
 
                         <div class="box ">
 
-                            @if ($word->video)
+                            @if ($word['video'])
                             <video controls class="vid-content">
-                                <source src="{{ $word->video }}" type="video/mp4">
+                                <source src="{{ $word['video'] }}" type="video/mp4">
                             </video>
                             @else
                             No video available
