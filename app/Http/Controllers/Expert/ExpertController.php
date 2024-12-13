@@ -203,73 +203,99 @@ class ExpertController extends Controller
 
 
         $i = 0;
-        $approveData = [];
+        $h = 0;
+        $unfilteredData = [];
 
 
 
-        // dd($userWords);
-
+        $approve = [];
+        $disapprove = [];
 
         foreach ($userWords as $key => $word) {
 
-            // dd($word, $key);
+
+
+            $unfilteredData[$i] = $this->database->getReference("verify_words/$key")->getValue();
 
 
 
 
 
 
-            $approveData[$i] = $this->database->getReference("verify_words/$key")->getValue();
+            if (is_array($unfilteredData[$i])) {
+
+
+                foreach ($unfilteredData[$i] as $key2 => $data) {
+                    if (isset($data['status'])) {
+                        if ($data['status'] === 'approved') {
+                            $approve[$key2] = $data;
+                        } elseif ($data['status'] === 'disapproved') {
+                            $disapprove[$key2] = $data;
+                        }
+                    }
+                }
+
+                $approve_count = count($approve);
+                $disapproved_count = count($disapprove);
+
+                $userWords[$key]['approve_count'] = 0;
+                $userWords[$key]['disapproved_count'] = 0;
 
 
 
-            // dd($approveData);
 
 
-            if (is_array($approveData[$i])) {
-                $count = count($approveData[$i]);
-            } else {
-                // Handle the case where $approveData[$i] is not an array
-                $count = 0; // or some default value
+                if ($approve) {
 
-            }
+                    foreach ($approve as $key3 => $approve) {
+
+                        if (isset($approve['status']) && $approve['status'] === 'approved') {
 
 
+                            $userWords[$key]['approve_count'] = $approve_count;
+                        }
+                    }
+                }
+
+                if ($disapprove) {
+
+                    foreach ($disapprove as $key4 => $disapprove) {
 
 
-
-            $userWords[$key]['approve_count'] = $count;
-
-
-            if ($approveData[$i]) {
-
-                foreach ($approveData[$i] as $key2 => $approvedData) {
-
-
-
-                    if ($userId == $approvedData['expert_id']) {
-
-                        $userWords[$key]['approved'] = true;
+                        if (isset($disapprove['status']) && $disapprove['status'] === 'disapproved') {
+                            $userWords[$key]['disapproved_count'] = $disapproved_count;
+                        }
                     }
                 }
             }
 
 
 
+            if ($unfilteredData[$i]) {
+
+                foreach ($unfilteredData[$i] as $key2 => $approvedData) {
+
+
+
+                    if ($userId == $approvedData['expert_id']) {
+
+
+
+                        if ($approvedData['status'] == 'approved') {
+                            $userWords[$key]['approved'] = true;
+                        } elseif ($approvedData['status'] == 'disapproved') {
+                            $userWords[$key]['approved'] = false;
+                        } else {
+                            $userWords[$key]['approved'] = 'pending';
+                        }
+                    }
+                }
+            }
+
             $i++;
         }
 
-        // dd($userWords, $approveData, $count);
-
-
-
-
-
-        // dd($approveData);
-
-        // check point ni boang i count nimo then i add nimo ang attribute sa userwords 
-
-        //add tag count
+        // dd($userWords);
 
 
 
@@ -359,27 +385,72 @@ class ExpertController extends Controller
     // Disapprove the suggested word
     public function disapproveWord(Request $request, $id)
     {
-        try {
-            $suggestedWord = SuggestedWord::findOrFail($id);
+        $user = Auth::user(); // Get the currently authenticated user's ID
 
-            if ($suggestedWord->video) {
-                // Delete the video from Firebase Storage
-                $videoPath = parse_url($suggestedWord->video, PHP_URL_PATH);
-                $bucket = $this->firebaseStorage->getBucket();
-                $object = $bucket->object($videoPath);
-                if ($object->exists()) {
-                    $object->delete();
+        $expertId = $user->firebase_id;
+
+        $status = 'disapproved';
+        $wordId = $id;
+
+
+        $contentData = [
+            'status' => $status,
+            'expert_id' => $expertId,
+            'word_id' => $wordId,
+        ];
+
+
+        $disapproved = $this->database->getReference("verify_words/$wordId")->getValue();
+        // checks if this user has already approved the workd
+
+        $exist = false;
+
+
+        if ($disapproved) {
+            foreach ($disapproved as $data) {
+                if ($data['expert_id'] === $expertId) {
+                    $exist = true; // Set to true if a match is found
+
+
+                    break; // Exit the loop early since we found a match
                 }
             }
-
-            $result = $suggestedWord->update([
-                'status' => 'disapproved',
-                'expert_id' => Auth::id(),
-            ]);
-
-            return redirect()->route('expert.pendingWords')->with('success', 'Word disapproved successfully.');
-        } catch (\Exception $e) {
-            return redirect()->route('expert.pendingWords')->with('error', 'An error occurred while disapproving the word: ' . $e->getMessage());
         }
+
+
+        if (!$exist) {
+            $this->database->getReference("verify_words/$wordId")->push($contentData);
+        }
+
+
+        $approveCount = $this->database->getReference("verify_words/$wordId")->getValue();
+
+        $approvedCount = count(array_filter($approveCount, function ($item) {
+            return $item['status'] === 'approved';
+        }));
+
+
+        // next nga logic ani if 3 higher and count
+
+        if ($approvedCount == 3) {
+
+            dd('its goods');
+        }
+
+
+        // try {
+        //     $suggestedWord = SuggestedWord::findOrFail($id);
+        //     $result = $suggestedWord->update([
+        //         'status' => 'approved',
+        //         'expert_id' => Auth::id(),
+        //     ]);
+
+
+        // } catch (\Exception $e) {
+        //     return redirect()->route('expert.pendingWords')->with('error', 'An error occurred while approving the word: ' . $e->getMessage());
+        // }
+        // dd($id);
+
+        return redirect()->route('expert.pendingWords')->with('success', 'Word approved successfully.');
     }
 }

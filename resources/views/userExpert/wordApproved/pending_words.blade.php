@@ -103,9 +103,9 @@
 
                     <td style="color: green;">{{ $word['approve_count'] }}/3</td>
 
-                    <td style="color: red;">{{ $word['approve_count'] }}</td>
+                    <td style="color: red;">{{ $word['disapproved_count'] }}</td>
 
-                    @if(isset($word['approved']) && $word['approved'] === true)
+                    @if((isset($word['approved']) && $word['approved'] === true) || (isset($word['approved']) && $word['approved'] === false))
                     <td>
                         <!-- Form for Approving -->
                         <form action="{{ route('expert.approveWord', $key) }}" method="POST" style="display:inline;">
