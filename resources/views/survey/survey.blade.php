@@ -1,10 +1,8 @@
-
 @extends('layouts.app')
 
 @section('content')
-
- <div class="main-container">
-    <!-- Multi-Page Survey Modal -->
+<div class="main-container">
+    <!-- Survey Modal -->
     <div id="surveyModal" class="modal fade show" tabindex="-1" aria-hidden="true" style="display: block; background: rgba(0, 0, 0, 0.7); z-index: 1050;">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 80%;">
             <div class="modal-content shadow">
@@ -13,30 +11,35 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
+                    <div class="survey-progress mb-3">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" id="progressBar" role="progressbar" style="width: 0%;"></div>
+                        </div>
+                    </div>
                     <form action="{{ route('survey.submit') }}" method="POST" id="multiPageSurvey">
                         @csrf
-
                         <!-- Survey Pages -->
-                        <div class="survey-progress mb-3">
-                            
-                        <div class="survey-page" data-page="1">
-                            <label class="form-label fw-bold">1. How familiar are you with languages?</label>
-                            <div class="form-check">
-                                <input type="radio" id="familiarity-beginner" name="familiarity" value="beginner" class="form-check-input" required>
-                                <label class="form-check-label" for="familiarity-beginner">I'm new</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" id="familiarity-intermediate" name="familiarity" value="intermediate" class="form-check-input">
-                                <label class="form-check-label" for="familiarity-intermediate">Heard from others</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" id="familiarity-advanced" name="familiarity" value="advanced" class="form-check-input">
-                                <label class="form-check-label" for="familiarity-advanced">Can speak with confidence</label>
-                            </div>
-                        </div>
+                        <div class="survey-page active animate__animated" data-page="1">
+                        <label class="form-label fw-bold">1. How familiar are you with languages?</label>
+                 
 
-                        <div class="survey-page d-none" data-page="2">
+                 <div class="form-check">
+                      <input type="radio" id="familiarity-beginner" name="familiarity" value="beginner" class="form-check-input" required>
+                      <label class="form-check-label" for="familiarity-beginner">I'm new</label>
+                  </div>
+                  <div class="form-check">
+                      <input type="radio" id="familiarity-intermediate" name="familiarity" value="intermediate" class="form-check-input">
+                      <label class="form-check-label" for="familiarity-intermediate">Heard from others</label>
+                  </div>
+                  <div class="form-check">
+                      <input type="radio" id="familiarity-advanced" name="familiarity" value="advanced" class="form-check-input">
+                      <label class="form-check-label" for="familiarity-advanced">Can speak with confidence</label>
+                  </div>
+                             
+                        </div>
+                        <div class="survey-page animate__animated d-none" data-page="2">
                             <label class="form-label fw-bold">2. How much experience do you have with language-learning apps?</label>
+                            <!-- Radio options here -->
                             <div class="form-check">
                                 <input type="radio" id="experience-beginner" name="language_experience" value="beginner" class="form-check-input" required>
                                 <label class="form-check-label" for="experience-beginner">Beginner</label>
@@ -50,11 +53,13 @@
                                 <label class="form-check-label" for="experience-advanced">Advanced</label>
                             </div>
                         </div>
-
-            
                         
-                        <div class="survey-page d-none" data-page="3">
-                            <label class="form-label fw-bold">3. What is your biggest challenge in learning a new language?</label>
+
+
+
+                        <div class="survey-page animate__animated d-none" data-page="3">
+                        <label class="form-label fw-bold">3. What is your biggest challenge in learning a new language?</label>
+                            <!-- Radio options here -->
                             <div class="form-check">
                                 <input type="radio" id="challenge-grammar" name="learning_challenge" value="grammar" class="form-check-input" required>
                                 <label class="form-check-label" for="challenge-grammar">Grammar</label>
@@ -68,32 +73,38 @@
                                 <label class="form-check-label" for="challenge-pronunciation">Pronunciation</label>
                             </div>
                         </div>
-                        <div class="survey-page d-none" data-page="4">
+
+
+
+
                         
-
-                            <label class="form-label fw-bold">4. Which of the following learning resources do you use most frequently?</label>
+                        <div class="survey-page animate__animated d-none" data-page="4">
+                        <label class="form-label fw-bold">4. Which of the following learning resources do you use most frequently?</label>
+                            <!-- Radio options here -->
                             <div class="form-check">
-                                <input type="radio" id="resource-textbooks" name="learning_resource" value="textbooks" class="form-check-input" required>
-                                <label class="form-check-label" for="resource-textbooks">Textbooks</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" id="resource-online" name="learning_resource" value="online_courses" class="form-check-input">
-                                <label class="form-check-label" for="resource-online">Online courses</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" id="resource-exchange" name="learning_resource" value="language_exchange" class="form-check-input">
-                                <label class="form-check-label" for="resource-exchange">Language exchange partners</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" id="resource-apps" name="learning_resource" value="language_apps" class="form-check-input">
-                                <label class="form-check-label" for="resource-apps">Language apps</label>
-                            </div>
-                     </div>
-                 
-
-                        <div class="survey-page d-none" data-page="5">
-                      
+                            <input type="radio" id="resource-textbooks" name="learning_resource" value="textbooks" class="form-check-input" required>
+                            <label class="form-check-label" for="resource-textbooks">Textbooks</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" id="resource-online" name="learning_resource" value="online_courses" class="form-check-input">
+                            <label class="form-check-label" for="resource-online">Online courses</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" id="resource-exchange" name="learning_resource" value="language_exchange" class="form-check-input">
+                            <label class="form-check-label" for="resource-exchange">Language exchange partners</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" id="resource-apps" name="learning_resource" value="language_apps" class="form-check-input">
+                            <label class="form-check-label" for="resource-apps">Language apps</label>
+                        </div>
+                        </div>
+                        
+                        
+                        
+                        <!-- More survey pages here -->
+                        <div class="survey-page animate__animated d-none" data-page="5">
                             <label class="form-label fw-bold">5. How motivated are you to learn a new language?</label>
+                            <!-- Radio options here -->
                             <div class="form-check">
                                 <input type="radio" id="motivation-1" name="motivation_level" value="1" class="form-check-input" required>
                                 <label class="form-check-label" for="motivation-1">Not at all</label>
@@ -106,10 +117,7 @@
                                 <input type="radio" id="motivation-3" name="motivation_level" value="3" class="form-check-input">
                                 <label class="form-check-label" for="motivation-3">Very</label>
                             </div>
-                   
-                          </div>
-                        
-
+                        </div>
                         <!-- Navigation Buttons -->
                         <div class="d-flex justify-content-between mt-4">
                             <button type="button" class="btn btn-secondary" id="prevButton" disabled>Previous</button>
@@ -120,18 +128,28 @@
                 </div>
             </div>
         </div>
-    </div>
+        <div id="welcomePopup" class="welcome-popup d-none">
+    <p>Welcome to your language journey! 🎉</p>
+  
+</div> 
     </div>
 
+
+
+
+
+</div> 
     <script>
-
-document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
     const pages = document.querySelectorAll('.survey-page');
+    const progressBar = document.getElementById('progressBar');
     const prevButton = document.getElementById('prevButton');
     const nextButton = document.getElementById('nextButton');
     const submitButton = document.getElementById('submitButton');
+    const welcomePopup = document.getElementById('welcomePopup');
 
     let currentPage = 1;
+    const totalPages = pages.length;
 
     const updatePage = () => {
         pages.forEach(page => {
@@ -142,12 +160,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         prevButton.disabled = currentPage === 1;
-        nextButton.classList.toggle('d-none', currentPage === pages.length);
-        submitButton.classList.toggle('d-none', currentPage !== pages.length);
+        nextButton.classList.toggle('d-none', currentPage === totalPages);
+        submitButton.classList.toggle('d-none', currentPage !== totalPages);
+
+        // Update progress bar
+        const progress = (currentPage / totalPages) * 100;
+        progressBar.style.width = `${progress}%`;
+        progressBar.setAttribute('aria-valuenow', progress);
     };
 
     nextButton.addEventListener('click', () => {
-        if (currentPage < pages.length) {
+        if (currentPage < totalPages) {
             currentPage++;
             updatePage();
         }
@@ -160,12 +183,65 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    submitButton.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent actual submission
+
+        // Show the welcome pop-up
+        welcomePopup.classList.add('show');
+        setTimeout(() => {
+            welcomePopup.classList.remove('d-none');
+        }, 100);
+
+        // Optional: Redirect to dashboard after a delay
+        setTimeout(() => {
+            window.location.href = "{{ route('user.dashboard') }}";
+        }, 300);
+    });
+
     updatePage(); // Initialize the first page view
 });
 
 
     </script>
 
+    <style>
+.survey-page {
+    min-height: 200px;
+}
+
+.progress-bar {
+    transition: width 0.5s ease;
+}
+
+.animate__animated {
+    animation-duration: 0.5s;
+}
+
+.welcome-popup {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #28a745;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: bottom 0.5s ease-in-out;
+    text-align: center;
+}
+
+.welcome-popup.show {
+    bottom: 20px;
+}
+
+.welcome-popup p {
+    margin: 0;
+    font-size: 16px;
+}
+
+
+    </style>
 @endsection
 
 
