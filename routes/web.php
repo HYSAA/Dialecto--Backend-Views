@@ -205,7 +205,9 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
     //Progress
     Route::get('/expert/progress/{id}', [ExpertProgresscontroller::class, 'expertprogress'])->name('expert.progress');
 
-    Route::get('/expert/dictionary/{id}', [ExpertDictionary::class, 'expertdictionary'])->name('expert.dictionary');
+    // Route::get('/expert/dictionary/{id}', [ExpertDictionary::class, 'expertdictionary'])->name('expert.dictionary');
+    Route::get('/expert/dictionary', [ExpertDictionary::class, 'expertdictionary'])->name('expert.dictionary');
+    Route::get('/expert/dictionary/{id}', [ExpertDictionary::class, 'expertdictionaryshow'])->name('expert.dictionary.show');
 
 
 
@@ -317,7 +319,8 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
     Route::get('/user/progress/{id}', [UserProgressController::class, 'userprogress'])->name('user.progress');
 
-    Route::get('/user/dictionary/{id}', [UserDictionary::class, 'userdictionary'])->name('user.dictionary');
+    Route::get('/user/dictionary', [UserDictionary::class, 'userdictionary'])->name('user.dictionary');
+    Route::get('/user/dictionary/{id}', [UserDictionary::class, 'userdictionaryshow'])->name('user.dictionary.show');
 
 
     Route::post('/profile/posting-credentials', [UserControllerProfile::class, 'postCredentials'])->name('user.profile.postCredentials');
