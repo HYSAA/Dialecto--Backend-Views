@@ -6,7 +6,7 @@
     <div id="surveyModal" class="modal fade show" tabindex="-1" aria-hidden="true" style="display: block; background: rgba(0, 0, 0, 0.7); z-index: 1050;">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 80%;">
             <div class="modal-content shadow">
-                <div class="modal-header bg-primary text-white">
+            <div class="modal-header" style="background-color: #FFCA58; color: black;">
                     <h2 class="modal-title">Language Learning Survey</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -20,20 +20,20 @@
                         @csrf
                         <!-- Survey Pages -->
                         <div class="survey-page active animate__animated" data-page="1">
-                        <label class="form-label fw-bold">1. How familiar are you with languages?</label>
+                        <label class="form-label fw-bold">1. How comfortable are you with languages?</label>
                  
 
                  <div class="form-check">
                       <input type="radio" id="familiarity-beginner" name="familiarity" value="beginner" class="form-check-input" required>
-                      <label class="form-check-label" for="familiarity-beginner">I'm new</label>
+                      <label class="form-check-label" for="familiarity-beginner">I have limited language abilities</label>
                   </div>
                   <div class="form-check">
                       <input type="radio" id="familiarity-intermediate" name="familiarity" value="intermediate" class="form-check-input">
-                      <label class="form-check-label" for="familiarity-intermediate">Heard from others</label>
+                      <label class="form-check-label" for="familiarity-intermediate">I have basic language skills in a few languages</label>
                   </div>
                   <div class="form-check">
                       <input type="radio" id="familiarity-advanced" name="familiarity" value="advanced" class="form-check-input">
-                      <label class="form-check-label" for="familiarity-advanced">Can speak with confidence</label>
+                      <label class="form-check-label" for="familiarity-advanced">I can easily communicate in multiple languages</label>
                   </div>
                              
                         </div>
@@ -42,15 +42,15 @@
                             <!-- Radio options here -->
                             <div class="form-check">
                                 <input type="radio" id="experience-beginner" name="language_experience" value="beginner" class="form-check-input" required>
-                                <label class="form-check-label" for="experience-beginner">Beginner</label>
+                                <label class="form-check-label" for="experience-beginner">I'm new to language learning apps</label>
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="experience-intermediate" name="language_experience" value="intermediate" class="form-check-input">
-                                <label class="form-check-label" for="experience-intermediate">Intermediate</label>
+                                <label class="form-check-label" for="experience-intermediate">I have basic experience with language learning apps</label>
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="experience-advanced" name="language_experience" value="advanced" class="form-check-input">
-                                <label class="form-check-label" for="experience-advanced">Advanced</label>
+                                <label class="form-check-label" for="experience-advanced">I've used multiple language learning apps for several years</label>
                             </div>
                         </div>
                         
@@ -115,7 +115,7 @@
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="motivation-3" name="motivation_level" value="3" class="form-check-input">
-                                <label class="form-check-label" for="motivation-3">Very</label>
+                                <label class="form-check-label" for="motivation-3">I'm excited!</label>
                             </div>
                         </div>
                         <!-- Navigation Buttons -->
@@ -132,21 +132,38 @@
     <p>Welcome to your language journey! 🎉</p>
   
 </div> 
+
+
     </div>
-
-
-
-
+    
 
 </div> 
+<div class="modal fade" id="customAlert" tabindex="-1" aria-labelledby="customAlertLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="customAlertLabel">Incomplete Answer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please answer the question before proceeding to the next page or submitting the survey.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
+
+
+
+ document.addEventListener('DOMContentLoaded', () => {
     const pages = document.querySelectorAll('.survey-page');
     const progressBar = document.getElementById('progressBar');
     const prevButton = document.getElementById('prevButton');
     const nextButton = document.getElementById('nextButton');
     const submitButton = document.getElementById('submitButton');
     const welcomePopup = document.getElementById('welcomePopup');
+    const customAlert = new bootstrap.Modal(document.getElementById('customAlert')); // Bootstrap Modal instance
 
     let currentPage = 1;
     const totalPages = pages.length;
@@ -169,10 +186,24 @@
         progressBar.setAttribute('aria-valuenow', progress);
     };
 
+    const validateCurrentPage = () => {
+        const currentInputs = pages[currentPage - 1].querySelectorAll('input[type="radio"]');
+        for (let input of currentInputs) {
+            if (input.checked) {
+                return true; // At least one option is selected
+            }
+        }
+        return false; // No option selected
+    };
+
     nextButton.addEventListener('click', () => {
-        if (currentPage < totalPages) {
-            currentPage++;
-            updatePage();
+        if (validateCurrentPage()) {
+            if (currentPage < totalPages) {
+                currentPage++;
+                updatePage();
+            }
+        } else {
+            customAlert.show(); // Show the custom alert modal
         }
     });
 
@@ -184,19 +215,39 @@
     });
 
     submitButton.addEventListener('click', (event) => {
-        event.preventDefault(); // Prevent actual submission
+        if (!validateCurrentPage()) {
+            event.preventDefault(); 
+            customAlert.show(); 
+        } else {
+            // Show the welcome pop-up
+            welcomePopup.classList.add('show');
+            setTimeout(() => {
+                welcomePopup.classList.remove('d-none');
+            }, 100);
 
-        // Show the welcome pop-up
-        welcomePopup.classList.add('show');
-        setTimeout(() => {
-            welcomePopup.classList.remove('d-none');
-        }, 100);
-
-        // Optional: Redirect to dashboard after a delay
-        setTimeout(() => {
-            window.location.href = "{{ route('user.dashboard') }}";
-        }, 300);
+            // Optional: Redirect to dashboard after a delay
+            setTimeout(() => {
+                window.location.href = "{{ route('user.dashboard') }}";
+            }, 300);
+        }
     });
+
+    
+function showAlertModal() {
+ 
+    const customAlert = new bootstrap.Modal(document.getElementById('customAlert'));
+
+    customAlert.show();
+
+ 
+    setTimeout(() => {
+        customAlert.hide();
+    }, 1000); //set nako to 1 sec interval lol
+}
+//para modal 
+// Example usage:
+// showAlertModal();
+
 
     updatePage(); // Initialize the first page view
 });
@@ -211,6 +262,7 @@
 
 .progress-bar {
     transition: width 0.5s ease;
+    background-color: #CB9219 !important;
 }
 
 .animate__animated {
