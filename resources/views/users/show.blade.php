@@ -3,29 +3,22 @@
 @section('content')
 
 <div class="main-container">
-    <div class="top-container" style="display: grid;grid-template-columns: 1fr 1fr;gap: 20px;">
-        <div class="container" style="border: 1px  #ccc;padding: 10px;">
+    <div class="top-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="container" style="border: 1px #ccc; padding: 10px;">
             <h2>User Details</h2>
-            <p><strong>User ID:</strong> {{ $id }}</p>
             <p><strong>Name:</strong> {{ $user['name'] ?? 'N/A' }}</p>
             <p><strong>Email:</strong> {{ $user['email'] ?? 'N/A' }}</p>
-            <p><strong>Usertype:</strong> {{ $user['usertype'] ?? 'N/A' }}</p>
         </div>
 
-        <!-- QUiz Data Shoud Be Here -->
-        <div class="container" style="border: 1px  #ccc;padding: 10px;">
-            <h2>User Details</h2>
-            <p><strong>User ID:</strong> {{ $id }}</p>
-            <p><strong>Name:</strong> {{ $user['name'] ?? 'N/A' }}</p>
-            <p><strong>Email:</strong> {{ $user['email'] ?? 'N/A' }}</p>
-            <p><strong>Usertype:</strong> {{ $user['usertype'] ?? 'N/A' }}</p>
+        <!-- Placeholder for Additional Details or Quiz Data -->
+        <div class="container" style="border: 1px solid #ccc; padding: 10px;">
+            <h2>Quiz Data</h2>
+            <p>Placeholder for quiz-related information or other user-specific data.</p>
         </div>
     </div>
 
-
-
-
-    <div class="card-container" style="overflow-y: auto;margin-top: 20px;">
+    <div class="card-container"
+        style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 20px; overflow-y: auto;">
         @foreach($coursesWithLessonsAndContents as $courseId => $courseData)
             @foreach ($courseData['lessons'] as $lessonId => $lessonData)
                 @php
@@ -35,21 +28,25 @@
                     $totalContentCount = $lessonData['content_count'];
                 @endphp
 
-                <li style="list-style: none;">
-                    <!-- Display the lesson title and progress -->
-                    <img src="{{ $lessonData['lesson']['image'] ?? ''}}" alt="Course Image" class="card-img-small">
+                <div class="card"
+                    style="border: 1px solid #ddd; border-radius: 10px ; padding: 15px; text-align: center; max-height: 300px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+                    <!-- Display the lesson image -->
+                    <img src="{{ $lessonData['lesson']['image'] ?? '' }}" alt="Lesson Image" class="card-img-top"
+                        style="max-width: 100%; height: 150px; object-fit: cover; border-radius: 8px;">
 
-                    {{ $lessonData['lesson']['title'] }}
-                    ({{ $userProgressCount }} / {{ $totalContentCount }} contents)
+                    <!-- Lesson title -->
+                    <h5 style="margin: 10px 0;height: 25px;overflow:auto">{{ $lessonData['lesson']['title'] }}</h5>
+
+                    <!-- Progress details -->
+                    <p style="margin-bottom: 10px;">Progress: {{ $userProgressCount }} / {{ $totalContentCount }} contents</p>
 
                     <!-- Progress bar -->
-                    <div class="progress mt-2" style="height: 20px;">
+                    <div class="progress" style="height: 20px;">
                         @if($totalContentCount > 0)
                             <div class="progress-bar" role="progressbar"
                                 style="width: {{ ($userProgressCount / $totalContentCount) * 100 }}%;"
                                 aria-valuenow="{{ ($userProgressCount / $totalContentCount) * 100 }}" aria-valuemin="0"
                                 aria-valuemax="100">
-
                                 {{ round(($userProgressCount / $totalContentCount) * 100) }}%
                             </div>
                         @else
@@ -59,11 +56,11 @@
                             </div>
                         @endif
                     </div>
-                </li>
+                </div>
             @endforeach
-
         @endforeach
     </div>
+
     <br>
     <div>
         <a href="{{ route('users.index') }}" class="btn btn-primary">Back to Users</a>

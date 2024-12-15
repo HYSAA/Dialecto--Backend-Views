@@ -117,9 +117,9 @@
             </li>
 
             <li class="nav-item">
-                <a class="btn btn-nav" href="{{ route('expert.dictionary', ['id' => Auth::user()->firebase_id]) }}">
-                    <i class="bi bi-bar-chart"></i>
-                    <span class="btn-text">Dictionary of Words Known</span>
+            <a class="btn btn-nav" href="{{ route('expert.dictionary') }}">
+            <i class="bi bi-bar-chart"></i>
+                    <span class="btn-text">Dictionary of Words</span>
                 </a>
             </li>
 
@@ -193,9 +193,9 @@
             </li>
 
             <li class="nav-item">
-                <a class="btn btn-nav" href="{{ route('user.dictionary', ['id' => Auth::user()->firebase_id]) }}">
+                <a class="btn btn-nav" href="{{ route('user.dictionary') }}">
                     <i class="bi bi-bar-chart"></i>
-                    <span class="btn-text">Dictionary of Words Known</span>
+                    <span class="btn-text">Dictionary of Words</span>
                 </a>
             </li>
 
