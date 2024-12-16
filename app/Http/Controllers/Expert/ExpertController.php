@@ -208,10 +208,12 @@ class ExpertController extends Controller
 
 
 
-        $approve = [];
-        $disapprove = [];
+
 
         foreach ($userWords as $key => $word) {
+
+            $approve = [];
+            $disapprove = [];
 
 
 
@@ -274,6 +276,8 @@ class ExpertController extends Controller
             if ($unfilteredData[$i]) {
 
                 foreach ($unfilteredData[$i] as $key2 => $approvedData) {
+
+                    // dd($approvedData);
 
 
 
@@ -351,19 +355,19 @@ class ExpertController extends Controller
         }
 
 
-        $approveCount = $this->database->getReference("verify_words/$wordId")->getValue();
+        // $approveCount = $this->database->getReference("verify_words/$wordId")->getValue();
 
-        $approvedCount = count(array_filter($approveCount, function ($item) {
-            return $item['status'] === 'approved';
-        }));
+        // $approvedCount = count(array_filter($approveCount, function ($item) {
+        //     return $item['status'] === 'approved';
+        // }));
 
         // dd($approvedCount);
 
 
-        if ($approvedCount == 3) {
+        // if ($approvedCount == 3) {
 
-            dd('its goods');
-        }
+        //     dd('its goods');
+        // }
 
 
 

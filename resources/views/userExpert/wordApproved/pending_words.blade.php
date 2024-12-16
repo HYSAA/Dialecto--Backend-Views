@@ -101,9 +101,18 @@
 
 
 
-                    <td style="color: green;">{{ $word['approve_count'] }}/3</td>
+                    <td style="color: green;">
+                        {{ isset($word['approve_count']) ? $word['approve_count'] : 0 }}/3
+                    </td>
 
-                    <td style="color: red;">{{ $word['disapproved_count'] }}</td>
+
+                    <td style="color: red;">
+                        {{ isset($word['disapproved_count']) ? $word['disapproved_count'] : 0 }}/3
+                    </td>
+
+
+
+
 
                     @if((isset($word['approved']) && $word['approved'] === true) || (isset($word['approved']) && $word['approved'] === false))
                     <td>
