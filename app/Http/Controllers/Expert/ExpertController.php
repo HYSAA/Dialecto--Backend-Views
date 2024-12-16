@@ -355,19 +355,36 @@ class ExpertController extends Controller
         }
 
 
-        // $approveCount = $this->database->getReference("verify_words/$wordId")->getValue();
+        $approveCount = $this->database->getReference("verify_words/$wordId")->getValue();
 
-        // $approvedCount = count(array_filter($approveCount, function ($item) {
-        //     return $item['status'] === 'approved';
-        // }));
+        $approvedCount = count(array_filter($approveCount, function ($item) {
+            return $item['status'] === 'approved';
+        }));
 
-        // dd($approvedCount);
+        // dd($wordId);
+
+
+        $this->database->getReference("verify_words/$wordId")->push($contentData);
+
+
+
 
 
         // if ($approvedCount == 3) {
 
-        //     dd('its goods');
+
+        //     $updateData = [
+        //         'status' => $request->name
+
+        //     ];
+
+        //     $this->database->getReference("suggestedwords/$userId/$wordId")->update($updateData);
         // }
+
+        // checkpoint i throw sad si user id kay di nimo ma biew dri
+
+
+
 
 
 
