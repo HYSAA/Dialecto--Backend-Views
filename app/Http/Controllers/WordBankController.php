@@ -18,20 +18,20 @@ class WordBankController extends Controller
     public function __construct()
     {
         $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
-    
+
         if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
             throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");
         }
-    
+
         // Ensure you are using the correct Realtime Database URL
         $this->firebaseDatabase = (new Factory)
             ->withServiceAccount($firebaseCredentialsPath)
             ->withDatabaseUri('https://dialecto-c14c1-default-rtdb.asia-southeast1.firebasedatabase.app/') // Use the correct URL
             ->createDatabase();
     }
-    
 
-    
+
+
 
     public function showWordBank()
     {
@@ -43,14 +43,36 @@ class WordBankController extends Controller
 
     public function wordBankCourse($id)
     {
-        $courseRef = $this->firebaseDatabase->getReference('courses/' . $id);
-        $course = $courseRef->getValue();
 
-        $suggestionsRef = $this->firebaseDatabase->getReference('suggestedWords')
+        $container = [];
+
+        $course = $this->firebaseDatabase->getReference("courses/$id")->getValue();
+        $courseId = $id;
+
+        $suggestedWords = $this->firebaseDatabase->getReference("suggested_words/")->getValue();
+
+        foreach ($suggestedWords as $outerArray) {
+            foreach ($outerArray as $key => $innerArray) {
+                $container[$key] = $innerArray; // Add each inner array to the container
+            }
+        }
+
+        dd($container);
+
+
+        // checkpoint add ug laing PAGE for lesson kay course ra gi lahos ni john ani
+
+
+
+        $$suggestionsRef = $this->firebaseDatabase->getReference('suggestedWords')
             ->orderByChild('course_id')
             ->equalTo($id)
             ->getSnapshot()
             ->getValue();
+
+
+
+
 
         $approvedSuggestions = [];
         if ($suggestionsRef) {
