@@ -69,7 +69,7 @@
                     <td>{{ $word['text'] }}</td>
                     <td>{{ $word['english'] }}</td>
                     <td>{{ $word['course_name'] ?? 'No course found' }}</td>
-                    <td>{{ $word['lesson_title'] ?? 'No lesson found' }}</td>
+                    <td>{{ $word['lesson_name'] ?? 'No lesson found' }}</td>
 
                     <td style="display: flex; justify-content: center; align-items: center; height: 100%;">
                         <div class="box ">

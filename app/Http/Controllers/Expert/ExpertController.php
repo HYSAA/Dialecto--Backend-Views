@@ -357,8 +357,8 @@ class ExpertController extends Controller
             return $item['status'] === 'approved';
         }));
 
+        // dd($approvedCount);
 
-        // next nga logic ani if 3 higher and count
 
         if ($approvedCount == 3) {
 
@@ -366,18 +366,7 @@ class ExpertController extends Controller
         }
 
 
-        // try {
-        //     $suggestedWord = SuggestedWord::findOrFail($id);
-        //     $result = $suggestedWord->update([
-        //         'status' => 'approved',
-        //         'expert_id' => Auth::id(),
-        //     ]);
 
-
-        // } catch (\Exception $e) {
-        //     return redirect()->route('expert.pendingWords')->with('error', 'An error occurred while approving the word: ' . $e->getMessage());
-        // }
-        // dd($id);
 
         return redirect()->route('expert.pendingWords')->with('success', 'Word approved successfully.');
     }
