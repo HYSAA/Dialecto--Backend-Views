@@ -113,9 +113,9 @@ class SurveyController extends Controller
 
 
         // Determine proficiency level based on total score
-        if ($score <= 4) {
+        if ($score <= 9) {
             return 'Beginner';
-        } elseif ($score <= 7) {
+        } elseif ($score <= 11) {
             return 'Intermediate';
         } else {
             return 'Advanced';
