@@ -364,7 +364,7 @@ class ExpertController extends Controller
         // dd($wordId);
 
 
-        $this->database->getReference("verify_words/$wordId")->push($contentData);
+        // $this->database->getReference("verify_words/$wordId")->push($contentData);
 
 
 
