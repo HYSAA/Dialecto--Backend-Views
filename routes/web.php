@@ -302,11 +302,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     // Route::post('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
     // Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
 
-
-    Route::get('/survey', [SurveyController::class, 'showSurvey'])->name('survey.show');
-    Route::post('/survey', [SurveyController::class, 'submitSurvey'])->name('survey.submit');
-    Route::get('/courses/{course}/completed-lessons', [SurveyController::class, 'countCompletedLessons'])->name('course.completed.lessons');
-    Route::post('/courses/{course}/lessons/{lesson}/complete', [SurveyController::class, 'completeLesson'])->name('lesson.complete');
+   
 
 
 
@@ -325,4 +321,17 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
     Route::post('/profile/posting-credentials', [UserControllerProfile::class, 'postCredentials'])->name('user.profile.postCredentials');
     Route::get('/profile/submitted-creds/{name}', [UserControllerProfile::class, 'submittedCredentials'])->name('user.profile.submittedCredentials');
+
+
+
+    Route::get('/survey', [SurveyController::class, 'showSurvey'])->name('survey.show');
+    Route::post('/survey', [SurveyController::class, 'submitSurvey'])->name('survey.submit');
+
+    Route::middleware(['user','survey.completed'])->group(function () {
+      
+        Route::get('/courses/{course}/completed-lessons', [SurveyController::class, 'countCompletedLessons'])->name('course.completed.lessons');
+        Route::post('/courses/{course}/lessons/{lesson}/complete', [SurveyController::class, 'completeLesson'])->name('lesson.complete');
+    
+
+    }); 
 });
