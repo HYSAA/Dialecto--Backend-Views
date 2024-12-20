@@ -40,7 +40,14 @@ public function store(Request $request): RedirectResponse
     // Validate the request data
     $request->validate([
         'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'], // Validate uniqueness in Firebase if needed
+       'email' => [
+    'required',
+    'string',
+    'email',
+    'max:255',
+    'unique:users,email',
+    'regex:/^[^\s@]+@gmail\.com$/'
+], // Validate uniqueness in Firebase if needed
         'password' => ['required', 'confirmed', Rules\Password::defaults()],
     ]);
 

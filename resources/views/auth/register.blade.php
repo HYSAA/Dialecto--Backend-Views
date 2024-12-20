@@ -10,11 +10,20 @@
         </div>
 
         <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+     \<div class="mt-4">
+    <x-input-label for="email" :value="__('Email')" />
+    <x-text-input 
+        id="email" 
+        class="block mt-1 w-full" 
+        type="email" 
+        name="email" 
+        :value="old('email')" 
+        required 
+        autocomplete="username" 
+        oninput="validateEmail(this)" 
+    />
+    <span id="email-error" class="text-red-500 text-sm hidden">Please enter a valid Gmail address (e.g., user@gmail.com).</span>
+</div>
 
         <!-- Password -->
         <div class="mt-4">
@@ -49,4 +58,17 @@
             </x-primary-button>
         </div>
     </form>
+
+    <script>
+    function validateEmail(input) {
+     
+        const gmailPattern = /^[^\s@]+@gmail\.com$/;
+        const errorSpan = document.getElementById('email-error');
+        if (!gmailPattern.test(input.value)) {
+            errorSpan.classList.remove('hidden'); 
+        } else {
+            errorSpan.classList.add('hidden'); 
+        }
+    }
+</script>
 </x-guest-layout>
