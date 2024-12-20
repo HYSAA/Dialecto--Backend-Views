@@ -17,7 +17,7 @@
         <div class="col-lg-12 margin-tb">
             <div class="row">
             @foreach ($filteredLessons as $lessonId => $lesson)
-    <div class="cardsmall mb-2 mr-2">
+    <div class="cardsmall mb-2 mr-2"  style="overflow-y: auto;">
         <div class="top">
             <div>
                 @if(isset($lesson['image']) && $lesson['image'])

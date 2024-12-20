@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Database;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+
+
+
 class UserDictionary extends Controller
 {
     // public function userdictionary($id)
@@ -123,7 +127,20 @@ class UserDictionary extends Controller
             ];
         }
 
-        return view('userUser.dictionary.userdictionaryshow', compact('course', 'lessonsWithContents'));
+        $perPage = 4;
+        $currentPage  = LengthAwarePaginator::resolveCurrentPage();
+        $itemCollection = collect($lessonsWithContents);
+        $currentPageItems = $itemCollection->slice(($currentPage - 1) * $perPage,$perPage)->all();
+        $paginatedLessons = new LengthAwarePaginator(
+            $currentPageItems,
+            $itemCollection->count(),
+            $perPage,
+            $currentPage,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
+
+
+        return view('userUser.dictionary.userdictionaryshow', compact('course', 'paginatedLessons'));
     }
 
 
