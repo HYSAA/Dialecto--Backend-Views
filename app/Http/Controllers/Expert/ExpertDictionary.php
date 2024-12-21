@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Database;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+
+
 class ExpertDictionary extends Controller
 {
     //
@@ -67,6 +70,19 @@ class ExpertDictionary extends Controller
             ];
         }
 
-        return view('userExpert.dictionary.expertdictionaryshow', compact('course', 'lessonsWithContents'));
+        
+        $perPage = 4;
+        $currentPage  = LengthAwarePaginator::resolveCurrentPage();
+        $itemCollection = collect($lessonsWithContents);
+        $currentPageItems = $itemCollection->slice(($currentPage - 1) * $perPage,$perPage)->all();
+        $paginatedLessons = new LengthAwarePaginator(
+            $currentPageItems,
+            $itemCollection->count(),
+            $perPage,
+            $currentPage,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
+
+        return view('userExpert.dictionary.expertdictionaryshow', compact('course', 'paginatedLessons'));
     }
 }
