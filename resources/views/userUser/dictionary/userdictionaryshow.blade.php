@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="main-container">
+<div class="main-container" style="overflow:auto">
     <!-- Display the course title -->
     <h1 class="text-center" style="
             font-size: 2.5rem; 
