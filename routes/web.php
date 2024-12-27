@@ -1,5 +1,6 @@
 <?php
-
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
 // admin
 use App\Http\Controllers\WordController;
 use App\Http\Controllers\ProfileController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\WordBankController;
 
 
 use App\Http\Controllers\QuizController as AdminQuizController;
+
 
 // user 
 
@@ -61,6 +63,14 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
+Route::get('/reset-password', [NewPasswordController::class, 'create'])->name('password.reset');
+Route::put('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
+
+Route::post('/forgot-password', [NewPasswordController::class, 'sendResetLink'])->name('password.email');
+Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.store');
+
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
 
 //para ang admin ray maka access 
 // Route::middleware(['auth', 'admin'])->prefix('api')->group(function () {
