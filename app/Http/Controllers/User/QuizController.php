@@ -173,13 +173,13 @@ class QuizController extends Controller
 
         $ttscore = 0;
 
-        // dd($totalScore);
 
 
         for ($i = 0; $i < count($totalScore); $i++) {
 
             $ttscore = $ttscore + $totalScore[$i]['points'];
         }
+
 
         $score = session('score', 0);
         $questions = session('questions', []);
@@ -188,14 +188,42 @@ class QuizController extends Controller
 
 
         $quizData = [
-            'score' => $score
+            'score' => $score,
+            'total-score' => $ttscore
         ];
 
         $user = Auth::user(); // Get the authenticated user
         $user = $user->firebase_id; // Dump
 
 
-        $this->database->getReference("quiz_results/$user/$lessonId")->set($quizData);
+
+        // Fetch existing quiz results
+        $userResults = $this->database->getReference("quiz_results/$user/$lessonId")->getValue();
+
+        // Check if userResults is null or 0
+        if (is_null($userResults) || $userResults['score'] == 0) {
+            // Save quiz data directly
+            $this->database->getReference("quiz_results/$user/$lessonId")->set($quizData);
+        } else {
+            // Check if the new total score is higher
+            if ($quizData['score'] >= $userResults['score']) {
+                // Update with the higher score
+                $this->database->getReference("quiz_results/$user/$lessonId")->set($quizData);
+            }
+        }
+
+
+
+
+        // dd($dd);
+
+
+
+
+
+
+
+
 
 
         return view('userUser.quiz.results', [
