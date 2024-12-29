@@ -284,6 +284,18 @@ class ContentController extends Controller
     //     }
     //     return view('userUser.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent'));
     // }
+
+
+
+
+
+
+
+
+
+
+
+
     public function show($courseId, $lessonId, $contentId)
     {
         // Retrieve the course, lesson, and content from the Firebase Realtime Database
@@ -403,9 +415,52 @@ class ContentController extends Controller
         } else {
             $congratulationsMessage = null; // No promotion
         }
+
+
+        //check if naay quizes sulod
+
+        $checkquestions  = $this->database->getReference("quizzes/$lessonId")->getValue();
+
+        if ($checkquestions == null) {
+
+            $checkquestions = false;
+        } else {
+
+            $checkquestions = true;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // Pass data to the view
-        return view('userUser.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent',  'congratulationsMessage'));
+        return view('userUser.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent',  'congratulationsMessage', 'checkquestions'));
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Helper function to get the next level
     private function getNextLevel($currentLevel)

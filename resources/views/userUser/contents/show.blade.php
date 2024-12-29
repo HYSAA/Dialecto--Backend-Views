@@ -71,9 +71,20 @@
                 <div class="row">
                     @if($nextContent)
                     <a class="btn btn-main" style="width: 100%; margin-bottom: 5px;" type="button" href="{{ route('user.contents.show', [$courseId, $lessonId, $nextContent['id']]) }}">Next Word</a>
-                    @else
+                    @elseif($checkquestions == true)
                     <a class="btn btn-main" style="width: 100%; margin-bottom: 5px;" type="button" href="{{ route('user.quiz.show', [$courseId, $lessonId]) }}">Take Quiz</a>
+                    @else
+                    <a class="btn btn-main"
+                        style="width: 100%; margin-bottom: 5px; pointer-events: none; background-color: #ccc; color: #666; cursor: not-allowed;"
+                        type="button">
+                        Quizzes unvailable
+                    </a>
+
                     @endif
+
+
+
+
                 </div>
 
                 <div class="row">
@@ -103,7 +114,7 @@
         }
     </script>
 
-<style>
+    <style>
         /* Modal styling */
         .modal {
             position: fixed;
@@ -111,11 +122,16 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Dark background */
-            display: none; /* Hidden by default */
-            align-items: center; /* Center vertically */
-            justify-content: center; /* Center horizontally */
-            z-index: 1000; /* Ensure it appears above everything */
+            background: rgba(0, 0, 0, 0.5);
+            /* Dark background */
+            display: none;
+            /* Hidden by default */
+            align-items: center;
+            /* Center vertically */
+            justify-content: center;
+            /* Center horizontally */
+            z-index: 1000;
+            /* Ensure it appears above everything */
         }
 
         .modal-content {
@@ -124,8 +140,10 @@
             border-radius: 10px;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            max-width: 400px; /* Limit width */
-            width: 90%; /* Responsive width */
+            max-width: 400px;
+            /* Limit width */
+            width: 90%;
+            /* Responsive width */
         }
 
         .modal-content h2 {
@@ -146,8 +164,8 @@
             background: #0056b3;
         }
     </style>
-   
-@endif
+
+    @endif
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

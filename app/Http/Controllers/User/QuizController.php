@@ -44,6 +44,8 @@ class QuizController extends Controller
     public function showQuiz($courseId, $lessonId)
     {
 
+        // dd('asdasssss');
+
 
         $courseName = $this->database->getReference("courses/$courseId")->getValue()['name'];
         $lessonName = $this->database->getReference("courses/$courseId/lessons/$lessonId")->getValue()['title'];
