@@ -60,25 +60,21 @@ class ControllerProfile extends Controller
 
     public function show()
     {
-
-        // Retrieve all users except the current one
-
-
-
         $user = Auth::user(); // Get the authenticated user
-
-        // dd($user);
         $userId = $user->firebase_id; // Dump
 
-        $UserId = $userId;
+
+        $courses  = $this->database->getReference("courses")->getValue();
+        $lessonWithScore  = $this->database->getReference("quiz_results/$userId")->getValue();
+
+        // dd($lessonWithScore);
+
+
+
 
         $user = $this->database
             ->getReference("users/{$userId}")
             ->getValue();
-
-
-
-
 
         $credentials = $this->database
             ->getReference("credentials/{$userId}")
@@ -99,7 +95,7 @@ class ControllerProfile extends Controller
 
 
         // Pass filtered users and the current user's userId to the view
-        return view('userUser.profile.show', compact('user', 'userId', 'credentials'));
+        return view('userUser.profile.show', compact('user', 'userId', 'credentials', 'courses', 'lessonWithScore'));
     }
 
 

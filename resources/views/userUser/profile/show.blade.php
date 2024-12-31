@@ -75,6 +75,30 @@
 
     </div>
 
+    <div class="card-container"
+        style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 20px; overflow-y: auto;">
+        @foreach($courses as $courseId => $courseData)
+        <!-- Row Header for Course Name -->
+        <div style="grid-column: span 4; margin-bottom: 10px;">
+            <span style="font-weight: bold; font-size: 18px;">{{ $courseData['name'] }}</span>
+        </div>
+
+        @foreach($lessonWithScore as $id => $lesson)
+        <div class="card"
+            style="border: 1px solid #ddd; border-radius: 10px; padding: 15px; text-align: center; max-height: 300px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+
+            <h5 style="margin: 10px 0; height: 25px; overflow: auto;">{{ $lesson['score'] }}</h5>
+        </div>
+
+
+        @endforeach
+        @endforeach
+    </div>
+
+
+
+
+    <!-- 
     <div class="row">
         <div class="col-lg-12">
             <div class="pull-left">
@@ -88,7 +112,7 @@
         <div class="col-lg-12">
             here goes the badges
         </div>
-    </div>
+    </div> -->
 
 
 

@@ -166,6 +166,10 @@ class QuizController extends Controller
     public function showResults($courseId, $lessonId)
     {
         $totalScore  = $this->database->getReference("quizzes/$lessonId")->getValue();
+        $course = $this->database->getReference("courses/$courseId")->getValue();
+        $courseName = $course['name'];
+
+
 
         $totalScore = array_values($totalScore);
 
@@ -189,7 +193,10 @@ class QuizController extends Controller
 
         $quizData = [
             'score' => $score,
-            'total-score' => $ttscore
+            'total-score' => $ttscore,
+            'course' => $courseId,
+            'lesson' => $lessonId
+
         ];
 
         $user = Auth::user(); // Get the authenticated user
@@ -201,21 +208,61 @@ class QuizController extends Controller
         $userResults = $this->database->getReference("quiz_results/$user/$lessonId")->getValue();
 
         // Check if userResults is null or 0
-        if (is_null($userResults) || $userResults['score'] == 0) {
+        if ($userResults != null) {
             // Save quiz data directly
-            $this->database->getReference("quiz_results/$user/$lessonId")->set($quizData);
-        } else {
-            // Check if the new total score is higher
+
             if ($quizData['score'] >= $userResults['score']) {
                 // Update with the higher score
                 $this->database->getReference("quiz_results/$user/$lessonId")->set($quizData);
             }
+        } else {
+            $this->database->getReference("quiz_results/$user/$lessonId")->set($quizData);
         }
 
+        // refetch nato and tanan results sa quizes ni user
+
+        $userResults = $this->database->getReference("quiz_results/$user")->getValue();
+
+        // kay random mani sila, i filter nato based sa  course niya
+
+        $filteredUserResults = [];
+
+        if (!empty($userResults)) {
+            foreach ($userResults as $key => $value) {
+                if (isset($value['course']) && $courseId == $value['course']) {
+                    // Add matching result to filtered results
+                    $filteredUserResults[$key] = $value;
+                }
+            }
+        }
+
+        // after ma filter, i add tanan score into one variable
+
+        $sumOfAllLesson = 0;
+
+        foreach ($filteredUserResults as $key => $value) {
+
+            $sumOfAllLesson = $sumOfAllLesson = $value['score'];
+        }
+
+        $totalScoreForCourse = $sumOfAllLesson;
+
+        // push the sum to firebase
 
 
 
-        // dd($dd);
+        $sumOfCourse = [
+            'total_course_score' => $totalScoreForCourse,
+            'course_name' => $courseName
+
+        ];
+
+
+        $this->database->getReference("ranking/$user/$courseId")->set($sumOfCourse);
+
+
+
+
 
 
 
