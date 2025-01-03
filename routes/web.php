@@ -42,6 +42,7 @@ use App\Http\Controllers\Expert\ExpertDictionary;
 use App\Http\Controllers\SurveyController;
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\User\LeaderboardController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -274,7 +275,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     ]);
 
 
-
+     
 
     Route::get('/wordSuggested/{id}/viewUpdateSelected', [UserController::class, 'viewUpdateSelected'])->name('user.viewUpdateSelected');
     Route::get('/wordSuggested/{id}/deleteSelectedWord', [UserController::class, 'deleteSelectedWord'])->name('user.deleteSelectedWord');
@@ -282,6 +283,10 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/wordSuggested', [UserController::class, 'wordSuggested'])->name('user.wordSuggested');
 
 
+    //para sa leaderboard/rankings
+    Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('user.leaderboard');
+
+    Route::get('/leaderboard/{courseName}', [LeaderboardController::class, 'show'])->name('user.leaderboard.show');
 
 
     Route::get('/selectUserCourseLesson', [UserController::class, 'selectUserCourseLesson'])->name('user.selectUserCourseLesson');
