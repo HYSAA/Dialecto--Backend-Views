@@ -4,7 +4,7 @@
   
 
 
-<div class="main-container">
+<div class="main-container" style="overflow:auto">
 
   <div class="Big-box">
     <div id="header">

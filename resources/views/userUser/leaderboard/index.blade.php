@@ -5,7 +5,7 @@
 
 @section('content')
 
-<div class="main-container">
+<div class="main-container" style="overflow:auto">
 
     <h1 style="
             font-size: 2.5rem; 
