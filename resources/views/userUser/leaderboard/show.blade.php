@@ -46,10 +46,7 @@
                 @endforeach
             </tbody>
         </table>
-        <div id="buttons">
-         
-            <button class="continue">PAGINATE NI </button>
-        </div>
+     
     </div>
     </div>
 </div>
@@ -59,7 +56,7 @@
    
 
 .Big-box{
-  width: 80%; /* Adjusted width for a smaller box */
+  width: 85%; /* Adjusted width for a smaller box */
   margin: 0 auto;
   
 }
@@ -70,7 +67,8 @@
     position: relative;
  
     vertical-align: middle; /* Align vertically with text */
-    margin-left: 4rem; /* Adjust spacing as needed */
+    margin-left: -3rem; /* Adjust spacing as needed */
+  
 }
 
 .ribbon {
@@ -117,6 +115,8 @@ h1 {
 #leaderboard {
   width: 100%;
   position: relative;
+  max-height: 600px; /* You can adjust the max height as needed */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 table {
@@ -134,7 +134,7 @@ tr {
 
 tr:not(:first-child):hover {
   background-color: #fff;
-  transform: scale(1.05);
+  transform: scale(1.04);
   -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
   box-shadow: 0px 5px 15px 8px #e4e7fb;
 }
@@ -166,12 +166,12 @@ td {
   font-size: 2rem;
   text-align: right; /* Align to the right for numerical consistency */
   vertical-align: middle; /* Align vertically with other cells */
-  padding-right: 6.5rem; /* Add spacing to the right if needed */
+  padding-right: 17rem; /* Add spacing to the right if needed */
 }
 
 
 .points:first-child {
-  width: 10rem;
+  width: 20rem;
 }
 
 .gold-medal {
