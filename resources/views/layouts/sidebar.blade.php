@@ -136,12 +136,11 @@
                                     <span class="btn-text">Word Approval</span>
                                 </li> -->
 
-            <li class="nav-item">
-                <a class="btn btn-nav" href="{{ url('/progress') }}">
-                    <i class="bi bi-bar-chart"></i>
-                    <span class="btn-text">Ranking</span>
-                </a>
-            </li>
+                                <li class="nav-item">
+            <a class="btn btn-nav" href="{{ route('expert.leaderboard') }}">
+    <i class="bi bi-bar-chart"></i>
+    <span class="btn-text">Ranking</span>
+</a>
 
 
 

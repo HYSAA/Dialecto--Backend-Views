@@ -27,7 +27,7 @@ use App\Http\Controllers\User\QuizController as UserQuizController;
 use App\Http\Controllers\ControllerProfile as  UserControllerProfile;
 use App\Http\Controllers\User\UserProgressController;
 use App\Http\Controllers\User\UserDictionary;
-
+use App\Http\Controllers\User\LeaderboardController;
 
 //expert
 use App\Http\Controllers\Expert\CourseController as  ExpertCourseController;
@@ -38,11 +38,11 @@ use App\Http\Controllers\Expert\ControllerProfile as  ExpertControllerProfile;
 use App\Http\Controllers\Expert\ExpertController;
 use App\Http\Controllers\Expert\ExpertProgresscontroller;
 use App\Http\Controllers\Expert\ExpertDictionary;
-
+use App\Http\Controllers\Expert\LeaderboardController as ExpertLeaderboardController;
 use App\Http\Controllers\SurveyController;
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\User\LeaderboardController;
+
 
 Route::get('/', function () {
     return view('auth.login');
@@ -202,6 +202,11 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
         'update' => 'expert.contents.update',
         'destroy' => 'expert.contents.destroy',
     ]);
+
+    Route::get('/leaderboard', [ExpertLeaderboardController::class, 'index'])->name('expert.leaderboard');
+
+    Route::get('/leaderboard/{courseName}', [ExpertLeaderboardController::class, 'show'])->name('expert.leaderboard.show');
+
 
 
     Route::get('/contribute-word', [ExpertController::class, 'contributeWord'])->name('expert.contributeWord');
