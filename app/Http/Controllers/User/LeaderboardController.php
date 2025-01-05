@@ -40,6 +40,8 @@ class LeaderboardController extends Controller
     
         // Retrieve rankings
         $rankings = $database->getReference('ranking')->getValue();
+        $users = $database->getReference('users')->getValue();
+        
         $courseRankings = [];
     
         // Retrieve users
@@ -69,6 +71,7 @@ class LeaderboardController extends Controller
     
             // Sort rankings by total course score in descending order
             usort($courseRankings, fn($a, $b) => $b['total_course_score'] <=> $a['total_course_score']);
+            $courseRankings = array_slice($courseRankings, 0 , 10);
         }
     
         return view('userUser.leaderboard.show', [

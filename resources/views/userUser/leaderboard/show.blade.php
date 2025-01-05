@@ -1,10 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-
+  
 
 
 <div class="main-container">
+
+  <div class="Big-box">
     <div id="header">
         <h1>Leaderboard</h1>
       
@@ -29,6 +31,17 @@
                         <td class="name">{{ $ranking['user_name'] }}</td>
                         <td class="name">{{ $ranking['course_id'] }}</td>
                         <td class="points">{{ $ranking['total_course_score'] }}</td>
+
+                        <td class="rank-icon">
+                @if($rank == 2)
+                    <img src="https://img.icons8.com/?size=100&id=I4hsHPwm86-K&format=png&color=000000" alt="Top 1" class="medal-icon">
+                    
+                @elseif($rank == 3)
+                    <img src="https://img.icons8.com/?size=100&id=YskxJ1NpCFQy&format=png&color=000000" alt="Top 2" class="medal-icon">
+                @elseif($rank == 4)
+                    <img src="https://img.icons8.com/?size=100&id=KL1txQ7JoYvd&format=png&color=000000" alt="Top 3" class="medal-icon">
+                @endif
+            </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -38,13 +51,48 @@
             <button class="continue">PAGINATE NI </button>
         </div>
     </div>
+    </div>
 </div>
 
 <style>
    
    
 
+.Big-box{
+  width: 80%; /* Adjusted width for a smaller box */
+  margin: 0 auto;
+  
+}
 
+.medal-icon {
+    width: 5rem; /* Adjust the size of the icon */
+    height: auto;
+    position: relative;
+ 
+    vertical-align: middle; /* Align vertically with text */
+    margin-left: 4rem; /* Adjust spacing as needed */
+}
+
+.ribbon {
+    width: 100%;
+    height: 9rem;
+    background-color: #FFCA58;
+    position: absolute; /* Changed to relative for proper alignment */
+    top: 0rem; /* Reset top position */
+    -webkit-box-shadow: 0px 15px 11px -6px #7a7a7d;
+    box-shadow: 0px 15px 11px -6pxrgb(6, 6, 8);
+}
+.leaderboard-row td:last-child {
+    text-align: center; /* Center the icons in the last column */
+}
+.number {
+ 
+ height: 2rem;
+ font-size: 2.2rem;
+ font-weight: bold;
+ text-align: left;
+ 
+}
 
 
 
@@ -107,26 +155,20 @@ td {
   position: relative;
 }
 
-.number {
-  width: 1rem;
-  font-size: 2.2rem;
-  font-weight: bold;
-  text-align: left;
-}
 
 .name {
   text-align: left;
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 .points {
   font-weight: bold;
   font-size: 2rem;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  
+  text-align: right; /* Align to the right for numerical consistency */
+  vertical-align: middle; /* Align vertically with other cells */
+  padding-right: 6.5rem; /* Add spacing to the right if needed */
 }
+
 
 .points:first-child {
   width: 10rem;
@@ -137,16 +179,6 @@ td {
   margin-left: 1.5rem;
 }
 
-.ribbon {
-  width: 100%;
-  height: 6.5rem;
-  top:-1 rem;
-  background-color: #FFCA58;
-  position: absolute;
-  left: 0rem;
-  -webkit-box-shadow: 0px 15px 11px -6px #7a7a7d;
-  box-shadow: 0px 15px 11px -6pxrgb(21, 21, 27);
-}
 
 .ribbon::before {
   content: "";
