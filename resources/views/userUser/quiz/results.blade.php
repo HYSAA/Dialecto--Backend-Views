@@ -61,7 +61,7 @@
         <div class="col-lg-4 margin-tb text-center " style="padding-top: 70px; display: flex; justify-content: center; ">
 
             <!-- Each card occupies 3 columns in medium screens and larger, with a 10px gap -->
-            <div class="card addborder" style="height: 400px; background-color: #333333;">
+            <div class="card" style="height: 400px; background-color: #333333;">
                 <!-- Image with consistent size -->
                 <img src="{{ $quizData['badge-image'] }}" class="card-img-top" alt="Course Image" style="object-fit: cover; height: 200px; margin-top: 20px;">
                 <div class="card-body" style="background-color: #333333;">
