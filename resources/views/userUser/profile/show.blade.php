@@ -77,6 +77,9 @@
 
     <div class="card-container"
         style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 20px; overflow-y: auto;">
+
+        @if ($courses)
+
         @foreach($courses as $courseId => $courseData)
         <!-- Row Header for Course Name -->
         <div style="grid-column: span 4; margin-bottom: 10px;">
@@ -86,13 +89,25 @@
         @foreach($lessonWithScore as $id => $lesson)
         <div class="card"
             style="border: 1px solid #ddd; border-radius: 10px; padding: 15px; text-align: center; max-height: 300px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-
             <h5 style="margin: 10px 0; height: 25px; overflow: auto;">{{ $lesson['score'] }}</h5>
+        </div>
+        @endforeach
+        @endforeach
+
+        @else
+        <!-- Code to execute when $courses is not set or empty -->
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="pull-left mb-2">
+                    <strong>Take quizes to show badges </strong>
+                </div>
+            </div>
         </div>
 
 
-        @endforeach
-        @endforeach
+        @endif
+
     </div>
 
 

@@ -22,23 +22,23 @@
 
     <form action="{{ route('admin.contents.store', [$courseId, $lessonId]) }}" method="POST" enctype="multipart/form-data">
 
-     
-    
-    @csrf
+
+
+        @csrf
 
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>{{ $course['name'] }} Text</strong>
-                    <textarea class="form-control" style="height:150px" name="text" placeholder="Text"></textarea>
+                    <textarea class="form-control" style="height:150px" name="text" placeholder="Text" required></textarea>
                 </div>
                 <div class="form-group">
                     <strong>English Text:</strong>
-                    <textarea class="form-control" style="height:150px" name="english" placeholder="English Equivalent"></textarea>
+                    <textarea class="form-control" style="height:150px" name="english" placeholder="English Equivalent" required></textarea>
                 </div>
                 <div class="form-group">
                     <strong>Video:</strong>
-                    <input type="file" name="video" class="form-control">
+                    <input type="file" name="video" class="form-control" required>
                 </div>
             </div>
 

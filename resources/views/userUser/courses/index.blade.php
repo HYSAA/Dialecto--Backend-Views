@@ -16,8 +16,13 @@
     $i = 0;
     @endphp
 
+    @if ($courses)
+
     <div class="row" style="overflow-y: auto;">
         <div class="col-lg-12 margin-tb">
+
+
+
 
 
             <div class="row">
@@ -62,8 +67,26 @@
             </div>
 
 
+
+
+
         </div>
     </div>
+
+    @else
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="pull-left mb-2">
+                <strong>There are no courses available. </strong>
+            </div>
+        </div>
+    </div>
+
+
+    @endif
+
 
 
 
