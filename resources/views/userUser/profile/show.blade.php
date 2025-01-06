@@ -50,7 +50,7 @@
 
 
     <div class="row">
-        <div class="col-lg-12 margin-tb addborder">
+        <div class="col-lg-12 margin-tb">
 
             <div class="form-group">
                 <strong>Name:</strong><span> {{ $user['name'] ?? 'N/A' }}</span>
@@ -68,10 +68,20 @@
         </div>
 
     </div>
-
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="pull-left mb-2">
+                <strong>My badges</strong>
+            </div>
+        </div>
+    </div>
 
 
     @if($quizResults)
+
+
+
+
     @foreach($courses as $courseId => $courseData)
     <!-- Flag to track if there are any matching results -->
     @php $hasMatchingResults = false; @endphp
