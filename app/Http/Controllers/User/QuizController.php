@@ -165,9 +165,29 @@ class QuizController extends Controller
 
     public function showResults($courseId, $lessonId)
     {
+
+
         $totalScore  = $this->database->getReference("quizzes/$lessonId")->getValue();
         $course = $this->database->getReference("courses/$courseId")->getValue();
         $courseName = $course['name'];
+
+        $lesson = $course['lessons'];
+        $lessonName = null;
+
+
+        foreach ($lesson as $key => $value) {
+
+            if ($lessonId == $key) {
+                $lessonName = $value['title'];
+            }
+        }
+
+        // dd($lessonName);
+
+
+
+
+
 
 
 
@@ -189,13 +209,49 @@ class QuizController extends Controller
         $questions = session('questions', []);
         $quizHistory = session('quizHistory', []);
 
+        $badges = $this->database->getReference("badges/")->getValue();
+
+
+
+
+
+
+        $badgeName = null;
+        $badgeImage = null;
+
+        // dd($badges);
+
+        if ($ttscore > 0) {
+            $percentage = ($score / $ttscore) * 100;
+        } else {
+            $percentage = 0; // Prevent division by zero if no total score
+        }
+
+        // Determine the medal based on percentage
+        if ($percentage >= 90) {
+            $badgeName = "gold";
+            $badgeImage = $badges['gold'];
+        } elseif ($percentage >= 60) {
+            $badgeName = "silver";
+            $badgeImage = $badges['silver'];
+        } elseif ($percentage >= 0) {
+            $badgeName = "bronze";
+            $badgeImage = $badges['bronze'];
+        } else {
+            $medal = "No Medal"; // This case handles negative percentages, but should not occur
+        }
+
+        // dd($badgeName, $badgeImage);
 
 
         $quizData = [
             'score' => $score,
             'total-score' => $ttscore,
             'course' => $courseId,
-            'lesson' => $lessonId
+            'lesson' => $lessonId,
+            'lesson-name' => $lessonName,
+            'badge' => $badgeName,
+            'badge-image' => $badgeImage,
 
         ];
 
@@ -264,15 +320,6 @@ class QuizController extends Controller
 
 
 
-
-
-
-
-
-
-
-
-
         return view('userUser.quiz.results', [
             'score' => $score,
             'totalQuestions' => count($questions),
@@ -280,6 +327,7 @@ class QuizController extends Controller
             'lessonId' => $lessonId,
             'totalScore' => $ttscore,
             'quizHistory' => $quizHistory,
+            'quizData' => $quizData,
         ]);
     }
 }

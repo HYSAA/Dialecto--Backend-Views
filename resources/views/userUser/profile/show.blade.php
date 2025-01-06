@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="main-container">
+<div class="main-container" style="overflow-y: auto;">
 
     <div class="row">
         <div class="col-lg-12">
@@ -49,10 +49,8 @@
     </div>
 
 
-
-
-    <div class="row" style="overflow-y: auto;">
-        <div class="col-lg-12 margin-tb">
+    <div class="row">
+        <div class="col-lg-12 margin-tb addborder">
 
             <div class="form-group">
                 <strong>Name:</strong><span> {{ $user['name'] ?? 'N/A' }}</span>
@@ -69,74 +67,69 @@
 
         </div>
 
-
-
-
-
     </div>
 
-    <div class="card-container"
-        style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 20px; overflow-y: auto;">
 
-        @if ($courses)
 
-        @foreach($courses as $courseId => $courseData)
-        <!-- Row Header for Course Name -->
-        <div style="grid-column: span 4; margin-bottom: 10px;">
-            <span style="font-weight: bold; font-size: 18px;">{{ $courseData['name'] }}</span>
+    @if($quizResults)
+    @foreach($courses as $courseId => $courseData)
+    <!-- Flag to track if there are any matching results -->
+    @php $hasMatchingResults = false; @endphp
+
+    <!-- Iterate over quizResults to find matching courseId -->
+    @foreach($quizResults as $resultId => $resultData)
+    @if($courseId == $resultData['course']) <!-- Compare courseId with courseId in resultData -->
+    @php $hasMatchingResults = true; @endphp
+    @break <!-- Exit the loop once we find a match, no need to continue checking -->
+    @endif
+    @endforeach
+
+    <!-- If there is a match, create the row and display the course name -->
+    @if($hasMatchingResults)
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="pull-left mb-2">
+                <h2>{{ $courseData['name'] }}</h2>
+            </div>
         </div>
 
-        @foreach($lessonWithScore as $id => $lesson)
-        <div class="card"
-            style="border: 1px solid #ddd; border-radius: 10px; padding: 15px; text-align: center; max-height: 300px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-            <h5 style="margin: 10px 0; height: 25px; overflow: auto;">{{ $lesson['score'] }}</h5>
-        </div>
-        @endforeach
-        @endforeach
+        <!-- Display the cards for this courseId -->
+        @foreach($quizResults as $resultId => $resultData)
+        @if($courseId == $resultData['course']) <!-- Compare courseId with courseId in resultData -->
+        <div class="col-md-3 mb-3"> <!-- Each card occupies 3 columns in medium screens and larger, with a 10px gap -->
+            <div class="card" style="height: 400px; background-color: #333333;">
+                <!-- Image with consistent size -->
+                <img src="{{ $resultData['badge-image'] }}" class="card-img-top" alt="Course Image" style="object-fit: cover; height: 200px; margin-top: 20px;">
+                <div class="card-body" style="background-color: #333333;">
+                    <!-- Card details -->
+                    <Strong class="card-text" style="color: white;">{{ $resultData['lesson-name'] }}</Strong>
+                    <p class="card-text" style="color: white;">Badge: {{ $resultData['badge'] }}</p>
+                    <p class="card-text" style="color: white;">Score: {{ $resultData['score'] }}</p>
+                    <p class="card-text" style="color: white;">Total quiz score: {{ $resultData['total-score'] }}</p>
 
-        @else
-        <!-- Code to execute when $courses is not set or empty -->
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="pull-left mb-2">
-                    <strong>Take quizes to show badges </strong>
                 </div>
             </div>
         </div>
-
-
         @endif
-
+        @endforeach
     </div>
+    @endif
+    @endforeach
+    @else
+    <!-- If $quizResults is null or empty -->
+    <div class="col-lg-12">
+        <div class="pull-left mb-2">
 
-
-
-
-    <!-- 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="pull-left">
-                <h2>Badges </h2>
-            </div>
+            <strong>No badges to show yet. Finish a lesson and take a quiz to show badges.</strong>
         </div>
     </div>
-
-
-    <div class="row">
-        <div class="col-lg-12">
-            here goes the badges
-        </div>
-    </div> -->
-
-
-
-
+    @endif
 
 
 
 
 </div>
+
 
 
 @endsection

@@ -65,11 +65,11 @@ class ControllerProfile extends Controller
 
 
         $courses  = $this->database->getReference("courses")->getValue();
-        $lessonWithScore  = $this->database->getReference("quiz_results/$userId")->getValue();
-
-        // dd($lessonWithScore);
 
 
+        $quizResults  = $this->database->getReference("quiz_results/$userId")->getValue();
+
+        // dd($quizResults, $courses);
 
 
         $user = $this->database
@@ -95,7 +95,7 @@ class ControllerProfile extends Controller
 
 
         // Pass filtered users and the current user's userId to the view
-        return view('userUser.profile.show', compact('user', 'userId', 'credentials', 'courses', 'lessonWithScore'));
+        return view('userUser.profile.show', compact('user', 'userId', 'credentials', 'courses', 'quizResults'));
     }
 
 
