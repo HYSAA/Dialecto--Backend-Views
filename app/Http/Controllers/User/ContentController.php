@@ -371,7 +371,7 @@ class ContentController extends Controller
         $userRef = 'users/' . $firebaseId; // Path to user data in Firebase
         $completedLessonsRef = $userRef . '/completed_lessons';
 
-        // Get the user's current completed lessons data
+       
         $completedLessons = $this->database->getReference($completedLessonsRef)->getValue();
 
         // Check if lesson exists in completed_lessons, if not initialize it
@@ -385,11 +385,11 @@ class ContentController extends Controller
         // Update the user's completed lessons data in Firebase
         $this->database->getReference($completedLessonsRef)->set($completedLessons);
 
-        // Now check if all lessons for the current proficiency level are completed
+      
         $userData = $this->database->getReference('users/' . $firebaseId)->getValue();
-        $currentLevel = $userData['user_type']; // Beginner, Intermediate, or Advanced
+        $currentLevel = $userData['user_type']; 
 
-        // Fetch lessons based on current proficiency level
+      
         $lessonsForLevel = $this->database->getReference('courses/' . $courseId . '/lessons')
             ->orderByChild('proficiency_level')
             ->equalTo($currentLevel)
@@ -397,24 +397,35 @@ class ContentController extends Controller
 
         $allLessonsCompleted = true;
         foreach ($lessonsForLevel as $lessonKey => $lessonData) {
-            // If there are incomplete lessons, break the loop
+          
             if (!isset($completedLessons[$lessonKey]) || count($completedLessons[$lessonKey]) < count($lessonData['contents'])) {
                 $allLessonsCompleted = false;
                 break;
             }
         }
 
-        // If all lessons for current level are completed, promote user
-        if ($allLessonsCompleted) {
-            // Update user proficiency level
-            $nextLevel = $this->getNextLevel($currentLevel);
-            $this->database->getReference('users/' . $firebaseId)->update([
-                'user_type' => $nextLevel
-            ]);
-            $congratulationsMessage = "Congratulations! You’ve been promoted to {$nextLevel}!";
-        } else {
-            $congratulationsMessage = null; // No promotion
-        }
+  
+if ($allLessonsCompleted) {
+   
+    if ($currentLevel === 'Advanced') {
+        $congratulationsMessage = null;
+    } else {
+    
+        $nextLevel = $this->getNextLevel($currentLevel);
+
+      
+        $this->database->getReference('users/' . $firebaseId)->update([
+            'user_type' => $nextLevel
+        ]);
+
+     
+        $congratulationsMessage = "Congratulations! You’ve been promoted to {$nextLevel}!";
+    }
+} else {
+    $congratulationsMessage = null; 
+}
+
+        
 
 
         //check if naay quizes sulod
