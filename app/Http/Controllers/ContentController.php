@@ -7,23 +7,24 @@ use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Storage as FirebaseStorage;
 
 use Kreait\Firebase\Factory;
+
 class ContentController extends Controller
 {
     protected $firebaseStorage;
     protected $database;
 
-    public function __construct(Database $database,FirebaseStorage $firebaseStorage)
+    public function __construct(Database $database, FirebaseStorage $firebaseStorage)
     {
         $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
-        
+
         if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
             throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");
         }
-    
+
         $this->firebaseStorage = (new Factory)
             ->withServiceAccount($firebaseCredentialsPath)
             ->createStorage();
-        
+
         $this->database = $database;
         // $this->firebaseStorage = $firebaseStorage;
     }
@@ -31,17 +32,17 @@ class ContentController extends Controller
     public function create($courseId, $lessonId)
     {
         // Fetch course and lesson details from Firebase Realtime Database
-        $course = $this->database->getReference('courses/'.$courseId)->getValue();
-        $lesson = $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId)->getValue();
-    
+        $course = $this->database->getReference('courses/' . $courseId)->getValue();
+        $lesson = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId)->getValue();
+
         if (!$course || !$lesson) {
             return redirect()->route('admin.courses.index')->with('error', 'Course or Lesson not found.');
         }
-    
+
         // Pass $courseId and $lessonId to the view
         return view('contents.create', compact('course', 'lesson', 'courseId', 'lessonId'));
     }
-    
+
     public function store(Request $request, $courseId, $lessonId)
     {
         $request->validate([
@@ -50,6 +51,9 @@ class ContentController extends Controller
             'image' => 'nullable|image|max:2048',
             'video' => 'nullable|mimes:mp4,avi,mov|max:10000',
         ]);
+
+
+
 
         $contentData = [
             'english' => $request->english,
@@ -86,11 +90,30 @@ class ContentController extends Controller
         }
 
         // Save content to Firebase Realtime Database
-        $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId.'/contents')->push($contentData);
+        $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents')->push($contentData);
 
         return redirect()->route('admin.lessons.show', [$courseId, $lessonId])
             ->with('success', 'Content created successfully.');
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function update(Request $request, $courseId, $lessonId, $contentId)
     {
@@ -107,7 +130,7 @@ class ContentController extends Controller
         ];
 
         $bucket = $this->firebaseStorage->getBucket();
-        $contentReference = $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId.'/contents/'.$contentId);
+        $contentReference = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents/' . $contentId);
 
         // Handle image
         if ($request->hasFile('image')) {
@@ -139,42 +162,42 @@ class ContentController extends Controller
     public function destroy($courseId, $lessonId, $contentId)
     {
         // Get the reference to the specific content in Firebase
-        $contentReference = $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId.'/contents/'.$contentId);
-        
+        $contentReference = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents/' . $contentId);
+
         // Remove the content entry from Firebase Realtime Database
         $contentReference->remove();
-    
+
         // Redirect back to the lesson view with a success message
         return redirect()->route('admin.lessons.show', [$courseId, $lessonId])
             ->with('success', 'Content deleted successfully.');
     }
-    
-    
+
+
 
     public function show($courseId, $lessonId, $contentId)
     {
-        $content = $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId.'/contents/'.$contentId)->getValue();
-        $nextContent = $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId.'/contents')
+        $content = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents/' . $contentId)->getValue();
+        $nextContent = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents')
             ->orderByKey()->startAt($contentId)->limitToFirst(2)->getValue();
-        $previousContent = $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId.'/contents')
+        $previousContent = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents')
             ->orderByKey()->endAt($contentId)->limitToLast(2)->getValue();
 
         return view('contents.show', compact('content', 'nextContent', 'previousContent'));
     }
 
     public function edit($courseId, $lessonId, $contentId)
-    { 
-        $course =$this->database->getReference('courses/'.$courseId)->getValue();
-        $lesson = $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId)->getValue();
-        $content = $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId.'/contents/'.$contentId)->getValue();
-    
+    {
+        $course = $this->database->getReference('courses/' . $courseId)->getValue();
+        $lesson = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId)->getValue();
+        $content = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents/' . $contentId)->getValue();
+
 
         return view('contents.edit', compact('content', 'course', 'lesson', 'courseId', 'lessonId', 'contentId'));
     }
-    
+
     public function index($courseId, $lessonId)
     {
-        $contents = $this->database->getReference('courses/'.$courseId.'/lessons/'.$lessonId.'/contents')->getValue();
+        $contents = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents')->getValue();
         return view('contents.index', compact('contents', 'courseId', 'lessonId'));
     }
 }

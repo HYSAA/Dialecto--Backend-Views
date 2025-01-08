@@ -9,19 +9,28 @@ use App\Models\Content;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Storage as FirebaseStorage;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\Finally_;
+
+
+use Kreait\Firebase\Contract\Database;
 
 
 class WordBankController extends Controller
 {
     protected $firebaseDatabase;
+    protected $firebaseStorage;
 
-    public function __construct()
+    public function __construct(FirebaseStorage $firebaseStorage)
     {
         $firebaseCredentialsPath = config('firebase.credentials') ?: base_path('config/firebase_credentials.json');
 
         if (!file_exists($firebaseCredentialsPath) || !is_readable($firebaseCredentialsPath)) {
             throw new \Exception("Firebase credentials file is not found or readable at: {$firebaseCredentialsPath}");
         }
+
+        $this->firebaseStorage = (new Factory)
+            ->withServiceAccount($firebaseCredentialsPath)
+            ->createStorage();
 
         // Ensure you are using the correct Realtime Database URL
         $this->firebaseDatabase = (new Factory)
@@ -45,72 +54,112 @@ class WordBankController extends Controller
     {
 
         $container = [];
+        $filteredByCourse = [];
+
 
         $course = $this->firebaseDatabase->getReference("courses/$id")->getValue();
         $courseId = $id;
 
+
+
         $suggestedWords = $this->firebaseDatabase->getReference("suggested_words/")->getValue();
 
-        foreach ($suggestedWords as $outerArray) {
-            foreach ($outerArray as $key => $innerArray) {
-                $container[$key] = $innerArray; // Add each inner array to the container
-            }
-        }
 
-        dd($container);
+        if ($suggestedWords) {
 
-
-        // checkpoint add ug laing PAGE for lesson kay course ra gi lahos ni john ani
-
-
-
-        $$suggestionsRef = $this->firebaseDatabase->getReference('suggestedWords')
-            ->orderByChild('course_id')
-            ->equalTo($id)
-            ->getSnapshot()
-            ->getValue();
-
-
-
-
-
-        $approvedSuggestions = [];
-        if ($suggestionsRef) {
-            foreach ($suggestionsRef as $suggestion) {
-                if (in_array($suggestion['status'], ['approved', 'expert'])) {
-                    $approvedSuggestions[] = $suggestion;
+            foreach ($suggestedWords as $outerArray) {
+                foreach ($outerArray as $key => $innerArray) {
+                    $container[$key] = $innerArray;
                 }
             }
         }
 
-        return view('admin.wordBank.wordBankCourse', compact('course', 'approvedSuggestions'));
+        if ($container) {
+            foreach ($container as $key => $value) {
+                if ($courseId === $value['course_id'] && $value['status'] !== 'pending') {
+                    $filteredByCourse[$key] = $value;
+                }
+            }
+        }
+
+
+
+        // dd($filteredByCourse, 'filter');
+
+
+        return view('admin.wordBank.wordBankCourse', compact('course', 'filteredByCourse', 'courseId'));
     }
 
-    public function addWordToLesson($courseid, $wordid)
+    public function addWordToLesson($courseId, $wordId)
     {
-        $suggestedWordRef = $this->firebaseDatabase->getReference('suggestedWords/' . $wordid);
+        $suggestedWordRef = $this->firebaseDatabase->getReference("suggested_words");
         $suggestedWord = $suggestedWordRef->getValue();
 
-        if (empty($suggestedWord['usedID'])) {
-            $lessonRef = $this->firebaseDatabase->getReference('lessons/' . $suggestedWord['lesson_id']);
-            $lesson = $lessonRef->getValue();
+        $container = [];
+        $filtered = [];
 
-            $contentRef = $this->firebaseDatabase->getReference('contents')->push();
-            $contentRef->set([
-                'english' => $suggestedWord['english'],
-                'text' => $suggestedWord['text'],
-                'video' => $suggestedWord['video'],
-                'lesson_id' => $lesson['id']
-            ]);
+        if ($suggestedWord) {
 
-            // Update suggestedWord with the new content ID
-            $suggestedWordRef->update(['usedID' => $contentRef->getKey()]);
-
-            return redirect()->route('admin.wordBankCourse', ['id' => $courseid])
-                ->with('success', 'Word added in lesson.');
-        } else {
-            return redirect()->route('admin.wordBankCourse', ['id' => $courseid])->with('fail', 'Word already in lesson.');
+            foreach ($suggestedWord as $outerArray) {
+                foreach ($outerArray as $key => $innerArray) {
+                    $container[$key] = $innerArray;
+                }
+            }
         }
+
+        if ($container) {
+            foreach ($container as $key => $value) {
+                if ($wordId === $key) {
+                    $filtered[$key] = $value;
+                }
+            }
+        }
+
+        foreach ($filtered as $key => $value) {
+            $finalFilter = [];
+            $toPush = $filtered;
+
+
+            $finalFilter = $value;
+
+            $filtered = $finalFilter;
+        }
+
+        // dd($filtered, 'asdf');
+
+        $contentData = [
+            'english' => $filtered['english'],
+            'text' => $filtered['text'],
+            'video' => $filtered['video'],
+        ];
+
+
+
+        $lessonId = $filtered['lesson_id'];
+
+
+        // Save content to Firebase Realtime Database
+        $this->firebaseDatabase->getReference("courses/$courseId/lessons/$lessonId/contents")->push($contentData);
+
+
+
+
+        $finalFilter['used_id'] = true;
+        $userId =  $finalFilter['user_id'];
+
+
+
+
+
+        // i change and usedId
+
+        $this->firebaseDatabase->getReference("suggested_words/$userId/$wordId")->set($finalFilter);
+
+
+
+
+        return redirect()->route('admin.wordBankCourse', ['id' => $courseId])
+            ->with('success', 'Word added in lesson.');
     }
 
     public function removeWord($courseid, $wordid)

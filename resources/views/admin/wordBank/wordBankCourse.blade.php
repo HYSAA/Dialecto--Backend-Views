@@ -44,9 +44,9 @@
                         <th width="280px">Action</th>
                     </tr>
 
-                    @foreach ($approvedSuggestions as $wordID => $word)
+                    @foreach ($filteredByCourse as $wordId => $word)
                     <tr>
-                        <td>{{ $word['lesson_title'] ?? 'No title available' }}</td>
+                        <td>{{ $word['lesson_name'] ?? 'No title available' }}</td>
                         <td>{{ $word['text'] }}</td>
                         <td>{{ $word['english'] }}</td>
 
@@ -61,19 +61,24 @@
                         </td>
 
                         <td>
-                            <a class="btn btn-success {{ isset($word['usedID']) ? 'disabled' : '' }}"
-                                href="{{ isset($word['usedID']) ? 'javascript:void(0);' : route('admin.addWordToLesson', ['courseid' => $courseID, 'wordid' => $wordID]) }}"
+
+
+                            <a class="btn btn-success {{ $word['used_id'] === true ? 'disabled' : '' }}"
+                                href="{{ $word['used_id'] === true ? 'javascript:void(0);' : route('admin.addWordToLesson', ['courseId' => $courseId, 'wordId' => $wordId]) }}"
                                 tabindex="-1"
-                                aria-disabled="{{ isset($word['usedID']) ? 'true' : 'false' }}">
+                                aria-disabled="{{ $word['used_id'] === true ? 'true' : 'false' }}">
                                 Add Word
                             </a>
 
-                            <a class="btn btn-danger {{ isset($word['usedID']) ? '' : 'disabled' }}"
-                                href="{{ isset($word['usedID']) ? route('admin.removeWord', ['courseid' => $courseID, 'wordid' => $wordID]) : 'javascript:void(0);' }}"
+                            <a class="btn btn-danger {{ $word['used_id'] === false ? 'disabled' : '' }}"
+                                href="{{ $word['used_id'] === false ? 'javascript:void(0);' : route('admin.addWordToLesson', ['courseId' => $courseId, 'wordId' => $wordId]) }}"
                                 tabindex="-1"
-                                aria-disabled="{{ isset($word['usedID']) ? 'false' : 'true' }}">
+                                aria-disabled="{{ $word['used_id'] === false ? 'false' : 'true' }}">
                                 Remove
                             </a>
+
+
+
                         </td>
                     </tr>
                     @endforeach

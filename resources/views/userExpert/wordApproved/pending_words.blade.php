@@ -119,6 +119,11 @@
                         <!-- Form for Approving -->
                         <form action="{{ route('expert.approveWord', $key) }}" method="POST" style="display:inline;">
                             @csrf
+
+
+
+
+
                             <button
                                 type="submit"
                                 class="btn btn-success"
@@ -149,6 +154,10 @@
                         <!-- Form for Approving -->
                         <form action="{{ route('expert.approveWord', $key) }}" method="POST" style="display:inline;">
                             @csrf
+
+                            <!-- Hidden input to send userId via POST -->
+                            <input type="hidden" name="userId" value="{{ $userId }}">
+
                             <button
                                 type="submit"
                                 class="btn btn-success"
@@ -156,6 +165,7 @@
                                 Approve
                             </button>
                         </form>
+
 
                         <!-- Form for Disapproving -->
                         <form action="{{ route('expert.disapproveWord', $key) }}" method="POST" style="display:inline;">

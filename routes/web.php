@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 // admin
@@ -161,7 +162,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     Route::get('/word-bank', [WordBankController::class, 'showWordBank'])->name('admin.showWordBank');
     Route::get('/word-bank/{id}', [WordBankController::class, 'wordBankCourse'])->name('admin.wordBankCourse');
-    Route::get('/word-bank/{courseid}/addWordToLesson/{wordid}', [WordBankController::class, 'addWordToLesson'])->name('admin.addWordToLesson');
+
+    Route::get('/word-bank/{courseId}/addWordToLesson/{wordId}/', [WordBankController::class, 'addWordToLesson'])->name('admin.addWordToLesson');
+
     Route::get('/word-bank/{courseid}/removeWord/{wordid}', [WordBankController::class, 'removeWord'])->name('admin.removeWord');
 });
 
@@ -216,6 +219,9 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
     Route::get('/pending-words', [ExpertController::class, 'index'])->name('expert.pendingWords');
 
     Route::post('/expert/approve-word/{id}', [ExpertController::class, 'approveWord'])->name('expert.approveWord');
+
+
+
     Route::post('/expert/disapprove-word/{id}', [ExpertController::class, 'disapproveWord'])->name('expert.disapproveWord');
 
     //Progress
@@ -280,7 +286,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     ]);
 
 
-     
+
 
     Route::get('/wordSuggested/{id}/viewUpdateSelected', [UserController::class, 'viewUpdateSelected'])->name('user.viewUpdateSelected');
     Route::get('/wordSuggested/{id}/deleteSelectedWord', [UserController::class, 'deleteSelectedWord'])->name('user.deleteSelectedWord');
@@ -315,14 +321,14 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('course/{courseId}/lesson/{lessonId}/quiz/results', [UserQuizController::class, 'showResults'])->name('user.question.results');
 
 
-    
+
 
     // Route::get('/courses/{courseId}/lessons/{lessonId}/multipleChoice', [QuizController::class, 'multipleChoice'])->name('user.multipleChoice.show');
 
     // Route::post('/courses/{courseId}/lessons/{lessonId}/quiz', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
     // Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
 
-   
+
 
 
 
@@ -347,11 +353,9 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/survey', [SurveyController::class, 'showSurvey'])->name('survey.show');
     Route::post('/survey', [SurveyController::class, 'submitSurvey'])->name('survey.submit');
 
-    Route::middleware(['user','survey.completed'])->group(function () {
-      
+    Route::middleware(['user', 'survey.completed'])->group(function () {
+
         Route::get('/courses/{course}/completed-lessons', [SurveyController::class, 'countCompletedLessons'])->name('course.completed.lessons');
         Route::post('/courses/{course}/lessons/{lesson}/complete', [SurveyController::class, 'completeLesson'])->name('lesson.complete');
-    
-
-    }); 
+    });
 });

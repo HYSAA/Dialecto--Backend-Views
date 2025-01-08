@@ -299,15 +299,17 @@ class ExpertController extends Controller
             $i++;
         }
 
-        // dd($userWords);
+        foreach ($userWords as $key => $value) {
+            $userId = $value['user_id'];
+        }
+
+        // dd($userId);
 
 
 
-        // add para determing if finish na ba ug approve and this user
 
 
-
-        return view('userExpert.wordApproved.pending_words', compact('expertWords', 'userWords'));
+        return view('userExpert.wordApproved.pending_words', compact('expertWords', 'userWords', 'userId'));
     }
 
 
@@ -315,11 +317,18 @@ class ExpertController extends Controller
 
     // Approve the suggested word
     public function approveWord(Request $request, $id)
+
     {
+
+        $userId = $request->input('userId');
 
         $user = Auth::user(); // Get the currently authenticated user's ID
 
+
+
         $expertId = $user->firebase_id;
+
+        // dd($expertId);
 
         $status = 'approved';
         $wordId = $id;
@@ -335,6 +344,18 @@ class ExpertController extends Controller
         $approveData = $this->database->getReference("verify_words/$wordId")->getValue();
         // checks if this user has already approved the workd
 
+
+        $suggestedWord = $this->database->getReference("suggested_words/$userId/$wordId")->getValue();
+
+        $suggestedWord['status'] = 'approved';
+        $suggestedWord['used_id'] = false;
+
+
+
+
+
+
+
         $exist = false;
 
 
@@ -349,7 +370,6 @@ class ExpertController extends Controller
             }
         }
 
-
         if (!$exist) {
             $this->database->getReference("verify_words/$wordId")->push($contentData);
         }
@@ -357,31 +377,21 @@ class ExpertController extends Controller
 
         $approveCount = $this->database->getReference("verify_words/$wordId")->getValue();
 
+
         $approvedCount = count(array_filter($approveCount, function ($item) {
             return $item['status'] === 'approved';
         }));
 
-        // dd($wordId);
 
 
-        // $this->database->getReference("verify_words/$wordId")->push($contentData);
+        if ($approvedCount == 3) {
+            $this->database->getReference("suggested_words/$userId/$wordId")->set($suggestedWord);
+        }
 
 
 
 
-
-        // if ($approvedCount == 3) {
-
-
-        //     $updateData = [
-        //         'status' => $request->name
-
-        //     ];
-
-        //     $this->database->getReference("suggestedwords/$userId/$wordId")->update($updateData);
-        // }
-
-        // checkpoint i throw sad si user id kay di nimo ma biew dri
+        // dd($approvedCount, 'stopper');
 
 
 
