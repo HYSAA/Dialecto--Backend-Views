@@ -19,19 +19,19 @@ class SurveyController extends Controller
 
         $database = $firebase->createDatabase();
 
-        // Check if the user has already taken the survey
+     //check if naka take naba si user diri
         $surveyTaken = $database->getReference('users/' . $uid . '/survey_taken')->getValue();
 
         if ($surveyTaken == 1) {
-            // If survey is already taken, redirect to the dashboard
+            // ug naka take nas user ilabay siyas dashboard
             return redirect()->route('user.dashboard');
         }
 
-        // If not taken, show the survey page
+        // if wala pa naka take si user redirect siya diri na view 
         return view('survey.survey');
     }
 
-    // Update survey_taken when the user submits the survey
+    // kani na function para mo update if naka send nas user sa survey
     public function submitSurvey(Request $request)
     {
         $uid = Auth::user()->firebase_id;
@@ -41,17 +41,17 @@ class SurveyController extends Controller
             ->withDatabaseUri(env('FIREBASE_DATABASE_URL'));
         $database = $firebase->createDatabase();
 
-        // Get the survey responses from the request
+        // kuhaon niya ang response sa survey example answers  sa questions 
         $responses = $request->all();
 
-        // Determine proficiency level based on survey answers
+        // i labay niyas function na determineproflevel ang proficiency 
         $proficiency = $this->determineProficiencyLevel($responses);
 
-        // Update the user's proficiency level and survey_taken status in Firebase
+        //update ang proficiency lvl ni user sa node 
         $database->getReference('users/' . $uid)
             ->update([
                 'survey_taken' => 1,
-                'user_type' => $proficiency  // Update proficiency level after survey
+                'user_type' => $proficiency  
             ]);
 
         // Redirect to dashboard
@@ -61,10 +61,10 @@ class SurveyController extends Controller
     // Determine the proficiency level based on survey responses
     public function determineProficiencyLevel(array $responses)
     {
-        // Example scoring system for determining proficiency level
+        // mga questions rani lol
         $score = 0;
 
-        // Adjust the logic according to the actual questions and options in your survey
+    
         if ($responses['language_experience'] == 'beginner') {
             $score += 1;
         } elseif ($responses['language_experience'] == 'intermediate') {
@@ -105,14 +105,8 @@ class SurveyController extends Controller
         
         
 
-        // if ($responses['learning_apps_experience'] == 'frequent') {
-        //     $score += 2;
-        // } elseif ($responses['learning_apps_experience'] == 'occasionally') {
-        //     $score += 1;
-        // }
 
-
-        // Determine proficiency level based on total score
+        // logic ra pag determine si user proficiency
         if ($score <= 9) {
             return 'Beginner';
         } elseif ($score <= 11) {
@@ -123,7 +117,7 @@ class SurveyController extends Controller
    
     }
 
-    // Count the number of completed lessons for a specific course
+
     public function countCompleteLessons(Request $request, $courseId)
     {
         $uid = Auth::user()->firebase_id;
@@ -134,7 +128,7 @@ class SurveyController extends Controller
 
         $database = $firebase->createDatabase();
 
-        // Get the completed lessons for the user and course
+        // retrieve ang lessons 
         $completedLessons = $database->getReference('users/' . $uid . '/completed_lessons/' . $courseId)->getValue();
 
         // Count the completed lessons
@@ -142,11 +136,11 @@ class SurveyController extends Controller
 
         return response()->json([
             'course_id' => $courseId,
-            'completed_lessons' => $completeCount, // Returning the count of completed lessons
+            'completed_lessons' => $completeCount,// Returning the count of completed lessons
         ]);
     }
 
-    // Mark a lesson as completed for a user
+    
     public function completeLesson(Request $request, $courseId, $lessonId)
     {
         $uid = Auth::user()->firebase_id;
@@ -156,7 +150,7 @@ class SurveyController extends Controller
             ->withDatabaseUri(env('FIREBASE_DATABASE_URL'));
         $database = $firebase->createDatabase();
 
-        // Retrieve the current list of completed lessons for this user and course
+        //KUHAON TANANG LESSONS NI USERS
         $completedLessonsRef = $database->getReference('users/' . $uid . '/completed_lessons/' . $courseId);
         $completedLessons = $completedLessonsRef->getValue() ?? [];
 
