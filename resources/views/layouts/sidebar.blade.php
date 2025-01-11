@@ -50,12 +50,12 @@
                 </a>
             </li>
 
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('lessons.index') }}">
                     <i class="fas fa-chalkboard-teacher btn-icon"></i>
                     <span class="btn-text">Lessons</span>
                 </a>
-            </li>
+            </li> -->
 
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('users.index') }}">

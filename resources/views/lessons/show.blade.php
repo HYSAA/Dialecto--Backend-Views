@@ -51,7 +51,7 @@
                             <form action="{{ route('admin.contents.destroy', [$courseId, $lessonId, $contentId]) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this content?')">Deletes</button>
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this content?')">Delete</button>
                             </form>
                         </td>
                     </tr>
