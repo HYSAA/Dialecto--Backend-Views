@@ -55,7 +55,25 @@ class CourseController extends Controller
     // }
     public function show($id)
     {
-        // Retrieve the course data
+
+
+        $firebaseId = Auth::user()->firebase_id;
+        $courseId = $id;
+
+        $survey = $this->database->getReference("survey/user/$firebaseId/course/$courseId")->getValue();
+
+        // check if user has taken survey for this course
+
+        if (!$survey) {
+
+            // dd('survey', $survey);
+
+            // Redirect to survey
+            return redirect()->route('survey.show', ['courseId' => $courseId]);
+        }
+
+        // dd($survey);
+
         $course = $this->database->getReference('courses/' . $id)->getValue();
 
         if (!$course || !isset($course['lessons'])) {
@@ -68,13 +86,9 @@ class CourseController extends Controller
         // Retrieve the user's data from Firebase using their firebase_id
         $userData = $this->database->getReference('users/' . $firebaseId)->getValue();
 
-        if (!$userData || !isset($userData['user_type'])) {
-            // Handle the case if user data or proficiency level is not found
-            return redirect()->route('user.dashboard')->with('error', 'User proficiency level not set.');
-        }
 
         // Get the user's proficiency level from the Firebase user data
-        $proficiencyLevel = $userData['user_type'];
+        $proficiencyLevel = $survey;
 
         $levelOrder = ['Beginner', 'Intermediate', 'Advanced'];
 

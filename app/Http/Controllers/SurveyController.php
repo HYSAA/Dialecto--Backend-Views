@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\Auth;
 class SurveyController extends Controller
 {
     // Show the survey page if the user hasn't taken it
-    public function showSurvey(Request $request)
+    public function showSurvey(Request $request, $courseId)
     {
-        $uid = Auth::user()->firebase_id;
+
+        $userId = Auth::user()->firebase_id;
+
+
 
         // Initialize Firebase
         $firebase = (new Factory)->withServiceAccount(config_path('firebase_credentials.json'))
@@ -19,22 +22,19 @@ class SurveyController extends Controller
 
         $database = $firebase->createDatabase();
 
-     //check if naka take naba si user diri
-        $surveyTaken = $database->getReference('users/' . $uid . '/survey_taken')->getValue();
 
-        if ($surveyTaken == 1) {
-            // ug naka take nas user ilabay siyas dashboard
-            return redirect()->route('user.dashboard');
-        }
 
         // if wala pa naka take si user redirect siya diri na view 
-        return view('survey.survey');
+        return view('survey.survey', compact('courseId'));
     }
+
+
+
 
     // kani na function para mo update if naka send nas user sa survey
     public function submitSurvey(Request $request)
     {
-        $uid = Auth::user()->firebase_id;
+        $userId = Auth::user()->firebase_id;
 
         // Initialize Firebase
         $firebase = (new Factory)->withServiceAccount(config_path('firebase_credentials.json'))
@@ -44,15 +44,20 @@ class SurveyController extends Controller
         // kuhaon niya ang response sa survey example answers  sa questions 
         $responses = $request->all();
 
+
+
+
+        $courseId = $responses['courseId'];
         // i labay niyas function na determineproflevel ang proficiency 
         $proficiency = $this->determineProficiencyLevel($responses);
 
-        //update ang proficiency lvl ni user sa node 
-        $database->getReference('users/' . $uid)
-            ->update([
-                'survey_taken' => 1,
-                'user_type' => $proficiency  
-            ]);
+
+
+        // create ug resibo kung unsa nga profeciency si user sa course
+
+
+
+        $database->getReference("survey/user/$userId/course/$courseId")->set($proficiency);
 
         // Redirect to dashboard
         return redirect()->route('user.dashboard');
@@ -64,7 +69,7 @@ class SurveyController extends Controller
         // mga questions rani lol
         $score = 0;
 
-    
+
         if ($responses['language_experience'] == 'beginner') {
             $score += 1;
         } elseif ($responses['language_experience'] == 'intermediate') {
@@ -83,7 +88,7 @@ class SurveyController extends Controller
             $score += 2;
         }
 
-        
+
         if ($responses['learning_resource'] == 'textbooks') {
             $score += 1;
         } elseif ($responses['learning_resource'] == 'online_courses') {
@@ -93,7 +98,7 @@ class SurveyController extends Controller
         } elseif ($responses['learning_resource'] == 'language_apps') {
             $score += 2;
         }
-        
+
 
         if ($responses['motivation_level'] == '1') {
             $score += 1;
@@ -102,8 +107,8 @@ class SurveyController extends Controller
         } elseif ($responses['motivation_level'] == '3') {
             $score += 3;
         }
-        
-        
+
+
 
 
         // logic ra pag determine si user proficiency
@@ -114,7 +119,6 @@ class SurveyController extends Controller
         } else {
             return 'Advanced';
         }
-   
     }
 
 
@@ -136,11 +140,11 @@ class SurveyController extends Controller
 
         return response()->json([
             'course_id' => $courseId,
-            'completed_lessons' => $completeCount,// Returning the count of completed lessons
+            'completed_lessons' => $completeCount, // Returning the count of completed lessons
         ]);
     }
 
-    
+
     public function completeLesson(Request $request, $courseId, $lessonId)
     {
         $uid = Auth::user()->firebase_id;

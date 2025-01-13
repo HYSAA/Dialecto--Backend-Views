@@ -168,9 +168,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/word-bank/{courseid}/removeWord/{wordid}', [WordBankController::class, 'removeWord'])->name('admin.removeWord');
 });
 
-
-
-
 Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
 
     // Dashboard route
@@ -329,11 +326,6 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     // Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [QuizController::class, 'showResult'])->name('quiz.result');
 
 
-
-
-
-
-
     Route::get('/profile', [UserControllerProfile::class, 'show'])->name('user.profile.show');
     Route::get('/profile/edit', [UserControllerProfile::class, 'edit'])->name('user.profile.edit');
     Route::get('/profile/{id}/apply-expert', [UserControllerProfile::class, 'applyExpert'])->name('user.profile.applyExpert');
@@ -348,9 +340,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::post('/profile/posting-credentials', [UserControllerProfile::class, 'postCredentials'])->name('user.profile.postCredentials');
     Route::get('/profile/submitted-creds/{name}', [UserControllerProfile::class, 'submittedCredentials'])->name('user.profile.submittedCredentials');
 
-
-
-    Route::get('/survey', [SurveyController::class, 'showSurvey'])->name('survey.show');
+    Route::get('/survey/{courseId}', [SurveyController::class, 'showSurvey'])->name('survey.show');
     Route::post('/survey', [SurveyController::class, 'submitSurvey'])->name('survey.submit');
 
     Route::middleware(['user', 'survey.completed'])->group(function () {

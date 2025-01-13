@@ -6,7 +6,7 @@
     <div id="surveyModal" class="modal fade show" tabindex="-1" aria-hidden="true" style="display: block; background: rgba(0, 0, 0, 0.7); z-index: 1050;">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 80%;">
             <div class="modal-content shadow">
-            <div class="modal-header" style="background-color: #FFCA58; color: black;">
+                <div class="modal-header" style="background-color: #FFCA58; color: black;">
                     <h2 class="modal-title">Language Learning Survey</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -19,23 +19,27 @@
                     <form action="{{ route('survey.submit') }}" method="POST" id="multiPageSurvey">
                         @csrf
                         <!-- Survey Pages -->
-                        <div class="survey-page active animate__animated" data-page="1">
-                        <label class="form-label fw-bold">1. How comfortable are you with languages?</label>
-                 
 
-                 <div class="form-check">
-                      <input type="radio" id="familiarity-beginner" name="familiarity" value="beginner" class="form-check-input" required>
-                      <label class="form-check-label" for="familiarity-beginner">I have limited language abilities</label>
-                  </div>
-                  <div class="form-check">
-                      <input type="radio" id="familiarity-intermediate" name="familiarity" value="intermediate" class="form-check-input">
-                      <label class="form-check-label" for="familiarity-intermediate">I have basic language skills in a few languages</label>
-                  </div>
-                  <div class="form-check">
-                      <input type="radio" id="familiarity-advanced" name="familiarity" value="advanced" class="form-check-input">
-                      <label class="form-check-label" for="familiarity-advanced">I can easily communicate in multiple languages</label>
-                  </div>
-                             
+                        <input type="hidden" name="courseId" value="{{ $courseId }}">
+
+
+                        <div class="survey-page active animate__animated" data-page="1">
+                            <label class="form-label fw-bold">1. How comfortable are you with languages?</label>
+
+
+                            <div class="form-check">
+                                <input type="radio" id="familiarity-beginner" name="familiarity" value="beginner" class="form-check-input" required>
+                                <label class="form-check-label" for="familiarity-beginner">I have limited language abilities</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" id="familiarity-intermediate" name="familiarity" value="intermediate" class="form-check-input">
+                                <label class="form-check-label" for="familiarity-intermediate">I have basic language skills in a few languages</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" id="familiarity-advanced" name="familiarity" value="advanced" class="form-check-input">
+                                <label class="form-check-label" for="familiarity-advanced">I can easily communicate in multiple languages</label>
+                            </div>
+
                         </div>
                         <div class="survey-page animate__animated d-none" data-page="2">
                             <label class="form-label fw-bold">2. How much experience do you have with language-learning apps?</label>
@@ -53,12 +57,12 @@
                                 <label class="form-check-label" for="experience-advanced">I've used multiple language learning apps for several years</label>
                             </div>
                         </div>
-                        
+
 
 
 
                         <div class="survey-page animate__animated d-none" data-page="3">
-                        <label class="form-label fw-bold">3. What is your biggest challenge in learning a new language?</label>
+                            <label class="form-label fw-bold">3. What is your biggest challenge in learning a new language?</label>
                             <!-- Radio options here -->
                             <div class="form-check">
                                 <input type="radio" id="challenge-grammar" name="learning_challenge" value="grammar" class="form-check-input" required>
@@ -77,30 +81,30 @@
 
 
 
-                        
+
                         <div class="survey-page animate__animated d-none" data-page="4">
-                        <label class="form-label fw-bold">4. Which of the following learning resources do you use most frequently?</label>
+                            <label class="form-label fw-bold">4. Which of the following learning resources do you use most frequently?</label>
                             <!-- Radio options here -->
                             <div class="form-check">
-                            <input type="radio" id="resource-textbooks" name="learning_resource" value="textbooks" class="form-check-input" required>
-                            <label class="form-check-label" for="resource-textbooks">Textbooks</label>
+                                <input type="radio" id="resource-textbooks" name="learning_resource" value="textbooks" class="form-check-input" required>
+                                <label class="form-check-label" for="resource-textbooks">Textbooks</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" id="resource-online" name="learning_resource" value="online_courses" class="form-check-input">
+                                <label class="form-check-label" for="resource-online">Online courses</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" id="resource-exchange" name="learning_resource" value="language_exchange" class="form-check-input">
+                                <label class="form-check-label" for="resource-exchange">Language exchange partners</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" id="resource-apps" name="learning_resource" value="language_apps" class="form-check-input">
+                                <label class="form-check-label" for="resource-apps">Language apps</label>
+                            </div>
                         </div>
-                        <div class="form-check">
-                            <input type="radio" id="resource-online" name="learning_resource" value="online_courses" class="form-check-input">
-                            <label class="form-check-label" for="resource-online">Online courses</label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" id="resource-exchange" name="learning_resource" value="language_exchange" class="form-check-input">
-                            <label class="form-check-label" for="resource-exchange">Language exchange partners</label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" id="resource-apps" name="learning_resource" value="language_apps" class="form-check-input">
-                            <label class="form-check-label" for="resource-apps">Language apps</label>
-                        </div>
-                        </div>
-                        
-                        
-                        
+
+
+
                         <!-- More survey pages here -->
                         <div class="survey-page animate__animated d-none" data-page="5">
                             <label class="form-label fw-bold">5. How motivated are you to learn a new language?</label>
@@ -129,15 +133,15 @@
             </div>
         </div>
         <div id="welcomePopup" class="welcome-popup d-none">
-    <p>Welcome to your language journey! 🎉</p>
-  
-</div> 
+            <p>Welcome to your language journey! 🎉</p>
+
+        </div>
 
 
     </div>
-    
 
-</div> 
+
+</div>
 <div class="modal fade" id="customAlert" tabindex="-1" aria-labelledby="customAlertLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -152,173 +156,139 @@
     </div>
 </div>
 
-    <script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const pages = document.querySelectorAll('.survey-page');
+        const progressBar = document.getElementById('progressBar');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const submitButton = document.getElementById('submitButton');
+        const welcomePopup = document.getElementById('welcomePopup');
+        const customAlert = new bootstrap.Modal(document.getElementById('customAlert')); // Bootstrap Modal instance
 
+        let currentPage = 1;
+        const totalPages = pages.length;
 
+        const updatePage = () => {
+            pages.forEach(page => {
+                page.classList.add('d-none');
+                if (parseInt(page.getAttribute('data-page')) === currentPage) {
+                    page.classList.remove('d-none');
+                }
+            });
 
- document.addEventListener('DOMContentLoaded', () => {
-    const pages = document.querySelectorAll('.survey-page');
-    const progressBar = document.getElementById('progressBar');
-    const prevButton = document.getElementById('prevButton');
-    const nextButton = document.getElementById('nextButton');
-    const submitButton = document.getElementById('submitButton');
-    const welcomePopup = document.getElementById('welcomePopup');
-    const customAlert = new bootstrap.Modal(document.getElementById('customAlert')); // Bootstrap Modal instance
+            prevButton.disabled = currentPage === 1;
+            nextButton.classList.toggle('d-none', currentPage === totalPages);
+            submitButton.classList.toggle('d-none', currentPage !== totalPages);
 
-    let currentPage = 1;
-    const totalPages = pages.length;
+            // Update progress bar
+            const progress = (currentPage / totalPages) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressBar.setAttribute('aria-valuenow', progress);
+        };
 
-    const updatePage = () => {
-        pages.forEach(page => {
-            page.classList.add('d-none');
-            if (parseInt(page.getAttribute('data-page')) === currentPage) {
-                page.classList.remove('d-none');
+        const validateCurrentPage = () => {
+            const currentInputs = pages[currentPage - 1].querySelectorAll('input[type="radio"]');
+            for (let input of currentInputs) {
+                if (input.checked) {
+                    return true; // At least one option is selected
+                }
+            }
+            return false; // No option selected
+        };
+
+        nextButton.addEventListener('click', () => {
+            if (validateCurrentPage()) {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updatePage();
+                }
+            } else {
+                customAlert.show(); // Show the custom alert modal
             }
         });
 
-        prevButton.disabled = currentPage === 1;
-        nextButton.classList.toggle('d-none', currentPage === totalPages);
-        submitButton.classList.toggle('d-none', currentPage !== totalPages);
-
-        // Update progress bar
-        const progress = (currentPage / totalPages) * 100;
-        progressBar.style.width = `${progress}%`;
-        progressBar.setAttribute('aria-valuenow', progress);
-    };
-
-    const validateCurrentPage = () => {
-        const currentInputs = pages[currentPage - 1].querySelectorAll('input[type="radio"]');
-        for (let input of currentInputs) {
-            if (input.checked) {
-                return true; // At least one option is selected
-            }
-        }
-        return false; // No option selected
-    };
-
-    nextButton.addEventListener('click', () => {
-        if (validateCurrentPage()) {
-            if (currentPage < totalPages) {
-                currentPage++;
+        prevButton.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
                 updatePage();
             }
-        } else {
-            customAlert.show(); // Show the custom alert modal
-        }
-    });
+        });
 
-    prevButton.addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            updatePage();
-        }
-    });
+        submitButton.addEventListener('click', (event) => {
+            if (!validateCurrentPage()) {
+                event.preventDefault();
+                customAlert.show();
+            } else {
+                // Show the welcome pop-up
+                welcomePopup.classList.add('show');
+                setTimeout(() => {
+                    welcomePopup.classList.remove('d-none');
+                }, 100);
 
-    submitButton.addEventListener('click', (event) => {
-        if (!validateCurrentPage()) {
-            event.preventDefault(); 
-            customAlert.show(); 
-        } else {
-            // Show the welcome pop-up
-            welcomePopup.classList.add('show');
+                // Optional: Redirect to dashboard after a delay
+                setTimeout(() => {
+                    window.location.href = "{{ route('user.dashboard') }}";
+                }, 300);
+            }
+        });
+
+
+        function showAlertModal() {
+
+            const customAlert = new bootstrap.Modal(document.getElementById('customAlert'));
+
+            customAlert.show();
+
+
             setTimeout(() => {
-                welcomePopup.classList.remove('d-none');
-            }, 100);
-
-            // Optional: Redirect to dashboard after a delay
-            setTimeout(() => {
-                window.location.href = "{{ route('user.dashboard') }}";
-            }, 300);
+                customAlert.hide();
+            }, 1000); //set nako to 1 sec interval lol
         }
+        //para modal 
+        // Example usage:
+        // showAlertModal();
+
+
+        updatePage(); // Initialize the first page view
     });
+</script>
 
-    
-function showAlertModal() {
- 
-    const customAlert = new bootstrap.Modal(document.getElementById('customAlert'));
+<style>
+    .survey-page {
+        min-height: 200px;
+    }
 
-    customAlert.show();
+    .progress-bar {
+        transition: width 0.5s ease;
+        background-color: #CB9219 !important;
+    }
 
- 
-    setTimeout(() => {
-        customAlert.hide();
-    }, 1000); //set nako to 1 sec interval lol
-}
-//para modal 
-// Example usage:
-// showAlertModal();
+    .animate__animated {
+        animation-duration: 0.5s;
+    }
 
+    .welcome-popup {
+        position: fixed;
+        bottom: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #28a745;
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: bottom 0.5s ease-in-out;
+        text-align: center;
+    }
 
-    updatePage(); // Initialize the first page view
-});
+    .welcome-popup.show {
+        bottom: 20px;
+    }
 
-
-    </script>
-
-    <style>
-.survey-page {
-    min-height: 200px;
-}
-
-.progress-bar {
-    transition: width 0.5s ease;
-    background-color: #CB9219 !important;
-}
-
-.animate__animated {
-    animation-duration: 0.5s;
-}
-
-.welcome-popup {
-    position: fixed;
-    bottom: -100px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #28a745;
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: bottom 0.5s ease-in-out;
-    text-align: center;
-}
-
-.welcome-popup.show {
-    bottom: 20px;
-}
-
-.welcome-popup p {
-    margin: 0;
-    font-size: 16px;
-}
-
-
-    </style>
+    .welcome-popup p {
+        margin: 0;
+        font-size: 16px;
+    }
+</style>
 @endsection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
