@@ -371,7 +371,7 @@ class ContentController extends Controller
         $userRef = 'users/' . $firebaseId; // Path to user data in Firebase
         $completedLessonsRef = $userRef . '/completed_lessons';
 
-       
+
         $completedLessons = $this->database->getReference($completedLessonsRef)->getValue();
 
         // Check if lesson exists in completed_lessons, if not initialize it
@@ -385,11 +385,17 @@ class ContentController extends Controller
         // Update the user's completed lessons data in Firebase
         $this->database->getReference($completedLessonsRef)->set($completedLessons);
 
-      
-        $userData = $this->database->getReference('users/' . $firebaseId)->getValue();
-        $currentLevel = $userData['user_type']; 
 
-      
+        $userData = $this->database->getReference('users/' . $firebaseId)->getValue();
+
+        $currentLevel = $this->database->getReference("survey/user/$firebaseId/course/$courseId")->getValue();
+
+
+        // dd($currentLevel);
+
+        // $currentLevel = $userData['user_type'];
+
+
         $lessonsForLevel = $this->database->getReference('courses/' . $courseId . '/lessons')
             ->orderByChild('proficiency_level')
             ->equalTo($currentLevel)
@@ -397,35 +403,44 @@ class ContentController extends Controller
 
         $allLessonsCompleted = true;
         foreach ($lessonsForLevel as $lessonKey => $lessonData) {
-          
+
             if (!isset($completedLessons[$lessonKey]) || count($completedLessons[$lessonKey]) < count($lessonData['contents'])) {
                 $allLessonsCompleted = false;
                 break;
             }
         }
 
-  
-if ($allLessonsCompleted) {
-   
-    if ($currentLevel === 'Advanced') {
-        $congratulationsMessage = null;
-    } else {
-    
-        $nextLevel = $this->getNextLevel($currentLevel);
 
-      
-        $this->database->getReference('users/' . $firebaseId)->update([
-            'user_type' => $nextLevel
-        ]);
+        if ($allLessonsCompleted) {
 
-     
-        $congratulationsMessage = "Congratulations! You’ve been promoted to {$nextLevel}!";
-    }
-} else {
-    $congratulationsMessage = null; 
-}
+            if ($currentLevel === 'Advanced') {
+                $congratulationsMessage = null;
+            } else {
 
-        
+                $nextLevel = $this->getNextLevel($currentLevel);
+
+                // dd($nextLevel);
+
+
+                // $this->database->getReference('users/' . $firebaseId)->update([
+                //     'user_type' => $nextLevel
+                // ]);
+
+
+                $this->database->getReference("survey/user/$firebaseId/course/$courseId")->set($nextLevel);
+
+
+
+
+
+
+                $congratulationsMessage = "Congratulations! You’ve been promoted to {$nextLevel}!";
+            }
+        } else {
+            $congratulationsMessage = null;
+        }
+
+
 
 
         //check if naay quizes sulod
@@ -439,18 +454,6 @@ if ($allLessonsCompleted) {
 
             $checkquestions = true;
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
