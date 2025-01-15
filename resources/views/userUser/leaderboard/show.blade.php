@@ -20,25 +20,31 @@
           </tr>
         </thead>
         <tbody>
-          @php $rank = 1; @endphp
-          @foreach ($rankings as $ranking)
-            <tr class="leaderboard-row {{ $ranking['user_id'] == $currentUserRanking['user_id'] ? 'userRank' : '' }}">
-              <td class="number">{{ $rank++ }}</td>
-              <td class="name">{{ $ranking['user_name'] }}</td>
-              <td class="name">{{ $ranking['course_id'] }}</td>
-              <td class="points">{{ $ranking['total_course_score'] }}</td>
-              <td class="rank-icon">
-                @if ($rank == 2)
-                  <img src="https://img.icons8.com/?size=100&id=I4hsHPwm86-K&format=png&color=000000" alt="Top 1" class="medal-icon">
-                @elseif ($rank == 3)
-                  <img src="https://img.icons8.com/?size=100&id=YskxJ1NpCFQy&format=png&color=000000" alt="Top 2" class="medal-icon">
-                @elseif ($rank == 4)
-                  <img src="https://img.icons8.com/?size=100&id=KL1txQ7JoYvd&format=png&color=000000" alt="Top 3" class="medal-icon">
+    @php $rank = 1; @endphp
+    @foreach ($rankings as $ranking)
+        <tr class="leaderboard-row {{ $ranking['user_id'] == $currentUserRanking['user_id'] ? 'userRank' : '' }}">
+            <td class="number">{{ $rank++ }}</td>
+            <td class="name">
+                @if ($ranking['user_id'] == $currentUserRanking['user_id'])
+                    {{ $ranking['user_name'] }}
+                @else
+                    *** {{-- Masked name --}}
                 @endif
-              </td>
-            </tr>
-          @endforeach
-        </tbody>
+            </td>
+            <td class="name">{{ $ranking['course_id'] }}</td>
+            <td class="points">{{ $ranking['total_course_score'] }}</td>
+            <td class="rank-icon">
+                @if ($rank == 2)
+                    <img src="https://img.icons8.com/?size=100&id=I4hsHPwm86-K&format=png&color=000000" alt="Top 1" class="medal-icon">
+                @elseif ($rank == 3)
+                    <img src="https://img.icons8.com/?size=100&id=YskxJ1NpCFQy&format=png&color=000000" alt="Top 2" class="medal-icon">
+                @elseif ($rank == 4)
+                    <img src="https://img.icons8.com/?size=100&id=KL1txQ7JoYvd&format=png&color=000000" alt="Top 3" class="medal-icon">
+                @endif
+            </td>
+        </tr>
+    @endforeach
+</tbody>
       </table>
     </div>
 
