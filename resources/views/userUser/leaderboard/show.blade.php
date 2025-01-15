@@ -1,98 +1,110 @@
 @extends('layouts.app')
 
 @section('content')
-  
-
-
 <div class="main-container" style="overflow:auto">
-
   <div class="Big-box">
     <div id="header">
-        <h1>Leaderboard</h1>
-      
+      <h1>Leaderboard</h1>
     </div>
 
     <div id="leaderboard">
-        <div class="ribbon"></div>
-        <table class="leaderboard-table">
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>User ID</th>
-                    <th>Course</th>
-                    <th>Total Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php $rank = 1; @endphp
-                @foreach ($rankings as $ranking)
-                    <tr class="leaderboard-row">
-                        <td class="number">{{ $rank++ }}</td>
-                        <td class="name">{{ $ranking['user_name'] }}</td>
-                        <td class="name">{{ $ranking['course_id'] }}</td>
-                        <td class="points">{{ $ranking['total_course_score'] }}</td>
-
-                        <td class="rank-icon">
-                @if($rank == 2)
-                    <img src="https://img.icons8.com/?size=100&id=I4hsHPwm86-K&format=png&color=000000" alt="Top 1" class="medal-icon">
-                    
-                @elseif($rank == 3)
-                    <img src="https://img.icons8.com/?size=100&id=YskxJ1NpCFQy&format=png&color=000000" alt="Top 2" class="medal-icon">
-                @elseif($rank == 4)
-                    <img src="https://img.icons8.com/?size=100&id=KL1txQ7JoYvd&format=png&color=000000" alt="Top 3" class="medal-icon">
+      <div class="ribbon"></div>
+      <table class="leaderboard-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Course</th>
+            <th>Total Score</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @php $rank = 1; @endphp
+          @foreach ($rankings as $ranking)
+            <tr class="leaderboard-row {{ $ranking['user_id'] == $currentUserRanking['user_id'] ? 'userRank' : '' }}">
+              <td class="number">{{ $rank++ }}</td>
+              <td class="name">{{ $ranking['user_name'] }}</td>
+              <td class="name">{{ $ranking['course_id'] }}</td>
+              <td class="points">{{ $ranking['total_course_score'] }}</td>
+              <td class="rank-icon">
+                @if ($rank == 2)
+                  <img src="https://img.icons8.com/?size=100&id=I4hsHPwm86-K&format=png&color=000000" alt="Top 1" class="medal-icon">
+                @elseif ($rank == 3)
+                  <img src="https://img.icons8.com/?size=100&id=YskxJ1NpCFQy&format=png&color=000000" alt="Top 2" class="medal-icon">
+                @elseif ($rank == 4)
+                  <img src="https://img.icons8.com/?size=100&id=KL1txQ7JoYvd&format=png&color=000000" alt="Top 3" class="medal-icon">
                 @endif
-            </td>
-                    </tr>
-                @endforeach
-            </tbody>
+              </td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+
+    @if ($userRank && $userRank > 1)
+      <div id="current-rank">
+        <h2>Your Current Rank</h2>
+        <table class="leaderboard-table">
+          <thead>
+            <tr>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="leaderboard-row userRank">
+              <td class="number">{{ $userRank }}</td>
+              <td class="name">{{ $currentUserRanking['user_name'] }}</td>
+              <td class="name">{{ $currentUserRanking['course_id'] }}</td>
+              <td class="points">{{ $currentUserRanking['total_course_score'] }}</td>
+              <td class="rank-icon"></td>
+            </tr>
+          </tbody>
         </table>
-     
-    </div>
-    </div>
+      </div>
+    @endif
+  </div>
 </div>
 
 <style>
-   
-   
 
-.Big-box{
-  width: 85%; /* Adjusted width for a smaller box */
-  margin: 0 auto;
   
+.Big-box {
+  width: 85%;
+  margin: 0 auto;
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  
+  position: relative;
 }
+
 
 .medal-icon {
-    width: 5rem; /* Adjust the size of the icon */
-    height: auto;
-    position: relative;
- 
-    vertical-align: middle; /* Align vertically with text */
-    margin-left: -3rem; /* Adjust spacing as needed */
-  
+  width: 4rem;
+  height: auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
 }
 
-.ribbon {
-    width: 100%;
-    height: 9rem;
-    background-color: #FFCA58;
-    position: absolute; /* Changed to relative for proper alignment */
-    top: 0rem; /* Reset top position */
-    -webkit-box-shadow: 0px 15px 11px -6px #7a7a7d;
-    box-shadow: 0px 15px 11px -6pxrgb(6, 6, 8);
+.medal-icon:hover {
+  transform: scale(1.1) rotate(5deg);
 }
+
+
+
 .leaderboard-row td:last-child {
-    text-align: center; /* Center the icons in the last column */
+  text-align: center;
 }
+
 .number {
- 
- height: 2rem;
- font-size: 2.2rem;
- font-weight: bold;
- text-align: left;
- 
+  height: 2rem;
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-align: left;
+  background: linear-gradient(45deg, #141a39, #2b3666);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-
-
 
 #header {
   width: 100%;
@@ -100,170 +112,169 @@
   align-items: center;
   justify-content: space-between;
   padding: 2.5rem 2rem;
+  position: relative;
+  z-index: 1;
 }
-
-
 
 h1 {
   font-family: "Rubik", sans-serif;
-  font-size: 1.7rem;
-  color: #141a39;
+  font-size: 2rem;
+  background: linear-gradient(45deg, #141a39, #2b3666);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   text-transform: uppercase;
-  cursor: default;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #leaderboard {
   width: 100%;
   position: relative;
-  max-height: 600px; /* You can adjust the max height as needed */
-  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 600px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #FFCA58 #f0f0f0;
+}
+
+#leaderboard::-webkit-scrollbar {
+  width: 8px;
+}
+
+#leaderboard::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+#leaderboard::-webkit-scrollbar-thumb {
+  background: #FFCA58;
+  border-radius: 4px;
 }
 
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 8px;
   table-layout: fixed;
   color: #141a39;
-  cursor: default;
 }
 
 tr {
-  transition: all 0.2s ease-in-out;
-  border-radius: 0.2rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
 }
 
 tr:not(:first-child):hover {
-  background-color: #fff;
-  transform: scale(1.04);
-  -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
-  box-shadow: 0px 5px 15px 8px #e4e7fb;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  transform: scale(1.02) translateX(5px);
+  box-shadow: 0 8px 20px rgba(32, 38, 72, 0.6);
 }
 
-tr:nth-child(odd) {
-  background-color: #f9f9f9;
+tr:nth-child(even), tr:nth-child(odd) {
+  background: linear-gradient(145deg, #f4f4f4, #e8e8e8);
+  border-radius: 12px;
+  margin: 8px 0;
 }
 
-tr:nth-child(1) {
-  color: #fff;
+.userRank {
+  background: linear-gradient(145deg, #FFCA58,rgb(233, 229, 200)) !important;
+  font-weight: bold !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(161, 181, 185, 0.3);
 }
 
 td {
   height: 3rem;
   font-family: "Rubik", sans-serif;
   font-size: 1.4rem;
-  padding: 1rem 2rem;
+  padding: 1.2rem 2rem;
   position: relative;
+  border-radius: 12px;
 }
 
+thead tr {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+thead th {
+  font-weight: 600;
+  color: #141a39;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  padding: 1.2rem 2rem;
+  border-bottom: 2px solid rgba(255, 202, 88, 0.3);
+}
 
 .name {
   text-align: left;
   font-size: 1.5rem;
+  color: #2b3666;
 }
 
 .points {
   font-weight: bold;
   font-size: 2rem;
-  text-align: right; /* Align to the right for numerical consistency */
-  vertical-align: middle; /* Align vertically with other cells */
-  padding-right: 17rem; /* Add spacing to the right if needed */
+  text-align: right;
+  vertical-align: middle;
+  color: #141a39;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-
-.points:first-child {
-  width: 20rem;
-}
-
-.gold-medal {
-  height: 3rem;
-  margin-left: 1.5rem;
-}
-
-
-.ribbon::before {
+.ribbon::before, .ribbon::after {
   content: "";
   height: 1.5rem;
   width: 1.5rem;
   bottom: -0.8rem;
-  left: 0.35rem;
   transform: rotate(45deg);
-  background-color: #FFCA58;
+  background: #FFCA58;
   position: absolute;
   z-index: -1;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.ribbon::before {
+  left: 0.35rem;
 }
 
 .ribbon::after {
-  content: "";
-  height: 1.5rem;
-  width: 1.5rem;
-  bottom: -0.8rem;
   right: 0.35rem;
-  transform: rotate(45deg);
-  background-color: #FFCA58;
-  position: absolute;
-  z-index: -1;
 }
 
-#buttons {
+#current-rank {
   width: 100%;
-  margin-top: 3rem;
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
+  margin: 2rem 0;
+  padding: 0 1rem;
+  
 }
 
-.exit {
-  width: 11rem;
-  height: 3rem;
+#current-rank h2 {
   font-family: "Rubik", sans-serif;
-  font-size: 1.3rem;
-  text-transform: uppercase;
-  color: #7e7f86;
-  border: 0;
-  background-color: #fff;
-  border-radius: 2rem;
-  cursor: pointer;
-}
-
-.exit:hover {
-  border: 0.1rem solid #5c5be5;
-}
-
-.continue {
-  width: 11rem;
-  height: 3rem;
-  font-family: "Rubik", sans-serif;
-  font-size: 1.3rem;
-  color: #fff;
-  text-transform: uppercase;
-  background-color: #5c5be5;
-  border: 0;
-  border-bottom: 0.2rem solid #3838b8;
-  border-radius: 2rem;
-  cursor: pointer;
-}
-
-.continue:active {
-  border-bottom: 0;
+  font-size: 1.5rem;
+  background: linear-gradient(45deg, #141a39, #2b3666);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+  letter-spacing: 1px;
 }
 
 @media (max-width: 740px) {
-    * {
-      font-size: 70%;
-    }
+  * {
+    font-size: 70%;
+  }
 }
 
 @media (max-width: 500px) {
-    * {
-      font-size: 55%;
-    }
+  * {
+    font-size: 55%;
+  }
 }
 
 @media (max-width: 390px) {
-    * {
-      font-size: 45%;
-    }
+  * {
+    font-size: 45%;
+  }
 }
 </style>
-
 @endsection

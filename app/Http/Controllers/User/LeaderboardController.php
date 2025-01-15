@@ -8,20 +8,24 @@ use Kreait\Firebase\Factory;
 
 class LeaderboardController extends Controller
 {
-    /**
-     * Display a list of courses for ranking selection.
-     */
-    public function index()
+    protected $database;
+
+    public function __construct()
     {
         // Set up Firebase connection
         $factory = (new Factory)
             ->withServiceAccount(base_path('config/firebase_credentials.json'))
             ->withDatabaseUri(env('FIREBASE_DATABASE_URL'));
+        $this->database = $factory->createDatabase();
+    }
 
-        $database = $factory->createDatabase();
-
+    /**
+     * Display a list of courses for ranking selection.
+     */
+    public function index()
+    {
         // Fetch courses
-        $courses = $database->getReference('courses')->getValue();
+        $courses = $this->database->getReference('courses')->getValue() ?? [];
 
         return view('userUser.leaderboard.index', ['courses' => $courses]);
     }
@@ -29,57 +33,52 @@ class LeaderboardController extends Controller
     /**
      * Show leaderboard for a specific course.
      */
-    public function show($courseName)
+    public function show($courseName, Request $request)
     {
-        // Set up Firebase connection
-        $factory = (new Factory)
-            ->withServiceAccount(base_path('config/firebase_credentials.json'))
-            ->withDatabaseUri(env('FIREBASE_DATABASE_URL'));
-    
-        $database = $factory->createDatabase();
-    
-        // Retrieve rankings
-        $rankings = $database->getReference('ranking')->getValue();
-        $users = $database->getReference('users')->getValue();
-        
+        $currentUserId = $request->user()->firebase_id; // Current logged-in user ID
+
+        // Fetch data from Firebase
+        $rankings = $this->database->getReference('ranking')->getValue() ?? [];
+        $users = $this->database->getReference('users')->getValue() ?? [];
+
         $courseRankings = [];
-    
-        // Retrieve users
-        $users = $database->getReference('users')->getValue();
-    
-        // Process the rankings
-        if ($rankings) {
-            foreach ($rankings as $userId => $courses) {
-                // Loop through each course for the user
-                foreach ($courses as $courseId => $data) {
-                    if ($data['course_name'] === $courseName) {
-                        // Fetch user name from the 'users' node, fallback to userId if name is not found
-                        $userName = $users[$userId]['name'] ?? $userId;
+        $userRank = null;
+        $currentUserRanking = null;
 
-                        $courseNameFromDatabase = $courses[$courseId]['course_name'] ?? $courseId;
-
-    
-                        // Push ranking data for each user
-                        $courseRankings[] = [
-                            'user_name' => $userName,
-                            'course_id' =>  $courseNameFromDatabase,
-                            'total_course_score' => $data['total_course_score'],
-                        ];
-                    }
+        // Process rankings
+        foreach ($rankings as $userId => $userCourses) {
+            foreach ($userCourses as $courseId => $data) {
+                if ($data['course_name'] === $courseName) {
+                    $courseRankings[] = [
+                        'user_id' => $userId,
+                        'user_name' => $users[$userId]['name'] ?? 'Unknown User',
+                        'course_id' => $data['course_name'],
+                        'total_course_score' => $data['total_course_score'] ?? 0,
+                    ];
                 }
             }
-    
-            // Sort rankings by total course score in descending order
-            usort($courseRankings, fn($a, $b) => $b['total_course_score'] <=> $a['total_course_score']);
-            $courseRankings = array_slice($courseRankings, 0 , 10);
         }
-    
+
+        // Sort rankings by total score (descending)
+        usort($courseRankings, fn($a, $b) => $b['total_course_score'] <=> $a['total_course_score']);
+
+        // Determine user rank
+        foreach ($courseRankings as $index => $ranking) {
+            if ($ranking['user_id'] === $currentUserId) {
+                $userRank = $index + 1; // Rankings start at 1
+                $currentUserRanking = $ranking;
+                break;
+            }
+        }
+
+        // Get the top 10 rankings
+        $topRankings = array_slice($courseRankings, 0, 10);
+
         return view('userUser.leaderboard.show', [
             'courseName' => $courseName,
-            'rankings' => $courseRankings,
+            'rankings' => $topRankings,
+            'userRank' => $userRank,
+            'currentUserRanking' => $currentUserRanking,
         ]);
     }
-    
-    
-
 }

@@ -74,6 +74,10 @@
     .card {
     margin: 1px; /* Adjust to control the space between cards */
     padding: 10px; /* Adjust to control space inside cards */
+ 
+    flex: 1 1 calc(33.33% - 20px); /* This allows the cards to have space and be responsive */
+    
 }
+
 </style>
 @endsection
