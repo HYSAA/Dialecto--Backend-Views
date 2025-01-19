@@ -52,11 +52,10 @@ class UserController extends Controller
         }
     }
 
-
-    public function index()
+    public function index(Request $request)
     {
         $currentUserId = Auth::id(); // Get the currently authenticated user's ID
-
+    
         $firebaseUrl = env('FIREBASE_DATABASE_URL') . '/users.json';
         $context = stream_context_create([
             "ssl" => [
@@ -64,15 +63,15 @@ class UserController extends Controller
                 "verify_peer_name" => false,
             ],
         ]);
-        // Use file_get_contents with the created context
+    
         $response = file_get_contents($firebaseUrl, false, $context);
-        // Decode the JSON response
         $allUsers = json_decode($response, true);
+    
         // Filter out the current user
         $users = array_filter($allUsers, function ($userId) use ($currentUserId) {
             return $userId !== $currentUserId;
         }, ARRAY_FILTER_USE_KEY);
-        // Convert filtered user IDs into an array of user objects if necessary
+    
         $filteredUsers = [];
         foreach ($users as $userId => $userData) {
             $filteredUsers[] = [
@@ -80,10 +79,22 @@ class UserController extends Controller
                 'data' => $userData,
             ];
         }
+    
+        // Handle search query
+        $search = strtolower($request->input('search'));
+        if ($search) {
+            $filteredUsers = array_filter($filteredUsers, function ($user) use ($search) {
+                $name = strtolower($user['data']['name'] ?? '');
+                $email = strtolower($user['data']['email'] ?? '');
+                $usertype = strtolower($user['data']['usertype'] ?? '');
+    
+                return str_contains($name, $search) || str_contains($email, $search) || str_contains($usertype, $search);
+            });
+        }
+    
         return view('users.index', compact('filteredUsers'));
     }
-
-
+    
 
 
 

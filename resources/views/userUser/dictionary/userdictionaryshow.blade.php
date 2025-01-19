@@ -3,6 +3,30 @@
 @section('content')
 
 <div class="main-container" style="overflow:auto">
+<form method="GET" action="{{ route('user.dictionary.show', $id) }}" style="margin-bottom: 20px;">
+    <div class="input-group">
+        <!-- Search Bar -->
+        <input 
+            type="text" 
+            name="search" 
+            class="form-control" 
+            placeholder="Search by lesson title or English text..." 
+            value="{{ $searchQuery ?? '' }}"
+            style="font-size: 1.2rem; padding: 10px;"
+        >
+
+        <!-- Search Button -->
+        <button type="submit" class="btn btn-primary" style="font-size: 1.2rem; padding: 10px 20px;margin-left: 10px;">
+            Search
+        </button>
+    </div>
+
+    <!-- Hidden Fields to Maintain Filters -->
+    @if ($filterProficiency)
+        <input type="hidden" name="proficiency_level" value="{{ $filterProficiency }}">
+    @endif
+</form>
+
     <!-- Display the course title -->
     <h1 class="text-center" style="
             font-size: 2.5rem; 
@@ -14,7 +38,35 @@
             border-radius: 8px; 
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     ">{{ $course['name'] ?? 'Course Details' }}</h1>
-    <p>{{ $course['description'] ?? 'No description available for this course.' }}</p>
+    <br>
+    <!-- <p>{{ $course['description'] ?? 'No description available for this course.' }}</p> -->
+<!-- <p>Course ID: {{ $id }}</p> -->
+
+<form method="GET" action="{{ route('user.dictionary.show', $id) }}" style="display: inline;">
+    <div>
+        <!-- Generate a button for each proficiency level -->
+        @foreach($allProficiencies as $proficiency)
+            <button 
+                type="submit" 
+                name="proficiency_level" 
+                value="{{ $proficiency }}" 
+                class="btn {{ $filterProficiency == $proficiency ? 'btn-primary' : 'btn-secondary' }}">
+                {{ $proficiency }}
+            </button>
+        @endforeach
+
+        <!-- Add a reset button to show all lessons -->
+        <button 
+            type="submit" 
+            name="proficiency_level" 
+            value="" 
+            class="btn {{ !$filterProficiency ? 'btn-primary' : 'btn-secondary' }}">
+            Show All
+        </button>
+    </div>
+</form>
+
+
 
     <!-- Display paginated lessons -->
     @if ($paginatedLessons->count())
@@ -52,7 +104,7 @@
 
         <!-- Paginate lessons -->
         <div class="pagination mt-3">
-            {{ $paginatedLessons->links() }}
+        {{ $paginatedLessons->appends(request()->query())->links() }}
         </div>
     @else
         <p>No lessons available for this course.</p>

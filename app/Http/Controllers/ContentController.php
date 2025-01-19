@@ -160,17 +160,42 @@ class ContentController extends Controller
     }
 
     public function destroy($courseId, $lessonId, $contentId)
-    {
-        // Get the reference to the specific content in Firebase
-        $contentReference = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents/' . $contentId);
+{
+    // Step 1: Delete the content from the courses node in Firebase
+    $contentReference = $this->database->getReference("courses/{$courseId}/lessons/{$lessonId}/contents/{$contentId}");
+    $contentReference->remove();
 
-        // Remove the content entry from Firebase Realtime Database
-        $contentReference->remove();
+    // Step 2: Delete associated user progress for the content
+    $userProgressReference = $this->database->getReference('user_progress');
+    $userProgressData = $userProgressReference->getValue();
 
-        // Redirect back to the lesson view with a success message
-        return redirect()->route('admin.lessons.show', [$courseId, $lessonId])
-            ->with('success', 'Content deleted successfully.');
+    if ($userProgressData) {
+        foreach ($userProgressData as $userId => $userCourses) {
+            foreach ($userCourses as $userCourseId => $userLessons) {
+                if ($userCourseId === $courseId) { // Match the course
+                    foreach ($userLessons as $lessonKey => $lessonContents) {
+                        if ($lessonKey === $lessonId) { // Match the lesson
+                            foreach ($lessonContents as $contentKey => $contentData) {
+                                if (isset($contentData['content_id']) && $contentData['content_id'] === $contentId) {
+                                    // Reference to the specific progress entry
+                                    $progressReference = $this->database->getReference(
+                                        "user_progress/{$userId}/{$userCourseId}/{$lessonKey}/{$contentKey}"
+                                    );
+                                    // Remove the progress entry
+                                    $progressReference->remove();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
+
+    // Step 3: Redirect back to the lesson view with a success message
+    return redirect()->route('admin.lessons.show', [$courseId, $lessonId])
+        ->with('success', 'Content and all associated user progress deleted successfully.');
+}
 
 
 
