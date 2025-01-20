@@ -292,7 +292,7 @@ class QuizController extends Controller
 
         foreach ($filteredUserResults as $key => $value) {
 
-            $sumOfAllLesson = $sumOfAllLesson = $value['score'];
+            $sumOfAllLesson = $sumOfAllLesson + $value['score'];
         }
 
         $totalScoreForCourse = $sumOfAllLesson;
