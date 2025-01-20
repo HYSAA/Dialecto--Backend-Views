@@ -115,7 +115,7 @@ class ExpertDictionary extends Controller
 
     $allProficiencies = collect($lessonsWithContents)->pluck('proficiency_level')->unique();
 
-    return view('userUser.dictionary.userdictionaryshow', compact(
+    return view('userExpert.dictionary.expertdictionaryshow', compact(
         'course', 
         'paginatedLessons', 
         'allProficiencies', 
