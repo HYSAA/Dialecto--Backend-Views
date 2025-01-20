@@ -31,9 +31,6 @@ class CourseController extends Controller
             'quizHistory' => []
         ]);
 
-        // dd(session()->all());
-
-
 
         if ($courses === null) {
             $courses = [];
@@ -62,13 +59,19 @@ class CourseController extends Controller
 
         $survey = $this->database->getReference("survey/user/$firebaseId/course/$courseId")->getValue();
 
+
+        if ($survey) {
+            $currentLevel = $survey;
+        } else {
+            $currentLevel = null;
+        }
+
+
+
+
         // check if user has taken survey for this course
 
         if (!$survey) {
-
-            // dd('survey', $survey);
-
-            // Redirect to survey
             return redirect()->route('survey.show', ['courseId' => $courseId]);
         }
 
@@ -105,6 +108,6 @@ class CourseController extends Controller
                 return array_search($lesson['proficiency_level'], $levelOrder);
             });
 
-        return view('userUser.courses.show', compact('course', 'filteredLessons', 'id'));
+        return view('userUser.courses.show', compact('course', 'filteredLessons', 'id', 'currentLevel'));
     }
 }

@@ -345,6 +345,7 @@ class ContentController extends Controller
         // User progress section (this keeps the existing user_progress logic intact)
         $firebaseId = auth()->user()->firebase_id; // Get the user's Firebase ID
 
+
         $userProgressRef = 'user_progress/' . $firebaseId . '/' . $courseId . '/' . $lessonId;
 
         // Check if the current content progress already exists
@@ -411,34 +412,13 @@ class ContentController extends Controller
         }
 
 
-        if ($allLessonsCompleted) {
-
-            if ($currentLevel === 'Advanced') {
-                $congratulationsMessage = null;
-            } else {
-
-                $nextLevel = $this->getNextLevel($currentLevel);
-
-                // dd($nextLevel);
-
-
-                // $this->database->getReference('users/' . $firebaseId)->update([
-                //     'user_type' => $nextLevel
-                // ]);
-
-
-                $this->database->getReference("survey/user/$firebaseId/course/$courseId")->set($nextLevel);
 
 
 
+        //logic sa pag change sa level
 
 
 
-                $congratulationsMessage = "Congratulations! You’ve been promoted to {$nextLevel}!";
-            }
-        } else {
-            $congratulationsMessage = null;
-        }
 
 
 
@@ -460,18 +440,8 @@ class ContentController extends Controller
 
 
         // Pass data to the view
-        return view('userUser.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent',  'congratulationsMessage', 'checkquestions'));
+        return view('userUser.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent', 'checkquestions'));
     }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -483,6 +453,9 @@ class ContentController extends Controller
         $currentIndex = array_search($currentLevel, $levels);
         return $levels[$currentIndex + 1] ?? $currentLevel; // If no next level, stay at current level
     }
+
+
+
 
 
     // /**

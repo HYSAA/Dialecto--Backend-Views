@@ -136,9 +136,6 @@ class QuizController extends Controller
             ];
         }
 
-
-
-
         // Move to the next question by incrementing currentIndex
         $currentIndex++;
 
@@ -148,6 +145,14 @@ class QuizController extends Controller
             'currentIndex' => $currentIndex,
             'quizHistory' => $quizHistory,
         ]);
+
+
+
+
+
+
+
+
 
         // Check if this was the last question
         if ($currentIndex >= count($questions)) {
@@ -182,18 +187,7 @@ class QuizController extends Controller
             }
         }
 
-        // dd($lessonName);
-
-
-
-
-
-
-
-
         $totalScore = array_values($totalScore);
-
-
 
         $ttscore = 0;
 
@@ -210,11 +204,6 @@ class QuizController extends Controller
         $quizHistory = session('quizHistory', []);
 
         $badges = $this->database->getReference("badges/")->getValue();
-
-
-
-
-
 
         $badgeName = null;
         $badgeImage = null;
@@ -257,6 +246,11 @@ class QuizController extends Controller
 
         $user = Auth::user(); // Get the authenticated user
         $user = $user->firebase_id; // Dump
+
+
+
+
+
 
 
 
@@ -320,6 +314,125 @@ class QuizController extends Controller
 
 
 
+
+        // here kay ato i check if angay i promote si user sa next nga level
+
+        // way pag check is i check if silver tanan sa kana nga level
+
+        // initialize mga variables i reference nato
+
+
+        $userId = $user;
+        $currentLevel = $this->database->getReference("survey/user/$userId/course/$courseId")->getValue();
+        $lesson; // kani siya tanan lessons inside course
+        $lessonFilterByLevel = []; // current level ang gi compare ani
+        $userResults = $this->database->getReference("quiz_results/$user/$lessonId")->getValue();
+
+        // filter by current level ang lesson
+
+        foreach ($lesson as $key => $value) {
+
+            if ($value['proficiency_level'] == $currentLevel) {
+                $lessonFilterByLevel[$key] = $value;
+            }
+        }
+        // count pila ka buok
+        $countFillteredtLessonsByLevel = count($lessonFilterByLevel);
+
+        // resuse tag code sa pag get sa user results
+
+        $userResults = $this->database->getReference("quiz_results/$user")->getValue();
+
+
+
+        // kay random mani sila, i filter nato based sa  course niya
+
+        $filteredUserResultsByCourse = [];
+
+        if (!empty($userResults)) {
+
+
+
+            foreach ($userResults as $key => $value) {
+
+                if (isset($value['course']) && $courseId == $value['course']) {
+
+
+                    // Add matching result to filtered results
+                    $filteredUserResultsByCourse[$key] = $value;
+                }
+            }
+        }
+
+        // filtered nato sya by proficiency
+
+        $filteredUserResultsByLevel = [];
+
+
+
+
+
+        foreach ($filteredUserResultsByCourse as $keyA => $valueA) {
+            // $valueA['lesson'];
+            $userResLessonID = $valueA['lesson'];
+
+            foreach ($lesson as $keyB => $valueB) {
+
+                if ($userResLessonID == $keyB) { // i check ang lesson id ani
+
+
+
+                    if ($valueB['proficiency_level'] == $currentLevel) {
+
+
+                        $filteredUserResultsByLevel[$keyA] = $valueA;
+                    }
+                }
+            }
+        }
+
+        // dd($filteredUserResultsByLevel);
+
+        $countUserResultsByLevel = count($filteredUserResultsByLevel);
+
+        $promote = null;
+
+        if ($countUserResultsByLevel == $countFillteredtLessonsByLevel) {
+
+
+
+            foreach ($filteredUserResultsByLevel as $key => $value) {
+
+                if ($value['badge'] == 'bronze') {
+                } else {
+                    $promote = true;
+                }
+            }
+        }
+
+
+        $congratulationsMessage = null;
+
+        if ($promote) {
+
+            if ($currentLevel === 'Advanced') {
+                $congratulationsMessage = null;
+            } else {
+
+                $nextLevel = $this->getNextLevel($currentLevel);
+                $this->database->getReference("survey/user/$user/course/$courseId")->set($nextLevel);
+                $congratulationsMessage = "Congratulations! You’ve been promoted to {$nextLevel}!";
+            }
+        } else {
+            $congratulationsMessage = null;
+        }
+
+
+
+        // dd($congratulationsMessage);
+
+
+
         return view('userUser.quiz.results', [
             'score' => $score,
             'totalQuestions' => count($questions),
@@ -328,6 +441,16 @@ class QuizController extends Controller
             'totalScore' => $ttscore,
             'quizHistory' => $quizHistory,
             'quizData' => $quizData,
+            'congratulationsMessage' => $congratulationsMessage,
         ]);
+    }
+
+
+
+    private function getNextLevel($currentLevel)
+    {
+        $levels = ['Beginner', 'Intermediate', 'Advanced'];
+        $currentIndex = array_search($currentLevel, $levels);
+        return $levels[$currentIndex + 1] ?? $currentLevel; // If no next level, stay at current level
     }
 }

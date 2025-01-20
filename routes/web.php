@@ -343,6 +343,10 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/survey/{courseId}', [SurveyController::class, 'showSurvey'])->name('survey.show');
     Route::post('/survey', [SurveyController::class, 'submitSurvey'])->name('survey.submit');
 
+
+
+    // unsay gamit ani???
+
     Route::middleware(['user', 'survey.completed'])->group(function () {
 
         Route::get('/courses/{course}/completed-lessons', [SurveyController::class, 'countCompletedLessons'])->name('course.completed.lessons');

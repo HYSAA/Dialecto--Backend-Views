@@ -96,76 +96,32 @@
 
         </div>
     </div>
-    @if ($congratulationsMessage)
-    <!-- Modal Structure -->
-    <div id="congrats-modal" class="modal">
-        <div class="modal-content">
-            <h2>{{ $congratulationsMessage }}</h2>
-            <button onclick="closeModal()">Close</button>
-        </div>
-    </div>
 
-    <script>
-        // Display the modal
-        document.getElementById('congrats-modal').style.display = 'flex';
 
-        function closeModal() {
-            document.getElementById('congrats-modal').style.display = 'none';
-        }
-    </script>
 
-    <style>
-        /* Modal styling */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            /* Dark background */
-            display: none;
-            /* Hidden by default */
-            align-items: center;
-            /* Center vertically */
-            justify-content: center;
-            /* Center horizontally */
-            z-index: 1000;
-            /* Ensure it appears above everything */
-        }
 
-        .modal-content {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            max-width: 400px;
-            /* Limit width */
-            width: 90%;
-            /* Responsive width */
-        }
 
-        .modal-content h2 {
-            margin-bottom: 20px;
-        }
 
-        .modal-content button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
 
-        .modal-content button:hover {
-            background: #0056b3;
-        }
-    </style>
+    <!-- transfer ni siya sa quizzes -->
 
-    @endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
