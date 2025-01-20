@@ -228,7 +228,18 @@
 
                 // Optional: Redirect to dashboard after a delay
                 setTimeout(() => {
-                    window.location.href = "{{ route('user.dashboard') }}";
+                    // window.location.href = "{{ route('user.dashboard') }}";
+
+
+                    window.location.href = "{{ route('user.courses.show', $courseId) }}";
+
+
+
+
+
+
+
+
                 }, 300);
             }
         });
