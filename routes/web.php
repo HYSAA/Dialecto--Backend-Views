@@ -15,7 +15,7 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WordBankController;
 
-
+use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\QuizController as AdminQuizController;
 
 
@@ -318,7 +318,8 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('course/{courseId}/lesson/{lessonId}/quiz/results', [UserQuizController::class, 'showResults'])->name('user.question.results');
 
 
-
+    Route::get('/settings', [UserSettingsController::class, 'edit'])->name('user.settings.edit');
+    Route::post('/settings', [UserSettingsController::class, 'update'])->name('user.settings.update');
 
     // Route::get('/courses/{courseId}/lessons/{lessonId}/multipleChoice', [QuizController::class, 'multipleChoice'])->name('user.multipleChoice.show');
 

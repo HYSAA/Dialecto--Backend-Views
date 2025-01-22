@@ -18,7 +18,8 @@
 
             <li class="nav-item" style="display: flex; justify-content: center; align-items: center;">
 
-                <h5 class="btn-text" style="color: white;"> Welcome, {{ Auth::user()->name }}</h5>
+            <h5 class="btn-text" style="color: white;"> Welcome, {{ Auth::user()->name }}</h5>
+
             </li>
 
             <hr style="border: 0; height: 1px; background-color: #939393; margin: 20px 0 35px 0;">

@@ -29,8 +29,12 @@
                 @else
 
 
-                <a class="btn btn-back-main" href="{{ route('user.profile.applyExpert', ['id' => $userId]) }}">Apply as verifier</a>
+             
+    <a class="btn btn-back-main" href="{{ route('user.settings.edit') }}">Settings</a>
 
+
+           
+                <a class="btn btn-back-main" href="{{ route('user.profile.applyExpert', ['id' => $userId]) }}">Apply as verifier</a>
                 @if ($credentials['status'] == 'denied' )
 
                 <a class="btn btn-back-main" href="{{ route('user.profile.applyExpert', ['id' => $userId]) }}" style="pointer-events: none; cursor: not-allowed; background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;">Application has been denied. Submit another application.</a>
