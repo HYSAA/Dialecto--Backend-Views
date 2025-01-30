@@ -16,12 +16,17 @@ class UserSettingsController extends Controller
     }
 
     public function edit()
-    {
-        $userId = Auth::user()->firebase_id; // Current user ID
-        $user = $this->database->getReference("users/{$userId}")->getValue();
+{
+    $userId = Auth::user()->firebase_id; // Current user ID
+    $user = $this->database->getReference("users/{$userId}")->getValue();
 
-        return view('userUser.settings.edit', compact('user'));
+    // Update session with Firebase data
+    if ($user) {
+        session()->put('user', $user);
     }
+
+    return view('userUser.settings.edit', compact('user'));
+}
 
     public function update(Request $request)
     {
