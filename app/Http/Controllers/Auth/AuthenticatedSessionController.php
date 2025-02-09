@@ -49,7 +49,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         if (!$firebaseUser) {
-            return back()->withErrors(['email' => 'These credentials do not match our records.']);
+            return back()->withErrors(['email' => 'Your email or password is incorrect. Please try again!']);
         }
 
         // Convert the bcrypt hash from $2a$ to $2y$
@@ -57,7 +57,7 @@ class AuthenticatedSessionController extends Controller
 
         // Verify password using Laravel's Hash::check()
         if (!Hash::check($request->password, $firebasePasswordHash)) {
-            return back()->withErrors(['password' => 'The provided password is incorrect.']);
+            return back()->withErrors(['password' => 'Your email or password is incorrect. Please try again!']);
         }
 
         // Retrieve usertype from Firebase

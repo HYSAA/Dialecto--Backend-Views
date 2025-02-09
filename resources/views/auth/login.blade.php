@@ -43,9 +43,7 @@
 
                     <!-- Authentication Failed Error -->
                     @if ($errors->has('email') || $errors->has('password'))
-                        <div class="alert alert-danger" style="border-radius: 10px; margin-top: 10px;">
-                            Incorrect email or password.
-                        </div>
+                     
                     @endif
 
                     <!-- Login Button -->
