@@ -6,33 +6,50 @@
     <div class="row mb-4">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-                <h2>{{ $course['name'] ?? 'Course Name' }} - Lessons</h2> <!-- Use 'description' if necessary -->
+
+                <h2>{{ $course['name'] ?? 'Course Name' }} - Lessons </h2>
+                <h2 style="color: green;">Level: {{ $currentLevel }} </h2>
+                <strong style="font-size: small;">Earn a silver or higher rating on all lessons in the current level to be promoted to the next level. To check your ratings for all lessons, go to your profile and view your badges.</strong>
+
             </div>
         </div>
     </div>
 
+
+
     <div class="row" style="overflow-y: auto;">
         <div class="col-lg-12 margin-tb">
             <div class="row">
-                @foreach ($course['lessons'] ?? [] as $lessonId => $lesson)
-
-                <div class="cardsmall mb-2 mr-2">
+                @foreach ($filteredLessons as $lessonId => $lesson)
+                <div class="cardsmall mb-2 mr-2" style="overflow-y: auto;">
                     <div class="top">
                         <div>
                             @if(isset($lesson['image']) && $lesson['image'])
-                            <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="card-img-small">
+                            <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="card-img-small" style="max-height: 200px;">
                             @else
-                            <img src="{{ asset('images/cebuano.png') }}" alt="Lesson Image" class="card-img">
+                            <img src="{{ asset('images/cebuano.png') }}" alt="Lesson Image" class="card-img" style="max-height: 200px;">
                             @endif
                         </div>
 
+
                         <div class="row align-items-center mt-3 mb-3" style="height: 50px;">
+
+
                             <div class="col-6 d-flex align-items-center">
-                                <h3 class="card-title mb-0">{{ $lesson['title'] ?? 'Lesson Title' }}</h3>
+                                <h3 class="card-title mb-0">
+                                    <span class="badge bg-{{ 
+                            $lesson['proficiency_level'] === 'Beginner' ? 'success' : 
+                            ($lesson['proficiency_level'] === 'Intermediate' ? 'warning' : 'primary') }} ms-2 small" style="margin-left: 0;">
+                                        {{ $lesson['proficiency_level'] }}
+                                    </span> <br>
+                                    {{ $lesson['title'] ?? 'Lesson Title' }}
+                                    {{-- Optional: Add proficiency level badge --}}
+
+                                </h3>
                             </div>
 
-                            <div class="col-6 d-flex justify-content-end">
 
+                            <div class="col-6 d-flex justify-content-end">
                                 <button class="btn btn-main lessonButton"
                                     data-title="{{ $lesson['title'] }}"
                                     data-lesson-id="{{ $lessonId }}"
@@ -40,10 +57,13 @@
                                     View
                                 </button>
                             </div>
+
+
                         </div>
                     </div>
                 </div>
                 @endforeach
+
             </div>
         </div>
     </div>
@@ -150,13 +170,6 @@
                     showButton.style.display = 'none';
                 }
 
-
-
-
-
-
-
-
                 // Show the modal
                 document.getElementById('lessonModal').style.display = 'block';
                 document.querySelector('.main-container').classList.add('blurred');
@@ -170,5 +183,6 @@
         });
     });
 </script>
+
 
 @endsection

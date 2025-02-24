@@ -16,8 +16,8 @@
                 <i class="bi bi-person" style="color: white; font-size: 50px;"></i>
             </li>
             <li class="nav-item" style="display: flex; justify-content: center; align-items: center;">
-    <h5 class="btn-text" style="color: white;">Welcome, {{ session('user.name') ?? Auth::user()->name }}</h5>
-</li>
+                <h5 class="btn-text" style="color: white;">Welcome, {{ session('user.name') ?? Auth::user()->name }}</h5>
+            </li>
             <hr style="border: 0; height: 1px; background-color: #939393; margin: 20px 0 35px 0;">
 
 
@@ -113,9 +113,21 @@
                 </a>
             </li>
 
+
             <li class="nav-item">
-            <a class="btn btn-nav" href="{{ route('expert.dictionary') }}">
-            <i class="bi bi-bar-chart"></i>
+                <a class="btn btn-nav" href="{{ route('expert.leaderboard') }}">
+                    <i class="bi bi-bar-chart"></i>
+                    <span class="btn-text">Ranking</span>
+                </a>
+
+
+
+
+
+
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('expert.dictionary') }}">
+                    <i class="bi bi-bar-chart"></i>
                     <span class="btn-text">Dictionary of Words</span>
                 </a>
             </li>
@@ -133,11 +145,7 @@
                                     <span class="btn-text">Word Approval</span>
                                 </li> -->
 
-                                <li class="nav-item">
-            <a class="btn btn-nav" href="{{ route('expert.leaderboard') }}">
-    <i class="bi bi-bar-chart"></i>
-    <span class="btn-text">Ranking</span>
-</a>
+
 
 
 
@@ -182,10 +190,10 @@
             </li>
 
             <li class="nav-item">
-            <a class="btn btn-nav" href="{{ route('user.leaderboard') }}">
-    <i class="bi bi-bar-chart"></i>
-    <span class="btn-text">Ranking</span>
-</a>
+                <a class="btn btn-nav" href="{{ route('user.leaderboard') }}">
+                    <i class="bi bi-bar-chart"></i>
+                    <span class="btn-text">Ranking</span>
+                </a>
 
 
             <li class="nav-item">

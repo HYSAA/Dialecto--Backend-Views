@@ -35,7 +35,7 @@ class LeaderboardController extends Controller
      */
     public function show($courseName, Request $request)
     {
-        $currentUserId = $request->user()->firebase_id; 
+        $currentUserId = $request->user()->firebase_id;
 
         // Fetch data from Firebase
         $rankings = $this->database->getReference('ranking')->getValue() ?? [];
@@ -59,17 +59,16 @@ class LeaderboardController extends Controller
             }
         }
 
-       
+
         usort($courseRankings, fn($a, $b) => $b['total_course_score'] <=> $a['total_course_score']);
 
         // Determine user rank
         foreach ($courseRankings as $index => $ranking) {
             if ($ranking['user_id'] === $currentUserId) {
-                $userRank = $index + 1; 
+                $userRank = $index + 1;
                 $currentUserRanking = $ranking;
-                
-            }else {
-                $ranking['user_name']= '****';
+            } else {
+                $ranking['user_name'] = '****';
             }
         }
         unset($ranking);

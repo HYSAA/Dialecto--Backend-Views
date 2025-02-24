@@ -37,19 +37,6 @@ class CourseController extends Controller
         }
         return view('userUser.courses.index', compact('courses'));
     }
-
-
-    //     public function show($courseId)
-    // {
-    //     $course = $this->database->getReference('courses/' . $courseId)->getValue();
-
-    //     if ($course === null) {
-    //         // Handle the case where the course is not found
-    //         return redirect()->route('user.courses.index')->with('error', 'Course not found.');
-    //     }
-
-    //     return view('userUser.courses.show', compact('course'));
-    // }
     public function show($id)
     {
 
@@ -65,9 +52,6 @@ class CourseController extends Controller
         } else {
             $currentLevel = null;
         }
-
-
-
 
         // check if user has taken survey for this course
 

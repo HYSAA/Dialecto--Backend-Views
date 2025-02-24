@@ -17,12 +17,6 @@
         </div>
     </div>
 
-    <!-- <div class=" row mt-2">
-                    <div class="col-lg-6 " style="padding-left: 20px;">
-                        <h6>Word Counter</h6>
-                    </div>
-            </div> -->
-
     <div class="row justify-content-center mt-5">
         <div class="col-lg-12 box-container">
 

@@ -39,10 +39,6 @@ class ContentController extends Controller
             ->createStorage();
     }
 
-
-
-
-
     public function create($courseId, $lessonId)
     {
         $course = Course::findOrFail($courseId);
@@ -208,25 +204,12 @@ class ContentController extends Controller
             ->with('success', 'Content deleted successfully.');
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     public function show($courseId, $lessonId, $contentId)
     {
         // Retrieve the course, lesson, and content from the Firebase Realtime Database
         $course = $this->database->getReference('courses/' . $courseId)->getValue();
         $lesson = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId)->getValue();
         $content = $this->database->getReference('courses/' . $courseId . '/lessons/' . $lessonId . '/contents/' . $contentId)->getValue();
-
 
 
         // Retrieve all contents for the lesson
@@ -248,14 +231,14 @@ class ContentController extends Controller
 
             // Sort contents by ID
             usort($contentsArray, function ($a, $b) {
-                return $a['id'] <=> $b['id'];
+                return strcmp($a['id'], $b['id']); // String comparison for Firebase keys
             });
 
             // Find the next content after the current content ID
             foreach ($contentsArray as $item) {
                 if ($item['id'] > $contentId) {
                     $nextContent = $item; // This is the next content
-                    break; // Exit the loop once we find the next content
+                    break;
                 }
             }
 
@@ -263,50 +246,106 @@ class ContentController extends Controller
             for ($i = count($contentsArray) - 1; $i >= 0; $i--) {
                 if ($contentsArray[$i]['id'] < $contentId) {
                     $previousContent = $contentsArray[$i]; // This is the previous content
-                    break; // Exit the loop once we find the previous content
+                    break;
                 }
             }
         }
 
+        // User progress section (this keeps the existing user_progress logic intact)
+        $firebaseId = auth()->user()->firebase_id; // Get the user's Firebase ID
 
 
+        $userProgressRef = 'user_progress/' . $firebaseId . '/' . $courseId . '/' . $lessonId;
+
+        // Check if the current content progress already exists
+        $existingProgress = $this->database->getReference($userProgressRef . '/' . $contentId)->getValue();
+
+        if (!$existingProgress) {
+            // If progress for this content doesn't exist, store it in Firebase
+            $this->database->getReference($userProgressRef . '/' . $contentId)
+                ->set([
+                    'content_id' => $contentId,
+                    'progress_at' => now()->toDateTimeString(), // Timestamp of progress
+                    'view_count' => 1 // Initialize view count to 1
+                ]);
+        } else {
+            // If progress exists, increment the view count in Firebase
+            $this->database->getReference($userProgressRef . '/' . $contentId)
+                ->update([
+                    'view_count' => $existingProgress['view_count'] + 1,
+                    'progress_at' => now()->toDateTimeString() // Update timestamp for the new view
+                ]);
+        }
+
+        // Now handle the completed_lessons update
+        $userRef = 'users/' . $firebaseId; // Path to user data in Firebase
+        $completedLessonsRef = $userRef . '/completed_lessons';
 
 
-        // Count of Content_id Does not increment but stores the id that is done dependent ont eh button nextcontent
-        // if ($nextContent) {
-        //     $userProgress = UserProgress::firstOrCreate([
-        //         'user_id' => auth()->id(),
-        //         'course_id' => $courseId,
-        //         'lesson_id' => $lessonId,
-        //         'content_id' => $nextContent->id,
-        //     ]);
-        // }
-        return view('userExpert.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent'));
+        $completedLessons = $this->database->getReference($completedLessonsRef)->getValue();
+
+        // Check if lesson exists in completed_lessons, if not initialize it
+        if (!isset($completedLessons[$lessonId])) {
+            $completedLessons[$lessonId] = [];
+        }
+
+        // Mark the content as completed
+        $completedLessons[$lessonId][$contentId] = true;
+
+        // Update the user's completed lessons data in Firebase
+        $this->database->getReference($completedLessonsRef)->set($completedLessons);
+
+
+        $userData = $this->database->getReference('users/' . $firebaseId)->getValue();
+
+        $currentLevel = $this->database->getReference("survey/user/$firebaseId/course/$courseId")->getValue();
+
+
+        // dd($currentLevel);
+
+        // $currentLevel = $userData['user_type'];
+
+
+        $lessonsForLevel = $this->database->getReference('courses/' . $courseId . '/lessons')
+            ->orderByChild('proficiency_level')
+            ->equalTo($currentLevel)
+            ->getValue();
+
+        $allLessonsCompleted = true;
+        foreach ($lessonsForLevel as $lessonKey => $lessonData) {
+
+            if (!isset($completedLessons[$lessonKey]) || count($completedLessons[$lessonKey]) < count($lessonData['contents'])) {
+                $allLessonsCompleted = false;
+                break;
+            }
+        }
+
+        //logic sa pag change sa level
+
+        //check if naay quizes sulod
+
+        $checkquestions  = $this->database->getReference("quizzes/$lessonId")->getValue();
+
+        if ($checkquestions == null) {
+
+            $checkquestions = false;
+        } else {
+
+            $checkquestions = true;
+        }
+
+
+        // Pass data to the view
+        return view('userExpert.contents.show', compact('course', 'courseId', 'lesson', 'lessonId', 'content', 'contentId', 'nextContent', 'previousContent', 'checkquestions'));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // Helper function to get the next level
+    private function getNextLevel($currentLevel)
+    {
+        $levels = ['Beginner', 'Intermediate', 'Advanced'];
+        $currentIndex = array_search($currentLevel, $levels);
+        return $levels[$currentIndex + 1] ?? $currentLevel; // If no next level, stay at current level
+    }
 
     public function edit($courseId, $lessonId, $contentId)
     {

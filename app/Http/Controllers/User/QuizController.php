@@ -41,23 +41,19 @@ class QuizController extends Controller
 
 
 
+
+
+
+
     public function showQuiz($courseId, $lessonId)
     {
-
-        // dd('asdasssss');
-
-
         $courseName = $this->database->getReference("courses/$courseId")->getValue()['name'];
         $lessonName = $this->database->getReference("courses/$courseId/lessons/$lessonId")->getValue()['title'];
 
         $currentIndex = session('currentIndex', 0);
         $score = session('score', 0);
 
-
-
         $questions  = $this->database->getReference("quizzes/$lessonId")->getValue();
-
-
 
         $questions = array_values($questions);
         session(['questions' => $questions]);
@@ -67,11 +63,7 @@ class QuizController extends Controller
             shuffle($questions[$i]['choices']);
         }
 
-
-
         $currentQuestion = $questions[$currentIndex];
-
-
 
         // Use compact to pass variables to the view
         return view('userUser.quiz.quiz', compact(

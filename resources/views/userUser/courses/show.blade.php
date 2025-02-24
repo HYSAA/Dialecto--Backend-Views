@@ -170,13 +170,6 @@
                     showButton.style.display = 'none';
                 }
 
-
-
-
-
-
-
-
                 // Show the modal
                 document.getElementById('lessonModal').style.display = 'block';
                 document.querySelector('.main-container').classList.add('blurred');

@@ -20,7 +20,7 @@ use App\Http\Controllers\QuizController as AdminQuizController;
 
 
 // user 
-
+use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\User\CourseController as UserCourseController;
 use App\Http\Controllers\User\LessonController as UserLessonController;
 use App\Http\Controllers\User\ContentController as UserContentController;
@@ -31,6 +31,7 @@ use App\Http\Controllers\User\UserDictionary;
 use App\Http\Controllers\User\LeaderboardController;
 
 //expert
+use App\Http\Controllers\Expert\SurveyController as ExpertSurveyController;
 use App\Http\Controllers\Expert\CourseController as  ExpertCourseController;
 use App\Http\Controllers\Expert\LessonController as  ExpertLessonController;
 use App\Http\Controllers\Expert\ContentController as  ExpertContentController;
@@ -40,7 +41,7 @@ use App\Http\Controllers\Expert\ExpertController;
 use App\Http\Controllers\Expert\ExpertProgresscontroller;
 use App\Http\Controllers\Expert\ExpertDictionary;
 use App\Http\Controllers\Expert\LeaderboardController as ExpertLeaderboardController;
-use App\Http\Controllers\SurveyController;
+
 
 use App\Http\Controllers\AdminController;
 
@@ -173,6 +174,7 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
     // Dashboard route
     Route::get('/dashboard', [ExpertCourseController::class, 'index'])->name('expert.dashboard');
 
+
     Route::resource('courses', ExpertCourseController::class)->names([
         'index' => 'expert.courses.index',
         'create' => 'expert.courses.create',
@@ -203,9 +205,20 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
         'destroy' => 'expert.contents.destroy',
     ]);
 
+
+
+
+
+
     Route::get('/leaderboard', [ExpertLeaderboardController::class, 'index'])->name('expert.leaderboard');
 
     Route::get('/leaderboard/{courseName}', [ExpertLeaderboardController::class, 'show'])->name('expert.leaderboard.show');
+
+
+
+
+
+
 
 
 
@@ -221,8 +234,15 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
 
     Route::post('/expert/disapprove-word/{id}', [ExpertController::class, 'disapproveWord'])->name('expert.disapproveWord');
 
+
+
     //Progress
     Route::get('/expert/progress/{id}', [ExpertProgresscontroller::class, 'expertprogress'])->name('expert.progress');
+
+
+
+
+
 
     // Route::get('/expert/dictionary/{id}', [ExpertDictionary::class, 'expertdictionary'])->name('expert.dictionary');
     Route::get('/expert/dictionary', [ExpertDictionary::class, 'expertdictionary'])->name('expert.dictionary');
@@ -231,18 +251,48 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
 
 
     // Quiz routes
-    Route::get('/quiz', [ExpertQuizController::class, 'show'])->name('expert.quiz');
 
-    Route::get('/courses/{courseId}/lessons/{lessonId}/quiz', [ExpertQuizController::class, 'showQuiz'])->name('expert.quiz.show');
-    Route::post('/courses/{courseId}/lessons/{lessonId}/quiz', [ExpertQuizController::class, 'submitQuiz'])->name('expert.quiz.submit');
-    Route::get('/courses/{courseId}/lessons/{lessonId}/quiz/result', [ExpertQuizController::class, 'showResult'])->name('expert.quiz.result');
+    Route::get('/take-quiz/{courseId}/{lessonId}', [ExpertQuizController::class, 'showQuiz'])->name('expert.quiz.show');
 
-    // Multiple choice quiz
-    Route::get('/courses/{courseId}/lessons/{lessonId}/multipleChoice', [ExpertQuizController::class, 'multipleChoice'])->name('expert.multipleChoice.show');
+    Route::post('/{courseId}/{lessonId}/submit', [ExpertQuizController::class, 'submitAnswer'])->name('expert.question.submit');
+
+    Route::get('course/{courseId}/lesson/{lessonId}/quiz/results', [ExpertQuizController::class, 'showResults'])->name('expert.question.results');
+
+
+
+
+
+
+
+
 
     // Profile routes
     Route::get('/profile', [ExpertControllerProfile::class, 'show'])->name('expert.profile.show');
     Route::get('/profile/edit', [ExpertControllerProfile::class, 'edit'])->name('expert.profile.edit');
+
+
+
+
+
+
+
+
+
+
+
+    Route::get('/survey/{courseId}', [ExpertSurveyController::class, 'showSurvey'])->name('expert.survey.show');
+
+    Route::post('/survey', [ExpertSurveyController::class, 'submitSurvey'])->name('expert.survey.submit');
+
+
+
+    // unsay gamit ani???
+
+    Route::middleware(['expert', 'survey.completed'])->group(function () {
+
+        Route::get('/courses/{course}/completed-lessons', [ExpertSurveyController::class, 'countCompletedLessons'])->name('course.completed.lessons');
+        Route::post('/courses/{course}/lessons/{lesson}/complete', [ExpertSurveyController::class, 'completeLesson'])->name('lesson.complete');
+    });
 });
 
 
@@ -283,18 +333,25 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     ]);
 
 
-
-
     Route::get('/wordSuggested/{id}/viewUpdateSelected', [UserController::class, 'viewUpdateSelected'])->name('user.viewUpdateSelected');
     Route::get('/wordSuggested/{id}/deleteSelectedWord', [UserController::class, 'deleteSelectedWord'])->name('user.deleteSelectedWord');
     Route::post('/wordSuggested/{id}/updateSelected', [UserController::class, 'updateSelected'])->name('user.updateSelected');
     Route::get('/wordSuggested', [UserController::class, 'wordSuggested'])->name('user.wordSuggested');
 
 
+
+
+
+
     //para sa leaderboard/rankings
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('user.leaderboard');
 
     Route::get('/leaderboard/{courseName}', [LeaderboardController::class, 'show'])->name('user.leaderboard.show');
+
+
+
+
+
 
 
     Route::get('/selectUserCourseLesson', [UserController::class, 'selectUserCourseLesson'])->name('user.selectUserCourseLesson');
@@ -314,8 +371,19 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
 
     Route::get('/take-quiz/{courseId}/{lessonId}', [UserQuizController::class, 'showQuiz'])->name('user.quiz.show');
+
+
+
+
+
     Route::post('/{courseId}/{lessonId}/submit', [UserQuizController::class, 'submitAnswer'])->name('user.question.submit');
+
+
+
     Route::get('course/{courseId}/lesson/{lessonId}/quiz/results', [UserQuizController::class, 'showResults'])->name('user.question.results');
+
+
+
 
 
     Route::get('/settings', [UserSettingsController::class, 'edit'])->name('user.settings.edit');
@@ -332,7 +400,12 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/profile/{id}/apply-expert', [UserControllerProfile::class, 'applyExpert'])->name('user.profile.applyExpert');
 
 
-    Route::get('/user/progress/{id}', [UserProgressController::class, 'userprogress'])->name('user.progress');
+    Route::get('/progress/{id}', [UserProgressController::class, 'userprogress'])->name('user.progress');
+
+
+
+
+
 
     Route::get('/user/dictionary', [UserDictionary::class, 'userdictionary'])->name('user.dictionary');
     Route::get('/user/dictionary/{id}', [UserDictionary::class, 'userdictionaryshow'])->name('user.dictionary.show');

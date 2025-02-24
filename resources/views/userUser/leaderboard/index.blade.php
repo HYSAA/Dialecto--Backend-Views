@@ -1,6 +1,3 @@
-
-
-
 @extends('layouts.app')
 
 @section('content')
@@ -17,12 +14,12 @@
             border-radius: 8px; 
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         ">
-       Leaderboard
+        Leaderboard
     </h1>
     <div class="row">
         @foreach($courses as $course)
-            <div class="col-md-6 mb-2" style="padding: 10px;">
-                <div class="course-card position-relative text-center">
+        <div class="col-md-6 mb-2" style="padding: 10px;">
+            <div class="course-card position-relative text-center">
                 <a href="{{ route('user.leaderboard.show', ['courseName' => $course['name']]) }}" class="list-group-item">
 
                     <!-- Blurred Background Image -->
@@ -36,9 +33,9 @@
                         <h3>{{ $course['name'] ?? 'Unnamed Course' }}</h3>
                     </div>
 
-                    </a>
-                </div>
+                </a>
             </div>
+        </div>
         @endforeach
     </div>
 </div>
