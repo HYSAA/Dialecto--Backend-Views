@@ -11,7 +11,7 @@
             </div>
             <div class="pull-right">
                 <a class="btn btn-back-main" href="{{ route('admin.courses.index') }}">Back To Courses</a>
-                <a class="btn btn-main" href="{{ route('admin.lessons.create', $id) }}">Create Lesson</a>
+                <a class="btn btn-main" href="{{ route('admin.lessons.create', $id) }}">Create Lessons</a>
             </div>
         </div>
     </div>
@@ -35,7 +35,7 @@
                     <p class="card-text"><strong>Proficiency Level:</strong> {{ $lesson['proficiency_level'] ?? 'N/A' }}</p>
                     <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
                         @if(isset($lesson['image']))
-                        <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="card-img-top" style="object-fit: contain; max-height: 100%; max-width: 100%;">
+                        <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="card-img-top fixed-dimensions">
                         @else
                         <p>No image available</p>
                         @endif
@@ -59,4 +59,12 @@
 
 </div>
 
+
+<style>
+    .fixed-dimensions {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+</style>
 @endsection
