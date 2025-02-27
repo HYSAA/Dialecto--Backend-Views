@@ -3,29 +3,7 @@
 @section('content')
 
 <div class="main-container" style="overflow:auto">
-<form method="GET" action="{{ route('user.dictionary.show', $id) }}" style="margin-bottom: 20px;">
-    <div class="input-group">
-        <!-- Search Bar -->
-        <input 
-            type="text" 
-            name="search" 
-            class="form-control" 
-            placeholder="Search by lesson title or English text..." 
-            value="{{ $searchQuery ?? '' }}"
-            style="font-size: 1.2rem; padding: 10px;"
-        >
 
-        <!-- Search Button -->
-        <button type="submit" class="btn btn-primary" style="font-size: 1.2rem; padding: 10px 20px;margin-left: 10px;">
-            Search
-        </button>
-    </div>
-
-    <!-- Hidden Fields to Maintain Filters -->
-    @if ($filterProficiency)
-        <input type="hidden" name="proficiency_level" value="{{ $filterProficiency }}">
-    @endif
-</form>
 
     <!-- Display the course title -->
     <h1 class="text-center" style="
@@ -41,10 +19,9 @@
     <br>
     <!-- <p>{{ $course['description'] ?? 'No description available for this course.' }}</p> -->
 <!-- <p>Course ID: {{ $id }}</p> -->
-
-<form method="GET" action="{{ route('user.dictionary.show', $id) }}" style="display: inline;">
-    <div>
-        <!-- Generate a button for each proficiency level -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- Proficiency Filter Buttons -->
+    <form method="GET" action="{{ route('user.dictionary.show', $id) }}" class="d-flex flex-wrap gap-2">
         @foreach($allProficiencies as $proficiency)
             <button 
                 type="submit" 
@@ -55,7 +32,7 @@
             </button>
         @endforeach
 
-        <!-- Add a reset button to show all lessons -->
+        <!-- Reset Button -->
         <button 
             type="submit" 
             name="proficiency_level" 
@@ -63,9 +40,28 @@
             class="btn {{ !$filterProficiency ? 'btn-primary' : 'btn-secondary' }}">
             Show All
         </button>
-    </div>
-</form>
+    </form>
 
+    <!-- Search Bar (Aligned to the Right) -->
+    <form method="GET" action="{{ route('user.dictionary.show', $id) }}" class="d-flex">
+    <input 
+        type="text" 
+        name="search" 
+        class="form-control me-2" 
+        placeholder="Search by lesson title or English text..." 
+        value="{{ $searchQuery ?? '' }}"
+        style="font-size: 1.2rem; padding: 10px; width: 500px;">
+
+        <button type="submit" class="btn btn-primary" style="font-size: 1.2rem; padding: 10px 20px;">
+            Search
+        </button>
+
+        <!-- Hidden Fields to Maintain Filters -->
+        @if ($filterProficiency)
+            <input type="hidden" name="proficiency_level" value="{{ $filterProficiency }}">
+        @endif
+    </form>
+</div>
 
 
     <!-- Display paginated lessons -->
@@ -107,7 +103,7 @@
         {{ $paginatedLessons->appends(request()->query())->links() }}
         </div>
     @else
-        <p>No lessons available for this course.</p>
+        <p>No lesson or Text Found for this course.</p>
     @endif
 
     <div class="mt-4">

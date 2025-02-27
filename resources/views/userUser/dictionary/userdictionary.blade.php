@@ -16,7 +16,7 @@
         ">
         Dictionary of Words
     </h1>
-    <div class="row">
+    <div class="row" style=" overflow-y: auto;">
         @foreach($courses as $course)
             <div class="col-md-6 mb-2" style="padding: 10px;">
                 <div class="course-card position-relative text-center">
