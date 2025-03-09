@@ -3,29 +3,6 @@
 @section('content')
 
 <div class="main-container" style="overflow:auto">
-<form method="GET" action="{{ route('expert.dictionary.show', $id) }}" style="margin-bottom: 20px;">
-    <div class="input-group">
-        <!-- Search Bar -->
-        <input 
-            type="text" 
-            name="search" 
-            class="form-control" 
-            placeholder="Search by lesson title or English text..." 
-            value="{{ $searchQuery ?? '' }}"
-            style="font-size: 1.2rem; padding: 10px;"
-        >
-
-        <!-- Search Button -->
-        <button type="submit" class="btn btn-primary" style="font-size: 1.2rem; padding: 10px 20px;margin-left: 10px;">
-            Search
-        </button>
-    </div>
-
-    <!-- Hidden Fields to Maintain Filters -->
-    @if ($filterProficiency)
-        <input type="hidden" name="proficiency_level" value="{{ $filterProficiency }}">
-    @endif
-</form>
 
     <!-- Display the course title -->
     <h1 class="text-center" style="
@@ -41,6 +18,7 @@
     <br>
     <!-- <p>{{ $course['description'] ?? 'No description available for this course.' }}</p> -->
 <!-- <p>Course ID: {{ $id }}</p> -->
+<div class="d-flex justify-content-between align-items-center mb-3">
 
 <form method="GET" action="{{ route('expert.dictionary.show', $id) }}" style="display: inline;">
     <div>
@@ -66,8 +44,30 @@
     </div>
 </form>
 
+<form method="GET" action="{{ route('expert.dictionary.show', $id) }}" style="margin-bottom: 20px;">
+    <div class="input-group">
+        <!-- Search Bar -->
+        <input 
+        type="text" 
+        name="search" 
+        class="form-control me-2" 
+        placeholder="Search by lesson title or English text..." 
+        value="{{ $searchQuery ?? '' }}"
+        style="font-size: 1.2rem; padding: 10px; width: 500px;">
 
+        <!-- Search Button -->
+        <button type="submit" class="btn btn-primary" style="font-size: 1.2rem; padding: 10px 20px;margin-left: 10px;">
+            Search
+        </button>
+    </div>
 
+    <!-- Hidden Fields to Maintain Filters -->
+    @if ($filterProficiency)
+        <input type="hidden" name="proficiency_level" value="{{ $filterProficiency }}">
+    @endif
+</form>
+
+</div>
     <!-- Display paginated lessons -->
     @if ($paginatedLessons->count())
         <div class="lessons-container"
@@ -107,7 +107,7 @@
         {{ $paginatedLessons->appends(request()->query())->links() }}
         </div>
     @else
-        <p>No lessons available for this course.</p>
+        <p>No lesson or Text Found for this course.</p>
     @endif
 
     <div class="mt-4">
