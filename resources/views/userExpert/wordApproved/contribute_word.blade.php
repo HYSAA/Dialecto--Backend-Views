@@ -85,7 +85,7 @@
                         <div class=" row mb-2">
 
 
-                            <label for="video">Video (optional):</label>
+                            <label for="video">Video:</label>
 
                         </div>
 
@@ -97,14 +97,6 @@
 
                     </div>
                 </div>
-
-
-
-
-
-
-
-
             </form>
         </div>
     </div>

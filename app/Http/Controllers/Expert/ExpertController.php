@@ -144,6 +144,7 @@ class ExpertController extends Controller
 
     public function index()
     {
+
         $user = Auth::user(); // Get the currently authenticated user's ID
 
         $userId = $user->firebase_id;
@@ -167,6 +168,8 @@ class ExpertController extends Controller
 
 
 
+
+
         if ($pendingWords) {
             foreach ($pendingWords as $topLevelKey => $innerArray) {
                 // Merge each inner array into $filteredWords
@@ -175,12 +178,17 @@ class ExpertController extends Controller
         }
 
 
+
+
         $filterByCourse = [];
         foreach ($filteredWords as $key => $word) {
             if (isset($word['course_id']) && $word['course_id'] === $specialtyID) {
                 $filterByCourse[$key] = $word; // Preserve the original key
             }
         }
+
+
+
 
 
 
@@ -199,14 +207,10 @@ class ExpertController extends Controller
             }
         }
 
-        // dd($userWords);
-
 
         $i = 0;
         $h = 0;
         $unfilteredData = [];
-
-
 
 
 
@@ -215,14 +219,7 @@ class ExpertController extends Controller
             $approve = [];
             $disapprove = [];
 
-
-
             $unfilteredData[$i] = $this->database->getReference("verify_words/$key")->getValue();
-
-
-
-
-
 
             if (is_array($unfilteredData[$i])) {
 
@@ -277,10 +274,6 @@ class ExpertController extends Controller
 
                 foreach ($unfilteredData[$i] as $key2 => $approvedData) {
 
-                    // dd($approvedData);
-
-
-
                     if ($userId == $approvedData['expert_id']) {
 
 
@@ -303,11 +296,7 @@ class ExpertController extends Controller
             $userId = $value['user_id'];
         }
 
-        // dd($userId);
-
-
-
-
+        // dd($userWords);
 
         return view('userExpert.wordApproved.pending_words', compact('expertWords', 'userWords', 'userId'));
     }

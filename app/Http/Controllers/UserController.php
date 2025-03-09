@@ -55,7 +55,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $currentUserId = Auth::id(); // Get the currently authenticated user's ID
-    
+
         $firebaseUrl = env('FIREBASE_DATABASE_URL') . '/users.json';
         $context = stream_context_create([
             "ssl" => [
@@ -63,15 +63,15 @@ class UserController extends Controller
                 "verify_peer_name" => false,
             ],
         ]);
-    
+
         $response = file_get_contents($firebaseUrl, false, $context);
         $allUsers = json_decode($response, true);
-    
+
         // Filter out the current user
         $users = array_filter($allUsers, function ($userId) use ($currentUserId) {
             return $userId !== $currentUserId;
         }, ARRAY_FILTER_USE_KEY);
-    
+
         $filteredUsers = [];
         foreach ($users as $userId => $userData) {
             $filteredUsers[] = [
@@ -79,7 +79,7 @@ class UserController extends Controller
                 'data' => $userData,
             ];
         }
-    
+
         // Handle search query
         $search = strtolower($request->input('search'));
         if ($search) {
@@ -87,14 +87,14 @@ class UserController extends Controller
                 $name = strtolower($user['data']['name'] ?? '');
                 $email = strtolower($user['data']['email'] ?? '');
                 $usertype = strtolower($user['data']['usertype'] ?? '');
-    
+
                 return str_contains($name, $search) || str_contains($email, $search) || str_contains($usertype, $search);
             });
         }
-    
+
         return view('users.index', compact('filteredUsers'));
     }
-    
+
 
 
 
@@ -475,17 +475,6 @@ class UserController extends Controller
         return redirect()->route('user.wordSuggested')->with('success', 'Word suggested successfully.');
     }
 
-
-
-
-
-
-
-
-
-
-
-    //////////////////////////////////////////////////////////////////////
 
 
 

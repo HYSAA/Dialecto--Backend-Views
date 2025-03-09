@@ -5,17 +5,22 @@
 
     <div class="row mb-2">
 
-        <div class="col-lg-12 margin-tb">
+        <div class="col-lg-12 margin-tb ">
+
+
             <div class="pull-left mb-2">
                 <h2 id="title">Words From User</h2>
             </div>
 
-            <div class="pull-right mb-2">
+            <div class="d-flex mb-2 gap-2">
                 <a class="btn btn-success" id="btn-myContributedWords" href="#">My Words Contributed</a>
                 <a class="btn btn-dark" id="btn-wordsFromUser" href="#">Words From User</a>
 
 
-                <a class="btn btn-main" id="btn-contribute" href="{{route('expert.contributeWord')}}">Contribute Words</a>
+                <a class="btn btn-main" id=" btn-contribute" href="{{route('expert.contributeWord')}}">Contribute Words</a>
+
+                <a class="btn btn-success ml-auto" id="btn-disapproved" href="#">Approved</a>
+                <a class="btn btn-danger" id="btn-approved" href="#">Disapproved</a>
 
             </div>
         </div>
