@@ -22,7 +22,11 @@
 
             @if(Auth::user()->usertype == 'admin')
 
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> f78ea02e7ac0158f98ad68e9252bf2334f2abf17
 
 
 
@@ -41,15 +45,15 @@
 
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('admin.showPendingExpert') }}">
-                    <i class="fas fa-chalkboard-teacher btn-icon"></i>
-                    <span class="btn-text">Pending Verification</span>
+                <i class="bi bi-person-fill-check"></i>
+                <span class="btn-text">Pending Verification</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('admin.showWordBank') }}">
-                    <i class="fas fa-chalkboard-teacher btn-icon"></i>
-                    <span class="btn-text">Word Bank</span>
+                <i class="bi bi-bank2"></i>
+                <span class="btn-text">Word Bank</span>
                 </a>
             </li>
 
@@ -100,15 +104,15 @@
 
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('expert.dictionary') }}">
-                    <i class="bi bi-bar-chart"></i>
+                <i class="bi bi-book-half"></i>
                     <span class="btn-text">Dictionary of Words</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('expert.pendingWords') }}">
-                    <i class="fas fa-tachometer-alt btn-icon"></i>
-                    <span class="btn-text">Word Bank</span>
+                <i class="bi bi-book"></i>
+                <span class="btn-text">Word Bank</span>
                 </a>
             </li>
 
@@ -125,8 +129,8 @@
 
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('user.profile.show') }}">
-                    <i class="fas fa-book btn-icon"></i>
-                    <span class="btn-text">Profile</span>
+                <i class="bi bi-person-circle"></i>
+                <span class="btn-text">Profile</span>
                 </a>
             </li>
 
@@ -163,8 +167,8 @@
 
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('user.dictionary') }}">
-                    <i class="bi bi-bar-chart"></i>
-                    <span class="btn-text">Dictionary of Words</span>
+                <i class="bi bi-book-half"></i>
+                <span class="btn-text">Dictionary of Words</span>
                 </a>
             </li>
 
