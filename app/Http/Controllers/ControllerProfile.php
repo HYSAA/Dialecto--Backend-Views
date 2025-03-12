@@ -63,7 +63,6 @@ class ControllerProfile extends Controller
         $user = Auth::user(); // Get the authenticated user
         $userId = $user->firebase_id; // Dump
 
-
         $courses  = $this->database->getReference("courses")->getValue();
 
 

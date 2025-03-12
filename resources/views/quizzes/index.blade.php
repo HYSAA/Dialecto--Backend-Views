@@ -64,7 +64,7 @@
                     <td>
                         <form action="{{ route('admin.courses.destroy', $quizId) }}" method="POST">
                             <a href="{{ route('admin.courses.edit', $quizId) }}" class="btn btn-success">Edit</a>
-                            <a href="{{ route('admin.courses.show', $quizId) }}" class="btn btn-primary">View</a>
+
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Delete</button>

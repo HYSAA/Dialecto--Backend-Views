@@ -29,11 +29,11 @@
                 @else
 
 
-             
-    <a class="btn btn-back-main" href="{{ route('user.settings.edit') }}">Settings</a>
+
+                <a class="btn btn-back-main" href="{{ route('user.settings.edit') }}">Settings</a>
 
 
-           
+
                 <a class="btn btn-back-main" href="{{ route('user.profile.applyExpert', ['id' => $userId]) }}">Apply as verifier</a>
                 @if ($credentials['status'] == 'denied' )
 

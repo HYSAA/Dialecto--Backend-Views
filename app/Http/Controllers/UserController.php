@@ -494,17 +494,26 @@ class UserController extends Controller
             ->getValue();
 
 
-        $unverifiedUsers = array_filter($userCredentials, function ($user) {
-            return isset($user['status']) && $user['status'] === 'pending';
-        });
 
-        $verifiedUsers = array_filter($userCredentials, function ($user) {
-            return isset($user['status']) && $user['status'] === 'verified';
-        });
+        if ($userCredentials) {
 
-        $deniedUsers = array_filter($userCredentials, function ($user) {
-            return isset($user['status']) && $user['status'] === 'denied';
-        });
+            $unverifiedUsers = array_filter($userCredentials, function ($user) {
+                return isset($user['status']) && $user['status'] === 'pending';
+            });
+
+            $verifiedUsers = array_filter($userCredentials, function ($user) {
+                return isset($user['status']) && $user['status'] === 'verified';
+            });
+
+            $deniedUsers = array_filter($userCredentials, function ($user) {
+                return isset($user['status']) && $user['status'] === 'denied';
+            });
+        } else {
+            $unverifiedUsers = null;
+            $verifiedUsers = null;
+            $deniedUsers = null;
+        }
+
 
 
 

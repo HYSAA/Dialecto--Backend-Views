@@ -14,6 +14,9 @@
     <div class="row">
         <div class="col-lg-12 margin-tb" style="padding: 0;">
             <div class="row">
+
+
+                @if($courses)
                 @foreach ($courses as $courseID => $course)
                 <div class="wordBankCard" style="overflow: hidden;">
                     <div style="width: 100%; height: 150px;">
@@ -36,6 +39,17 @@
                     </div>
                 </div>
                 @endforeach
+
+                @else
+                <div class="col-lg-12">
+                    <strong>No words found.</strong>
+                </div>
+
+                @endif
+
+
+
+
             </div>
         </div>
     </div>

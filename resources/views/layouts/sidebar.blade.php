@@ -20,23 +20,9 @@
             </li>
             <hr style="border: 0; height: 1px; background-color: #939393; margin: 20px 0 35px 0;">
 
-
-
-
-
-
-
             @if(Auth::user()->usertype == 'admin')
 
-            <li class="nav-item">
-                <a class="btn btn-nav" href="{{ route('admin.courses.index') }}">
 
-                    <i class="bi bi-person-circle"></i>
-
-
-                    <span class="btn-text">Profile</span>
-                </a>
-            </li>
 
 
 
@@ -46,14 +32,6 @@
                     <span class="btn-text">Courses and Lessons</span>
                 </a>
             </li>
-
-            <!-- <li class="nav-item">
-                <a class="btn btn-nav" href="{{ route('lessons.index') }}">
-                    <i class="fas fa-chalkboard-teacher btn-icon"></i>
-                    <span class="btn-text">Lessons</span>
-                </a>
-            </li> -->
-
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('users.index') }}">
                     <i class="fas fa-chalkboard-teacher btn-icon"></i>
@@ -165,6 +143,16 @@
                     <span class="btn-text">Progress</span>
                 </a>
             </li>
+
+
+
+
+
+
+
+
+
+
 
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('user.leaderboard') }}">

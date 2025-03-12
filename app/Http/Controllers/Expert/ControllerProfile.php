@@ -38,13 +38,15 @@ class ControllerProfile extends Controller
         $credentials = $this->database->getReference("credentials/$userId")->getValue();
 
         $courseId = $credentials['langExperties'];
+        $courses  = $this->database->getReference("courses")->getValue();
+        $quizResults  = $this->database->getReference("quiz_results/$userId")->getValue();
 
         $languageExperty = $this->database->getReference("courses/$courseId")->getValue();
         $languageExperty = $languageExperty['name'];
 
         // dd($languageExperty);
 
-        return view('userExpert.profile.show', compact('user', 'credentials', 'languageExperty')); // Pass filtered users to the view
+        return view('userExpert.profile.show', compact('user', 'userId', 'credentials', 'courses', 'quizResults', 'languageExperty')); // Pass filtered users to the view
     }
 
 

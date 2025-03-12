@@ -27,9 +27,12 @@
     @endif
 
     <div class="row">
-        @foreach ($course['lessons'] ?? [] as $lessonId => $lesson)
+
+        @if ($course['lessons'] ?? null)
+
+        @foreach ($course['lessons'] as $lessonId => $lesson)
         <div class="col-md-3 mb-4">
-        <div class="card d-flex flex-column" style="max-height: 400px; overflow-y: auto;">
+            <div class="card d-flex flex-column" style="max-height: 400px; overflow-y: auto;">
                 <div class="card-body">
                     <h5 class="card-title">{{ $lesson['title'] ?? 'Unknown Title' }}</h5>
                     <p class="card-text"><strong>Proficiency Level:</strong> {{ $lesson['proficiency_level'] ?? 'N/A' }}</p>
@@ -55,6 +58,20 @@
             </div>
         </div>
         @endforeach
+
+        @else
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="pull-left mb-2">
+                    <strong>There are no lessons. </strong>
+                </div>
+            </div>
+        </div>
+        @endif
+
+
+
+
     </div>
 
 </div>

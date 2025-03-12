@@ -53,19 +53,23 @@ class CourseController extends Controller
             $currentLevel = null;
         }
 
+
+
         // check if user has taken survey for this course
 
         if (!$survey) {
             return redirect()->route('survey.show', ['courseId' => $courseId]);
         }
 
-        // dd($survey);
+
 
         $course = $this->database->getReference('courses/' . $id)->getValue();
 
         if (!$course || !isset($course['lessons'])) {
             return view('userUser.courses.show', compact('course', 'id'))->with('error', 'No lessons found.');
         }
+
+        // dd($survey);
 
         // Get the user's Firebase ID
         $firebaseId = Auth::user()->firebase_id;
@@ -91,6 +95,8 @@ class CourseController extends Controller
             ->sortBy(function ($lesson) use ($levelOrder) {
                 return array_search($lesson['proficiency_level'], $levelOrder);
             });
+
+        // dd($currentLevel);
 
         return view('userUser.courses.show', compact('course', 'filteredLessons', 'id', 'currentLevel'));
     }

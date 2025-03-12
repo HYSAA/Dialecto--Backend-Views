@@ -4,6 +4,7 @@
 
 <div class="main-container">
 
+
     <div class="row mb-2">
 
         <div class="col-lg-12 margin-tb">
@@ -41,6 +42,7 @@
                         <th width=" 280px">Action</th>
                     </tr>
 
+                    @if($unverifiedUsers)
 
                     @foreach ($unverifiedUsers as $userId => $user) <!-- Loop through unverified users -->
                     @if (isset($userDetails[$userId])) <!-- Check if user details exist for this user -->
@@ -69,6 +71,18 @@
                     @endif
                     @endforeach
 
+                    @else
+
+                    <tr>
+                        <td colspan="100%" style="font-weight: bold;">No users found.</td>
+                    </tr>
+
+
+                    @endif
+
+
+
+
                 </tbody>
 
             </table>
@@ -90,6 +104,8 @@
                     <th>Credentials</th>
 
                 </tr>
+
+                @if($verifiedUsers)
 
 
                 @foreach ($verifiedUsers as $userId => $user) <!-- Loop through unverified users -->
@@ -116,6 +132,14 @@
                 @endforeach
 
 
+                @else
+                <tr>
+                    <td colspan="100%" style="font-weight: bold;">No users found.</td>
+                </tr>
+                @endif
+
+
+
             </table>
         </div>
     </div>
@@ -129,6 +153,8 @@
                     <th>Credentials</th>
 
                 </tr>
+
+                @if($deniedUsers)
 
                 @foreach ($deniedUsers as $userId => $user) <!-- Loop through unverified users -->
                 @if (isset($userDetails[$userId])) <!-- Check if user details exist for this user -->
@@ -152,6 +178,14 @@
                 </tr>
                 @endif
                 @endforeach
+
+
+                @else
+                <tr>
+                    <td colspan="100%" style="font-weight: bold;">No users found.</td>
+                </tr>
+                @endif
+
 
 
 

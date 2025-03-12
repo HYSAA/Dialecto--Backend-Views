@@ -20,12 +20,15 @@ class UserProgressController extends Controller
 
     public function userprogress($id)
     {
+
+
         $userId = Auth::user()->firebase_id;
 
         // Check if the ID matches the authenticated user's firebase_id
         if ($id !== $userId) {
             abort(403, 'Unauthorized access.');
         }
+
 
         // Firebase URL for user data
         $firebaseUserUrl = env('FIREBASE_DATABASE_URL') . '/users/' . $id . '.json';
@@ -36,6 +39,7 @@ class UserProgressController extends Controller
             ],
         ]);
 
+
         // Get the user data from Firebase
         $response = file_get_contents($firebaseUserUrl, false, $context);
         $user = json_decode($response, true);
@@ -43,6 +47,8 @@ class UserProgressController extends Controller
         if (!$user) {
             abort(404, 'User not found.');
         }
+
+
 
         // Fetch courses data from Firebase
         $firebaseCoursesUrl = env('FIREBASE_DATABASE_URL') . '/courses.json';
@@ -52,6 +58,8 @@ class UserProgressController extends Controller
         if (!$courses) {
             abort(404, 'Courses not found.');
         }
+
+
 
         // Get progress data (initialize as an empty array if not found)
         $progressUrl = env('FIREBASE_DATABASE_URL') . '/user_progress/' . $id . '.json';
@@ -103,6 +111,7 @@ class UserProgressController extends Controller
                 ];
             }
         }
+
 
         // Pass data to the view
         return view('userUser.progress.userprogress', compact('user', 'coursesWithLessonsAndContents', 'progressData', 'searchQuery'));

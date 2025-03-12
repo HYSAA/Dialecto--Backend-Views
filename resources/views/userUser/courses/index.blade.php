@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="main-container">
+<div class="main-container" style="overflow:auto">
 
     <div class="row mb-4">
         <div class="col-lg-12 margin-tb">
@@ -20,10 +20,6 @@
 
     <div class="row" style="overflow-y: auto;">
         <div class="col-lg-12 margin-tb">
-
-
-
-
 
             <div class="row">
 
@@ -86,17 +82,6 @@
 
 
     @endif
-
-
-
-
-
-
-
-
-
-
-
 
 
 
