@@ -88,7 +88,7 @@
                 </tbody>
 
             </table>
-            <!-- Modal -->
+       
 <!-- Modal -->
 <div id="detailsModal" class="modal">
     <div class="modal-content">
@@ -99,10 +99,16 @@
         <div class="modal-body">
             <h6>Credentials:</h6>
             <div id="modalImageContainer">
-                <img id="modalImage" src="" alt="Credential Image" class="img-fluid">
+            <img id="modalImage" src="" alt="Credential Image" class="img-fluid clickable-image">
             </div>
         </div>
     </div>
+</div>
+
+<!-- mudako ang image -->
+<div id="lightbox" class="lightbox">
+    <span class="lightbox-close">&times;</span>
+    <img class="lightbox-content" id="lightboxImage">
 </div>
 
         </div>
@@ -316,6 +322,43 @@
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
+.lightbox {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1001; /* Sit on top of the modal */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.9); /* Black with opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+.lightbox-content {
+    max-width: 90%; /* Limit the width of the enlarged image */
+    max-height: 90vh; /* Limit the height of the enlarged image */
+    border-radius: 8px; /* Rounded corners */
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.lightbox-close:hover,
+.lightbox-close:focus {
+    color: #ccc; /* Lighter color on hover */
+    text-decoration: none;
+}
+
 </style>
 
 <script>
@@ -386,6 +429,31 @@
     window.addEventListener('click', function(event) {
         if (event.target === modal) {
             modal.style.display = 'none';
+        }
+    });
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxClose = document.querySelector('.lightbox-close');
+    const clickableImages = document.querySelectorAll('.clickable-image');
+
+    // Open lightbox when image is clicked
+    clickableImages.forEach(image => {
+        image.addEventListener('click', function() {
+            lightboxImage.src = this.src; // Set the lightbox image source
+            lightbox.style.display = 'flex'; // Show the lightbox
+        });
+    });
+
+    // Close lightbox when close button is clicked
+    lightboxClose.addEventListener('click', function() {
+        lightbox.style.display = 'none'; // Hide the lightbox
+    });
+
+    // Close lightbox when clicking outside the image
+    lightbox.addEventListener('click', function(event) {
+        if (event.target === lightbox) {
+            lightbox.style.display = 'none'; // Hide the lightbox
         }
     });
     });
