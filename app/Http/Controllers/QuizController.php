@@ -104,6 +104,81 @@ class QuizController extends Controller
         return redirect()->route('admin.quizzes.index', [$courseId, $lessonId])
             ->with('success', 'Content created successfully.');
     }
+
+
+    public function edit(Request $request, $quizId, $courseId, $lessonId)
+    {
+
+        $contents = $this->database->getReference("courses/$courseId/lessons/$lessonId/contents")->getValue();
+
+        $courseName = $this->database->getReference("courses/$courseId")->getValue();
+        $courseName = $courseName['name'];
+
+        $lessonName = $this->database->getReference("courses/$courseId/lessons/$lessonId")->getValue();
+        $lessonName = $lessonName['title'];
+
+        $placeholder = $this->database->getReference("quizzes/{$lessonId}/{$quizId}")->getValue();
+
+        // dd($placeholder);
+
+        return view('quizzes.edit', compact('lessonId', 'courseId', 'quizId', 'courseName', 'lessonName', 'contents', 'placeholder'));
+    }
+
+
+    public function postEdit(Request $request, $quizId, $courseId, $lessonId)
+    {
+
+
+
+
+
+        $contentData = [
+            'question' => $request->question,
+            'choices' => [
+                [
+                    'text' => $request->answer,
+                    'audioRef' => $request->answerRef ?: null, // Default to null if no value
+                ],
+                [
+                    'text' => $request->choiceA,
+                    'audioRef' => $request->choiceARef ?: null,
+                ],
+                [
+                    'text' => $request->choiceB,
+                    'audioRef' => $request->choiceBRef ?: null,
+                ],
+                [
+                    'text' => $request->choiceC,
+                    'audioRef' => $request->choiceCRef ?: null,
+                ],
+            ],
+            'correct' => $request->answer, // Replace with your logic to identify the correct answer
+            'points' => $request->points,
+        ];
+        // dd($contentData);
+        $this->database->getReference("quizzes/{$lessonId}/{$quizId}")->set($contentData);
+
+
+        return redirect()->route('admin.quizzes.index', [$courseId, $lessonId])
+            ->with('success', 'Content edited successfully.');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function delete($quizId, $courseId, $lessonId)
     {
 

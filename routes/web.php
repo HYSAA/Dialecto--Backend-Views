@@ -133,19 +133,29 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     // admin access of quizzes
 
     Route::get('/quizzes/{courseId}/{lessonId}', [AdminQuizController::class, 'index'])->name('admin.quizzes.index');
+
     Route::get('/quizzes/{courseId}/{lessonId}/create', [AdminQuizController::class, 'create'])->name('admin.quizzes.create');
-
-
 
     Route::post('/quizzes/{courseId}/{lessonId}', [AdminQuizController::class, 'store'])->name('admin.quizzes.store');
 
 
 
+
+
+
+    Route::get('/quizzes/{quizId}/{courseId}/{lessonId}/edit', [AdminQuizController::class, 'edit'])->name('admin.quizzes.edit');
+
+
+
+    Route::post('/quizzes/{quizId}/{courseId}/{lessonId}/postEdit}', [AdminQuizController::class, 'postEdit'])->name('admin.quizzes.postEdit');
+
+
+
+
+
+
+
     Route::delete('/quizzes/{quizId}/{courseId}/{lessonId}', [AdminQuizController::class, 'delete'])->name('admin.quizzes.delete');
-
-
-
-    Route::get('/quizzes/{quizId}/edit', [AdminQuizController::class, 'edit'])->name('admin.quizzes.edit');
 
 
 

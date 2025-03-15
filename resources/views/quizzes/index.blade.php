@@ -68,7 +68,7 @@
                             @csrf
                             @method('DELETE')
 
-                            <a href="{{ route('admin.quizzes.edit', ['quizId' => $quizId)]}" class="btn btn-success">Edit</a>
+                            <a href="{{ route('admin.quizzes.edit', ['quizId' => $quizId, 'courseId' => $courseId, 'lessonId' => $lessonId]) }}" class="btn btn-success">Edit</a>
 
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
