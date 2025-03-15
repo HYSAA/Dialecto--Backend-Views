@@ -134,7 +134,22 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     Route::get('/quizzes/{courseId}/{lessonId}', [AdminQuizController::class, 'index'])->name('admin.quizzes.index');
     Route::get('/quizzes/{courseId}/{lessonId}/create', [AdminQuizController::class, 'create'])->name('admin.quizzes.create');
+
+
+
     Route::post('/quizzes/{courseId}/{lessonId}', [AdminQuizController::class, 'store'])->name('admin.quizzes.store');
+
+
+
+    Route::delete('/quizzes/{quizId}/{courseId}/{lessonId}', [AdminQuizController::class, 'delete'])->name('admin.quizzes.delete');
+
+
+
+    Route::get('/quizzes/{quizId}/edit', [AdminQuizController::class, 'edit'])->name('admin.quizzes.edit');
+
+
+
+
 
     //void nani nga question controller
 

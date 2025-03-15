@@ -34,7 +34,6 @@ class QuizController extends Controller
 
 
 
-        // dd($userId);
 
         $courseName = $this->database->getReference("courses/$courseId")->getValue();
         $courseName = $courseName['name'];
@@ -104,5 +103,16 @@ class QuizController extends Controller
 
         return redirect()->route('admin.quizzes.index', [$courseId, $lessonId])
             ->with('success', 'Content created successfully.');
+    }
+    public function delete($quizId, $courseId, $lessonId)
+    {
+
+        $quizRef = $this->database->getReference("quizzes/{$lessonId}/{$quizId}");
+
+        // Delete the quiz
+        $quizRef->remove();
+
+        return redirect()->route('admin.quizzes.index', [$courseId, $lessonId])
+            ->with('success', 'Content Deleted successfully.');
     }
 }

@@ -52,6 +52,8 @@
                     <td>{{ $quiz['question'] }}</td>
                     <td>{{ $quiz['correct'] }}</td>
 
+                    <td>{{ $quizId }}</td>
+
 
                     @foreach ($quiz['choices'] as $index => $choice)
                     <td>{{ $choice['text'] }}</td> <!-- Assuming 'text' holds the displayable choice value -->
@@ -62,11 +64,12 @@
 
                     <td>{{ $quiz['points'] }}</td>
                     <td>
-                        <form action="{{ route('admin.courses.destroy', $quizId) }}" method="POST">
-                            <a href="{{ route('admin.courses.edit', $quizId) }}" class="btn btn-success">Edit</a>
-
+                        <form action="{{ route('admin.quizzes.delete', ['quizId' => $quizId, 'courseId' => $courseId, 'lessonId' => $lessonId]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this quiz?')">
                             @csrf
                             @method('DELETE')
+
+                            <a href="{{ route('admin.quizzes.edit', ['quizId' => $quizId)]}" class="btn btn-success">Edit</a>
+
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                     </td>

@@ -55,7 +55,7 @@
                                 <h3 class="card-title mb-0">{{ $course['name'] }}</h3>
                             </div>
 
-                            <div class="col-5 d-flex justify-content-end addborder pr-3">
+                            <div class="col-5 d-flex justify-content-end  pr-1 " style="padding: 0;">
 
                                 <a href="{{ route('admin.courses.show', $id) }}" class="btn btn-main pull-right" style="width: 100%;">Views</a>
 
@@ -64,29 +64,23 @@
 
 
 
-                        <div class="row align-items-center justify-content-end " style="height: 50px;">
+                        <div class="row align-items-center justify-content-end  " style="height: 50px;">
 
-                            <div class="col-5 d-flex justify-content-end   " style="padding: 0;">
+                            <div class="col-5 d-flex justify-content-end   pr-1 " style="padding: 0;">
 
 
-                                <div class="col-6 d-flex justify-content-end   " style="padding: 0;">
+                                <div class="col-6 d-flex justify-content-end   " style="padding: 0; margin: 0;">
                                     <a href="{{ route('admin.courses.edit', $id) }}" class="btn btn-success btn-sm" style="width: 100%;">Edit</a>
                                 </div>
 
 
-                                <div class="col-6 d-flex justify-content-end   " style="padding: 0; ">
-                                    <form action="{{ route('admin.courses.destroy', $id) }}" method="POST" style="display: inline; margin: 0; padding: 0;">
+                                <div class="col-6 d-flex justify-content-end    " style="padding: 0; ">
+                                    <form action="{{ route('admin.courses.destroy', $id) }}" method="POST" style=" margin: 0; padding: 0;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" style="width: 100%; margin: 0;">Delete</button>
+                                        <button type="submit" class="btn btn-danger btn-sm" style="width: 100%; margin: 0; ;">Delete</button>
                                     </form>
                                 </div>
-
-
-
-
-
-
 
 
                             </div>
