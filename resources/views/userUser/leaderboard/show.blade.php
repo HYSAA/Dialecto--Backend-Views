@@ -22,10 +22,10 @@
         <tbody>
           @php $rank = 1; @endphp
           @foreach ($rankings as $ranking)
-          <tr class="leaderboard-row {{ $ranking['user_id'] == $currentUserRanking['user_id'] ? 'userRank' : '' }}">
+          <tr class="leaderboard-row {{ $currentUserRanking && $ranking['user_id'] == $currentUserRanking['user_id'] ? 'userRank' : '' }}">
             <td class="number">{{ $rank++ }}</td>
             <td class="name">
-              @if ($ranking['user_id'] == $currentUserRanking['user_id'])
+              @if ($currentUserRanking && $ranking['user_id'] == $currentUserRanking['user_id'])
               {{ $ranking['user_name'] }}
               @else
               *** {{-- para matago name sa user --}}
@@ -48,7 +48,7 @@
       </table>
     </div>
 
-    @if ($userRank && $userRank > 1)
+    @if ($currentUserRanking && $userRank && $userRank > 1)
     <div id="current-rank">
       <h2>Your Current Rank</h2>
       <table class="leaderboard-table">
@@ -67,6 +67,11 @@
         </tbody>
       </table>
     </div>
+    @else
+    <div id="current-rank">
+      <h2>Your Current Rank</h2>
+      <p>You have not taken any courses yet. Start learning to see your rank here!</p>
+    </div>
     @endif
   </div>
 </div>
@@ -78,10 +83,8 @@
     background: linear-gradient(145deg, #ffffff, #f0f0f0);
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-
     position: relative;
   }
-
 
   .medal-icon {
     width: 4rem;
@@ -93,8 +96,6 @@
   .medal-icon:hover {
     transform: scale(1.1) rotate(5deg);
   }
-
-
 
   .leaderboard-row td:last-child {
     text-align: center;
@@ -251,7 +252,6 @@
     width: 100%;
     margin: 2rem 0;
     padding: 0 1rem;
-
   }
 
   #current-rank h2 {
