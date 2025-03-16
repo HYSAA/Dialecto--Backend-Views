@@ -46,7 +46,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12" style="width:100%">
                             <div>
                                 <strong for="video">Video:</strong><br>
-                                <input type="file" name="video" class="form-control form-control-lg">
+                                <input type="file" name="video" class="form-control form-control-lg" required>
                             </div>
 
                             <!-- Input for the course-specific word -->
