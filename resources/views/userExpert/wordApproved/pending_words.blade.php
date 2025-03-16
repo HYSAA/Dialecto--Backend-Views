@@ -76,6 +76,12 @@
                     <td>{{ $word['course_name'] ?? 'No course found' }}</td>
                     <td>{{ $word['lesson_name'] ?? 'No lesson found' }}</td>
 
+
+
+                    <td>{{ $word['user_id'] ?? 'No lesson found' }} user id ni siya</td>
+                    <td>{{ $key}} asd</td>
+
+
                     <td style="display: flex; justify-content: center; align-items: center; height: 100%;">
                         <div class="box ">
                             @if ($word['video'])
@@ -161,7 +167,7 @@
                             @csrf
 
                             <!-- Hidden input to send userId via POST -->
-                            <input type="hidden" name="userId" value="{{ $userId }}">
+                            <input type="hidden" name="userId" value="{{ $word['user_id'] }}">
 
                             <button
                                 type="submit"

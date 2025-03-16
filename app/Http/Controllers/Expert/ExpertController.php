@@ -170,6 +170,7 @@ class ExpertController extends Controller
 
 
 
+
         if ($pendingWords) {
             foreach ($pendingWords as $topLevelKey => $innerArray) {
                 // Merge each inner array into $filteredWords
@@ -181,6 +182,8 @@ class ExpertController extends Controller
 
 
         $filterByCourse = [];
+
+
         foreach ($filteredWords as $key => $word) {
             if (isset($word['course_id']) && $word['course_id'] === $specialtyID) {
                 $filterByCourse[$key] = $word; // Preserve the original key
@@ -333,16 +336,20 @@ class ExpertController extends Controller
         $approveData = $this->database->getReference("verify_words/$wordId")->getValue();
         // checks if this user has already approved the workd
 
+        // dd($approveData);
+
 
         $suggestedWord = $this->database->getReference("suggested_words/$userId/$wordId")->getValue();
+
+        // dd($userId, $wordId);
+
+
 
         $suggestedWord['status'] = 'approved';
         $suggestedWord['used_id'] = false;
 
 
-
-
-
+        // dd($suggestedWord);
 
 
         $exist = false;
@@ -390,6 +397,10 @@ class ExpertController extends Controller
 
         return redirect()->route('expert.pendingWords')->with('success', 'Word approved successfully.');
     }
+
+
+
+
 
     // Disapprove the suggested word
     public function disapproveWord(Request $request, $id)

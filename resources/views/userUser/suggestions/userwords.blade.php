@@ -32,6 +32,8 @@
                     <th style="width: 280px;">Actions</th>
                 </tr>
 
+
+
                 @foreach ($suggestedWords as $wordId => $word)
                 @php
                 $statusColor = 'black';
@@ -98,7 +100,19 @@
                 </tr>
                 @endforeach
 
+
+
+
             </table>
+
+            @if (!empty($suggestedWords))
+
+
+            @else
+            <span style="font-weight: bold;">Suggested words empty.</span>
+
+            @endif
+
 
         </div>
     </div>
