@@ -18,7 +18,7 @@
     </h1>
     <div class="row" style="overflow: auto;">
         @foreach($courses as $course)
-            <div class="col-md-6 mb-2" style="padding: 10px;">
+            <div class="col-md-6 mb-2" style="padding: 10px; overflow: hidden;">
                 <div class="course-card position-relative text-center">
                     <a href="{{ route('expert.dictionary.show', $course['id']) }}">
 
