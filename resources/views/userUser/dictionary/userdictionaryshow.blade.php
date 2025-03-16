@@ -84,13 +84,22 @@
                     @if (!empty($lesson['contents']))
 
 
-                        <ul>
+                    <table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse; font-size: 1.2rem;">
+                        <thead>
+                            <tr>
+                                <th style="font-size: 25px;">English</th>
+                                <th style="font-size: 25px;">Dialect</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             @foreach($lesson['contents'] as $contentId => $content)
-                                <li style="font-size: 1.2rem;"><b>English:</b> {{ $content['english'] ?? 'Unnamed Content' }}
-                                    <b>Dialect:</b> {{ $content['text'] ?? 'Unnamed Content' }}
-                                </li>
+                                <tr>
+                                    <td>{{ $content['english'] ?? 'Unnamed Content' }}</td>
+                                    <td>{{ $content['text'] ?? 'Unnamed Content' }}</td>
+                                </tr>
                             @endforeach
-                        </ul>
+                        </tbody>
+                    </table>
                     @else
                         <p>No contents available for this lesson.</p>
                     @endif
