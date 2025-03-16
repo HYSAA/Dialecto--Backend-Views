@@ -78,10 +78,6 @@
 
 
 
-                    <td>{{ $word['user_id'] ?? 'No lesson found' }} user id ni siya</td>
-                    <td>{{ $key}} asd</td>
-
-
                     <td style="display: flex; justify-content: center; align-items: center; height: 100%;">
                         <div class="box ">
                             @if ($word['video'])
