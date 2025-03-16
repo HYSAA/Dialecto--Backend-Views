@@ -187,11 +187,22 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/post-postDeny/{id}', [UserController::class, 'postDeny'])->name('admin.postDeny');
 
     Route::get('/word-bank', [WordBankController::class, 'showWordBank'])->name('admin.showWordBank');
+
+
+
     Route::get('/word-bank/{id}', [WordBankController::class, 'wordBankCourse'])->name('admin.wordBankCourse');
+
+
+
 
     Route::get('/word-bank/{courseId}/addWordToLesson/{wordId}/', [WordBankController::class, 'addWordToLesson'])->name('admin.addWordToLesson');
 
-    Route::get('/word-bank/{courseid}/removeWord/{wordid}', [WordBankController::class, 'removeWord'])->name('admin.removeWord');
+
+
+
+
+
+    Route::delete('/word-bank/{courseId}/removeFromLesson/{wordId}', [WordBankController::class, 'removeFromLesson'])->name('admin.removeFromLesson');
 });
 
 Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {

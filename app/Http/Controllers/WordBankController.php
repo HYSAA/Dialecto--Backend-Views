@@ -53,6 +53,8 @@ class WordBankController extends Controller
     public function wordBankCourse($id)
     {
 
+
+
         $container = [];
         $filteredByCourse = [];
 
@@ -65,6 +67,10 @@ class WordBankController extends Controller
         $suggestedWords = $this->firebaseDatabase->getReference("suggested_words/")->getValue();
 
 
+
+
+
+
         if ($suggestedWords) {
 
             foreach ($suggestedWords as $outerArray) {
@@ -74,17 +80,27 @@ class WordBankController extends Controller
             }
         }
 
+
+
         if ($container) {
             foreach ($container as $key => $value) {
+
+
+
+
                 if ($courseId === $value['course_id'] && $value['status'] !== 'pending') {
                     $filteredByCourse[$key] = $value;
                 }
             }
         }
 
+        // dd($suggestedWords, $value);
 
 
-        // dd($filteredByCourse, 'filter');
+
+
+
+
 
 
         return view('admin.wordBank.wordBankCourse', compact('course', 'filteredByCourse', 'courseId'));
@@ -97,6 +113,7 @@ class WordBankController extends Controller
 
         $container = [];
         $filtered = [];
+
 
         if ($suggestedWord) {
 
@@ -139,12 +156,106 @@ class WordBankController extends Controller
 
 
         // Save content to Firebase Realtime Database
-        $this->firebaseDatabase->getReference("courses/$courseId/lessons/$lessonId/contents")->push($contentData);
+        $this->firebaseDatabase->getReference("courses/$courseId/lessons/$lessonId/contents/$wordId")->set($contentData);
 
 
 
 
         $finalFilter['used_id'] = true;
+        $userId =  $finalFilter['user_id'];
+
+
+
+
+
+        // i change and usedId
+
+
+
+        $this->firebaseDatabase->getReference("suggested_words/$userId/$wordId")->set($finalFilter);
+
+
+
+
+        return redirect()->route('admin.wordBankCourse', ['id' => $courseId])
+            ->with('success', 'Word added in lesson.');
+    }
+
+
+
+
+
+    public function removeFromLesson($courseId, $wordId)
+    {
+
+        $suggestedWordRef = $this->firebaseDatabase->getReference("suggested_words");
+        $suggestedWord = $suggestedWordRef->getValue();
+
+
+
+        $container = [];
+        $filtered = [];
+
+        if ($suggestedWord) {
+
+            foreach ($suggestedWord as $outerArray) {
+                foreach ($outerArray as $key => $innerArray) {
+                    $container[$key] = $innerArray;
+                }
+            }
+        }
+
+        if ($container) {
+            foreach ($container as $key => $value) {
+                if ($wordId === $key) {
+                    $filtered[$key] = $value;
+                }
+            }
+        }
+
+        foreach ($filtered as $key => $value) {
+            $finalFilter = [];
+            $toPush = $filtered;
+
+
+            $finalFilter = $value;
+
+            $filtered = $finalFilter;
+
+
+            // dd($key);
+        }
+
+
+
+
+        $contentData = [
+            'english' => $filtered['english'],
+            'text' => $filtered['text'],
+            'video' => $filtered['video'],
+        ];
+
+
+
+        $lessonId = $filtered['lesson_id'];
+
+
+        // Save content to Firebase Realtime Database
+        $this->firebaseDatabase->getReference("courses/$courseId/lessons/$lessonId/contents/$wordId")->remove();
+
+
+
+        $suggestedWordRef = $this->firebaseDatabase->getReference("courses/$courseId/lessons/$lessonId/contents/");
+        $dd = $suggestedWordRef->getValue();
+
+
+
+
+        $finalFilter['used_id'] = false;
+
+
+        // dd($finalFilter);
+
         $userId =  $finalFilter['user_id'];
 
 
@@ -159,29 +270,6 @@ class WordBankController extends Controller
 
 
         return redirect()->route('admin.wordBankCourse', ['id' => $courseId])
-            ->with('success', 'Word added in lesson.');
-    }
-
-    public function removeWord($courseid, $wordid)
-    {
-        $suggestedWordRef = $this->firebaseDatabase->getReference('suggestedWords/' . $wordid);
-        $suggestedWord = $suggestedWordRef->getValue();
-
-        $contentToDeleteRef = $this->firebaseDatabase->getReference('contents/' . $suggestedWord['usedID']);
-        $contentToDelete = $contentToDeleteRef->getValue();
-
-        if ($contentToDelete) {
-            // Delete content
-            $contentToDeleteRef->remove();
-
-            // Reset usedID
-            $suggestedWordRef->update(['usedID' => null]);
-
-            return redirect()->route('admin.wordBankCourse', ['id' => $courseid])
-                ->with('success', 'Word has been removed from lesson.');
-        } else {
-            return redirect()->route('admin.wordBankCourse', ['id' => $courseid])
-                ->with('fail', 'Content not found.');
-        }
+            ->with('success', 'Word removed from lesson.');
     }
 }

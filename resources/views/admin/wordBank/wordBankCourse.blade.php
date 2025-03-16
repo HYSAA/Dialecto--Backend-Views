@@ -70,12 +70,14 @@
                                 Add Word
                             </a>
 
-                            <a class="btn btn-danger {{ $word['used_id'] === false ? 'disabled' : '' }}"
-                                href="{{ $word['used_id'] === false ? 'javascript:void(0);' : route('admin.addWordToLesson', ['courseId' => $courseId, 'wordId' => $wordId]) }}"
-                                tabindex="-1"
-                                aria-disabled="{{ $word['used_id'] === false ? 'false' : 'true' }}">
-                                Remove
-                            </a>
+                            <form action="{{ route('admin.removeFromLesson', ['courseId' => $courseId, 'wordId' => $wordId]) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger" {{ $word['used_id'] === false ? 'disabled' : '' }}>
+                                    Remove
+                                </button>
+                            </form>
+
 
 
 
