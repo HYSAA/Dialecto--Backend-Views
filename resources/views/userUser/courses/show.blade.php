@@ -3,12 +3,19 @@
 @section('content')
 
 <div class="main-container">
+@if(empty($filteredLessons))
+    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <p style="font-size: 1.5rem; color: #666;">No lessons available yet. The admins will update this soon.</p>
+    </div>
+    
+@else
+
     <div class="row mb-4">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
 
                 <h2>{{ $course['name'] ?? 'Course Name' }} - Lessons </h2>
-                <h2 style="color: green;">Level: {{ $currentLevel }} </h2>
+                <h2 style="color: green;">Level: {{ $currentLevel ?? 'Not Specified' }} </h2>
                 <strong style="font-size: small;">Earn a silver or higher rating on all lessons in the current level to be promoted to the next level. To check your ratings for all lessons, go to your profile and view your badges.</strong>
 
             </div>
@@ -67,6 +74,7 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
 
 <!-- Lesson Modal -->

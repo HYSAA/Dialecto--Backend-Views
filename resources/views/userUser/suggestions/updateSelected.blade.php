@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-
-<div class="main-container" style="padding: 15px;">
+<div class="main-container" style="padding: 15px; overflow-y: auto;">
     <div class="pull-right " style="padding:15px;">
         <a class="btn btn-back-main" href="{{ route('user.wordSuggested') }}">Back</a>
     </div>
