@@ -471,6 +471,6 @@ class ExpertController extends Controller
         // }
         // dd($id);
 
-        return redirect()->route('expert.pendingWords')->with('success', 'Word approved successfully.');
+        return redirect()->route('expert.pendingWords')->with('success', 'Word denied successfully.');
     }
 }
