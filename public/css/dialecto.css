@@ -795,7 +795,12 @@ body {
 }
 
 
-
+mark {
+    background-color: #FFCA58; /* coral red */
+    color: black; /* white text */
+    padding: 2px 4px;
+    border-radius: 4px;
+}
 
 
 
