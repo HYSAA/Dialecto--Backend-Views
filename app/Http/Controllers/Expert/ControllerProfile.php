@@ -56,29 +56,41 @@ class ControllerProfile extends Controller
         }
 
         if ($firebaseUser) {
+            // ✅ Always find the user by firebase_id
             $localUser = \App\Models\User::where('firebase_id', $userId)->first();
-    
+        
             if ($localUser) {
                 $needsUpdate = false;
-    
-                // Check if name or email has changed
+        
+                // ✅ Update name if it changed
                 if ($localUser->name !== $firebaseUser['name']) {
                     $localUser->name = $firebaseUser['name'];
                     $needsUpdate = true;
                 }
-    
+        
+                // ✅ Update email if it changed
                 if (isset($firebaseUser['email']) && $localUser->email !== $firebaseUser['email']) {
-                    $localUser->email = $firebaseUser['email'];
-                    $needsUpdate = true;
+                    // Check if another user has this email
+                    $existingUser = \App\Models\User::where('email', $firebaseUser['email'])
+                        ->where('firebase_id', '!=', $userId) // ✅ Ensure it's not the same user
+                        ->first();
+        
+                    if (!$existingUser) {
+                        // ✅ Safe to update the email
+                        $localUser->email = $firebaseUser['email'];
+                        $needsUpdate = true;
+                    } else {
+                        // ❌ Prevent duplicate emails
+                        return back()->withErrors(['email' => 'This email is already taken by another user.']);
+                    }
                 }
-    
-                // Save the updated MySQL user record
+        
+                // ✅ Save only if something changed
                 if ($needsUpdate) {
                     $localUser->save();
                 }
             }
         }
-
 
         // dd($languageExperty);
 
