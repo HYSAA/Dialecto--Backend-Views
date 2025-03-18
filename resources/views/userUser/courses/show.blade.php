@@ -28,7 +28,7 @@
         <div class="col-lg-12 margin-tb">
             <div class="row">
                 @foreach ($filteredLessons as $lessonId => $lesson)
-                <div class="cardsmall mb-2 mr-2" style="overflow-y: auto;">
+                <div class="cardsmall mb-2 mr-2" style="overflow-y: auto; height: fit-content;">
                     <div class="top">
                         <div>
                             @if(isset($lesson['image']) && $lesson['image'])
@@ -39,7 +39,7 @@
                         </div>
 
 
-                        <div class="row align-items-center mt-3 mb-3" style="height: 50px;">
+                        <div class="row align-items-center mt-3 mb-3" style="height: fit-content;">
 
 
                             <div class="col-6 d-flex align-items-center">

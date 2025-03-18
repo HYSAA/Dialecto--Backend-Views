@@ -12,10 +12,10 @@
 
                 <div class="row justify-content-center">
 
-                    <!-- Display current content in the selected course -->
-                    <div class="card mb-2 mr-2" style="padding:15px;">
-                        <div
-                            style="background:white; border-radius: 10px; padding:15px; height:100%; overflow-y: auto-hidden;">
+                    <!-- Display current content in the selected course  -->
+                     <!-- Left Side -->
+                    <div style="padding:15px; width: 50%; background: #ebe4cc; margin: 5px;border-radius: 10px;">
+                        <div style="border-radius: 10px; padding:15px; height:100%; overflow-y: auto; background-color: #fff;">
                             <h4 class="mb-2">Current content in {{ $course['name'] }}</h4>
 
                             @if (isset($lesson['contents']) && count($lesson['contents']) > 0)
@@ -45,7 +45,8 @@
                     </div>
 
                     <!-- Form for adding a new suggested word -->
-                    <div class="card mb-2 mr-2" style="padding:15px;">
+                     <!-- right -->
+                    <div style="padding:30px; margin: 5px;height: fit-content; background: #ebe4cc; border-radius: 10px;">
                         <form action="{{ route('user.submitWordSuggested', [$courseId, $lessonId]) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf

@@ -78,7 +78,7 @@
             </div>
         @else
             <div style="text-align: center; margin-top: 20px;">
-                <h3>User Has No Progress</h3>
+                <h3>You Have No Progress</h3>
             </div>
         @endif
         <br>
