@@ -44,9 +44,45 @@ class ControllerProfile extends Controller
         $languageExperty = $this->database->getReference("courses/$courseId")->getValue();
         $languageExperty = $languageExperty['name'];
 
+        $user = $this->database
+        ->getReference("users/{$userId}")
+        ->getValue();
+
+        $firebaseUser = $this->database->getReference("users/{$userId}")->getValue();
+
+        // Update session data with the latest name
+        if ($firebaseUser && isset($firebaseUser['name'])) {
+            session(['user.name' => $firebaseUser['name']]);
+        }
+
+        if ($firebaseUser) {
+            $localUser = \App\Models\User::where('firebase_id', $userId)->first();
+    
+            if ($localUser) {
+                $needsUpdate = false;
+    
+                // Check if name or email has changed
+                if ($localUser->name !== $firebaseUser['name']) {
+                    $localUser->name = $firebaseUser['name'];
+                    $needsUpdate = true;
+                }
+    
+                if (isset($firebaseUser['email']) && $localUser->email !== $firebaseUser['email']) {
+                    $localUser->email = $firebaseUser['email'];
+                    $needsUpdate = true;
+                }
+    
+                // Save the updated MySQL user record
+                if ($needsUpdate) {
+                    $localUser->save();
+                }
+            }
+        }
+
+
         // dd($languageExperty);
 
-        return view('userExpert.profile.show', compact('user', 'userId', 'credentials', 'courses', 'quizResults', 'languageExperty')); // Pass filtered users to the view
+        return view('userExpert.profile.show', compact('firebaseUser','user', 'userId', 'credentials', 'courses', 'quizResults', 'languageExperty')); // Pass filtered users to the view
     }
 
 

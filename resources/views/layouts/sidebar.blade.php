@@ -64,6 +64,7 @@
 
             <!--EXPERT SIDE-->
 
+          
             @if(Auth::user()->usertype == 'expert')
 
             <li class="nav-item">
@@ -122,6 +123,7 @@
 
             @if(Auth::user()->usertype == 'user')
 
+          
 
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('user.profile.show') }}">

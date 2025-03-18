@@ -64,12 +64,9 @@ class ControllerProfile extends Controller
         $userId = $user->firebase_id; // Dump
 
         $courses  = $this->database->getReference("courses")->getValue();
-
-
         $quizResults  = $this->database->getReference("quiz_results/$userId")->getValue();
 
         // dd($quizResults, $courses);
-
 
         $user = $this->database
             ->getReference("users/{$userId}")
@@ -92,9 +89,45 @@ class ControllerProfile extends Controller
             // dd('naay sulod', $credentials);
         }
 
+        $firebaseUser = $this->database->getReference("users/{$userId}")->getValue();
+
+        if ($firebaseUser && isset($firebaseUser['name'])) {
+            session(['user.name' => $firebaseUser['name']]);
+        }
+    
+        // Check if MySQL user needs updating
+        if ($firebaseUser) {
+            $localUser = \App\Models\User::where('firebase_id', $userId)->first();
+    
+            if ($localUser) {
+                $needsUpdate = false;
+    
+                // Check if name or email has changed
+                if ($localUser->name !== $firebaseUser['name']) {
+                    $localUser->name = $firebaseUser['name'];
+                    $needsUpdate = true;
+                }
+    
+                if (isset($firebaseUser['email']) && $localUser->email !== $firebaseUser['email']) {
+                    $localUser->email = $firebaseUser['email'];
+                    $needsUpdate = true;
+                }
+    
+                // Save the updated MySQL user record
+                if ($needsUpdate) {
+                    $localUser->save();
+                }
+            }
+        }
+
+        // Update session data with the latest name
+        if ($firebaseUser && isset($firebaseUser['name'])) {
+            session(['user.name' => $firebaseUser['name']]);
+        }
+
 
         // Pass filtered users and the current user's userId to the view
-        return view('userUser.profile.show', compact('user', 'userId', 'credentials', 'courses', 'quizResults'));
+        return view('userUser.profile.show', compact('firebaseUser','user', 'userId', 'credentials', 'courses', 'quizResults'));
     }
 
 

@@ -41,6 +41,7 @@ use App\Http\Controllers\Expert\ExpertController;
 use App\Http\Controllers\Expert\ExpertProgresscontroller;
 use App\Http\Controllers\Expert\ExpertDictionary;
 use App\Http\Controllers\Expert\LeaderboardController as ExpertLeaderboardController;
+use App\Http\Controllers\Expert\ExpertSettingsController;
 
 
 use App\Http\Controllers\AdminController;
@@ -305,7 +306,8 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
     // Profile routes
     Route::get('/profile', [ExpertControllerProfile::class, 'show'])->name('expert.profile.show');
     Route::get('/profile/edit', [ExpertControllerProfile::class, 'edit'])->name('expert.profile.edit');
-
+    Route::get('/settings', [ExpertSettingsController::class, 'edit'])->name('expert.settings.edit');
+    Route::post('/settings', [ExpertSettingsController::class, 'update'])->name('expert.settings.update');
 
 
 
