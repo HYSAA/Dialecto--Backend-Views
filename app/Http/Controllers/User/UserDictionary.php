@@ -155,17 +155,53 @@ class UserDictionary extends Controller
 
     // Handle search query
     $searchQuery = request()->input('search', null);
+    // if ($searchQuery) {
+    //     $lessonsWithContents = array_filter($lessonsWithContents, function ($lesson) use ($searchQuery) {
+    //         $titleMatches = stripos($lesson['title'], $searchQuery) !== false;
+    //         $contentsMatch = collect($lesson['contents'])->filter(function ($content) use ($searchQuery) {
+    //             return stripos($content['english'] ?? '', $searchQuery) !== false || 
+    //                    stripos($content['text'] ?? '', $searchQuery) !== false;
+    //         })->isNotEmpty();
+
+    //         return $titleMatches || $contentsMatch;
+    //     });
+    // }
+
     if ($searchQuery) {
+        // Filter logic stays as it is
         $lessonsWithContents = array_filter($lessonsWithContents, function ($lesson) use ($searchQuery) {
             $titleMatches = stripos($lesson['title'], $searchQuery) !== false;
             $contentsMatch = collect($lesson['contents'])->filter(function ($content) use ($searchQuery) {
                 return stripos($content['english'] ?? '', $searchQuery) !== false || 
                        stripos($content['text'] ?? '', $searchQuery) !== false;
             })->isNotEmpty();
-
+    
             return $titleMatches || $contentsMatch;
         });
+    
+        // SIMPLE HIGHLIGHT FUNCTION
+        $highlight = function($text, $searchQuery) {
+            return str_ireplace($searchQuery, '<mark>' . $searchQuery . '</mark>', $text);
+        };
+    
+        // Add highlights
+        foreach ($lessonsWithContents as &$lesson) {
+            if (stripos($lesson['title'], $searchQuery) !== false) {
+                $lesson['title'] = $highlight($lesson['title'], $searchQuery);
+            }
+    
+            foreach ($lesson['contents'] as &$content) {
+                if (!empty($content['english']) && stripos($content['english'], $searchQuery) !== false) {
+                    $content['english'] = $highlight($content['english'], $searchQuery);
+                }
+                if (!empty($content['text']) && stripos($content['text'], $searchQuery) !== false) {
+                    $content['text'] = $highlight($content['text'], $searchQuery);
+                }
+            }
+        }
+        unset($lesson); // cleanup reference
     }
+    
 
     // Sort lessons by proficiency level
     $proficiencyOrder = ['Beginner', 'Intermediate', 'Advanced'];
@@ -180,7 +216,7 @@ class UserDictionary extends Controller
     });
 
     // Paginate lessons
-    $perPage = 8;
+    $perPage = 2;
     $currentPage = LengthAwarePaginator::resolveCurrentPage();
     $itemCollection = collect($lessonsWithContents);
     $currentPageItems = $itemCollection->slice(($currentPage - 1) * $perPage, $perPage)->all();

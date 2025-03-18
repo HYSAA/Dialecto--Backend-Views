@@ -70,14 +70,14 @@
             style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 10px;">
             @foreach ($paginatedLessons as $lesson)
                 <div class="lesson-card"
-                    style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+                    style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9; height: fit-content;">
                     <!-- Display lesson title -->
-                    <h2 style="font-size: 2rem; font-weight: bold; color: #333; margin-bottom: 10px;">{{ $lesson['title'] }}</h2>
+                    <h2 style="font-size: 2rem; font-weight: bold; color: #333; margin-bottom: 10px;">{!! $lesson['title'] !!}</h2>
 
                     <!-- Display proficiency level -->
                     <p style="font-size: 1.5rem; color: #666; font-style: italic; margin-bottom: 15px;">
                         Proficiency Level: 
-                        <span style="font-weight: bold; color: #007BFF;">{{ $lesson['proficiency_level'] }}</span>
+                        <span style="font-weight: bold; color: #007BFF;">{!! $lesson['proficiency_level'] !!}</span>
                     </p>
 
                     <!-- Display contents of the lesson -->
@@ -94,8 +94,8 @@
                         <tbody>
                             @foreach($lesson['contents'] as $contentId => $content)
                                 <tr>
-                                    <td>{{ $content['english'] ?? 'Unnamed Content' }}</td>
-                                    <td>{{ $content['text'] ?? 'Unnamed Content' }}</td>
+                                    <td>{!!  $content['english'] ?? 'Unnamed Content' !!}</td>
+                                    <td>{!! $content['text'] ?? 'Unnamed Content' !!}</td>
                                 </tr>
                             @endforeach
                         </tbody>
