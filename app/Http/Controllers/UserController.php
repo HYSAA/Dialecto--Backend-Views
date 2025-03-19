@@ -52,49 +52,59 @@ class UserController extends Controller
         }
     }
 
+    
     public function index(Request $request)
     {
-        $currentUserId = Auth::id(); // Get the currently authenticated user's ID
-
-        $firebaseUrl = env('FIREBASE_DATABASE_URL') . '/users.json';
+        $currentUserId = Auth::id();
+    
+        $firebaseBaseUrl = env('FIREBASE_DATABASE_URL');
+    
         $context = stream_context_create([
             "ssl" => [
                 "verify_peer" => false,
                 "verify_peer_name" => false,
             ],
         ]);
-
-        $response = file_get_contents($firebaseUrl, false, $context);
-        $allUsers = json_decode($response, true);
-
-        // Filter out the current user
+    
+        // Fetch users
+        $usersResponse = file_get_contents($firebaseBaseUrl . '/users.json', false, $context);
+        $allUsers = json_decode($usersResponse, true);
+    
+        // Fetch credentials
+        $credentialsResponse = file_get_contents($firebaseBaseUrl . '/credentials.json', false, $context);
+        $allCredentials = json_decode($credentialsResponse, true);
+    
+        // Filter out current user
         $users = array_filter($allUsers, function ($userId) use ($currentUserId) {
             return $userId !== $currentUserId;
         }, ARRAY_FILTER_USE_KEY);
-
+    
         $filteredUsers = [];
         foreach ($users as $userId => $userData) {
+            $courseName = $allCredentials[$userId]['courseName'] ?? null;
+    
             $filteredUsers[] = [
                 'id' => $userId,
                 'data' => $userData,
+                'courseName' => $courseName, // add the course name
             ];
         }
-
-        // Handle search query
+    
+        // Handle search
         $search = strtolower($request->input('search'));
         if ($search) {
             $filteredUsers = array_filter($filteredUsers, function ($user) use ($search) {
                 $name = strtolower($user['data']['name'] ?? '');
                 $email = strtolower($user['data']['email'] ?? '');
                 $usertype = strtolower($user['data']['usertype'] ?? '');
-
+    
                 return str_contains($name, $search) || str_contains($email, $search) || str_contains($usertype, $search);
             });
         }
-
+    
         return view('users.index', compact('filteredUsers'));
     }
-
+    
 
 
 
