@@ -44,52 +44,26 @@
                             @endif
                         </td>
 
-                        <!-- test design -->
-
-
-
-
-
-                        <div class="row align-items-center mt-3  " style="height: 50px;">
-                            <div class="col-7 d-flex align-items-center ">
+                        <div class="row align-items-center mt-3" style="height: 50px;">
+                            <div class="col-7 d-flex align-items-center">
                                 <h3 class="card-title mb-0">{{ $course['name'] }}</h3>
                             </div>
 
-                            <div class="col-5 d-flex justify-content-end  pr-1 " style="padding: 0;">
-
-                                <a href="{{ route('admin.courses.show', $id) }}" class="btn btn-main pull-right" style="width: 100%;">Views</a>
-
+                            <div class="col-5 d-flex justify-content-end pr-1" style="padding: 0;">
+                                <a href="{{ route('admin.courses.show', $id) }}" class="btn btn-main pull-right" style="width: 100%;">View</a>
                             </div>
                         </div>
 
-
-
-                        <div class="row align-items-center justify-content-end  " style="height: 50px;">
-
-                            <div class="col-5 d-flex justify-content-end   pr-1 " style="padding: 0;">
-
-
-                                <div class="col-6 d-flex justify-content-end   " style="padding: 0; margin: 0;">
+                        <div class="row align-items-center justify-content-end" style="height: 50px;">
+                            <div class="col-5 d-flex justify-content-end pr-1" style="padding: 0;">
+                                <div class="col-6 d-flex justify-content-end" style="padding: 0;margin-right: 5px;">
                                     <a href="{{ route('admin.courses.edit', $id) }}" class="btn btn-success btn-sm" style="width: 100%;">Edit</a>
                                 </div>
-
-
-                                <div class="col-6 d-flex justify-content-end    " style="padding: 0; ">
-                                    <form action="{{ route('admin.courses.destroy', $id) }}" method="POST" style=" margin: 0; padding: 0;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" style="width: 100%; margin: 0; ;">Delete</button>
-                                    </form>
+                                <div class="col-6 d-flex justify-content-end" style="padding: 0;">
+                                    <button type="button" class="btn btn-danger btn-sm delete-course" data-course-id="{{ $id }}" style="width: 100%; margin: 0;">Delete</button>
                                 </div>
-
-
                             </div>
                         </div>
-
-
-
-
-
 
                     </div>
                     <div class="card-content" style="overflow-y: auto;">
@@ -100,47 +74,59 @@
 
                 @endforeach
 
-
             </div>
-
-
-
-
 
         </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteCourseModal" tabindex="-1" role="dialog" aria-labelledby="deleteCourseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document"> <!-- Centered modal -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCourseModalLabel">Confirm Delete</h5>
+               
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this course?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <form id="deleteCourseForm" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
     .card {
         margin: 1px;
-        /* Adjust to control the space between cards */
         padding: 10px;
-        /* Adjust to control space inside cards */
-
         flex: 1 1 calc(33.33% - 20px);
-        /* This allows the cards to have space and be responsive */
-
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var deleteButtons = document.querySelectorAll('.delete-course');
+        var deleteForm = document.getElementById('deleteCourseForm');
+
+        deleteButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var courseId = this.getAttribute('data-course-id');
+                var action = "{{ route('admin.courses.destroy', ':id') }}";
+                action = action.replace(':id', courseId);
+                deleteForm.setAttribute('action', action);
+                $('#deleteCourseModal').modal('show');
+            });
+        });
+    });
+</script>
+
 @endsection

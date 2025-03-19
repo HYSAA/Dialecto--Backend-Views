@@ -13,7 +13,9 @@
 
 
             <div class="pull-right mb-2">
-            <a class="btn btn-back-main" href="{{ route('expert.settings.edit') }}">Settings</a>
+            <a class="btn btn-back-main" href="{{ route('expert.settings.edit') }}">
+                    <i class="fas fa-pencil-alt"></i> 
+                </a>
                 <span class="btn " style="background-color: #d4edda; color: #155724;border-color: #c3e6cb; box-sizing: border-box; border-radius: 4px; text-align: center; text-decoration: none; box-shadow: none;">
                     Verified Expert for {{$languageExperty}}</span>
 

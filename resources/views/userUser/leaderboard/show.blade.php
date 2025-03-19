@@ -69,8 +69,8 @@
     </div>
     @else
     <div id="current-rank">
-      <h2>Your Current Rank</h2>
-      <p>You have not taken any courses yet. Start learning to see your rank here!</p>
+   
+      <p>Start learning to see your rank here!</p>
     </div>
     @endif
   </div>

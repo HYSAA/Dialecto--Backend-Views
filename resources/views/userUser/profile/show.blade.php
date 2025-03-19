@@ -29,8 +29,9 @@
                 @else
 
 
-
-                <a class="btn btn-back-main" href="{{ route('user.settings.edit') }}">Settings</a>
+                <a class="btn btn-back-main" href="{{ route('user.settings.edit') }}">
+                    <i class="fas fa-pencil-alt"></i> 
+                </a>
 
 
 
