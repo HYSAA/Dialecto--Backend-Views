@@ -41,8 +41,8 @@
                         <div class="row align-items-center mt-3 mb-3" style="height: 50px;">
 
 
-                            <div class="col-6 d-flex align-items-center">
-                                <h3 class="card-title mb-0">
+                            <div class="col-6 d-flex align-items-center" >
+                                <h3 class="card-title mb-0"  style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">
                                     <span class="badge bg-{{ 
                             $lesson['proficiency_level'] === 'Beginner' ? 'success' : 
                             ($lesson['proficiency_level'] === 'Intermediate' ? 'warning' : 'primary') }} ms-2 small" style="margin-left: 0;">

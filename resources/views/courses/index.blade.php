@@ -46,7 +46,7 @@
 
                         <div class="row align-items-center mt-3" style="height: 50px;">
                             <div class="col-7 d-flex align-items-center">
-                                <h3 class="card-title mb-0">{{ $course['name'] }}</h3>
+                                <h3 class="card-title mb-0"  style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">{{ $course['name'] }}</h3>
                             </div>
 
                             <div class="col-5 d-flex justify-content-end pr-1" style="padding: 0;">

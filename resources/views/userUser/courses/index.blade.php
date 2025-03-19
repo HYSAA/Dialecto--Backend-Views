@@ -37,17 +37,11 @@
                         </td>
 
 
-                        <div class="row align-items-center mt-3 mb-3 " style="height: 50px;">
-                            <div class="col-6 d-flex align-items-center ">
-                                <h3 class="card-title mb-0">{{ $course['name'] }}</h3>
-                            </div>
-
-
-                            <div class="col-6 d-flex justify-content-end ">
-
-                                <a href="{{ route('user.courses.show', $id) }}" class="btn btn-main pull-right">Views</a>
-
-                            </div>
+                        <div class="d-flex align-items-center mt-3 mb-3" style="height: 50px; padding: 15px;">
+                            <h3 class="mb-0 me-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">
+                                {{ $course['name'] }}
+                            </h3>
+                            <a href="{{ route('user.courses.show', $id) }}" class="btn btn-main">View</a>
                         </div>
 
                     </div>
