@@ -48,32 +48,27 @@
       </table>
     </div>
 
-    @if ($currentUserRanking && $userRank && $userRank > 1)
     <div id="current-rank">
-      <h2>Your Current Rank</h2>
-      <table class="leaderboard-table">
-        <thead>
-          <tr>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="leaderboard-row userRank">
-            <td class="number">{{ $userRank }}</td>
-            <td class="name">{{ $currentUserRanking['user_name'] }}</td>
-            <td class="name">{{ $currentUserRanking['course_id'] }}</td>
-            <td class="points">{{ $currentUserRanking['total_course_score'] }}</td>
-            <td class="rank-icon"></td>
-          </tr>
-        </tbody>
-      </table>
+      @if ($currentUserRanking && $userRank)
+        <h2>Your Current Rank</h2>
+        <table class="leaderboard-table">
+          <thead>
+            <tr></tr>
+          </thead>
+          <tbody>
+            <tr class="leaderboard-row userRank">
+              <td class="number">{{ $userRank }}</td>
+              <td class="name">{{ $currentUserRanking['user_name'] }}</td>
+              <td class="name">{{ $currentUserRanking['course_id'] }}</td>
+              <td class="points">{{ $currentUserRanking['total_course_score'] }}</td>
+              <td class="rank-icon"></td>
+            </tr>
+          </tbody>
+        </table>
+      @else
+        <p>Start learning to see your rank here!</p>
+      @endif
     </div>
-    @else
-    <div id="current-rank">
-    
-      <p>Start learning to see your rank here!</p>
-    </div>
-    @endif
-  </div>
 </div>
 
 <style>
