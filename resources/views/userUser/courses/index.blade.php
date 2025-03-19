@@ -45,7 +45,7 @@
                         </div>
 
                     </div>
-                    <div class="card-content">
+                    <div class="card-content" style="overflow-y: auto;">
                         <h5>Description</h5>
                         <p class="card-description">{{ $course['description'] }}</p>
                     </div>
