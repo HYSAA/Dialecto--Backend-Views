@@ -22,10 +22,10 @@
         <tbody>
           @php $rank = 1; @endphp
           @foreach ($rankings as $ranking)
-          <tr class="leaderboard-row {{ $ranking['user_id'] == $currentUserRanking['user_id'] ? 'userRank' : '' }}">
+          <tr class="leaderboard-row {{ $currentUserRanking && $ranking['user_id'] == $currentUserRanking['user_id'] ? 'userRank' : '' }}">
             <td class="number">{{ $rank++ }}</td>
             <td class="name">
-              @if ($ranking['user_id'] == $currentUserRanking['user_id'])
+            @if ($currentUserRanking && $ranking['user_id'] == $currentUserRanking['user_id'])
               {{ $ranking['user_name'] }}
               @else
               *** {{-- para matago name sa user --}}
@@ -48,7 +48,7 @@
       </table>
     </div>
 
-    @if ($userRank && $userRank > 1)
+    @if ($currentUserRanking && $userRank && $userRank > 1)
     <div id="current-rank">
       <h2>Your Current Rank</h2>
       <table class="leaderboard-table">
@@ -66,6 +66,11 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    @else
+    <div id="current-rank">
+    
+      <p>Start learning to see your rank here!</p>
     </div>
     @endif
   </div>

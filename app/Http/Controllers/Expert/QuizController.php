@@ -47,7 +47,7 @@ class QuizController extends Controller
 
     public function showQuiz($courseId, $lessonId)
     {
-        dd('asdf');
+      
 
 
 
