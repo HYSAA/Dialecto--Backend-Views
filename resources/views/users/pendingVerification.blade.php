@@ -271,6 +271,34 @@
         color: #ccc;
         text-decoration: none;
     }
+    .position-relative {
+        position: relative;
+    }
+
+    .position-absolute {
+        position: absolute;
+    }
+
+    .top-0 {
+        top: 0;
+    }
+
+    .start-100 {
+        left: 100%;
+    }
+
+    .translate-middle {
+        transform: translate(-50%, -50%);
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        border-radius: 50%;
+        background-color: red;
+        color: white;
+        font-size: 1.1em; /* Increase font size */
+    }
+
 </style>
 
 <script>

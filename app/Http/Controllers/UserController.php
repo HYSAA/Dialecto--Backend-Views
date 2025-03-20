@@ -491,30 +491,23 @@ class UserController extends Controller
 
     public function showPendingExpert()
     {
-
-
         $userCredentials = $this->database
             ->getReference("credentials")
             ->getValue();
-
-
-
+    
         $userDetails = $this->database
             ->getReference("users")
             ->getValue();
-
-
-
+    
         if ($userCredentials) {
-
             $unverifiedUsers = array_filter($userCredentials, function ($user) {
                 return isset($user['status']) && $user['status'] === 'pending';
             });
-
+    
             $verifiedUsers = array_filter($userCredentials, function ($user) {
                 return isset($user['status']) && $user['status'] === 'verified';
             });
-
+    
             $deniedUsers = array_filter($userCredentials, function ($user) {
                 return isset($user['status']) && $user['status'] === 'denied';
             });
@@ -523,11 +516,10 @@ class UserController extends Controller
             $verifiedUsers = null;
             $deniedUsers = null;
         }
-
-
-
-
-
+    
+        // Store unverifiedUsers in the session
+        session(['unverifiedUsers' => $unverifiedUsers]);
+    
         return view('users.pendingVerification', compact('unverifiedUsers', 'verifiedUsers', 'deniedUsers', 'userDetails'));
     }
 
