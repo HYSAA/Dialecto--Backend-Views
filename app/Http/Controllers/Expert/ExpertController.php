@@ -298,7 +298,8 @@ class ExpertController extends Controller
         foreach ($userWords as $key => $value) {
             $userId = $value['user_id'];
         }
-
+       
+        session(['pendingWordsCount' => count($userWords)]);
         // dd($userWords);
 
         return view('userExpert.wordApproved.pending_words', compact('expertWords', 'userWords', 'userId'));

@@ -111,11 +111,14 @@
             </li>
 
             <li class="nav-item">
-                <a class="btn btn-nav" href="{{ route('expert.pendingWords') }}">
-                    <i class="bi bi-book"></i>
-                    <span class="btn-text">Word Bank</span>
-                </a>
-            </li>
+    <a class="btn btn-nav position-relative" href="{{ route('expert.pendingWords') }}">
+        <i class="bi bi-book"></i>
+        <span class="btn-text">Word Bank</span>
+        @if(session('pendingWordsCount') && session('pendingWordsCount') > 0)
+        <span class="badge badge-light position-absolute top-0 start-100 translate-middle">{{ session('pendingWordsCount') }}</span>
+        @endif
+    </a>
+</li>
 
             @endif
 
