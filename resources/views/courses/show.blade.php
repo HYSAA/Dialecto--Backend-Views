@@ -32,13 +32,13 @@
 
         @foreach ($course['lessons'] as $lessonId => $lesson)
         <div class="col-md-3 mb-4">
-            <div class="card d-flex flex-column" style="max-height: 400px; overflow-y: auto;">
+            <div class="card d-flex flex-column" style="max-height: 450px; overflow-y: auto;">
                 <div class="card-body">
-                    <h5 class="card-title">{{ $lesson['title'] ?? 'Unknown Title' }}</h5>
-                    <p class="card-text"><strong>Proficiency Level:</strong> {{ $lesson['proficiency_level'] ?? 'N/A' }}</p>
+                    <h5 class="card-title" style="height: 30px;padding: 5px;white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">{{ $lesson['title'] ?? 'Unknown Title' }}</h5>
+                    <p class="card-text" style="padding:5px;"><strong>Proficiency Level:</strong> {{ $lesson['proficiency_level'] ?? 'N/A' }}</p>
                     <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
                         @if(isset($lesson['image']))
-                        <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="card-img-top" style="object-fit: contain; max-height: 100%; max-width: 100%;">
+                        <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="card-img-top" style="object-fit: contain; max-height: 200px; max-width: 200px;">
                         @else
                         <p>No image available</p>
                         @endif

@@ -38,7 +38,7 @@
                            padding: 15px; 
                            text-align: center; 
                            max-height: 35vh; 
-                           max-width: 90vw; 
+                           max-width: 10vw; 
                            display: flex; 
                            flex-direction: column; 
                            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
@@ -51,7 +51,7 @@
                             <h2 style="margin: 10px ;height: 25px;"><b>{{ $lessonData['lesson']['proficiency_level'] }}</b></h2>
 
                             <!-- Lesson title -->
-                            <h1 style="height: 25px;overflow:auto">{{ $lessonData['lesson']['title'] }}</h1>
+                            <h1 style="height: 50px;padding: 15px;white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">{{ $lessonData['lesson']['title'] }}</h1>
 
                             <!-- Progress details -->
                             <p style="margin-bottom: 10px;">Progress: {{ $userProgressCount }} / {{ $totalContentCount }} contents</p>
