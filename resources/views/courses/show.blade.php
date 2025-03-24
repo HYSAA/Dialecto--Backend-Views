@@ -34,15 +34,17 @@
         <div class="col-md-3 mb-4">
             <div class="card d-flex flex-column" style="max-height: 450px; overflow-y: auto;">
                 <div class="card-body">
-                    <h5 class="card-title" style="height: 30px;padding: 5px;white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">{{ $lesson['title'] ?? 'Unknown Title' }}</h5>
+                <h5 class="card-title" data-bs-toggle="tooltip" title="{{ $lesson['title'] ?? 'Unknown Title' }}">
+    {{ Str::limit($lesson['title'] ?? 'Unknown Title', 50) }} 
+</h5>
                     <p class="card-text" style="padding:5px;"><strong>Proficiency Level:</strong> {{ $lesson['proficiency_level'] ?? 'N/A' }}</p>
                     <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
-                        @if(isset($lesson['image']))
-                        <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="card-img-top" style="object-fit: contain; max-height: 200px; max-width: 200px;">
-                        @else
-                        <p>No image available</p>
-                        @endif
-                    </div>
+    @if(isset($lesson['image']))
+        <img src="{{ $lesson['image'] }}" alt="Lesson Image" class="card-img-top lesson-image">
+    @else
+        <p>No image available</p>
+    @endif
+</div>
                 </div>
                 <div class="card-footer text-center">
                     <a class="btn btn-success mb-2" href="{{ route('admin.lessons.edit', [$id, $lessonId]) }}">Edit</a>
@@ -155,6 +157,14 @@
         background-color: #dc3545;
         color: white;
     }
+    .lesson-image {
+    width: 220px; /* Fixed width */
+    height: 200px; /* Fixed height */
+    object-fit: cover; /* Ensures images are cropped uniformly */
+    border-radius: 8px; /* Optional: Slight rounding for aesthetics */
+}
+
+
 </style>
 
 
