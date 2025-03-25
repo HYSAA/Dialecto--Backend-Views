@@ -53,6 +53,12 @@
     </div>
     @endif
 
+
+
+
+
+
+
     <div class="row" id="wordsFromUser" style="overflow-y: auto;">
 
         <div class="col-lg-12 margin-tb">

@@ -52,44 +52,44 @@ class UserController extends Controller
         }
     }
 
-    
+
     public function index(Request $request)
     {
         $currentUserId = Auth::id();
-    
+
         $firebaseBaseUrl = env('FIREBASE_DATABASE_URL');
-    
+
         $context = stream_context_create([
             "ssl" => [
                 "verify_peer" => false,
                 "verify_peer_name" => false,
             ],
         ]);
-    
+
         // Fetch users
         $usersResponse = file_get_contents($firebaseBaseUrl . '/users.json', false, $context);
         $allUsers = json_decode($usersResponse, true);
-    
+
         // Fetch credentials
         $credentialsResponse = file_get_contents($firebaseBaseUrl . '/credentials.json', false, $context);
         $allCredentials = json_decode($credentialsResponse, true);
-    
+
         // Filter out current user
         $users = array_filter($allUsers, function ($userId) use ($currentUserId) {
             return $userId !== $currentUserId;
         }, ARRAY_FILTER_USE_KEY);
-    
+
         $filteredUsers = [];
         foreach ($users as $userId => $userData) {
             $courseName = $allCredentials[$userId]['courseName'] ?? null;
-    
+
             $filteredUsers[] = [
                 'id' => $userId,
                 'data' => $userData,
                 'courseName' => $courseName, // add the course name
             ];
         }
-    
+
         // Handle search
         $search = strtolower($request->input('search'));
         if ($search) {
@@ -97,14 +97,14 @@ class UserController extends Controller
                 $name = strtolower($user['data']['name'] ?? '');
                 $email = strtolower($user['data']['email'] ?? '');
                 $usertype = strtolower($user['data']['usertype'] ?? '');
-    
+
                 return str_contains($name, $search) || str_contains($email, $search) || str_contains($usertype, $search);
             });
         }
-    
+
         return view('users.index', compact('filteredUsers'));
     }
-    
+
 
 
 
@@ -266,23 +266,84 @@ class UserController extends Controller
 
         $user = Auth::user();
         $userId = $user->firebase_id;
+        // $denied_remarks = [];
 
         // dd($user);
 
-        $suggestedWords = $this->database
-            ->getReference("suggested_words/{$userId}")
-            ->getValue();
+        $suggestedWords = $this->database->getReference("suggested_words/{$userId}")->getValue();
 
-        // dd($suggestedWords); 
+        $denied_remarks = $this->database->getReference("denied_words/{$userId}")->getValue();
+
+
+
+
+
+
+        // dd($suggestedWords);
 
         // Check if $suggestedWords is null and convert it to an empty array if needed
         if (is_null($suggestedWords)) {
             $suggestedWords = []; // Set to an empty array to prevent null error in Blade
         }
 
+        $approved_words = [];
+        $disapproved_words = [];
+        $pending_words = [];
 
 
-        return view('userUser.suggestions.userwords', compact('suggestedWords'));
+        foreach ($suggestedWords as $key => $innerArray) {
+
+            if ($innerArray['status'] == 'approved') {
+
+                $approved_words[$key] = $innerArray;
+            }
+        }
+
+        foreach ($suggestedWords as $key => $innerArray) {
+
+            if ($innerArray['status'] == 'pending') {
+
+                $pending_words[$key] = $innerArray;
+            }
+        }
+
+        foreach ($suggestedWords as $key => $innerArray) {
+
+            if ($innerArray['status'] == 'disapproved') {
+
+                $disapproved_words[$key] = $innerArray;
+            }
+        }
+
+
+        foreach ($disapproved_words as $key => $value) {
+
+
+
+            foreach ($denied_remarks as $key2 => $value2) {
+
+                if ($key == $key2) {
+
+
+                    $disapproved_words[$key]['reason'] = $value2['reason'];
+
+                    // dd($key, $value, $key2, $value2);
+                }
+            }
+        }
+
+        // dd($disapproved_words);
+
+
+
+        // dd($suggestedWords, $approved_words, $pending_words, $disapproved_words);
+
+
+
+
+
+
+        return view('userUser.suggestions.userwords', compact('suggestedWords', 'approved_words', 'pending_words', 'disapproved_words'));
     }
 
 
@@ -494,20 +555,20 @@ class UserController extends Controller
         $userCredentials = $this->database
             ->getReference("credentials")
             ->getValue();
-    
+
         $userDetails = $this->database
             ->getReference("users")
             ->getValue();
-    
+
         if ($userCredentials) {
             $unverifiedUsers = array_filter($userCredentials, function ($user) {
                 return isset($user['status']) && $user['status'] === 'pending';
             });
-    
+
             $verifiedUsers = array_filter($userCredentials, function ($user) {
                 return isset($user['status']) && $user['status'] === 'verified';
             });
-    
+
             $deniedUsers = array_filter($userCredentials, function ($user) {
                 return isset($user['status']) && $user['status'] === 'denied';
             });
@@ -516,10 +577,10 @@ class UserController extends Controller
             $verifiedUsers = null;
             $deniedUsers = null;
         }
-    
+
         // Store unverifiedUsers in the session
         session(['unverifiedUsers' => $unverifiedUsers]);
-    
+
         return view('users.pendingVerification', compact('unverifiedUsers', 'verifiedUsers', 'deniedUsers', 'userDetails'));
     }
 

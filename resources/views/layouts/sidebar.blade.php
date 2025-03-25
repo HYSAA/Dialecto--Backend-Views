@@ -154,15 +154,6 @@
             </li>
 
 
-
-
-
-
-
-
-
-
-
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('user.leaderboard') }}">
                     <i class="bi bi-bar-chart"></i>
