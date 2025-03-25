@@ -269,7 +269,15 @@ Route::middleware(['auth', 'expert'])->prefix('expert')->group(function () {
 
 
 
-    Route::post('/expert/disapprove-word/{id}', [ExpertController::class, 'disapproveWord'])->name('expert.disapproveWord');
+
+
+
+
+    Route::post('/disapprove-word/{id}', [ExpertController::class, 'disapproveWord'])->name('expert.disapproveWord');
+
+
+
+
 
 
 

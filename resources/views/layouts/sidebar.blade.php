@@ -39,16 +39,16 @@
                 </a>
             </li>
 
-        
-<li class="nav-item">
-    <a class="btn btn-nav position-relative" href="{{ route('admin.showPendingExpert') }}">
-        <i class="bi bi-person-fill-check"></i>
-        <span class="btn-text">Pending Verification</span>
-        @if(session('unverifiedUsers') && count(session('unverifiedUsers')) > 0)
-        <span class="badge badge-light position-absolute top-0 start-100 translate-middle">{{ count(session('unverifiedUsers')) }}</span>
-        @endif
-    </a>
-</li>
+
+            <li class="nav-item">
+                <a class="btn btn-nav position-relative" href="{{ route('admin.showPendingExpert') }}">
+                    <i class="bi bi-person-fill-check"></i>
+                    <span class="btn-text">Pending Verification</span>
+                    @if(session('unverifiedUsers') && count(session('unverifiedUsers')) > 0)
+                    <span class="badge badge-light position-absolute top-0 start-100 translate-middle">{{ count(session('unverifiedUsers')) }}</span>
+                    @endif
+                </a>
+            </li>
 
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('admin.showWordBank') }}">
@@ -68,7 +68,7 @@
 
             <!--EXPERT SIDE-->
 
-          
+
             @if(Auth::user()->usertype == 'expert')
 
             <li class="nav-item">
@@ -111,14 +111,14 @@
             </li>
 
             <li class="nav-item">
-    <a class="btn btn-nav position-relative" href="{{ route('expert.pendingWords') }}">
-        <i class="bi bi-book"></i>
-        <span class="btn-text">Word Bank</span>
-        @if(session('pendingWordsCount') && session('pendingWordsCount') > 0)
-        <span class="badge badge-light position-absolute top-0 start-100 translate-middle">{{ session('pendingWordsCount') }}</span>
-        @endif
-    </a>
-</li>
+                <a class="btn btn-nav position-relative" href="{{ route('expert.pendingWords') }}">
+                    <i class="bi bi-book"></i>
+                    <span class="btn-text">Word Bank</span>
+                    @if(session('pendingWordsCount') && session('pendingWordsCount') > 0)
+                    <span class="badge badge-light position-absolute top-0 start-100 translate-middle">{{ session('pendingWordsCount') }}</span>
+                    @endif
+                </a>
+            </li>
 
             @endif
 
@@ -130,7 +130,7 @@
 
             @if(Auth::user()->usertype == 'user')
 
-          
+
 
             <li class="nav-item">
                 <a class="btn btn-nav" href="{{ route('user.profile.show') }}">
@@ -190,39 +190,42 @@
 
 
 
- <style>
-     .position-relative {
-        position: relative;
-    }
+            <style>
+                .position-relative {
+                    position: relative;
+                }
 
-    .position-absolute {
-        position: absolute;
-    }
+                .position-absolute {
+                    position: absolute;
+                }
 
-    .top-0 {
-        top: 0;
-    }
+                .top-0 {
+                    top: 0;
+                }
 
-    .start-100 {
-        left: 100%;
-    }
+                .start-100 {
+                    left: 100%;
+                }
 
-    .translate-middle {
-        transform: translate(-50%, -50%);
-    }
+                .translate-middle {
+                    transform: translate(-50%, -50%);
+                }
 
-    .badge {
-        padding: 0.6em 0.9em; /* Increase padding */
-        border-radius: 50%;
-        background-color: red;
-        color: white;
-        font-size: 1.1em; /* Increase font size */
-    }
+                .badge {
+                    padding: 0.6em 0.9em;
+                    /* Increase padding */
+                    border-radius: 50%;
+                    background-color: red;
+                    color: white;
+                    font-size: 1.1em;
+                    /* Increase font size */
+                }
 
-    .badge-light {
-        background-color: red; /* Ensure the badge is red */
-    }
- </style>
+                .badge-light {
+                    background-color: red;
+                    /* Ensure the badge is red */
+                }
+            </style>
 
         </ul>
     </div>

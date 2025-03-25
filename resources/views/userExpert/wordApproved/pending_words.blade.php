@@ -73,6 +73,13 @@
                 @foreach($userWords as $key => $word)
                 <tr>
                     <td>{{ $word['text'] }}</td>
+
+
+                    <td>{{ $key }}</td>
+
+
+
+
                     <td>{{ $word['english'] }}</td>
                     <td>{{ $word['course_name'] ?? 'No course found' }}</td>
                     <td>{{ $word['lesson_name'] ?? 'No lesson found' }}</td>
@@ -176,15 +183,15 @@
 
 
                         <!-- Form for Disapproving -->
-                        <form action="{{ route('expert.disapproveWord', $key) }}" method="POST" style="display:inline;">
-                            @csrf
-                            <button
-                                type="submit"
-                                class="btn btn-danger"
-                                @if($word['status']==='disapproved' ) disabled @endif>
-                                Disapprove
-                            </button>
-                        </form>
+                        <button type="button"
+                            class="btn btn-danger"
+                            onclick="openCustomModal('{{ $key }}', '{{ $word['user_id'] }}')"
+                            @if($word['status']==='disapproved' ) disabled @endif>
+                            Disapprove
+                        </button>
+
+
+
                     </td>
 
                     @endif
@@ -256,6 +263,38 @@
     </div>
 
 
+    <!-- Disapprove Modal (Initially Hidden) -->
+    <div id="customDisapproveModal" style="display: none;">
+        <div class="modal-content">
+            <h3>Disapprove Word</h3>
+
+
+            <!-- for debugging -->
+
+
+            <p><strong>Word ID:</strong> <span id="debugWordId"></span></p>
+
+
+
+
+            <form id="customDisapproveForm" action="" method="POST">
+                @csrf
+                <input type="hidden" name="word_id" id="customWordId">
+
+                <input type="hidden" name="user_id" id="customUserId">
+
+                <label for="customReason">Reason for Disapproval:</label>
+                <textarea name="reason" id="customReason" rows="3" required></textarea>
+                <br><br>
+
+                <button type="submit" class=" btn btn-danger">Submit</button>
+                <button type="button" id="closeCustomModal" class="btn btn-gray">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+
+
 </div>
 
 
@@ -288,6 +327,41 @@
         });
 
 
+    });
+
+
+    function openCustomModal(wordId, userID) {
+
+
+        // for debugging
+        console.log("Word ID Clicked:", wordId);
+        console.log("user ID Clicked:", userID);
+
+
+        document.getElementById("debugWordId").innerText = wordId; // DEBUG: Added
+
+        // end of debug
+
+
+
+        document.getElementById("customWordId").value = wordId;
+
+        document.getElementById("customUserId").value = userID;
+
+
+        document.getElementById("customDisapproveForm").action = "/expert/disapprove-word/" + wordId;
+        document.getElementById("customDisapproveModal").style.display = "flex";
+    }
+
+    document.getElementById("closeCustomModal").addEventListener("click", function() {
+        document.getElementById("customDisapproveModal").style.display = "none";
+    });
+
+    window.addEventListener("click", function(event) {
+        var modal = document.getElementById("customDisapproveModal");
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
     });
 </script>
 @endsection

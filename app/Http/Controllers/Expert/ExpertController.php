@@ -298,7 +298,7 @@ class ExpertController extends Controller
         foreach ($userWords as $key => $value) {
             $userId = $value['user_id'];
         }
-       
+
         session(['pendingWordsCount' => count($userWords)]);
         // dd($userWords);
 
@@ -386,14 +386,7 @@ class ExpertController extends Controller
         }
 
 
-
-
         // dd($approvedCount, 'stopper');
-
-
-
-
-
 
 
         return redirect()->route('expert.pendingWords')->with('success', 'Word approved successfully.');
@@ -406,71 +399,43 @@ class ExpertController extends Controller
     // Disapprove the suggested word
     public function disapproveWord(Request $request, $id)
     {
-        $user = Auth::user(); // Get the currently authenticated user's ID
 
-        $expertId = $user->firebase_id;
-
-        $status = 'disapproved';
+        $userId = $request->input('user_id');
+        $reason = $request->input('reason');
         $wordId = $id;
 
 
+        // checkpoint ni sya. sunod ani is create resibo nga sa remarks nya change satus to denied
+
+
+        $user = Auth::user(); // Get the currently authenticated user's ID
+
+        $expert_id = $user->firebase_id;
+
+        //change status sa suggested word to disapproved
+
+
+        $suggestedWord = $this->database->getReference("suggested_words/$userId/$wordId")->getValue();
+
+
+        $suggestedWord['status'] = 'disapproved';
+
+
+        $this->database->getReference("suggested_words/$userId/$wordId")->set($suggestedWord);
+
+
+
+        // make node resibo sa reason ug 
+
         $contentData = [
-            'status' => $status,
-            'expert_id' => $expertId,
-            'word_id' => $wordId,
+            'reason' => $reason,
+            'user_id' => $userId,
+            'expert_id' => $expert_id,
         ];
 
-
-        $disapproved = $this->database->getReference("verify_words/$wordId")->getValue();
-        // checks if this user has already approved the workd
-
-        $exist = false;
+        $this->database->getReference("denied_words/$userId/$wordId")->set($contentData);
 
 
-        if ($disapproved) {
-            foreach ($disapproved as $data) {
-                if ($data['expert_id'] === $expertId) {
-                    $exist = true; // Set to true if a match is found
-
-
-                    break; // Exit the loop early since we found a match
-                }
-            }
-        }
-
-
-        if (!$exist) {
-            $this->database->getReference("verify_words/$wordId")->push($contentData);
-        }
-
-
-        $approveCount = $this->database->getReference("verify_words/$wordId")->getValue();
-
-        $approvedCount = count(array_filter($approveCount, function ($item) {
-            return $item['status'] === 'approved';
-        }));
-
-
-        // next nga logic ani if 3 higher and count
-
-        if ($approvedCount == 3) {
-
-            dd('its goods');
-        }
-
-
-        // try {
-        //     $suggestedWord = SuggestedWord::findOrFail($id);
-        //     $result = $suggestedWord->update([
-        //         'status' => 'approved',
-        //         'expert_id' => Auth::id(),
-        //     ]);
-
-
-        // } catch (\Exception $e) {
-        //     return redirect()->route('expert.pendingWords')->with('error', 'An error occurred while approving the word: ' . $e->getMessage());
-        // }
-        // dd($id);
 
         return redirect()->route('expert.pendingWords')->with('success', 'Word denied successfully.');
     }
