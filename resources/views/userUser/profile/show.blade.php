@@ -19,15 +19,17 @@
         <!-- Right Side - Action Buttons -->
         <div class="col-md-6">
             <div style="display: flex; justify-content: flex-end; gap: 15px; padding: 15px;">
+
+            <a class="btn btn-primary" href="{{ route('user.settings.edit') }}" 
+                   style="font-size: 1.3rem; border-radius: 6px; padding: 10px 15px; display: flex; align-items: center;">
+                    <i class="fas fa-pencil-alt" style="margin-right: 8px;"></i>Edit Profile
+                </a>
                 @if ($credentials['status'] == 'pending' && !empty($credentials))
                 <span class="btn" style="font-size: 1.3rem; background-color: #d4edda; color: #155724; border-color: #c3e6cb; border-radius: 6px; padding: 10px 15px; height: fit-content;">
                     <i class="fas fa-clock" style="margin-right: 8px;"></i>Pending Approval
                 </span>
                 @else
-                <a class="btn btn-primary" href="{{ route('user.settings.edit') }}" 
-                   style="font-size: 1.3rem; border-radius: 6px; padding: 10px 15px; display: flex; align-items: center;">
-                    <i class="fas fa-pencil-alt" style="margin-right: 8px;"></i>Edit Profile
-                </a>
+              
                 <a class="btn btn-success" href="{{ route('user.profile.applyExpert', ['id' => $userId]) }}" 
                    style="font-size: 1.3rem; border-radius: 6px; padding: 10px 15px; display: flex; align-items: center;">
                     <i class="fas fa-user-shield" style="margin-right: 8px;"></i>Apply as Verifier
