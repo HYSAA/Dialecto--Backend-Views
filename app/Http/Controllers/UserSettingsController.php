@@ -49,9 +49,7 @@ class UserSettingsController extends Controller
         if ($updatedUser) {
             session()->put('user', $updatedUser);
         }
-    
-        return redirect()->route('user.settings.edit')
-            ->with('success', 'Profile updated successfully.');
+        return redirect()->route('user.profile.show')->with('success', 'Profile updated successfully.');
     }
     
 }

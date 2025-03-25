@@ -54,8 +54,7 @@ class ExpertSettingsController extends Controller
             
         }
     
-        return redirect()->route('expert.settings.edit')
-            ->with('success', 'Profile updated successfully.');
+        return redirect()->route('expert.profile.show')->with('success', 'Profile updated successfully.');
     }
     
 }
