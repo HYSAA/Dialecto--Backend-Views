@@ -13,9 +13,9 @@
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
 
-                <h2>{{ $course['name'] ?? 'Course Name' }} - Lessons </h2>
-                <h2 style="color: green;">Level: {{ $currentLevel ?? 'Not Specified' }} </h2>
-                <strong style="font-size: small;">Earn a silver or higher rating on all lessons in the current level to be promoted to the next level. To check your ratings for all lessons, go to your profile and view your badges.</strong>
+                <h2 style="font-size: larger;">{{ $course['name'] ?? 'Course Name' }} - Lessons </h2>
+                <h2 style="color: green;">Your Level: {{ $currentLevel ?? 'Not Specified' }} </h2>
+                <strong style="font-size: medium;">Earn a silver or higher rating on all lessons in the current level to be promoted to the next level. To check your ratings for all lessons, go to your profile and view your badges.</strong>
 
             </div>
         </div>
@@ -27,7 +27,7 @@
         <div class="col-lg-12 margin-tb">
             <div class="row">
                 @foreach ($filteredLessons as $lessonId => $lesson)
-                <div class="cardsmall mb-2 mr-2" style="overflow-y: auto;">
+                <div class="cardsmall mb-2 mr-2" style="overflow-y: auto; height: fit-content;">
                     <div class="top">
                         <div>
                             @if(isset($lesson['image']) && $lesson['image'])
@@ -38,7 +38,7 @@
                         </div>
 
 
-                        <div class="row align-items-center mt-3 mb-3" style="height: 50px;">
+                        <div class="row align-items-center mt-3 mb-3" style="height: 90px;">
 
 
                             <div class="col-6 d-flex align-items-center" >

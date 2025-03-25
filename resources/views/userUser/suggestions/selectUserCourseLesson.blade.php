@@ -10,7 +10,7 @@
                 <div class="row">
                     <!-- Loop through courses retrieved from Firebase -->
                     @foreach ($courses as $courseId => $course)
-                        <div class="card mb-2 mr-2" style="overflow-y: auto; width: 300px; height: fit-content;">
+                        <div class="card mb-2 mr-2" style="width: 300px; height: fit-content;">
                             <div class="top">
                                 <!-- Check for the course image from Firebase -->
                                 @if(isset($course['image']))
@@ -19,9 +19,9 @@
                                     <img src="{{ asset('images/cebuano.png') }}" alt="Course Image" class="card-img">
                                 @endif
 
-                                <div class="row align-items-center mt-3 mb-3 " style="height: 50px;">
-                                    <div class="col-6 d-flex align-items-center ">
-                                        <h3 class="card-title mb-0">{{ $course['name'] }}</h3>
+                                <div>
+                                    <div class="d-flex align-items-center mt-3 mb-3" style="height: 50px; padding: 15px;">
+                                        <h3 class="mb-0 me-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">{{ $course['name'] }}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -41,7 +41,7 @@
                                 <div class="modal-content">
 
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="lessonModalLabel{{ $courseId }}">Select Lesson for
+                                        <h5 class="modal-title" id="lessonModalLabel{{ $courseId }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">Select Lesson for
                                             {{ $course['name'] }}</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
@@ -51,10 +51,13 @@
                                     <div class="modal-body">
                                         @if (isset($course['lessons']))
                                             @foreach ($course['lessons'] as $lessonId => $lesson)
-                                                <a class="btn btn-back-main btn-block mb-2" 
+                                            <div class="d-flex align-items-center mt-3 mb-3" style="height: 50px; padding: 15px;">
+
+                                                <a class="btn btn-select btn-block mb-2"
                                                     href="{{ route('user.addUserSuggestedWord', ['courseId' => $courseId, 'lessonId' => $lessonId]) }}">
                                                     {{ $lesson['title'] }}
                                                 </a>
+                                            </div>
                                             @endforeach
                                         @else
                                             <p>No lessons available for this course.</p>
@@ -77,4 +80,22 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
+    <style>
+    .btn-select {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 5px;
+    border-color: #CB9219;
+    background-color: #CB9219;
+    color: #fff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-select:hover {
+        background-color: #a67c1c;
+        color: #fff;
+    }
+    </style>
 @endsection
