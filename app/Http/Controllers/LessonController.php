@@ -70,7 +70,7 @@ class LessonController extends Controller
     public function store(Request $request, $courseId)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required | max:50 ',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
             'proficiency_level' =>'required|in:Beginner,Intermediate,Advanced',
         ]);
@@ -143,7 +143,7 @@ class LessonController extends Controller
     public function update(Request $request, $courseId, $lessonId)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required | max:50 ',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
             'proficiency_level' => 'required|in:Beginner,Intermediate,Advanced',
         ]);
