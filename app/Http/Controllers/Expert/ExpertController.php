@@ -300,9 +300,73 @@ class ExpertController extends Controller
         }
 
         session(['pendingWordsCount' => count($userWords)]);
-        // dd($userWords);
 
-        return view('userExpert.wordApproved.pending_words', compact('expertWords', 'userWords', 'userId'));
+
+
+
+        $pending_words = [];
+        $approved_words = [];
+        $disapproved_words = [];
+
+        foreach ($userWords as $key => $value) {
+
+            if ($value['status'] == 'pending') {
+                $pending_words[$key] = $value;
+            }
+        }
+
+        foreach ($userWords as $key => $value) {
+
+            if ($value['status'] == 'approved') {
+                $approved_words[$key] = $value;
+            }
+        }
+
+        $denied_remarks = $this->database->getReference("denied_words/{$userId}")->getValue();
+
+        foreach ($userWords as $key => $value) {
+
+            if ($value['status'] == 'disapproved') {
+                $disapproved_words[$key] = $value;
+            }
+        }
+
+        foreach ($disapproved_words as $key => $value) {
+
+
+
+            $userId = $value['user_id'];
+
+            $denied_remarks = $this->database->getReference("denied_words/{$userId}")->getValue();
+
+
+            foreach ($denied_remarks as $key2 => $value2) {
+
+                $disapproved_words[$key]['reason'] = $value2['reason'];
+            }
+
+
+
+
+
+
+
+
+
+
+            // if ($value['status'] == 'disapproved') {
+            //     $disapproved_words[$key] = $value;
+
+            // }
+        }
+
+
+
+
+
+
+
+        return view('userExpert.wordApproved.pending_words', compact('expertWords', 'userWords', 'userId', 'pending_words', 'approved_words', 'disapproved_words'));
     }
 
 

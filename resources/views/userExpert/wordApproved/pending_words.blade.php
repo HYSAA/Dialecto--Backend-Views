@@ -13,15 +13,27 @@
             </div>
 
             <div class="d-flex mb-2 gap-2">
-                <a class="btn btn-success" id="btn-myContributedWords" href="#">My Words Contributed</a>
 
-                <a class="btn btn-dark" id="btn-wordsFromUser" href="#">Words From User</a>
+
+                <a class="btn btn-success " style="margin-right: 3px;" id="btn-approved" href="#">Approved</a>
+
+                <a class="btn btn-dark " style="margin-right: 3px;" id="btn-pending" href="#">Pending</a>
+
+                <a class="btn btn-danger" id="btn-disapproved" href="#">Disapproved</a>
+
+
+                <a class="btn btn-success ml-auto" style="margin-right: 3px;" id="btn-myContributedWords" href="#">My Words Contributed</a>
+
 
 
                 <a class="btn btn-main" id=" btn-contribute" href="{{route('expert.contributeWord')}}">Contribute Words</a>
-                <!-- 
-                <a class="btn btn-success ml-auto" id="btn-disapproved" href="#">Approved</a>
-                <a class="btn btn-danger" id="btn-approved" href="#">Disapproved</a> -->
+
+
+
+
+
+
+
 
             </div>
         </div>
@@ -59,7 +71,7 @@
 
 
 
-    <div class="row" id="wordsFromUser" style="overflow-y: auto;">
+    <div class="row" id="pendingTable" style="overflow-y: auto;">
 
         <div class="col-lg-12 margin-tb">
 
@@ -76,12 +88,15 @@
                     <th>Denied</th>
                     <th width="280px">Action</th>
                 </tr>
-                @foreach($userWords as $key => $word)
+
+                @if (!empty($pending_words))
+
+                @foreach($pending_words as $key => $word)
                 <tr>
                     <td>{{ $word['text'] }}</td>
 
 
-                    <td>{{ $key }}</td>
+                    <!-- <td>{{ $key }}</td> -->
 
 
 
@@ -201,8 +216,188 @@
                     </td>
 
                     @endif
+                </tr>
+                @endforeach
 
 
+                @else
+                <span style="font-weight: bold;">Pending words empty.</span>
+
+                @endif
+
+            </table>
+        </div>
+    </div>
+
+    <div class="row" id="approvedTable" style="overflow-y: auto; display: none;">
+
+        <div class="col-lg-12 margin-tb">
+
+            <table class="table table-striped table-bordered">
+
+                <tr>
+                    <th>Translation Text</th>
+                    <th>English</th>
+                    <th>Course</th>
+                    <th>Lesson</th>
+                    <th>Video</th>
+                    <th>Status</th>
+                    <th>Approve</th>
+
+                </tr>
+
+                @if (!empty($approved_words))
+
+                @foreach($approved_words as $key => $word)
+                <tr>
+                    <td>{{ $word['text'] }}</td>
+
+
+                    <!-- <td>{{ $key }}</td> -->
+
+
+
+
+                    <td>{{ $word['english'] }}</td>
+                    <td>{{ $word['course_name'] ?? 'No course found' }}</td>
+                    <td>{{ $word['lesson_name'] ?? 'No lesson found' }}</td>
+
+
+
+                    <td style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                        <div class="box ">
+                            @if ($word['video'])
+                            <video controls class="vid-content">
+                                <source src="{{ $word['video'] }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            @else
+                            No video available
+                            @endif
+                        </div>
+                    </td>
+
+
+                    <td style="color: 
+    @if ($word['status'] === 'approved')
+        green;
+    @elseif ($word['status'] === 'disapproved')
+        red;
+    @elseif ($word['status'] === 'pending')
+        gray;
+    @else
+        black; /* Default color */
+    @endif
+">
+                        {{ $word['status'] }}
+                    </td>
+
+
+
+                    <td style="color: green;">
+                        {{ isset($word['approve_count']) ? $word['approve_count'] : 0 }}/3
+                    </td>
+
+
+
+
+
+
+
+
+                    @if((isset($word['approved']) && $word['approved'] === true) || (isset($word['approved']) && $word['approved'] === false))
+
+
+
+                    @else
+
+
+
+
+                    @endif
+
+
+
+
+                </tr>
+                @endforeach
+
+
+                @else
+                <span style="font-weight: bold;">Approved words empty.</span>
+
+                @endif
+
+            </table>
+        </div>
+    </div>
+
+    <div class="row" id="disapprovedTable" style="overflow-y: auto; display: none;">
+
+        <div class="col-lg-12 margin-tb">
+
+            <table class="table table-striped table-bordered">
+
+                <tr>
+                    <th>Translation Text</th>
+                    <th>English</th>
+                    <th>Course</th>
+                    <th>Lesson</th>
+                    <th>Video</th>
+                    <th>Status</th>
+                    <th style="width: 300px;">Remarks</th>
+
+                </tr>
+
+                @if (!empty($disapproved_words))
+
+                @foreach($disapproved_words as $key => $word)
+                <tr>
+                    <td>{{ $word['text'] }}</td>
+
+
+                    <!-- <td>{{ $key }}</td> -->
+
+
+
+
+                    <td>{{ $word['english'] }}</td>
+                    <td>{{ $word['course_name'] ?? 'No course found' }}</td>
+                    <td>{{ $word['lesson_name'] ?? 'No lesson found' }}</td>
+
+
+
+                    <td style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                        <div class="box ">
+                            @if ($word['video'])
+                            <video controls class="vid-content">
+                                <source src="{{ $word['video'] }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            @else
+                            No video available
+                            @endif
+                        </div>
+                    </td>
+
+
+                    <td style="color: 
+    @if ($word['status'] === 'approved')
+        green;
+    @elseif ($word['status'] === 'disapproved')
+        red;
+    @elseif ($word['status'] === 'pending')
+        gray;
+    @else
+        black; /* Default color */
+    @endif
+">
+                        {{ $word['status'] }}
+                    </td>
+                    <td>
+                        {{ $word['reason'] }} <br>
+
+                    </td>
 
 
 
@@ -216,6 +411,12 @@
 
                 </tr>
                 @endforeach
+
+
+                @else
+                <span style=" font-weight: bold;">Dispproved words empty.</span>
+
+                @endif
 
             </table>
         </div>
@@ -271,7 +472,7 @@
 
     <!-- Disapprove Modal (Initially Hidden) -->
     <div id="customDisapproveModal" style="display: none;">
-        <div class="modal-content">
+        <div class="modal-content2">
             <h3>Disapprove Word</h3>
 
 
@@ -314,14 +515,66 @@
         // document.getElementById('wordsFromUser').style.display = 'block';
         // document.getElementById('myContributedWords').style.display = 'none';
 
-        document.getElementById('btn-wordsFromUser').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('myContributedWords').style.display = 'none';
-            document.getElementById('wordsFromUser').style.display = 'block';
 
-            document.getElementById('title').textContent = 'Words From User';
+
+
+        document.getElementById('btn-approved').addEventListener('click', function(e) {
+
+            e.preventDefault();
+
+            document.getElementById('myContributedWords').style.display = 'none';
+
+
+
+            document.getElementById('approvedTable').style.display = 'block';
+            document.getElementById('pendingTable').style.display = 'none';
+            document.getElementById('disapprovedTable').style.display = 'none';
+
+            document.getElementById('title').textContent = 'Pending Words';
+
 
         });
+
+        document.getElementById('btn-pending').addEventListener('click', function(e) {
+
+            e.preventDefault();
+
+            document.getElementById('myContributedWords').style.display = 'none';
+
+
+
+            document.getElementById('approvedTable').style.display = 'none';
+            document.getElementById('pendingTable').style.display = 'block';
+            document.getElementById('disapprovedTable').style.display = 'none';
+
+            document.getElementById('title').textContent = 'Pending Words';
+
+
+        });
+
+        document.getElementById('btn-disapproved').addEventListener('click', function(e) {
+
+            e.preventDefault();
+
+            document.getElementById('myContributedWords').style.display = 'none';
+
+
+
+            document.getElementById('approvedTable').style.display = 'none';
+            document.getElementById('pendingTable').style.display = 'none';
+            document.getElementById('disapprovedTable').style.display = 'block';
+
+            document.getElementById('title').textContent = 'Pending Words';
+
+
+        });
+
+
+
+
+
+
+
 
         document.getElementById('btn-myContributedWords').addEventListener('click', function(e) {
             e.preventDefault();

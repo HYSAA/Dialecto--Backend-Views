@@ -19,13 +19,13 @@
                 <a class="btn btn-main" href="{{ route('user.selectUserCourseLesson') }}"> Suggest A Word</a>
             </div>
 
-            <div class="d-flex mb-2 gap-2">
+            <div class="d-flex mb-2 gap-3">
 
 
 
-                <a class="btn btn-success" id="btn-approvedWords" href="#">Approved Words</a>
+                <a class="btn btn-success" style="margin-right: 3px;" id="btn-approvedWords" href="#">Approved Words</a>
 
-                <a class="btn btn-dark" id="btn-pendingWords" href="#">Pending Words</a>
+                <a class="btn btn-dark" style="margin-right: 3px;" id="btn-pendingWords" href="#">Pending Words</a>
 
                 <a class="btn btn-danger" id="btn-deniedWords" href="#">Denied Words</a>
 
@@ -123,6 +123,7 @@
                     </td>
                 </tr>
                 @endforeach
+
                 @else
                 <span style="font-weight: bold;">Pending words empty.</span>
 
