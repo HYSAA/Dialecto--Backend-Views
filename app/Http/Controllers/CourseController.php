@@ -40,7 +40,7 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required | max:25 ',
+            'name' => 'required | max:35 ',
             'description' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
@@ -81,7 +81,7 @@ class CourseController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required | max:25 ',
+            'name' => 'required | max:35 ',
             'description' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
