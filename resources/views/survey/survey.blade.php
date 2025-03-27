@@ -24,37 +24,37 @@
 
 
                         <div class="survey-page active animate__animated" data-page="1">
-                            <label class="form-label fw-bold">1. How comfortable are you with languages?</label>
+                            <label class="form-label fw-bold">1. How well can you communicate in a foreign language?</label>
 
 
                             <div class="form-check">
                                 <input type="radio" id="familiarity-beginner" name="familiarity" value="beginner" class="form-check-input" required>
-                                <label class="form-check-label" for="familiarity-beginner">I have limited language abilities</label>
+                                <label class="form-check-label" for="familiarity-beginner">I can only use basic phrases and words.</label>
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="familiarity-intermediate" name="familiarity" value="intermediate" class="form-check-input">
-                                <label class="form-check-label" for="familiarity-intermediate">I have basic language skills in a few languages</label>
+                                <label class="form-check-label" for="familiarity-intermediate">I can hold simple conversations but struggle with complex topics.</label>
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="familiarity-advanced" name="familiarity" value="advanced" class="form-check-input">
-                                <label class="form-check-label" for="familiarity-advanced">I can easily communicate in multiple languages</label>
+                                <label class="form-check-label" for="familiarity-advanced">I can discuss complex topics fluently and confidently</label>
                             </div>
 
                         </div>
                         <div class="survey-page animate__animated d-none" data-page="2">
-                            <label class="form-label fw-bold">2. How much experience do you have with language-learning apps?</label>
+                            <label class="form-label fw-bold">2. How often do you use the language in real-life situations (e.g., work, travel, or social interactions)?</label>
                             <!-- Radio options here -->
                             <div class="form-check">
                                 <input type="radio" id="experience-beginner" name="language_experience" value="beginner" class="form-check-input" required>
-                                <label class="form-check-label" for="experience-beginner">I'm new to language learning apps</label>
+                                <label class="form-check-label" for="experience-beginner">Rarely or never.</label>
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="experience-intermediate" name="language_experience" value="intermediate" class="form-check-input">
-                                <label class="form-check-label" for="experience-intermediate">I have basic experience with language learning apps</label>
+                                <label class="form-check-label" for="experience-intermediate">Occasionally, but I still struggle.</label>
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="experience-advanced" name="language_experience" value="advanced" class="form-check-input">
-                                <label class="form-check-label" for="experience-advanced">I've used multiple language learning apps for several years</label>
+                                <label class="form-check-label" for="experience-advanced">Frequently and with confidence.</label>
                             </div>
                         </div>
 
@@ -107,19 +107,19 @@
 
                         <!-- More survey pages here -->
                         <div class="survey-page animate__animated d-none" data-page="5">
-                            <label class="form-label fw-bold">5. How motivated are you to learn a new language?</label>
+                            <label class="form-label fw-bold">5. What is your primary goal for learning this language?</label>
                             <!-- Radio options here -->
                             <div class="form-check">
                                 <input type="radio" id="motivation-1" name="motivation_level" value="1" class="form-check-input" required>
-                                <label class="form-check-label" for="motivation-1">Not at all</label>
+                                <label class="form-check-label" for="motivation-1">I want to learn basic phrases for travel or fun.</label>
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="motivation-2" name="motivation_level" value="2" class="form-check-input">
-                                <label class="form-check-label" for="motivation-2">Somewhat</label>
+                                <label class="form-check-label" for="motivation-2">I want to improve my skills for work or study.</label>
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="motivation-3" name="motivation_level" value="3" class="form-check-input">
-                                <label class="form-check-label" for="motivation-3">I'm excited!</label>
+                                <label class="form-check-label" for="motivation-3">I want to achieve fluency for professional or personal mastery.</label>
                             </div>
                         </div>
                         <!-- Navigation Buttons -->

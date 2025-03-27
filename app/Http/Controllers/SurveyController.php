@@ -83,9 +83,9 @@ class SurveyController extends Controller
         } elseif ($responses['learning_challenge'] == 'vocabulary') {
             $score += 2;
         } elseif ($responses['learning_challenge'] == 'pronunciation') {
-            $score += 3;
-        } elseif ($responses['learning_challenge'] == 'speaking_fluency') {
             $score += 2;
+        } elseif ($responses['learning_challenge'] == 'speaking_fluency') {
+            $score += 3;
         }
 
 
@@ -94,9 +94,9 @@ class SurveyController extends Controller
         } elseif ($responses['learning_resource'] == 'online_courses') {
             $score += 2;
         } elseif ($responses['learning_resource'] == 'language_exchange') {
-            $score += 3;
-        } elseif ($responses['learning_resource'] == 'language_apps') {
             $score += 2;
+        } elseif ($responses['learning_resource'] == 'language_apps') {
+            $score += 3;
         }
 
 
@@ -112,13 +112,12 @@ class SurveyController extends Controller
 
 
         // logic ra pag determine si user proficiency
-        if ($score <= 9) {
+        if ($score < 12) {
             return 'Beginner';
-        } elseif ($score <= 11) {
-            return 'Intermediate';
         } else {
-            return 'Advanced';
+            return 'Intermediate';
         }
+        
     }
 
 
