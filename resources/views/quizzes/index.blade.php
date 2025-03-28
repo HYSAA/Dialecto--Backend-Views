@@ -52,7 +52,7 @@
                     <td>{{ $quiz['question'] }}</td>
                     <td>{{ $quiz['correct'] }}</td>
 
-                    <td>{{ $quizId }}</td>
+                    
 
 
                     @foreach ($quiz['choices'] as $index => $choice)
