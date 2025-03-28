@@ -44,7 +44,7 @@
                         <th width="280px">Action</th>
                     </tr>
 
-                    @foreach ($filteredByCourse as $wordId => $word)
+                    @foreach ($approved_words as $wordId => $word)
                     <tr>
                         <td>{{ $word['lesson_name'] ?? 'No title available' }}</td>
                         <td>{{ $word['text'] }}</td>

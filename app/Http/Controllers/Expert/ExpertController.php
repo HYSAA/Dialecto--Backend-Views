@@ -299,7 +299,7 @@ class ExpertController extends Controller
             $userId = $value['user_id'];
         }
 
-        session(['pendingWordsCount' => count($userWords)]);
+       
 
 
 
@@ -308,6 +308,7 @@ class ExpertController extends Controller
         $approved_words = [];
         $disapproved_words = [];
 
+        
         foreach ($userWords as $key => $value) {
 
             if ($value['status'] == 'pending') {
@@ -331,6 +332,7 @@ class ExpertController extends Controller
             }
         }
 
+        
         foreach ($disapproved_words as $key => $value) {
 
 
@@ -340,13 +342,21 @@ class ExpertController extends Controller
             $denied_remarks = $this->database->getReference("denied_words/{$userId}")->getValue();
 
 
-            foreach ($denied_remarks as $key2 => $value2) {
 
-                $disapproved_words[$key]['reason'] = $value2['reason'];
-            }
+            
 
 
+            
 
+                
+                
+                
+                foreach ($denied_remarks as $key2 => $value2) {
+
+                    $disapproved_words[$key]['reason'] = $value2['reason'];
+                }
+
+            
 
 
 
@@ -363,7 +373,7 @@ class ExpertController extends Controller
 
 
 
-
+        session(['pendingWordsCount' => count($pending_words)]);
 
 
         return view('userExpert.wordApproved.pending_words', compact('expertWords', 'userWords', 'userId', 'pending_words', 'approved_words', 'disapproved_words'));

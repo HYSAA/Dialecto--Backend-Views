@@ -47,12 +47,13 @@ class WordBankController extends Controller
         $coursesRef = $this->firebaseDatabase->getReference('courses');
         $courses = $coursesRef->getValue();
 
+        
+
         return view('admin.wordBank.showWordBank', compact('courses'));
     }
 
     public function wordBankCourse($id)
     {
-
 
 
         $container = [];
@@ -94,7 +95,23 @@ class WordBankController extends Controller
             }
         }
 
-        // dd($suggestedWords, $value);
+
+        // checkpoint filtering for pendind
+
+        // dd($filteredByCourse);
+
+        $approved_words = [];
+
+
+        foreach ($filteredByCourse as $key => $value) {
+
+            if ($value['status'] == 'approved') {
+                $approved_words[$key] = $value;
+            }
+        }
+
+
+        // dd($approved_words);
 
 
 
@@ -103,7 +120,7 @@ class WordBankController extends Controller
 
 
 
-        return view('admin.wordBank.wordBankCourse', compact('course', 'filteredByCourse', 'courseId'));
+        return view('admin.wordBank.wordBankCourse', compact('course', 'filteredByCourse', 'courseId', 'approved_words'));
     }
 
     public function addWordToLesson($courseId, $wordId)
