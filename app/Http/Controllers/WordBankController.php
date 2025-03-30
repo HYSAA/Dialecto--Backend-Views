@@ -47,7 +47,7 @@ class WordBankController extends Controller
         $coursesRef = $this->firebaseDatabase->getReference('courses');
         $courses = $coursesRef->getValue();
 
-        
+
 
         return view('admin.wordBank.showWordBank', compact('courses'));
     }
@@ -105,7 +105,7 @@ class WordBankController extends Controller
 
         foreach ($filteredByCourse as $key => $value) {
 
-            if ($value['status'] == 'approved') {
+            if ($value['status'] == 'approved' || $value['status'] == 'expert') {
                 $approved_words[$key] = $value;
             }
         }

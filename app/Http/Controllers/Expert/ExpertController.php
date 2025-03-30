@@ -61,8 +61,6 @@ class ExpertController extends Controller
 
         $thisLessons = $this->database->getReference("courses/$courseId/lessons")->getValue();
 
-        // dd('asd');
-
 
 
         return view('userExpert.wordApproved.contribute_word', compact('language', 'thisLessons', 'course', 'courseId'));
@@ -124,6 +122,9 @@ class ExpertController extends Controller
             'english' => $english, //
             'video' => $videoUrl, //
             'status' => $status,
+
+
+            'used_id' => 'false',
         ];
 
         // Save the suggested word in Firebase
@@ -299,7 +300,7 @@ class ExpertController extends Controller
             $userId = $value['user_id'];
         }
 
-       
+
 
 
 
@@ -308,7 +309,7 @@ class ExpertController extends Controller
         $approved_words = [];
         $disapproved_words = [];
 
-        
+
         foreach ($userWords as $key => $value) {
 
             if ($value['status'] == 'pending') {
@@ -332,7 +333,7 @@ class ExpertController extends Controller
             }
         }
 
-        
+
         foreach ($disapproved_words as $key => $value) {
 
 
@@ -343,20 +344,20 @@ class ExpertController extends Controller
 
 
 
-            
 
 
-            
 
-                
-                
-                
-                foreach ($denied_remarks as $key2 => $value2) {
 
-                    $disapproved_words[$key]['reason'] = $value2['reason'];
-                }
 
-            
+
+
+
+            foreach ($denied_remarks as $key2 => $value2) {
+
+                $disapproved_words[$key]['reason'] = $value2['reason'];
+            }
+
+
 
 
 
@@ -369,6 +370,8 @@ class ExpertController extends Controller
 
             // }
         }
+
+        // dd($expertWords);
 
 
 

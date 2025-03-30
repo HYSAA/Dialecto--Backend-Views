@@ -443,7 +443,8 @@
                     <td>{{ $word['text'] }}</td>
                     <td>{{ $word['english'] }}</td>
                     <td>{{ $word['course_name'] ?? 'No course found' }}</td>
-                    <td>{{ $word['lesson_title'] ?? 'No lesson found' }}</td>
+
+                    <td>{{ $word['lesson_name'] ?? 'No lesson foundss' }}</td>
 
 
 
@@ -557,9 +558,6 @@
             e.preventDefault();
 
             document.getElementById('myContributedWords').style.display = 'none';
-
-
-
             document.getElementById('approvedTable').style.display = 'none';
             document.getElementById('pendingTable').style.display = 'none';
             document.getElementById('disapprovedTable').style.display = 'block';
@@ -570,16 +568,18 @@
         });
 
 
-
-
-
-
-
-
         document.getElementById('btn-myContributedWords').addEventListener('click', function(e) {
             e.preventDefault();
+
+
+
             document.getElementById('myContributedWords').style.display = 'block';
-            document.getElementById('wordsFromUser').style.display = 'none';
+
+
+            document.getElementById('approvedTable').style.display = 'none';
+            document.getElementById('pendingTable').style.display = 'none';
+            document.getElementById('disapprovedTable').style.display = 'none';
+
 
             document.getElementById('title').textContent = 'My Contributed Words';
 
