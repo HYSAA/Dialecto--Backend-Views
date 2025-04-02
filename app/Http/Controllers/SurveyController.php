@@ -112,10 +112,13 @@ class SurveyController extends Controller
 
 
         // logic ra pag determine si user proficiency
-        if ($score < 12) {
+        if ($score <= 9) {
             return 'Beginner';
-        } else {
+        } elseif ($score <= 11) {
             return 'Intermediate';
+        } else {
+            return 'Advanced';
+
         }
         
     }
