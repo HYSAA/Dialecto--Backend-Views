@@ -84,8 +84,8 @@
                     <th>Lesson</th>
                     <th>Video</th>
                     <th>Status</th>
-                    <th>Approve</th>
-                    <th>Denied</th>
+                    <th>Approve Count</th>
+
                     <th width="280px">Action</th>
                 </tr>
 
@@ -139,11 +139,6 @@
 
                     <td style="color: green;">
                         {{ isset($word['approve_count']) ? $word['approve_count'] : 0 }}/3
-                    </td>
-
-
-                    <td style="color: red;">
-                        {{ isset($word['disapproved_count']) ? $word['disapproved_count'] : 0 }}/3
                     </td>
 
 
@@ -480,8 +475,6 @@
             <!-- for debugging -->
 
 
-            <p><strong>Word ID:</strong> <span id="debugWordId"></span></p>
-
 
 
 
@@ -597,7 +590,6 @@
         console.log("user ID Clicked:", userID);
 
 
-        document.getElementById("debugWordId").innerText = wordId; // DEBUG: Added
 
         // end of debug
 
