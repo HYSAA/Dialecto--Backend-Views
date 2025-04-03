@@ -22,19 +22,48 @@ class CourseController extends Controller
 
     public function index()
     {
+        // 1. Original course listing (unchanged)
         $courses = $this->database->getReference('courses')->getValue();
-
+    
         session([
             'score' => 0,
             'currentIndex' => 0,
             'questions' => [],
             'quizHistory' => []
         ]);
-
-
+    
         if ($courses === null) {
             $courses = [];
         }
+    
+        // 2. NEW: Get pending words count (simplified)
+        $pendingCount = 0;
+        $user = Auth::user();
+        $userId = $user->firebase_id;
+    
+        // Only fetch credentials if user is logged in
+        if ($userId) {
+            $credentials = $this->database->getReference("credentials/$userId")->getValue();
+            $courseId = $credentials['langExperties'] ?? null;
+    
+            if ($courseId) {
+                $pendingWords = $this->database->getReference("suggested_words")->getValue();
+    
+                if ($pendingWords) {
+                    foreach ($pendingWords as $topLevelKey => $innerArray) {
+                        foreach ($innerArray as $word) {
+                            if (isset($word['course_id']) && $word['course_id'] === $courseId && ($word['status'] ?? '') === 'pending') {
+                                $pendingCount++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    
+        session(['pendingWordsCount' => $pendingCount]);
+    
+        // 3. Return view (same as before)
         return view('userExpert.courses.index', compact('courses'));
     }
 
