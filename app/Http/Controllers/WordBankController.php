@@ -47,7 +47,36 @@ class WordBankController extends Controller
         $coursesRef = $this->firebaseDatabase->getReference('courses');
         $courses = $coursesRef->getValue();
 
+        $suggestedWords = $this->firebaseDatabase->getReference("suggested_words/")->getValue();
 
+
+
+
+        if ($suggestedWords) {
+
+            foreach ($suggestedWords as $outerArray) {
+                foreach ($outerArray as $key => $innerArray) {
+                    $allWords[$key] = $innerArray;
+                }
+            }
+        }
+
+
+
+
+
+        if ($courses) {
+            foreach ($courses as $key => $data) {
+                $courses[$key]['notif'] = false; // Default to false
+
+                foreach ($allWords as $key2 => $data2) {
+                    if ($key == $data2['course_id']) {
+                        $courses[$key]['notif'] = true;
+                        break; // Stop checking further words for this course
+                    }
+                }
+            }
+        }
 
         return view('admin.wordBank.showWordBank', compact('courses'));
     }
@@ -67,11 +96,6 @@ class WordBankController extends Controller
 
         $suggestedWords = $this->firebaseDatabase->getReference("suggested_words/")->getValue();
 
-
-
-
-
-
         if ($suggestedWords) {
 
             foreach ($suggestedWords as $outerArray) {
@@ -86,19 +110,11 @@ class WordBankController extends Controller
         if ($container) {
             foreach ($container as $key => $value) {
 
-
-
-
                 if ($courseId === $value['course_id'] && $value['status'] !== 'pending') {
                     $filteredByCourse[$key] = $value;
                 }
             }
         }
-
-
-        // checkpoint filtering for pendind
-
-        // dd($filteredByCourse);
 
         $approved_words = [];
 
@@ -109,10 +125,6 @@ class WordBankController extends Controller
                 $approved_words[$key] = $value;
             }
         }
-
-
-        // dd($approved_words);
-
 
 
 

@@ -18,41 +18,54 @@
 
                 @if($courses)
                 @foreach ($courses as $courseID => $course)
-                <div class="wordBankCard" style="overflow: hidden;">
-                    <div style="width: 100%; height: 150px;">
-                        @if(!empty($course['image']))
-                        <img src="{{ $course['image'] }}" alt="Course Image" class="image-thumbnail">
 
-                        @else
-                        No image available
+                @if($course['notif'] == true)
+
+                <div class="wordBankCard" style="overflow: hidden; box-shadow: rgba(80, 228, 12, 0.89) 0px 3px 8px;">
+
+                    @else
+
+
+                    <div class="wordBankCard" style="overflow: hidden;">
+
                         @endif
-                    </div>
 
-                    <div class="row" style="height: 100%;">
-                        <div class="col-lg-6 pt-2">
-                            {{ $course['name'] }}
+
+
+                        <div style="width: 100%; height: 150px;">
+                            @if(!empty($course['image']))
+                            <img src="{{ $course['image'] }}" alt="Course Image" class="image-thumbnail">
+
+                            @else
+                            No image available
+                            @endif
                         </div>
 
-                        <div class="col-lg-6 text-center pt-2">
-                            <a href="{{ route('admin.wordBankCourse', $courseID) }}" class="btn btn-main pull-right" style="width: 100%;">View</a>
+                        <div class="row" style="height: 100%;">
+                            <div class="col-lg-6 pt-2">
+                                {{ $course['name'] }}
+                            </div>
+
+                            <div class="col-lg-6 text-center pt-2">
+                                <a href="{{ route('admin.wordBankCourse', $courseID) }}" class="btn btn-main pull-right" style="width: 100%;">View</a>
+                            </div>
                         </div>
                     </div>
+                    @endforeach
+
+                    @else
+                    <div class="col-lg-12">
+                        <strong>No words found.</strong>
+                    </div>
+
+                    @endif
+
+
+
+
                 </div>
-                @endforeach
-
-                @else
-                <div class="col-lg-12">
-                    <strong>No words found.</strong>
-                </div>
-
-                @endif
-
-
-
-
             </div>
         </div>
     </div>
-</div>
 
-@endsection
+    @endsection
