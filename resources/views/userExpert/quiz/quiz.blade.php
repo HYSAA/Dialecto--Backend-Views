@@ -9,14 +9,23 @@
     </div>
 
     <div class="row justify-content-center mt-5  " style="overflow-y: auto;">
-        <div class="col-lg-6 text-center">
-            <div class="mb-5">
-                <h2>Match the phrases.</h2>
+
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"
+                style="width: {{ ($currentIndex + 1) / count($questions) * 100 }}%;">
+            </div>
+        </div>
+
+
+        <div class="col-lg-8 text-center pb-5 pt-5 " style=" border-radius: 10px;">
+            <div class="mb-2">
+                <span style="font-size: 50px;">Match the phrases</span>
             </div>
 
 
-            <h1>Question {{ $currentIndex + 1 }} of {{ count($questions) }}</h1>
-            <p>{{ $currentQuestion['question'] }}</p>
+            <span style="font-size: 20px;">Question {{ $currentIndex + 1 }} of {{ count($questions) }}</span> <br>
+            <span style="font-size: 30px;" class="mb-5">{{ $currentQuestion['question'] }}</span>
 
 
             <!-- paste here -->
@@ -37,21 +46,21 @@
                             Your browser does not support the audio tag.
                         </audio>
 
-
-
-
-
                     </div>
                     @endforeach
                 </div>
 
                 <input type="hidden" name="answer" id="selectedChoice" value="">
-                <button type="submit" class="btn btn-submit">Submit</button>
+                <button type="submit" class="choice-item2" style="margin-top: 10px; border-color: grey;">Submit</button>
+
+
             </form>
+
+
         </div>
     </div>
 
-    <script>
+    `<script>
         document.addEventListener('DOMContentLoaded', function() {
             const playAudioButtons = document.querySelectorAll('.play-audio-button');
             const choiceItems = document.querySelectorAll('.choice-item');
@@ -121,6 +130,87 @@
         color: #fff;
         border-color: #0056b3;
     }
+
+    .choice-item2 {
+        padding: 15px;
+
+        /* padding-left: 50px;
+        padding-right: 50px; */
+        /* background-color: #FFCA58; */
+        /* box-shadow: 5px 5px 0px #CB9219; */
+
+
+
+        width: 40%;
+
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .choice-item2:hover {
+        background-color: #CB9219;
+        border-color: #FFCA58;
+        color: white;
+    }
+
+    .choice-item2.selected {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #0056b3;
+    }
+
+    .progress-container {
+        width: 80%;
+        height: 20px;
+        background-color: #e0e0e0;
+        border-radius: 300px;
+        overflow: hidden;
+        margin-bottom: 20px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #FFCA58, #CB9219);
+        transition: width 0.8s ease-in-out;
+        border-radius: 6px;
+        position: relative;
+    }
+
+    /* Bounce Animation */
+    @keyframes bounceProgress {
+        0% {
+            transform: scaleX(1);
+        }
+
+        50% {
+            transform: scaleX(1.02);
+        }
+
+        100% {
+            transform: scaleX(1);
+        }
+    }
+
+    .progress-bar.animated {
+        animation: bounceProgress 0.4s ease-out;
+    }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const progressBar = document.getElementById('progressBar');
+
+        if (progressBar) {
+            progressBar.classList.add('animated');
+            setTimeout(() => {
+                progressBar.classList.remove('animated'); // Remove after animation
+            }, 400);
+        }
+    });
+</script>
 
 @endsection
