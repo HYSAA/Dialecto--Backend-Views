@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="main-container" style="overflow-y: auto;">
+<div class="main-container">
 
     <div class="row">
         <div class="col-lg-12 margin-tb">
@@ -11,10 +11,10 @@
         </div>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" style="overflow-y: auto;">
         <div class="col-lg-4 margin-tb text-center " style="padding-top: 70px;">
             <h1>Finished quiz on</h1>
-            <div class="container">
+            <div class="container ">
                 <h1>Quiz Results</h1>
 
                 <p>Total Questions: {{ $totalQuestions }}</p>
@@ -22,43 +22,47 @@
                 <p>Congratulations!! You gather a total score of {{ $score }}</p>
 
                 <br>
-                <ul>
-                    <strong>Here's a history of your quiz</strong>
+
+                <strong>Here's a history of your quiz</strong>
+                <br>
+                @foreach($quizHistory as $index => $quiz)
+
+                <div style="border: gray solid; width: 100%; border-radius: 10px; margin-bottom: 10px; padding-bottom: 10px;">
+
+
+
                     <br>
-                    @foreach($quizHistory as $index => $quiz)
-                    <li>
 
-                        <br>
+                    <p>Question number: {{ $index + 1 }}</p> <!-- Incrementing the question number -->
 
-                        <p>Question number: {{ $index + 1 }}</p> <!-- Incrementing the question number -->
+                    @if($quiz['Remarks'] == 1)
 
-                        @if($quiz['Remarks'] == 1)
-
-                        <strong>Question:</strong> {{$quiz['Question']}}.<br>
-                        <strong>Your answer:</strong> {{$quiz['Answer']}}.<br>
-                        <strong>Correct answer:</strong> {{$quiz['Answer']}}.<br>
-                        <strong style="color: black;">Remarks:</strong> <span style="color: green;">Correct</span>.<br>
+                    <strong>Question:</strong> {{$quiz['Question']}}.<br>
+                    <strong>Your answer:</strong> {{$quiz['Answer']}}.<br>
+                    <strong>Correct answer:</strong> {{$quiz['Answer']}}.<br>
+                    <strong style="color: black;">Remarks:</strong> <span style="color: green;">Correct</span>.<br>
 
 
-                        @else
+                    @else
 
-                        <strong>Question:</strong> {{$quiz['Question']}}.<br>
-                        <strong>Your answer:</strong> {{$quiz['Answer']}}.<br>
-                        <strong>Correct answer:</strong> {{$quiz['CorrectAnswer']}}.<br>
-                        <strong style="color: black;">Remarks:</strong> <span style="color: red;">Wrong</span>.<br>
+                    <strong>Question:</strong> {{$quiz['Question']}}.<br>
+                    <strong>Your answer:</strong> {{$quiz['Answer']}}.<br>
+                    <strong>Correct answer:</strong> {{$quiz['CorrectAnswer']}}.<br>
+                    <strong style="color: black;">Remarks:</strong> <span style="color: red;">Wrong</span>.<br>
 
 
-                        @endif
-                    </li>
-                    @endforeach
+                    @endif
 
-                </ul>
+                </div>
+
+                @endforeach
+
 
             </div>
 
         </div>
 
-        <div class="col-lg-4 margin-tb text-center " style="padding-top: 70px; display: flex; justify-content: center; ">
+        <div class="col-lg-4 margin-tb text-center " style="height: 100%; padding-top: 70px; display: flex; justify-content: center; ">
 
             <!-- Each card occupies 3 columns in medium screens and larger, with a 10px gap -->
             <div class="card" style="height: 400px; background-color: #333333;">
