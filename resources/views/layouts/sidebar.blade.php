@@ -45,7 +45,10 @@
                     <i class="bi bi-person-fill-check"></i>
                     <span class="btn-text">Pending Verification</span>
                     @if(session('unverifiedUsers') && count(session('unverifiedUsers')) > 0)
-                    <span class="badge badge-light position-absolute top-0 start-100 translate-middle">{{ count(session('unverifiedUsers')) }}</span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger"
+                  style="width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+                !
+            </span>
                     @endif
                 </a>
             </li>

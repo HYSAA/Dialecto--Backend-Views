@@ -29,8 +29,22 @@ class CourseController extends Controller
             $courses = [];
         }
 
-        return view('courses.index', compact('courses'));
+        $userCredentials = $this->database
+        ->getReference("credentials")
+        ->getValue();
+
+    $unverifiedUsers = [];
+
+    if ($userCredentials) {
+        $unverifiedUsers = array_filter($userCredentials, function ($user) {
+            return isset($user['status']) && $user['status'] === 'pending';
+        });
     }
+
+    session(['unverifiedUsers' => $unverifiedUsers]);
+
+    return view('courses.index', compact('courses'));
+}
 
     public function create()
     {
