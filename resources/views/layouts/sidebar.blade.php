@@ -115,10 +115,14 @@
                     <i class="bi bi-book"></i>
                     <span class="btn-text">Word Bank</span>
                     @if(session('pendingWordsCount') && session('pendingWordsCount') > 0)
-                    <span class="badge badge-light position-absolute top-0 start-100 translate-middle">{{ session('pendingWordsCount') }}</span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger"
+                  style="width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+                !
+            </span>
                     @endif
                 </a>
             </li>
+
 
             @endif
 
