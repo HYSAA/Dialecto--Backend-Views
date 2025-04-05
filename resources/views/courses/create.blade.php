@@ -3,7 +3,7 @@
 @section('content')
 
 
-<div class="main-container">
+<div class="main-container overflow-auto">
 
 
     <div class="row">
