@@ -59,6 +59,9 @@ class WordBankController extends Controller
                     $allWords[$key] = $innerArray;
                 }
             }
+        } else {
+
+            $allWords = [];
         }
 
 
@@ -68,6 +71,7 @@ class WordBankController extends Controller
         if ($courses) {
             foreach ($courses as $key => $data) {
                 $courses[$key]['notif'] = false; // Default to false
+
 
                 foreach ($allWords as $key2 => $data2) {
                     if ($key == $data2['course_id']) {
