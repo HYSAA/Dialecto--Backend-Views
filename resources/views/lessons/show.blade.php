@@ -9,9 +9,9 @@
                 <h2>{{ $course['name'] }} - Lessons: {{ $lesson['title'] }}</h2>
             </div>
             <div class="pull-right">
-            <a class="btn btn-back-main" href="{{ route('admin.courses.show', [$courseId]) }}"> Back To Lesson</a>
+                <a class="btn btn-back-main" href="{{ route('admin.courses.show', [$courseId]) }}"> Back To Lesson</a>
 
-            <a class="btn btn-main" href="{{ route('admin.contents.create', [$courseId, $lessonId]) }}">Add Contents</a>
+                <a class="btn btn-main" href="{{ route('admin.contents.create', [$courseId, $lessonId]) }}">Add Contents</a>
             </div>
 
         </div>
@@ -33,9 +33,9 @@
                     <tr>
                         <td>{{ $content['text'] }}</td>
                         <td>{{ $content['english'] }}</td>
-                        <td>
+                        <td class=" centered-flex">
                             @if ($content['video'])
-                            <video controls class="vid-content">
+                            <video controls class="vid-content ">
                                 <source src="{{ $content['video'] }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>

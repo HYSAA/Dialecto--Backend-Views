@@ -50,9 +50,9 @@
                         <td>{{ $word['text'] }}</td>
                         <td>{{ $word['english'] }}</td>
 
-                        <td>
+                        <td class=" centered-flex">
                             @if ($word['video'])
-                            <video width="200px" controls>
+                            <video width="200px" class="vid-content" controls>
                                 <source src="{{ $word['video'] }}" type="video/mp4">
                             </video>
                             @else

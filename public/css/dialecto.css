@@ -1179,12 +1179,20 @@ mark {
 }
 
 .vid-content {
-    width: 100%;
-    height: 100%;
+    width: 250px;
+    height: 300px;
     object-fit: cover;
+    
 
     border-radius: 10px;
     box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+}
+
+.centered-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 .quiz-cont {
@@ -1280,3 +1288,6 @@ mark {
 }
 
 /* Buttons */
+
+
+[]
