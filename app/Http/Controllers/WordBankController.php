@@ -52,6 +52,8 @@ class WordBankController extends Controller
 
 
 
+
+
         if ($suggestedWords) {
 
             foreach ($suggestedWords as $outerArray) {
@@ -64,16 +66,23 @@ class WordBankController extends Controller
             $allWords = [];
         }
 
+        $approved_words = [];
 
+        foreach ($allWords as $key => $value) {
 
+            if ($value['status'] == 'approved') {
+                $approved_words[$key] = $value;
+            }
+        }
 
+        // dd($approved_words);
 
         if ($courses) {
             foreach ($courses as $key => $data) {
                 $courses[$key]['notif'] = false; // Default to false
 
 
-                foreach ($allWords as $key2 => $data2) {
+                foreach ($approved_words as $key2 => $data2) {
                     if ($key == $data2['course_id']) {
                         $courses[$key]['notif'] = true;
                         break; // Stop checking further words for this course
@@ -81,6 +90,8 @@ class WordBankController extends Controller
                 }
             }
         }
+
+
 
         return view('admin.wordBank.showWordBank', compact('courses'));
     }
