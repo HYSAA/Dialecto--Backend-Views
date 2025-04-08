@@ -21,7 +21,7 @@
 
                 @if($course['notif'] == true)
 
-                <div class="wordBankCard" style="overflow: hidden; box-shadow: rgba(80, 228, 12, 0.89) 0px 3px 8px;">
+                <div class="wordBankCard" style="overflow: hidden; box-shadow: rgba(228, 44, 12, 0.89) 0px 3px 8px;">
 
                     @else
 
