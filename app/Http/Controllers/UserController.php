@@ -94,8 +94,9 @@ class UserController extends Controller
                 $name = strtolower($user['data']['name'] ?? '');
                 $email = strtolower($user['data']['email'] ?? '');
                 $usertype = strtolower($user['data']['usertype'] ?? '');
-    
-                return str_contains($name, $search) || str_contains($email, $search) || str_contains($usertype, $search);
+                $courseName = strtolower($user['courseName'] ?? '');
+
+                return str_contains($name, $search) || str_contains($email, $search) || str_contains($usertype, $search) || str_contains($courseName, $search);
             });
         }
     

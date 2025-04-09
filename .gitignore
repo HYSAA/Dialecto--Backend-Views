@@ -31,3 +31,6 @@ yarn-error.log
 c
 config/firebase_credentials.json
 config/dialecto-c14c1-firebase-adminsdk-q80as-e6ee6b1b18.json
+composer.json
+composer.lock
+config/dialecto-c14c1-firebase-adminsdk-q80as-7401c37304.json
