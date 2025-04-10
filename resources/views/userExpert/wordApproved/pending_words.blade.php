@@ -9,7 +9,7 @@
 
 
             <div class="pull-left mb-2">
-                <h2 id="title">Words From User</h2>
+                <h2 id="title">Pending Words</h2>
             </div>
 
             <div class="d-flex mb-2 gap-2">
@@ -524,7 +524,7 @@
             document.getElementById('pendingTable').style.display = 'none';
             document.getElementById('disapprovedTable').style.display = 'none';
 
-            document.getElementById('title').textContent = 'Pending Words';
+            document.getElementById('title').textContent = 'Approved Words';
 
 
         });
@@ -555,7 +555,7 @@
             document.getElementById('pendingTable').style.display = 'none';
             document.getElementById('disapprovedTable').style.display = 'block';
 
-            document.getElementById('title').textContent = 'Pending Words';
+            document.getElementById('title').textContent = 'Denied Words';
 
 
         });
