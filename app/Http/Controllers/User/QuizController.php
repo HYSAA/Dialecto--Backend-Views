@@ -393,20 +393,20 @@ class QuizController extends Controller
 
         $countUserResultsByLevel = count($filteredUserResultsByLevel);
 
-        $promote = null;
+        $promote = true;
 
         if ($countUserResultsByLevel == $countFillteredtLessonsByLevel) {
-
-
-
             foreach ($filteredUserResultsByLevel as $key => $value) {
-
+           
                 if ($value['badge'] == 'bronze') {
-                } else {
-                    $promote = true;
+                    $promote = false; // if bronze siya di siya ma promote :(
+                    break; 
                 }
             }
+        } else {
+            $promote = false; 
         }
+        
 
 
         $congratulationsMessage = null;

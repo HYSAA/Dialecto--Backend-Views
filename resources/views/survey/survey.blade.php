@@ -42,7 +42,7 @@
 
                         </div>
                         <div class="survey-page animate__animated d-none" data-page="2">
-                            <label class="form-label fw-bold">2. How often do you use the language in real-life situations (e.g., work, travel, or social interactions)?</label>
+                            <label class="form-label fw-bold">2. How often do you use these language in real-life situations (e.g., work, travel, or social interactions)?</label>
                             <!-- Radio options here -->
                             <div class="form-check">
                                 <input type="radio" id="experience-beginner" name="language_experience" value="beginner" class="form-check-input" required>
