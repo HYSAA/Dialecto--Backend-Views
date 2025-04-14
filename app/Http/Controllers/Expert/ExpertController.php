@@ -63,6 +63,7 @@ class ExpertController extends Controller
 
 
 
+
         return view('userExpert.wordApproved.contribute_word', compact('language', 'thisLessons', 'course', 'courseId'));
     }
 
@@ -75,7 +76,7 @@ class ExpertController extends Controller
 
 
 
-        $status = 'expert';
+        $status = 'pending';
 
         $request->validate([
             'lesson_id' => 'required|string', // Ensure it is a required string
@@ -122,19 +123,86 @@ class ExpertController extends Controller
             'english' => $english, //
             'video' => $videoUrl, //
             'status' => $status,
-
-
-            'used_id' => 'false',
         ];
 
         // Save the suggested word in Firebase
-        $this->database->getReference("suggested_words/{$userId}")->push($suggestedWord);
+
+        $ref = $this->database->getReference("suggested_words/{$userId}")->push($suggestedWord);
+        $id = $ref->getKey();
 
 
 
+        $userId = $request->input('userId');
+
+        $user = Auth::user(); // Get the currently authenticated user's ID
 
 
 
+        $expertId = $user->firebase_id;
+
+        // dd($expertId);
+
+        $status = 'approved';
+        $wordId = $id;
+
+
+        $contentData = [
+            'status' => $status,
+            'expert_id' => $expertId,
+            'word_id' => $wordId,
+        ];
+
+
+        $approveData = $this->database->getReference("verify_words/$wordId")->getValue();
+        // checks if this user has already approved the workd
+
+        // dd($approveData);
+
+
+        $suggestedWord = $this->database->getReference("suggested_words/$userId/$wordId")->getValue();
+
+        // dd($userId, $wordId);
+
+
+
+        $suggestedWord['status'] = 'approved';
+        $suggestedWord['used_id'] = false;
+
+
+        // dd($suggestedWord);
+
+
+        $exist = false;
+
+
+        if ($approveData) {
+            foreach ($approveData as $data) {
+                if ($data['expert_id'] === $expertId) {
+                    $exist = true; // Set to true if a match is found
+
+
+                    break; // Exit the loop early since we found a match
+                }
+            }
+        }
+
+        if (!$exist) {
+            $this->database->getReference("verify_words/$wordId")->push($contentData);
+        }
+
+
+        $approveCount = $this->database->getReference("verify_words/$wordId")->getValue();
+
+
+        $approvedCount = count(array_filter($approveCount, function ($item) {
+            return $item['status'] === 'approved';
+        }));
+
+
+
+        if ($approvedCount == 3) {
+            $this->database->getReference("suggested_words/$userId/$wordId")->set($suggestedWord);
+        }
 
 
 
@@ -149,6 +217,7 @@ class ExpertController extends Controller
         $user = Auth::user(); // Get the currently authenticated user's ID
 
         $userId = $user->firebase_id;
+        $exId = $user->firebase_id;
 
         $credentials = $this->database->getReference("credentials/$userId")->getValue();
 
@@ -210,6 +279,24 @@ class ExpertController extends Controller
                 $expertWords[$key] = $word; // Preserve the original key
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         $i = 0;
@@ -301,10 +388,6 @@ class ExpertController extends Controller
         }
 
 
-
-
-
-
         $pending_words = [];
         $approved_words = [];
         $disapproved_words = [];
@@ -344,35 +427,23 @@ class ExpertController extends Controller
 
 
 
-
-
-
-
-
-
-
-
             foreach ($denied_remarks as $key2 => $value2) {
 
                 $disapproved_words[$key]['reason'] = $value2['reason'];
             }
-
-
-
-
-
-
-
-
-
-            // if ($value['status'] == 'disapproved') {
-            //     $disapproved_words[$key] = $value;
-
-            // }
         }
 
-        // dd($expertWords);
 
+
+        foreach ($pending_words as $key => $word) {
+
+            if (isset($word['user_id']) && $word['user_id'] == $exId) {
+
+
+
+                $expertWords[$key] = $word; // Preserve the original key
+            }
+        }
 
 
 

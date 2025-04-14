@@ -98,9 +98,6 @@
 
                     <!-- <td>{{ $key }}</td> -->
 
-
-
-
                     <td>{{ $word['english'] }}</td>
                     <td>{{ $word['course_name'] ?? 'No course found' }}</td>
                     <td>{{ $word['lesson_name'] ?? 'No lesson found' }}</td>
@@ -430,6 +427,8 @@
                     <th>Course</th>
                     <th>Lesson</th>
                     <th>Video</th>
+                    <th>Status</th>
+                    <th>Approve Count</th>
 
                 </tr>
 
@@ -457,6 +456,34 @@
                             @endif
 
                         </div>
+
+                    </td>
+
+
+
+                    <td style="color: 
+    @if ($word['status'] === 'approved')
+        green;
+    @elseif ($word['status'] === 'disapproved')
+        red;
+    @elseif ($word['status'] === 'pending')
+        gray;
+    @else
+        black; /* Default color */
+    @endif
+">
+                        {{ $word['status'] }}
+                    </td>
+
+
+
+                    <td style="color: green;">
+                        {{ isset($word['approve_count']) ? $word['approve_count'] : 0 }}/3
+                    </td>
+
+
+
+
 
                 </tr>
                 @endforeach
