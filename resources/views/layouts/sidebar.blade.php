@@ -16,10 +16,17 @@
                 <i class="bi bi-person" style="color: white; font-size: 50px;"></i>
             </li>
             <li class="nav-item" style="display: flex; justify-content: center; align-items: center;">
-                <h5 class="btn-text" style="color: white;">Welcome, {{ session('user.name') ?? Auth::user()->name }}</h5>
-            </li>
-            <hr style="border: 0; height: 1px; background-color: #939393; margin: 20px 0 35px 0;">
-
+    <h5 class="btn-text" style="color: white;">Welcome, {{ session('user.name') ?? Auth::user()->name }}</h5>
+</li>
+<hr style="border: 0; height: 1px; background-color: #939393; margin: 20px 0 5px 0;">
+@if(Auth::user()->usertype == 'user' || Auth::user()->usertype == 'expert')
+<li class="nav-item" style="display: flex; justify-content: center; align-items: center;">
+    <span class="btn-text" style="color: white; font-size: 14px; ">
+        {{ Auth::user()->usertype == 'user' ? 'Learner' : 'Expert Contributor' }}
+    </span>
+</li>
+@endif
+<hr style="border: 0; height: 1px; background-color: #939393; margin: 5px 0 5px 0;">
             @if(Auth::user()->usertype == 'admin')
 
 
