@@ -82,6 +82,9 @@
                     <th>English</th>
                     <th>Course</th>
                     <th>Lesson</th>
+
+                    <th>Suggested By</th>
+
                     <th>Video</th>
                     <th>Status</th>
                     <th>Approve Count</th>
@@ -102,7 +105,7 @@
                     <td>{{ $word['course_name'] ?? 'No course found' }}</td>
                     <td>{{ $word['lesson_name'] ?? 'No lesson found' }}</td>
 
-
+                    <td>{{ $word['user_name'] }}</td>
 
                     <td style="display: flex; justify-content: center; align-items: center; height: 100%;">
                         <div class="box ">
@@ -232,6 +235,7 @@
                     <th>English</th>
                     <th>Course</th>
                     <th>Lesson</th>
+                    <th>Suggested By</th>
                     <th>Video</th>
                     <th>Status</th>
                     <th>Approve</th>
@@ -253,6 +257,7 @@
                     <td>{{ $word['english'] }}</td>
                     <td>{{ $word['course_name'] ?? 'No course found' }}</td>
                     <td>{{ $word['lesson_name'] ?? 'No lesson found' }}</td>
+                    <td>{{ $word['user_name'] }}</td>
 
 
 
@@ -335,6 +340,7 @@
                     <th>English</th>
                     <th>Course</th>
                     <th>Lesson</th>
+                    <th>Suggested By</th>
                     <th>Video</th>
                     <th>Status</th>
                     <th style="width: 300px;">Remarks</th>
@@ -356,6 +362,7 @@
                     <td>{{ $word['english'] }}</td>
                     <td>{{ $word['course_name'] ?? 'No course found' }}</td>
                     <td>{{ $word['lesson_name'] ?? 'No lesson found' }}</td>
+                    <td>{{ $word['user_name'] }}</td>
 
 
 

@@ -280,7 +280,16 @@ class ExpertController extends Controller
             }
         }
 
-
+        foreach ($userWords as $key => &$value) {
+            if (isset($value['user_id'])) {
+                $uid = $value['user_id'];
+                $userData = $this->database->getReference("users/$uid")->getValue();
+        
+                $value['user_name'] = $userData['name'] ?? 'Unknown';
+            } else {
+                $value['user_name'] = 'Unknown';
+            }
+        }
 
 
 
@@ -456,89 +465,64 @@ class ExpertController extends Controller
 
 
 
-    // Approve the suggested word
     public function approveWord(Request $request, $id)
+{
+    $userId = $request->input('userId');
+    $user = Auth::user(); // Get the currently authenticated user's ID
+    $expertId = $user->firebase_id;
 
-    {
+    $status = 'approved';
+    $wordId = $id;
 
-        $userId = $request->input('userId');
+    $contentData = [
+        'status' => $status,
+        'expert_id' => $expertId,
+        'word_id' => $wordId,
+    ];
 
-        $user = Auth::user(); // Get the currently authenticated user's ID
+    $approveData = $this->database->getReference("verify_words/$wordId")->getValue();
 
+    $suggestedWord = $this->database->getReference("suggested_words/$userId/$wordId")->getValue();
 
+    // ✅ Add user name to suggestedWord (if it exists)
+    if (isset($suggestedWord['user_id'])) {
+        $uid = $suggestedWord['user_id'];
+        $userData = $this->database->getReference("users/$uid")->getValue();
+        $suggestedWord['user_name'] = $userData['name'] ?? 'Unknown';
+    } else {
+        $suggestedWord['user_name'] = 'Unknown';
+    }
 
-        $expertId = $user->firebase_id;
+    $suggestedWord['status'] = 'approved';
+    $suggestedWord['used_id'] = false;
 
-        // dd($expertId);
+    $exist = false;
 
-        $status = 'approved';
-        $wordId = $id;
-
-
-        $contentData = [
-            'status' => $status,
-            'expert_id' => $expertId,
-            'word_id' => $wordId,
-        ];
-
-
-        $approveData = $this->database->getReference("verify_words/$wordId")->getValue();
-        // checks if this user has already approved the workd
-
-        // dd($approveData);
-
-
-        $suggestedWord = $this->database->getReference("suggested_words/$userId/$wordId")->getValue();
-
-        // dd($userId, $wordId);
-
-
-
-        $suggestedWord['status'] = 'approved';
-        $suggestedWord['used_id'] = false;
-
-
-        // dd($suggestedWord);
-
-
-        $exist = false;
-
-
-        if ($approveData) {
-            foreach ($approveData as $data) {
-                if ($data['expert_id'] === $expertId) {
-                    $exist = true; // Set to true if a match is found
-
-
-                    break; // Exit the loop early since we found a match
-                }
+    if ($approveData) {
+        foreach ($approveData as $data) {
+            if ($data['expert_id'] === $expertId) {
+                $exist = true;
+                break;
             }
         }
-
-        if (!$exist) {
-            $this->database->getReference("verify_words/$wordId")->push($contentData);
-        }
-
-
-        $approveCount = $this->database->getReference("verify_words/$wordId")->getValue();
-
-
-        $approvedCount = count(array_filter($approveCount, function ($item) {
-            return $item['status'] === 'approved';
-        }));
-
-
-
-        if ($approvedCount == 3) {
-            $this->database->getReference("suggested_words/$userId/$wordId")->set($suggestedWord);
-        }
-
-
-        // dd($approvedCount, 'stopper');
-
-
-        return redirect()->route('expert.pendingWords')->with('success', 'Word approved successfully.');
     }
+
+    if (!$exist) {
+        $this->database->getReference("verify_words/$wordId")->push($contentData);
+    }
+
+    $approveCount = $this->database->getReference("verify_words/$wordId")->getValue();
+
+    $approvedCount = count(array_filter($approveCount, function ($item) {
+        return $item['status'] === 'approved';
+    }));
+
+    if ($approvedCount == 3) {
+        $this->database->getReference("suggested_words/$userId/$wordId")->set($suggestedWord);
+    }
+
+    return redirect()->route('expert.pendingWords')->with('success', 'Word approved successfully.');
+}
 
 
 
@@ -546,45 +530,47 @@ class ExpertController extends Controller
 
     // Disapprove the suggested word
     public function disapproveWord(Request $request, $id)
-    {
+{
+    $userId = $request->input('user_id');
+    $reason = $request->input('reason');
+    $wordId = $id;
 
-        $userId = $request->input('user_id');
-        $reason = $request->input('reason');
-        $wordId = $id;
+    $user = Auth::user(); // Get the currently authenticated user's ID
+    $expert_id = $user->firebase_id;
 
+    // Get the suggested word
+    $suggestedWord = $this->database->getReference("suggested_words/$userId/$wordId")->getValue();
 
-        // checkpoint ni sya. sunod ani is create resibo nga sa remarks nya change satus to denied
+    // Update the status to disapproved
+    $suggestedWord['status'] = 'disapproved';
 
-
-        $user = Auth::user(); // Get the currently authenticated user's ID
-
-        $expert_id = $user->firebase_id;
-
-        //change status sa suggested word to disapproved
-
-
-        $suggestedWord = $this->database->getReference("suggested_words/$userId/$wordId")->getValue();
-
-
-        $suggestedWord['status'] = 'disapproved';
-
-
-        $this->database->getReference("suggested_words/$userId/$wordId")->set($suggestedWord);
-
-
-
-        // make node resibo sa reason ug 
-
-        $contentData = [
-            'reason' => $reason,
-            'user_id' => $userId,
-            'expert_id' => $expert_id,
-        ];
-
-        $this->database->getReference("denied_words/$userId/$wordId")->set($contentData);
-
-
-
-        return redirect()->route('expert.pendingWords')->with('success', 'Word denied successfully.');
+    // ✅ Optionally attach user_name to suggested word
+    if (isset($suggestedWord['user_id'])) {
+        $uid = $suggestedWord['user_id'];
+        $userData = $this->database->getReference("users/$uid")->getValue();
+        $suggestedWord['user_name'] = $userData['name'] ?? 'Unknown';
+    } else {
+        $suggestedWord['user_name'] = 'Unknown';
     }
+
+    // Save the updated suggested word
+    $this->database->getReference("suggested_words/$userId/$wordId")->set($suggestedWord);
+
+    // ✅ Also attach user_name to the reason node if needed
+    $userData = $this->database->getReference("users/$userId")->getValue();
+    $userName = $userData['name'] ?? 'Unknown';
+
+    $contentData = [
+        'reason' => $reason,
+        'user_id' => $userId,
+        'expert_id' => $expert_id,
+        'user_name' => $userName, // Add the user's name for reference
+    ];
+
+    // Save the reason under denied_words
+    $this->database->getReference("denied_words/$userId/$wordId")->set($contentData);
+
+    return redirect()->route('expert.pendingWords')->with('success', 'Word denied successfully.');
+}
+
 }
