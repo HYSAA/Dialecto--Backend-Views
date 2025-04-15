@@ -5,6 +5,16 @@
   <div class="Big-box">
     <div id="header">
       <h1>Leaderboard</h1>
+    <!-- ADDED THIS For filter  check the tables for Profeciency-->
+    <form method="GET" action="{{ route('expert.leaderboard.show', ['courseName' => $courseName]) }}">
+        <label for="proficiency">Filter by Proficiency:</label>
+        <select name="proficiency" id="proficiency" onchange="this.form.submit()">
+          <option value="">All</option>
+          <option value="Beginner" {{ request('proficiency') === 'Beginner' ? 'selected' : '' }}>Beginner</option>
+          <option value="Intermediate" {{ request('proficiency') === 'Intermediate' ? 'selected' : '' }}>Intermediate</option>
+          <option value="Advanced" {{ request('proficiency') === 'Advanced' ? 'selected' : '' }}>Advanced</option>
+        </select>
+      </form>
     </div>
 
     <div id="leaderboard">
@@ -15,6 +25,8 @@
             <th>Rank</th>
             <th>Name</th>
             <th>Course</th>
+            <th>Proficiency</th>
+
             <th>Total Score</th>
             <th></th>
           </tr>
@@ -32,6 +44,10 @@
               @endif
             </td>
             <td class="name">{{ $ranking['course_id'] }}</td>
+            <!-- ADDED THIS -->
+            <td class="proficiency">
+                {{ $ranking['proficiency'] ?? 'Unknown' }}
+            </td>
             <td class="points">{{ $ranking['total_course_score'] }}</td>
             <td class="rank-icon">
               @if ($rank == 2)
@@ -49,26 +65,34 @@
     </div>
 
     <div id="current-rank">
-      @if ($currentUserRanking && $userRank)
+    @if ($currentUserRanking && $userRank)
         <h2>Your Current Rank</h2>
         <table class="leaderboard-table">
-          <thead>
-            <tr></tr>
-          </thead>
-          <tbody>
-            <tr class="leaderboard-row userRank">
-              <td class="number">{{ $userRank }}</td>
-              <td class="name">{{ $currentUserRanking['user_name'] }}</td>
-              <td class="name">{{ $currentUserRanking['course_id'] }}</td>
-              <td class="points">{{ $currentUserRanking['total_course_score'] }}</td>
-              <td class="rank-icon"></td>
-            </tr>
-          </tbody>
+            <thead>
+                <tr></tr>
+            </thead>
+            <tbody>
+                <tr class="leaderboard-row userRank">
+                    <td class="number">{{ $userRank }}</td>
+                    <td class="name">{{ $currentUserRanking['user_name'] }}</td>
+                    <td class="name">{{ $currentUserRanking['course_id'] }}</td>
+                    <td class="proficiency">
+                        {{ $currentUserRanking['proficiency'] ?? 'Unknown' }}
+                    </td>
+                    <td class="points">{{ $currentUserRanking['total_course_score'] }}</td>
+                    <td class="rank-icon"></td>
+                </tr>
+            </tbody>
         </table>
-      @else
-        <p>Start learning to see your rank here!</p>
-      @endif
-    </div>
+
+<!-- Added This if naa nay prof ang user -->
+        @else
+            @if (request('proficiency'))
+                <p>You are not ranked in the <strong>{{ request('proficiency') }}</strong> level.</p>
+            @else
+                <p>Start learning to see your rank here!</p>
+            @endif
+        @endif
 </div>
 
 <style>

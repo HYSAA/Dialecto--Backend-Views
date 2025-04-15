@@ -43,6 +43,10 @@ class LeaderboardController extends Controller
         $rankings = $database->getReference('ranking')->getValue() ?? [];
         $users = $database->getReference('users')->getValue() ?? [];
 
+        $surveyData = $database->getReference('survey/user')->getValue() ?? [];
+        $filterProficiency = $request->query('proficiency');
+
+
         $courseRankings = [];
         $userRank = null;
         $currentUserRanking = null;
@@ -51,11 +55,19 @@ class LeaderboardController extends Controller
         foreach ($rankings as $userId => $userCourses) {
             foreach ($userCourses as $courseId => $data) {
                 if ($data['course_name'] === $courseName) {
+                    $proficiency = $surveyData[$userId]['course'][$courseId] ?? 'Unknown';
+    
+                    // Apply proficiency filter
+                    if ($filterProficiency && strtolower($filterProficiency) !== strtolower($proficiency)) {
+                        continue;
+                    }
+    
                     $courseRankings[] = [
                         'user_id' => $userId,
                         'user_name' => $users[$userId]['name'] ?? 'Unknown User',
                         'course_id' => $data['course_name'],
                         'total_course_score' => $data['total_course_score'] ?? 0,
+                        'proficiency' => $proficiency,
                     ];
                 }
             }
@@ -83,6 +95,7 @@ class LeaderboardController extends Controller
             'rankings' => $topRankings,
             'userRank' => $userRank,
             'currentUserRanking' => $currentUserRanking,
+            'selectedProficiency' => $filterProficiency,
         ]);
     }
 }
