@@ -141,7 +141,24 @@ class WordBankController extends Controller
             }
         }
 
+        $users = $this->firebaseDatabase->getReference("users/")->getValue();
 
+
+
+
+
+
+
+        foreach ($approved_words as $key => $value) {
+
+
+            foreach ($users as $key2 => $value2) {
+
+                if ($value['user_id'] == $key2) {
+                    $approved_words[$key]['suggestedBy'] = $value2['name'];
+                }
+            }
+        }
 
 
 

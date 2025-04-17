@@ -16,20 +16,19 @@
                 <i class="bi bi-person" style="color: white; font-size: 50px;"></i>
             </li>
             <li class="nav-item" style="display: flex; justify-content: center; align-items: center;">
-    <h5 class="btn-text" style="color: white;">Welcome, {{ session('user.name') ?? Auth::user()->name }}</h5>
-</li>
-<hr style="border: 0; height: 1px; background-color: #939393; margin: 20px 0 5px 0;">
-@if(Auth::user()->usertype == 'user' || Auth::user()->usertype == 'expert')
-<li class="nav-item" style="display: flex; justify-content: center; align-items: center;">
-    <span class="btn-text" style="color: white; font-size: 14px; ">
-        {{ Auth::user()->usertype == 'user' ? 'Learner' : 'Expert Contributor' }}
-    </span>
-</li>
-@endif
-<hr style="border: 0; height: 1px; background-color: #939393; margin: 5px 0 5px 0;">
+                <h5 class="btn-text" style="color: white;">Welcome, {{ session('user.name') ?? Auth::user()->name }}</h5>
+            </li>
+            <hr style="border: 0; height: 1px; background-color: #939393; margin: 20px 0 5px 0;">
+            @if(Auth::user()->usertype == 'user' || Auth::user()->usertype == 'expert')
+            <li class="nav-item" style="display: flex; justify-content: center; align-items: center;">
+                <span class="btn-text" style="color: white; font-size: 14px; ">
+                    {{ Auth::user()->usertype == 'user' ? 'Learner' : 'Expert Contributor' }}
+                </span>
+            </li>
+            @endif
+            <hr style="border: 0; height: 1px; background-color: #939393; margin: 5px 0 5px 0;">
+
             @if(Auth::user()->usertype == 'admin')
-
-
 
 
 
@@ -53,9 +52,9 @@
                     <span class="btn-text">Pending Verification</span>
                     @if(session('unverifiedUsers') && count(session('unverifiedUsers')) > 0)
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger"
-                  style="width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
-                !
-            </span>
+                        style="width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+                        !
+                    </span>
                     @endif
                 </a>
             </li>
@@ -64,6 +63,13 @@
                 <a class="btn btn-nav" href="{{ route('admin.showWordBank') }}">
                     <i class="bi bi-bank2"></i>
                     <span class="btn-text">Word Bank</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="btn btn-nav" href="{{ route('admin.user-report') }}">
+                    <i class="bi bi-bar-chart-fill"></i>
+                    <span class="btn-text">User Report</span>
                 </a>
             </li>
 
@@ -126,9 +132,9 @@
                     <span class="btn-text">Word Bank</span>
                     @if(session('pendingWordsCount') && session('pendingWordsCount') > 0)
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger"
-                  style="width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
-                !
-            </span>
+                        style="width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+                        !
+                    </span>
                     @endif
                 </a>
             </li>

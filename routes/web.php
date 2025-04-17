@@ -14,6 +14,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WordBankController;
+use App\Http\Controllers\UserReportController;
 
 use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\QuizController as AdminQuizController;
@@ -134,10 +135,26 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     // admin access of quizzes
 
     Route::get('/quizzes/{courseId}/{lessonId}', [AdminQuizController::class, 'index'])->name('admin.quizzes.index');
-
     Route::get('/quizzes/{courseId}/{lessonId}/create', [AdminQuizController::class, 'create'])->name('admin.quizzes.create');
-
     Route::post('/quizzes/{courseId}/{lessonId}', [AdminQuizController::class, 'store'])->name('admin.quizzes.store');
+
+
+
+
+
+    Route::get('/user-report}', [UserReportController::class, 'index'])->name('admin.user-report');
+
+    Route::get('/user-report/check-lessons/{id}', [UserReportController::class, 'checkLessons'])->name('admin.checkLessons');
+
+    Route::get('/user-report/check-suggestions/{id}', [UserReportController::class, 'checkSuggestions'])->name('admin.checkSuggestions');
+
+
+
+
+
+
+
+
 
 
 
@@ -145,22 +162,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 
     Route::get('/quizzes/{quizId}/{courseId}/{lessonId}/edit', [AdminQuizController::class, 'edit'])->name('admin.quizzes.edit');
-
-
-
     Route::post('/quizzes/{quizId}/{courseId}/{lessonId}/postEdit}', [AdminQuizController::class, 'postEdit'])->name('admin.quizzes.postEdit');
-
-
-
-
-
-
-
     Route::delete('/quizzes/{quizId}/{courseId}/{lessonId}', [AdminQuizController::class, 'delete'])->name('admin.quizzes.delete');
-
-
-
-
 
     //void nani nga question controller
 

@@ -40,6 +40,7 @@
                         <th>Lesson</th>
                         <th>Translation Text</th>
                         <th>English Text</th>
+                        <th>Suggested by</th>
                         <th>Video</th>
                         <th width="280px">Action</th>
                     </tr>
@@ -49,6 +50,7 @@
                         <td>{{ $word['lesson_name'] ?? 'No title available' }}</td>
                         <td>{{ $word['text'] }}</td>
                         <td>{{ $word['english'] }}</td>
+                        <td>{{ $word['suggestedBy'] }}</td>
 
                         <td class=" centered-flex">
                             @if ($word['video'])
