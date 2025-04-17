@@ -62,19 +62,19 @@
 
 
                         <div class="survey-page animate__animated d-none" data-page="3">
-                            <label class="form-label fw-bold">3. What is your biggest challenge in learning a new language?</label>
+                            <label class="form-label fw-bold">3. How much can you understand when someone speaks to you in this language?</label>
                             <!-- Radio options here -->
                             <div class="form-check">
                                 <input type="radio" id="challenge-grammar" name="learning_challenge" value="grammar" class="form-check-input" required>
-                                <label class="form-check-label" for="challenge-grammar">Grammar</label>
+                                <label class="form-check-label" for="challenge-grammar">I understand only if the person speaks very slowly and clearly</label>
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="challenge-vocabulary" name="learning_challenge" value="vocabulary" class="form-check-input">
-                                <label class="form-check-label" for="challenge-vocabulary">Vocabulary</label>
+                                <label class="form-check-label" for="challenge-vocabulary"> I understand familiar words and short, simple sentences</label>
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="challenge-pronunciation" name="learning_challenge" value="pronunciation" class="form-check-input">
-                                <label class="form-check-label" for="challenge-pronunciation">Pronunciation</label>
+                                <label class="form-check-label" for="challenge-pronunciation"> I understand longer discussions and most accents, even in fast speech</label>
                             </div>
                         </div>
 
@@ -83,23 +83,23 @@
 
 
                         <div class="survey-page animate__animated d-none" data-page="4">
-                            <label class="form-label fw-bold">4. Which of the following learning resources do you use most frequently?</label>
+                            <label class="form-label fw-bold">4. How would you describe your vocabulary in this language?</label>
                             <!-- Radio options here -->
                             <div class="form-check">
                                 <input type="radio" id="resource-textbooks" name="learning_resource" value="textbooks" class="form-check-input" required>
-                                <label class="form-check-label" for="resource-textbooks">Textbooks</label>
+                                <label class="form-check-label" for="resource-textbooks"> I know only basic everyday words</label>
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="resource-online" name="learning_resource" value="online_courses" class="form-check-input">
-                                <label class="form-check-label" for="resource-online">Online courses</label>
+                                <label class="form-check-label" for="resource-online"> I know some common phrases and can describe simple things</label>
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="resource-exchange" name="learning_resource" value="language_exchange" class="form-check-input">
-                                <label class="form-check-label" for="resource-exchange">Language exchange partners</label>
+                                <label class="form-check-label" for="resource-exchange">I know enough to handle most day-to-day conversations</label>
                             </div>
                             <div class="form-check">
                                 <input type="radio" id="resource-apps" name="learning_resource" value="language_apps" class="form-check-input">
-                                <label class="form-check-label" for="resource-apps">Language apps</label>
+                                <label class="form-check-label" for="resource-apps">I know a wide range of words, including technical or formal vocabulary</label>
                             </div>
                         </div>
 
