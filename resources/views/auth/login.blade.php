@@ -82,7 +82,7 @@
 
                 <!-- Name Field -->
                 <div class="form-group">
-                    <x-text-input id="name" class="form-control" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Fullname" />
+                    <x-text-input id="name" class="form-control" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="User name" />
                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 </div>
 
