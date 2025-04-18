@@ -24,7 +24,7 @@
         <thead>
           <tr>
             <th>Rank</th>
-            <th>Name</th>
+            <th>User Name</th>
             <th>Course</th>
             <th>Proficiency</th>
 
@@ -38,12 +38,8 @@
           <tr class="leaderboard-row {{ $currentUserRanking && $ranking['user_id'] == $currentUserRanking['user_id'] ? 'userRank' : '' }}">
             <td class="number">{{ $rank++ }}</td>
             <td class="name">
-              @if ($currentUserRanking && $ranking['user_id'] == $currentUserRanking['user_id'])
-              {{ $ranking['user_name'] }}
-              @else
-              *** {{-- para matago name sa user --}}
-              @endif
-            </td>
+    {{ $ranking['user_name'] }}
+</td>
             <td class="name">{{ $ranking['course_id'] }}</td>
             <!-- ADDED THIS -->
             <td class="proficiency">
