@@ -53,34 +53,29 @@
 
 
     <div class="row" id="expertTable" style="overflow-y: auto;">
-        <div class="col-lg-12 margin-tb">
+        <div class="col-lg-10 margin-tb mx-auto">
             <table class="table table-striped table-bordered">
                 <tr>
-                    <th>Translation Text</th>
-                    <th>English</th>
-                    <th>Course</th>
-                    <th>Lesson</th>
-                    <th>Suggested By</th>
-                    <th>Video</th>
-                    <th>Status</th>
-                    <th>Approve Count</th>
-                    <th width="280px">Action</th>
+                    <th>Expert Name</th>
+                    <th>Expert Language</th>
+                    <th>Numbers of Approved Words</th>
+                    <th>Numbers of Disapproved Words</th>
+
                 </tr>
 
-                @if (!empty($pending_words) && count($pending_words) > 0)
-                @foreach($pending_words as $key => $word)
+                @if (!empty($expert) && count($expert) > 0)
+                @foreach($expert as $key => $word)
                 <tr>
-                    <td>{{ $word['text'] }}</td>
-                    <td>{{ $word['english'] }}</td>
-                    <td>{{ $word['course_name'] ?? 'No course found' }}</td>
-                    <td>{{ $word['lesson_name'] ?? 'No lesson found' }}</td>
-                    <td>{{ $word['user_name'] }}</td>
-                    <td>{{ $word['video'] ?? 'N/A' }}</td>
-                    <td>{{ $word['status'] ?? 'Pending' }}</td>
-                    <td>{{ $word['approve_count'] ?? 0 }}</td>
-                    <td>
-                        <!-- Action buttons go here -->
+                    <td>{{ $word['name'] }}</td>
+                    <td>{{ $word['language'] }}</td>
+                    <td style="color: {{ $word['approveCount'] > 0 ? 'green' : 'red' }}">
+                        {{ $word['approveCount'] }}
                     </td>
+                    <td style="color: {{ $word['disCount'] > 0 ? 'green' : 'red' }}">
+                        {{ $word['disCount'] }}
+                    </td>
+
+
                 </tr>
                 @endforeach
                 @else
@@ -109,25 +104,11 @@
                     <td>{{ $word['name'] }}</td>
 
                     <td class="text-end" style="color: {{ isset($word['completed_lessons']) && count($word['completed_lessons']) > 0 ? '#28a745' : '#dc3545' }}">
-                        <div class="d-flex align-items-center justify-content-end gap-2">
-                            <span>{{ isset($word['completed_lessons']) ? count($word['completed_lessons']) : 0 }}</span>
-                            @if(isset($word['completed_lessons']) && count($word['completed_lessons']) > 0)
-                            <a href="{{ route('admin.checkLessons', ['id' => $key]) }}" class="btn btn-sm btn-primary">Check</a>
-                            @else
-                            <button class="btn btn-sm btn-secondary" disabled>Check</button>
-                            @endif
-                        </div>
+                        <span class="d-block text-end">{{ isset($word['completed_lessons']) ? count($word['completed_lessons']) : 0 }}</span>
                     </td>
 
                     <td class="text-end" style="color: {{ isset($word['suggestCount']) && $word['suggestCount'] > 0 ? '#28a745' : '#dc3545' }}">
-                        <div class="d-flex align-items-center justify-content-end gap-2">
-                            <span>{{ $word['suggestCount'] ?? 0 }}</span>
-                            @if(isset($word['suggestCount']) && $word['suggestCount'] > 0)
-                            <a href="{{ route('admin.checkSuggestions', ['id' => $key]) }}" class="btn btn-sm btn-primary">Check</a>
-                            @else
-                            <button class="btn btn-sm btn-secondary" disabled>Check</button>
-                            @endif
-                        </div>
+                        <span class="d-block text-end">{{ $word['suggestCount'] ?? 0 }}</span>
                     </td>
 
 

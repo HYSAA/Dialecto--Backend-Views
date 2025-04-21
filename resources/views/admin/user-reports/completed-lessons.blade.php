@@ -31,25 +31,43 @@
                     <th>Proficiency</th>
                 </tr>
 
-                @if (!empty($completedLessons))
-                @foreach($courses as $course)
-                @if(isset($course['lessons']) && is_array($course['lessons']))
-                @foreach($course['lessons'] as $lessonId => $lesson)
-                @if(array_key_exists($lessonId, $completedLessons))
+                @foreach($courses as $courseID => $courseData)
+
+                @if(isset($courseData['lessons']) && is_array($courseData['lessons']))
+
+                @foreach($lessons as $lessonID => $lessonData)
+
+                @foreach($completedLessons as $compID => $compData)
+
+                @if($compID == $lessonID)
+
+
                 <tr>
-                    <td>{{ $course['name'] ?? 'N/A' }}</td>
-                    <td>{{ $lesson['title'] ?? 'N/A' }}</td>
-                    <td>{{ $lesson['proficiency_level'] ?? 'N/A' }}</td>
+
+                    <td>{{ $compID ?? 'N/A' }}</td>
+                    <td>{{ $courseData['name'] ?? 'N/A' }}</td>
+                    <td>{{ $lessonData['title'] ?? 'N/A' }}</td>
                 </tr>
+
+
                 @endif
+
+                @endforeach
                 @endforeach
                 @endif
                 @endforeach
-                @else
+
+
+
+
+
+
+
+
                 <tr>
                     <td colspan="3" class="text-center fw-bold">Empty {{ $id }} report.</td>
                 </tr>
-                @endif
+
             </table>
 
         </div>

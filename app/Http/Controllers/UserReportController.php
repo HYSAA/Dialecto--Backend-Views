@@ -61,7 +61,77 @@ class UserReportController extends Controller
             }
         }
 
-        return view('admin.user-reports.user-report', compact('users'));
+
+
+        $data = $this->database->getReference("verify_words/")->getValue();
+
+        $data2 = $this->database->getReference("users/")->getValue();
+        $expert = [];
+
+        foreach ($data2 as $key => $value) {
+            if ($value['usertype'] == 'expert') {
+                $expert[$key] = $value;
+            }
+        }
+
+
+
+        foreach ($expert as $key => $value) {
+            $expert[$key]['approveCount'] = 0;
+            $expert[$key]['disCount'] = 0;
+        }
+
+        foreach ($expert as $key => $value) {
+
+            foreach ($data as $key2 => $value2) {
+                foreach ($value2 as $key3 => $value3) {
+
+
+                    if ($key == $key3) {
+
+
+                        if ($value3['status'] == 'approved') {
+                            $expert[$key]['approveCount']++;
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        $data3 = $this->database->getReference("denied_words/")->getValue();
+
+        foreach ($expert as $key => $value) {
+            if (isset($data3[$key])) {
+                $count = count($data3[$key]); // This will count how many suggestions are under this expert
+                $expert[$key]['disCount'] = $count;
+            }
+        }
+
+
+        $data4 = $this->database->getReference("credentials/")->getValue();
+
+
+
+        foreach ($expert as $key => $value) {
+            foreach ($data4 as $key2 => $value2) {
+                if ($key == $key2) {
+
+
+                    $expert[$key]['language'] = $value2['courseName'];
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+        return view('admin.user-reports.user-report', compact('users', 'expert'));
     }
 
     public function checkLessons($id)
@@ -104,6 +174,7 @@ class UserReportController extends Controller
 
 
         // dd($completedLessons, $courses, $id, $curUser);
+        // dd($courses, $lessons, $completedLessons);
 
         // You can fetch and use the user data here if needed
         // Example: $user = User::find($id);
