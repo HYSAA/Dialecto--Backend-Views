@@ -70,6 +70,15 @@ class SurveyController extends Controller
         $score = 0;
 
 
+        if ($responses['familiarity'] == 'beginner') {
+            $score += 1;
+        } elseif ($responses['familiarity'] == 'intermediate') {
+            $score += 2;
+        } elseif ($responses['familiarity'] == 'advanced') {
+            $score += 3;
+        }
+        
+
         if ($responses['language_experience'] == 'beginner') {
             $score += 1;
         } elseif ($responses['language_experience'] == 'intermediate') {
@@ -108,18 +117,18 @@ class SurveyController extends Controller
             $score += 3;
         }
 
-
+    
 
 
         // logic ra pag determine si user proficiency
-        if ($score <= 9) {
-            return 'Beginner';
-        } elseif ($score <= 11) {
-            return 'Intermediate';
-        } else {
-            return 'Advanced';
+     if ($score <= 9) {
+    return 'Beginner';
+} elseif ($score <= 12) {
+    return 'Intermediate';
+} else {
+    return 'Advanced';
+}
 
-        }
         
     }
 

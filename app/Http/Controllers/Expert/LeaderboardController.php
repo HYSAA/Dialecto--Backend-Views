@@ -81,8 +81,6 @@ class LeaderboardController extends Controller
             if ($ranking['user_id'] === $currentUserId) {
                 $userRank = $index + 1;
                 $currentUserRanking = $ranking;
-            } else {
-                $ranking['user_name'] = '****';
             }
         }
         unset($ranking);
