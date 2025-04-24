@@ -64,6 +64,9 @@ class QuizController extends Controller
 
         //dd($courseName, $lessonName);
 
+        // dd($contents);
+
+
         return view('quizzes.create', compact('lessonId', 'courseId', 'courseName', 'lessonName', 'contents'));
     }
 
@@ -74,29 +77,54 @@ class QuizController extends Controller
 
         // dd($request->all());
 
+
+
+        $question = $request->input('question');
+        $question = json_decode($question, true);
+
+
+        $answerRef = $request->input('answerRef');
+        $answerRef = json_decode($answerRef, true);
+
+        $choiceARef = $request->input('choiceARef');
+        $choiceARef = json_decode($choiceARef, true);
+
+        $choiceBRef = $request->input('choiceBRef');
+        $choiceBRef = json_decode($choiceBRef, true);
+
+        $choiceCRef = $request->input('choiceCRef');
+        $choiceCRef = json_decode($choiceCRef, true);
+
         $contentData = [
-            'question' => $request->question,
+            'question' => $question['english'],
+
             'choices' => [
                 [
-                    'text' => $request->answer,
-                    'audioRef' => $request->answerRef ?: null, // Default to null if no value
+                    'text' =>  $question['text'],
+                    'audioRef' => $question['video'] ?: null, // Default to null if no value
                 ],
                 [
-                    'text' => $request->choiceA,
-                    'audioRef' => $request->choiceARef ?: null,
+                    'text' => $choiceARef['text'],
+                    'audioRef' => $choiceARef['video'] ?: null,
                 ],
+
                 [
-                    'text' => $request->choiceB,
-                    'audioRef' => $request->choiceBRef ?: null,
+                    'text' => $choiceBRef['text'],
+                    'audioRef' => $choiceBRef['video'] ?: null,
                 ],
+
                 [
-                    'text' => $request->choiceC,
-                    'audioRef' => $request->choiceCRef ?: null,
+                    'text' => $choiceCRef['text'],
+                    'audioRef' => $choiceCRef['video'] ?: null,
                 ],
             ],
-            'correct' => $request->answer, // Replace with your logic to identify the correct answer
+
+
+            'correct' => $question['text'], // Replace with your logic to identify the correct answer
             'points' => $request->points,
         ];
+
+        dd($contentData);
 
         $this->database->getReference("quizzes/{$lessonId}")->push($contentData);
 

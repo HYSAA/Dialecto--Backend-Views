@@ -28,24 +28,13 @@
 
     <form action="{{ route('admin.quizzes.store', [$courseId, $lessonId]) }}" style="padding-top: 20px;" method="POST" enctype="multipart/form-data">
         @csrf
-
         <div class="row  justify-content-center">
-
-            <div class="col-md-4  ">
-
-                <div class="form-group ">
-                    <strong>Question: </strong>
-                    <input type="text" name="question" class="form-control" placeholder="Question" required>
-
-                </div>
-
-
-            </div>
-
 
             <div class="col-md-4">
                 <div class="form-group">
                     <strong>Points: </strong>
+
+
                     <select name="points" class="form-control" required>
                         <option value="" disabled selected>Select points</option>
                         <option value="0">0</option>
@@ -66,25 +55,45 @@
         </div>
 
 
-        <div class="row  justify-content-center ">
-            <div class="col-md-4  ">
-
-                <div class="form-group ">
-                    <strong>Answer: </strong>
-                    <input type="text" name="answer" class="form-control" placeholder="Answer" required>
-                </div>
-
-            </div>
+        <div class="row  justify-content-center">
 
             <div class="col-md-4  ">
 
                 <div class="form-group ">
-                    <strong>Answer audio reference: </strong>
+                    <strong>Question: </strong>
 
-                    <select name="answerRef" class="form-control">
-                        <option value="null" selected>Answer audio reference</option>
+
+                    <select name="question" class="form-control" required>
+
+                        <option value="" disabled selected>Choose your question</option>
+
                         @foreach ($contents as $key => $content)
-                        <option value="{{ $content['video'] }}">{{ $content['text'] }}</option>
+                        <option value='@json($content)'>
+                            {{ $content['english'] }}
+                        </option>
+                        @endforeach
+                    </select>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row  justify-content-center ">
+
+            <div class="col-md-4  ">
+
+                <div class="form-group ">
+                    <strong>Choice A : </strong>
+
+
+                    <select name="choiceARef" class="form-control" required>
+                        <option value="" disabled selected>Choice A </option>
+                        @foreach ($contents as $key => $content)
+                        <option value='@json($content)'>
+                            {{ $content['text'] }}
+                        </option>
                         @endforeach
                     </select>
 
@@ -93,54 +102,22 @@
 
         </div>
 
-        <div class="row  justify-content-center ">
-            <div class="col-md-4  ">
-
-                <div class="form-group ">
-                    <strong>Choice A: </strong>
-                    <input type="text" name="choiceA" class="form-control" placeholder="Choice A" required>
-                </div>
-
-            </div>
-
-            <div class="col-md-4  ">
-
-                <div class="form-group ">
-                    <strong>Choice A audio reference: </strong>
-
-                    <select name="choiceARef" class="form-control">
-                        <option value="null" selected>Choice A audio reference</option>
-                        @foreach ($contents as $key => $content)
-                        <option value="{{ $content['video'] }}">{{ $content['text'] }}</option>
-                        @endforeach
-                    </select>
-
-                </div>
-            </div>
-
-        </div>
-
 
         <div class="row  justify-content-center ">
-            <div class="col-md-4  ">
 
-                <div class="form-group ">
-                    <strong>Choice B: </strong>
-                    <input type="text" name="choiceB" class="form-control" placeholder="Choice B" required>
-                </div>
-
-            </div>
 
             <div class="col-md-4  ">
 
                 <div class="form-group ">
-                    <strong>Choice B audio reference: </strong>
+                    <strong>Choice B : </strong>
 
 
-                    <select name="choiceBRef" class="form-control">
-                        <option value="null" selected>Choice B audio reference</option>
+                    <select name="choiceBRef" class="form-control" required>
+                        <option value="" disabled selected>Choice B </option>
                         @foreach ($contents as $key => $content)
-                        <option value="{{ $content['video'] }}">{{ $content['text'] }}</option>
+                        <option value='@json($content)'>
+                            {{ $content['text'] }}
+                        </option>
                         @endforeach
                     </select>
 
@@ -153,24 +130,18 @@
 
 
         <div class="row  justify-content-center ">
-            <div class="col-md-4  ">
-
-                <div class="form-group ">
-                    <strong>Choice C: </strong>
-                    <input type="text" name="choiceC" class="form-control" placeholder="Choice C" required>
-                </div>
-
-            </div>
 
             <div class="col-md-4  ">
 
                 <div class="form-group ">
-                    <strong>Choice C audio reference: </strong>
+                    <strong>Choice C : </strong>
 
-                    <select name="choiceCRef" class="form-control">
-                        <option value="null" selected>Choice C audio reference</option>
+                    <select name="choiceCRef" class="form-control" required>
+                        <option value="" disabled selected>Choice C </option>
                         @foreach ($contents as $key => $content)
-                        <option value="{{ $content['video'] }}">{{ $content['text'] }}</option>
+                        <option value='@json($content)'>
+                            {{ $content['text'] }}
+                        </option>
                         @endforeach
                     </select>
 
