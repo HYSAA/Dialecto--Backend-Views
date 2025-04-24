@@ -33,8 +33,6 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <strong>Points: </strong>
-
-
                     <select name="points" class="form-control" required>
                         <option value="" disabled selected>Select points</option>
                         <option value="0">0</option>
@@ -61,7 +59,6 @@
 
                 <div class="form-group ">
                     <strong>Question: </strong>
-
 
                     <select name="question" class="form-control" required>
 
@@ -90,6 +87,7 @@
 
                     <select name="choiceARef" class="form-control" required>
                         <option value="" disabled selected>Choice A </option>
+
                         @foreach ($contents as $key => $content)
                         <option value='@json($content)'>
                             {{ $content['text'] }}
@@ -149,10 +147,6 @@
             </div>
 
         </div>
-
-
-
-
 
 
         <div class="row justify-content-center" style="margin-top: 20px;">

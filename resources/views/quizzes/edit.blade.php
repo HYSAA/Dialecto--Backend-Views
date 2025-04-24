@@ -8,7 +8,7 @@
 
     <div class="row">
         <div class="col-lg-6">
-            <h2>Create item > {{$courseName}} > {{$lessonName}} </h2>
+            <h2>Edit item > {{$courseName}} > {{$lessonName}} </h2>
         </div>
 
     </div>
@@ -30,18 +30,6 @@
         @csrf
 
         <div class="row  justify-content-center">
-
-            <div class="col-md-4  ">
-
-                <div class="form-group ">
-                    <strong>Question: </strong>
-                    <input type="text" name="question" class="form-control" placeholder="Question" value="{{ $placeholder['question'] }}" required>
-
-                </div>
-
-
-            </div>
-
 
             <div class="col-md-4">
                 <div class="form-group">
@@ -65,46 +53,27 @@
 
         </div>
 
-
-        <div class="row  justify-content-center ">
+        <div class="row  justify-content-center">
             <div class="col-md-4  ">
 
                 <div class="form-group ">
-                    <strong>Answer: </strong>
-                    <input type="text" name="answer" class="form-control" placeholder="Answer" value="{{ $placeholder['correct'] }}" required>
-                </div>
+                    <strong>Question: </strong>
 
-            </div>
+                    <select name="question" class="form-control" required>
 
-            <div class="col-md-4  ">
-
-                <div class="form-group ">
-                    <strong>Answer audio reference: </strong>
-
-                    <select name="answerRef" class="form-control">
-
-                        <option value="{{ $placeholder['choices'][0]['audioRef'] }}" selected>{{ $placeholder['choices'][0]['text'] }}</option>
-
+                        <option value='@json($placeholder["questionFinal"])' selected>{{ $placeholder['questionFinal']['english'] }}</option>
 
                         @foreach ($contents as $key => $content)
-                        <option value="{{ $content['video'] }}">{{ $content['text'] }}</option>
+                        <option value='@json($content)'>
+                            {{ $content['english'] }}
+                        </option>
                         @endforeach
                     </select>
-
                 </div>
             </div>
-
         </div>
 
         <div class="row  justify-content-center ">
-            <div class="col-md-4  ">
-
-                <div class="form-group ">
-                    <strong>Choice A: </strong>
-                    <input type="text" name="choiceA" class="form-control" placeholder="Choice A" value="{{ $placeholder['choices'][1]['text'] }}" required>
-                </div>
-
-            </div>
 
             <div class="col-md-4  ">
 
@@ -113,10 +82,12 @@
 
                     <select name="choiceARef" class="form-control">
 
-                        <option value="{{ $placeholder['choices'][1]['audioRef'] }}" selected>{{ $placeholder['choices'][1]['text'] }}</option>
+                        <option value='@json($placeholder["choices"][1])' selected>{{ $placeholder['choices'][1]['text'] }}</option>
 
                         @foreach ($contents as $key => $content)
-                        <option value="{{ $content['video'] }}">{{ $content['text'] }}</option>
+                        <option value='@json($content)'>
+                            {{ $content['text'] }}
+                        </option>
                         @endforeach
                     </select>
 
@@ -127,14 +98,7 @@
 
 
         <div class="row  justify-content-center ">
-            <div class="col-md-4  ">
 
-                <div class="form-group ">
-                    <strong>Choice B: </strong>
-                    <input type="text" name="choiceB" class="form-control" placeholder="Choice B" value="{{ $placeholder['choices'][2]['text'] }}" required>
-                </div>
-
-            </div>
 
             <div class="col-md-4  ">
 
@@ -144,9 +108,11 @@
 
                     <select name="choiceBRef" class="form-control">
 
-                        <option value="{{ $placeholder['choices'][2]['audioRef'] }}" selected>{{ $placeholder['choices'][2]['text'] }}</option>
+                        <option value='@json($placeholder["choices"][2])' selected>{{ $placeholder['choices'][2]['text'] }}</option>
                         @foreach ($contents as $key => $content)
-                        <option value="{{ $content['video'] }}">{{ $content['text'] }}</option>
+                        <option value='@json($content)'>
+                            {{ $content['text'] }}
+                        </option>
                         @endforeach
                     </select>
 
@@ -159,14 +125,7 @@
 
 
         <div class="row  justify-content-center ">
-            <div class="col-md-4  ">
 
-                <div class="form-group ">
-                    <strong>Choice C: </strong>
-                    <input type="text" name="choiceC" class="form-control" placeholder="Choice C" value="{{ $placeholder['choices'][3]['text'] }}" required>
-                </div>
-
-            </div>
 
             <div class="col-md-4  ">
 
@@ -175,9 +134,11 @@
 
                     <select name="choiceCRef" class="form-control">
 
-                        <option value="{{ $placeholder['choices'][3]['audioRef'] }}" selected>{{ $placeholder['choices'][3]['text'] }}</option>
+                        <option value='@json($placeholder["choices"][3])' selected>{{ $placeholder['choices'][3]['text'] }}</option>
                         @foreach ($contents as $key => $content)
-                        <option value="{{ $content['video'] }}">{{ $content['text'] }}</option>
+                        <option value='@json($content)'>
+                            {{ $content['text'] }}
+                        </option>
                         @endforeach
                     </select>
 

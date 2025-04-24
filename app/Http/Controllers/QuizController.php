@@ -7,6 +7,7 @@ use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Storage as FirebaseStorage;
 use Kreait\Firebase\Factory;
 
+use function Laravel\Prompts\text;
 
 class QuizController extends Controller
 {
@@ -78,7 +79,6 @@ class QuizController extends Controller
         // dd($request->all());
 
 
-
         $question = $request->input('question');
         $question = json_decode($question, true);
 
@@ -124,7 +124,7 @@ class QuizController extends Controller
             'points' => $request->points,
         ];
 
-        dd($contentData);
+        // dd($contentData);
 
         $this->database->getReference("quizzes/{$lessonId}")->push($contentData);
 
@@ -149,6 +149,24 @@ class QuizController extends Controller
 
         // dd($placeholder);
 
+        $placeholder['questionFinal']['english'] = $placeholder['question'];
+        $placeholder['questionFinal']['text'] = $placeholder['correct'];
+
+
+        foreach ($placeholder["choices"] as $key => $value) {
+
+            // dd();
+
+            if ($value["text"] == $placeholder['questionFinal']['text']) {
+                // dd($placeholder['questionFinal']['text'], $value["text"]);
+
+
+                $placeholder['questionFinal']['video'] = $value['audioRef'];
+            }
+        }
+
+
+
         return view('quizzes.edit', compact('lessonId', 'courseId', 'quizId', 'courseName', 'lessonName', 'contents', 'placeholder'));
     }
 
@@ -160,29 +178,66 @@ class QuizController extends Controller
 
 
 
+        $question = $request->input('question');
+        $question = json_decode($question, true);
+
+
+
+
+
+
+        $answerRef = $request->input('answerRef');
+        $answerRef = json_decode($answerRef, true);
+
+        $choiceARef = $request->input('choiceARef');
+        $choiceARef = json_decode($choiceARef, true);
+
+
+
+
+
+        $choiceBRef = $request->input('choiceBRef');
+        $choiceBRef = json_decode($choiceBRef, true);
+
+        $choiceCRef = $request->input('choiceCRef');
+        $choiceCRef = json_decode($choiceCRef, true);
+
+        // dd($question);
+
+
         $contentData = [
-            'question' => $request->question,
+            'question' => $question['english'],
+
             'choices' => [
                 [
-                    'text' => $request->answer,
-                    'audioRef' => $request->answerRef ?: null, // Default to null if no value
+                    'text' =>  $question['text'],
+                    'audioRef' => isset($question['audioRef']) ? $question['audioRef'] : (isset($question['video']) ? $question['video'] : null),
                 ],
+
                 [
-                    'text' => $request->choiceA,
-                    'audioRef' => $request->choiceARef ?: null,
+                    'text' => $choiceARef['text'],
+                    'audioRef' => isset($choiceARef['audioRef']) ? $choiceARef['audioRef'] : (isset($choiceARef['video']) ? $choiceARef['video'] : null),
+
                 ],
+
                 [
-                    'text' => $request->choiceB,
-                    'audioRef' => $request->choiceBRef ?: null,
+                    'text' => $choiceBRef['text'],
+                    'audioRef' => isset($choiceBRef['audioRef']) ? $choiceBRef['audioRef'] : (isset($choiceBRef['video']) ? $choiceBRef['video'] : null),
+
                 ],
+
                 [
-                    'text' => $request->choiceC,
-                    'audioRef' => $request->choiceCRef ?: null,
+                    'text' => $choiceCRef['text'],
+                    'audioRef' => isset($choiceCRef['audioRef']) ? $choiceCRef['audioRef'] : (isset($choiceCRef['video']) ? $choiceCRef['video'] : null),
+
                 ],
             ],
-            'correct' => $request->answer, // Replace with your logic to identify the correct answer
+
+
+            'correct' => $question['text'], // Replace with your logic to identify the correct answer
             'points' => $request->points,
         ];
+
         // dd($contentData);
         $this->database->getReference("quizzes/{$lessonId}/{$quizId}")->set($contentData);
 
