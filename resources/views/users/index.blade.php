@@ -29,9 +29,9 @@
 
                 <table class="table table-bordered">
                     <tr>
-                        <th>User Full Name</th>
-                        <th>User Email</th>
-                        <th>User Type</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Type</th>
                         <!-- <th>View User Progress</th> -->
                     </tr>
                     @foreach ($sortedUsers as $user)

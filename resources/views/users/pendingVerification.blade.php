@@ -27,7 +27,7 @@
             <table class="table table-striped table-bordered">
                 <tbody>
                     <tr>
-                        <th>Full Name</th>
+                        <th>Username</th>
                         <th>Email</th>
                         <th>List of Languages</th>
                         <th width="280px">Action</th>
@@ -66,9 +66,9 @@
         <div class="col-lg-12 margin-tb">
             <table class="table table-striped table-bordered">
                 <tr>
-                    <th>Full Name</th>
+                    <th>Username</th>
                     <th>Email</th>
-                    <th>List of Languages</th>
+                    <th>Language</th>
                     <th>Credentials</th>
                 </tr>
                 @if($verifiedUsers)
@@ -102,9 +102,9 @@
         <div class="col-lg-12 margin-tb">
             <table class="table table-bordered">
                 <tr>
-                    <th>Full Name</th>
+                    <th>Username</th>
                     <th>Email</th>
-                    <th>List of Languages</th>
+                    <th>Language</th>
                     <th>Credentials</th>
                 </tr>
                 @if($deniedUsers)
